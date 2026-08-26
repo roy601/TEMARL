@@ -1,0 +1,51 @@
+# ── Virtual environment (~4.7 GB — NEVER commit) ─────────────────────────────
+thesis_env/
+venv/
+.venv/
+env/
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ── Model checkpoints & trained weights (regenerable; large) ─────────────────
+*.pt
+*.pth
+*.ckpt
+thesis_system/temarl_v2/runs/
+thesis_system/results/
+thesis_system/results_02/
+
+# ── Datasets — DO NOT REDISTRIBUTE ────────────────────────────────────────────
+# COMISET is a published dataset (Perez-Sanchez, Palacios & Lopez,
+# "COMISET: Dataset for the analysis of malicious events in Windows systems",
+# Data in Brief, 2025, doi:10.1016/j.dib.2025.111723). Obtain it from the
+# original source rather than committing a copy here; redistributing it may
+# breach its licence and it bloats the repository.
+thesis_system/data/comiset_sessions.json
+*.ndjson
+*.pcap
+
+# KEEP the derived grounding file: it is OUR reconstruction (small, and it is
+# what makes the environment reproducible).
+!thesis_system/data/camlds_grounding.json
+
+# ── Logs & run artefacts ─────────────────────────────────────────────────────
+*.log
+thesis_system/temarl_v2/results_v2/*.log
+thesis_system/final_thesis_results/*.log
+
+# ── OS / editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
