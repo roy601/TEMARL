@@ -1,0 +1,150 @@
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.742 | Engage=9.60 | Depth=4.23 | Reward=2.043
+  NoTrans:  Align=0.743 | Engage=9.45 | Depth=4.06 | Reward=2.137
+  Static:   Align=0.124 | Engage=4.16 | Depth=4.16 | Reward=0.527
+  PPO:      Align=0.726 | Engage=9.12 | Depth=4.11 | Reward=1.896
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.684 | Engage=8.75 | Depth=4.13 | Reward=1.904
+  NoTrans:  Align=0.698 | Engage=10.40 | Depth=4.43 | Reward=2.303
+  Static:   Align=0.116 | Engage=3.93 | Depth=3.93 | Reward=0.490
+  PPO:      Align=0.274 | Engage=5.31 | Depth=4.12 | Reward=1.073
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.549 | Engage=6.41 | Depth=3.16 | Reward=1.399
+  NoTrans:  Align=0.611 | Engage=7.54 | Depth=3.08 | Reward=1.725
+  Static:   Align=0.125 | Engage=3.46 | Depth=3.13 | Reward=0.429
+  PPO:      Align=0.539 | Engage=6.68 | Depth=3.08 | Reward=1.455
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.721 | Engage=9.87 | Depth=4.22 | Reward=1.917
+  NoTrans:  Align=0.707 | Engage=10.47 | Depth=4.46 | Reward=2.328
+  Static:   Align=0.123 | Engage=4.28 | Depth=4.28 | Reward=0.504
+  PPO:      Align=0.677 | Engage=9.76 | Depth=4.42 | Reward=2.059
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL (no Transformer)             75.0%      9.45    4.06   0.743    2.137
+         MARL + Transformer (Thesis)       72.0%      9.60    4.23   0.742    2.043
+         Single-Agent PPO                  74.0%      9.12    4.11   0.726    1.896
+         Static Honeypot                   76.5%      4.16    4.16   0.124    0.527
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             72.5%     10.40    4.43   0.698    2.303
+         MARL + Transformer (Thesis)       75.5%      8.75    4.13   0.684    1.904
+         Single-Agent PPO                  72.5%      5.31    4.12   0.274    1.073
+         Static Honeypot                   75.0%      3.93    3.93   0.116    0.490
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             61.0%      7.54    3.08   0.611    1.725
+         MARL + Transformer (Thesis)       55.0%      6.41    3.16   0.549    1.399
+         Single-Agent PPO                  61.5%      6.68    3.08   0.539    1.455
+         Static Honeypot                   60.5%      3.46    3.13   0.125    0.429
+  ------------------------------------------------------------------------------------------
+  Mix    MARL + Transformer (Thesis)       70.5%      9.87    4.22   0.721    1.917
+         MARL (no Transformer)             69.5%     10.47    4.46   0.707    2.328
+         Single-Agent PPO                  69.5%      9.76    4.42   0.677    2.059
+         Static Honeypot                   70.5%      4.28    4.28   0.123    0.504
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.742      0.743    0.124    0.726   -0.001
+  HiC       0.684      0.698    0.116    0.274   -0.014
+  Ran       0.549      0.611    0.125    0.539   -0.062
+  Mix       0.721      0.707    0.123    0.677   +0.015
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.60     4.23
+  HiE    MARL (no Transformer)            9.45     4.06
+  HiE    Static Honeypot                  4.16     4.16
+  HiE    Single-Agent PPO                 9.12     4.11
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.75     4.13
+  HiC    MARL (no Transformer)           10.40     4.43
+  HiC    Static Honeypot                  3.93     3.93
+  HiC    Single-Agent PPO                 5.31     4.12
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      6.41     3.16
+  Ran    MARL (no Transformer)            7.54     3.08
+  Ran    Static Honeypot                  3.46     3.13
+  Ran    Single-Agent PPO                 6.68     3.08
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.87     4.22
+  Mix    MARL (no Transformer)           10.47     4.46
+  Mix    Static Honeypot                  4.28     4.28
+  Mix    Single-Agent PPO                 9.76     4.42
+  ----------------------------------------------------
+
+==============================================================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+==============================================================================================================
+  Anchor points: 0% (full telemetry) | 50% (moderate fog) | 90% (near-blind)
+  At fog=0.9: agents receive ~10% of telemetry; only h is reliable.
+
+  Strategy: HiE  (ExpRate = depth / engagement; lower = attacker confined longer)
+    Fog%    T-Align  NT-Align  AlignGap   T-ExpRate NT-ExpRate   RateGap
+  ----------------------------------------------------------------------
+      0%      0.730     0.751    -0.020      0.4451     0.4285   +0.0166  
+     50%      0.746     0.742    +0.003      0.4415     0.4272   +0.0143  ↑
+     90%      0.750     0.732    +0.019      0.4397     0.4318   +0.0079  ↑
+  Peak align gap : +0.019 at fog=90%
+  Best rate gap  : +0.0079 at fog=90%  (NoTrans confines better)
+
+  Strategy: HiC  (ExpRate = depth / engagement; lower = attacker confined longer)
+    Fog%    T-Align  NT-Align  AlignGap   T-ExpRate NT-ExpRate   RateGap
+  ----------------------------------------------------------------------
+      0%      0.651     0.696    -0.044      0.4741     0.4253   +0.0488  
+     50%      0.682     0.711    -0.029      0.4684     0.4248   +0.0436  ↑
+     90%      0.671     0.714    -0.043      0.4749     0.4231   +0.0518  
+  Peak align gap : -0.029 at fog=50%
+  Best rate gap  : +0.0436 at fog=50%  (NoTrans confines better)
+
+  Strategy: Ran  (ExpRate = depth / engagement; lower = attacker confined longer)
+    Fog%    T-Align  NT-Align  AlignGap   T-ExpRate NT-ExpRate   RateGap
+  ----------------------------------------------------------------------
+      0%      0.575     0.579    -0.005      0.4976     0.4103   +0.0873  
+     50%      0.553     0.617    -0.064      0.4870     0.4104   +0.0766  
+     90%      0.610     0.608    +0.002      0.4766     0.4005   +0.0761  ↑
+  Peak align gap : +0.002 at fog=90%
+  Best rate gap  : +0.0761 at fog=90%  (NoTrans confines better)
+
+  Strategy: Mix  (ExpRate = depth / engagement; lower = attacker confined longer)
+    Fog%    T-Align  NT-Align  AlignGap   T-ExpRate NT-ExpRate   RateGap
+  ----------------------------------------------------------------------
+      0%      0.702     0.691    +0.010      0.4308     0.4315   -0.0007  
+     50%      0.722     0.698    +0.023      0.4290     0.4341   -0.0050  ↑
+     90%      0.722     0.702    +0.020      0.4261     0.4337   -0.0076  
+  Peak align gap : +0.023 at fog=50%
+  Best rate gap  : -0.0076 at fog=90%  (Thesis confines better)
+
+  CROSS-STRATEGY SUMMARY
+    Strategy   AlignGap@90%    RateGap@90%                         Verdict
+  ---------------------------------------------------------------------------
+         HiE         +0.019        +0.0079  Thesis better: align↑ only
+         HiC         -0.043        +0.0518  NoTrans holds edge at 90% fog
+         Ran         +0.002        +0.0761  Thesis better: align↑ only
+         Mix         +0.020        -0.0076  Thesis better: align↑ confine↑
+
+  Fog of War results saved -> results\fog_of_war_results.json

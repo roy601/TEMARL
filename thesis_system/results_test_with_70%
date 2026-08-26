@@ -1,0 +1,916 @@
+  ----------------------------------------
+  Thesis:   Align=0.579 | Engage=5.65 | Depth=2.85 | Reward=1.278
+  NoTrans:  Align=0.593 | Engage=7.52 | Depth=3.10 | Reward=1.726
+  Static:   Align=0.126 | Engage=3.25 | Depth=2.94 | Reward=0.389
+  PPO:      Align=0.567 | Engage=6.28 | Depth=2.90 | Reward=1.404
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.728 | Engage=9.23 | Depth=3.95 | Reward=1.823
+  NoTrans:  Align=0.699 | Engage=9.87 | Depth=4.26 | Reward=2.243
+  Static:   Align=0.121 | Engage=4.08 | Depth=4.08 | Reward=0.503
+  PPO:      Align=0.692 | Engage=9.51 | Depth=4.22 | Reward=2.058
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL (no Transformer)             70.5%      9.69    4.16   0.749    2.161
+         MARL + Transformer (Thesis)       71.5%      9.62    4.28   0.733    2.051
+         Single-Agent PPO                  70.5%      9.11    4.25   0.712    1.907
+         Static Honeypot                   74.0%      4.05    4.05   0.124    0.499
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             72.0%      9.99    4.20   0.731    2.222
+         Single-Agent PPO                  78.0%      7.91    3.79   0.675    1.730
+         MARL + Transformer (Thesis)       72.0%      8.78    4.20   0.674    1.914
+         Static Honeypot                   72.0%      4.12    4.12   0.122    0.495
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             53.0%      7.52    3.10   0.593    1.726
+         MARL + Transformer (Thesis)       60.0%      5.65    2.85   0.579    1.278
+         Single-Agent PPO                  60.0%      6.28    2.90   0.567    1.404
+         Static Honeypot                   54.0%      3.25    2.94   0.126    0.389
+  ------------------------------------------------------------------------------------------
+  Mix    MARL + Transformer (Thesis)       76.0%      9.23    3.95   0.728    1.823
+         MARL (no Transformer)             76.0%      9.87    4.26   0.699    2.243
+         Single-Agent PPO                  73.0%      9.51    4.22   0.692    2.058
+         Static Honeypot                   75.5%      4.08    4.08   0.121    0.503
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.733      0.749    0.124    0.712   -0.016
+  HiC       0.674      0.731    0.122    0.675   -0.057
+  Ran       0.579      0.593    0.126    0.567   -0.014
+  Mix       0.728      0.699    0.121    0.692   +0.028
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.62     4.28
+  HiE    MARL (no Transformer)            9.69     4.16
+  HiE    Static Honeypot                  4.05     4.05
+  HiE    Single-Agent PPO                 9.11     4.25
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.78     4.20
+  HiC    MARL (no Transformer)            9.99     4.20
+  HiC    Static Honeypot                  4.12     4.12
+  HiC    Single-Agent PPO                 7.91     3.79
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      5.65     2.85
+  Ran    MARL (no Transformer)            7.52     3.10
+  Ran    Static Honeypot                  3.25     2.94
+  Ran    Single-Agent PPO                 6.28     2.90
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.23     3.95
+  Mix    MARL (no Transformer)            9.87     4.26
+  Mix    Static Honeypot                  4.08     4.08
+  Mix    Single-Agent PPO                 9.51     4.22
+  ----------------------------------------------------
+
+==============================================================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+==============================================================================================================
+  Anchor points: 0% (full telemetry) | 50% (moderate fog) | 90% (near-blind)
+  At fog=0.9: agents receive ~10% of telemetry; only h is reliable.
+
+    Fog%    T-Align  NT-Align      Gap    T-Engage  NT-Engage   T-Depth NT-Depth
+  ------------------------------------------------------------------------------
+      0%      0.702     0.717   -0.016        9.66       9.28      4.15     3.98  
+     50%      0.703     0.714   -0.010        8.50      10.28      3.68     4.38  ↑
+     90%      0.723     0.694   +0.029        9.46      10.66      4.04     4.58  ↑
+
+  Peak alignment gap: +0.029 at fog=90%
+  RESULT: Alignment gap WIDENS with fog — h proves its value under partial observability.
+  Engagement gap at 0% fog: +0.37  |  at 90% fog: -1.20
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.745 | Engage=9.40 | Depth=4.14 | Reward=1.977
+  NoTrans:  Align=0.737 | Engage=9.47 | Depth=4.06 | Reward=2.156
+  Static:   Align=0.124 | Engage=3.83 | Depth=3.83 | Reward=0.476
+  PPO:      Align=0.733 | Engage=8.78 | Depth=4.03 | Reward=1.814
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.685 | Engage=8.38 | Depth=3.95 | Reward=1.813
+  NoTrans:  Align=0.709 | Engage=10.15 | Depth=4.32 | Reward=2.270
+  Static:   Align=0.120 | Engage=4.21 | Depth=4.21 | Reward=0.493
+  PPO:      Align=0.339 | Engage=5.93 | Depth=4.28 | Reward=1.463
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.570 | Engage=6.65 | Depth=3.22 | Reward=1.435
+  NoTrans:  Align=0.586 | Engage=7.13 | Depth=3.00 | Reward=1.658
+  Static:   Align=0.131 | Engage=3.33 | Depth=3.00 | Reward=0.373
+  PPO:      Align=0.491 | Engage=5.34 | Depth=3.15 | Reward=1.060
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.696 | Engage=9.20 | Depth=4.00 | Reward=1.818
+  NoTrans:  Align=0.707 | Engage=9.93 | Depth=4.26 | Reward=2.255
+  Static:   Align=0.120 | Engage=4.00 | Depth=4.00 | Reward=0.481
+  PPO:      Align=0.696 | Engage=8.44 | Depth=3.96 | Reward=1.618
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL + Transformer (Thesis)       73.0%      9.40    4.14   0.745    1.977
+         MARL (no Transformer)             75.5%      9.47    4.06   0.737    2.156
+         Single-Agent PPO                  69.5%      8.78    4.03   0.733    1.814
+         Static Honeypot                   74.5%      3.83    3.83   0.124    0.476
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             73.5%     10.15    4.32   0.709    2.270
+         MARL + Transformer (Thesis)       75.0%      8.38    3.95   0.685    1.813
+         Single-Agent PPO                  71.5%      5.93    4.28   0.339    1.463
+         Static Honeypot                   69.0%      4.21    4.21   0.120    0.493
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             56.0%      7.13    3.00   0.586    1.658
+         MARL + Transformer (Thesis)       57.5%      6.65    3.22   0.570    1.435
+         Single-Agent PPO                  60.5%      5.34    3.15   0.491    1.060
+         Static Honeypot                   50.5%      3.33    3.00   0.131    0.373
+  ------------------------------------------------------------------------------------------
+  Mix    MARL (no Transformer)             76.5%      9.93    4.26   0.707    2.255
+         MARL + Transformer (Thesis)       74.0%      9.20    4.00   0.696    1.818
+         Single-Agent PPO                  72.0%      8.44    3.96   0.696    1.618
+         Static Honeypot                   71.5%      4.00    4.00   0.120    0.481
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.745      0.737    0.124    0.733   +0.008
+  HiC       0.685      0.709    0.120    0.339   -0.025
+  Ran       0.570      0.586    0.131    0.491   -0.016
+  Mix       0.696      0.707    0.120    0.696   -0.011
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.40     4.14
+  HiE    MARL (no Transformer)            9.47     4.06
+  HiE    Static Honeypot                  3.83     3.83
+  HiE    Single-Agent PPO                 8.78     4.03
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.38     3.95
+  HiC    MARL (no Transformer)           10.15     4.32
+  HiC    Static Honeypot                  4.21     4.21
+  HiC    Single-Agent PPO                 5.93     4.28
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      6.65     3.22
+  Ran    MARL (no Transformer)            7.13     3.00
+  Ran    Static Honeypot                  3.33     3.00
+  Ran    Single-Agent PPO                 5.34     3.15
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.20     4.00
+  Mix    MARL (no Transformer)            9.93     4.26
+  Mix    Static Honeypot                  4.00     4.00
+  Mix    Single-Agent PPO                 8.44     3.96
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.699            0.711           -0.012  
+     30%       0.711            0.723           -0.012  
+     50%       0.706            0.713           -0.007  ↑
+     70%       0.708            0.701           +0.007  ↑
+     90%       0.716            0.705           +0.011  ↑
+
+  Maximum gap: +0.011 at fog=90%
+  RESULT: Gap WIDENS with fog — Transformer h proves its value under partial observability.
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.750 | Engage=9.30 | Depth=4.09 | Reward=1.967
+  NoTrans:  Align=0.745 | Engage=9.94 | Depth=4.27 | Reward=2.239
+  Static:   Align=0.124 | Engage=4.12 | Depth=4.12 | Reward=0.497
+  PPO:      Align=0.754 | Engage=9.57 | Depth=4.10 | Reward=1.914
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.676 | Engage=8.69 | Depth=4.13 | Reward=1.885
+  NoTrans:  Align=0.710 | Engage=8.92 | Depth=3.80 | Reward=2.024
+  Static:   Align=0.117 | Engage=3.74 | Depth=3.74 | Reward=0.480
+  PPO:      Align=0.689 | Engage=9.73 | Depth=4.31 | Reward=1.941
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.570 | Engage=6.28 | Depth=3.08 | Reward=1.400
+  NoTrans:  Align=0.608 | Engage=6.56 | Depth=2.79 | Reward=1.546
+  Static:   Align=0.126 | Engage=3.60 | Depth=3.10 | Reward=0.439
+  PPO:      Align=0.578 | Engage=6.31 | Depth=2.69 | Reward=1.308
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.706 | Engage=9.00 | Depth=3.90 | Reward=1.799
+  NoTrans:  Align=0.715 | Engage=9.67 | Depth=4.13 | Reward=2.181
+  Static:   Align=0.121 | Engage=4.16 | Depth=4.16 | Reward=0.500
+  PPO:      Align=0.681 | Engage=9.01 | Depth=4.03 | Reward=1.822
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    Single-Agent PPO                  70.0%      9.57    4.10   0.754    1.914
+         MARL + Transformer (Thesis)       71.5%      9.30    4.09   0.750    1.967
+         MARL (no Transformer)             70.5%      9.94    4.27   0.745    2.239
+         Static Honeypot                   71.0%      4.12    4.12   0.124    0.497
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             75.5%      8.92    3.80   0.710    2.024
+         Single-Agent PPO                  72.5%      9.73    4.31   0.689    1.941
+         MARL + Transformer (Thesis)       72.0%      8.69    4.13   0.676    1.885
+         Static Honeypot                   79.5%      3.74    3.74   0.117    0.480
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             62.0%      6.56    2.79   0.608    1.546
+         Single-Agent PPO                  54.5%      6.31    2.69   0.578    1.308
+         MARL + Transformer (Thesis)       63.0%      6.28    3.08   0.570    1.400
+         Static Honeypot                   64.0%      3.60    3.10   0.126    0.439
+  ------------------------------------------------------------------------------------------
+  Mix    MARL (no Transformer)             73.5%      9.67    4.13   0.715    2.181
+         MARL + Transformer (Thesis)       79.5%      9.00    3.90   0.706    1.799
+         Single-Agent PPO                  77.5%      9.01    4.03   0.681    1.822
+         Static Honeypot                   74.5%      4.16    4.16   0.121    0.500
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.750      0.745    0.124    0.754   +0.005
+  HiC       0.676      0.710    0.117    0.689   -0.034
+  Ran       0.570      0.608    0.126    0.578   -0.039
+  Mix       0.706      0.715    0.121    0.681   -0.009
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.30     4.09
+  HiE    MARL (no Transformer)            9.94     4.27
+  HiE    Static Honeypot                  4.12     4.12
+  HiE    Single-Agent PPO                 9.57     4.10
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.69     4.13
+  HiC    MARL (no Transformer)            8.92     3.80
+  HiC    Static Honeypot                  3.74     3.74
+  HiC    Single-Agent PPO                 9.73     4.31
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      6.28     3.08
+  Ran    MARL (no Transformer)            6.56     2.79
+  Ran    Static Honeypot                  3.60     3.10
+  Ran    Single-Agent PPO                 6.31     2.69
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.00     3.90
+  Mix    MARL (no Transformer)            9.67     4.13
+  Mix    Static Honeypot                  4.16     4.16
+  Mix    Single-Agent PPO                 9.01     4.03
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.698            0.717           -0.019  
+     30%       0.701            0.688           +0.013  ↑
+     50%       0.690            0.706           -0.016  
+     70%       0.712            0.721           -0.009  ↑
+     90%       0.743            0.707           +0.036  ↑
+
+  Maximum gap: +0.036 at fog=90%
+  RESULT: Gap WIDENS with fog — Transformer h proves its value under partial observability.
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.751 | Engage=9.18 | Depth=4.04 | Reward=1.958
+  NoTrans:  Align=0.740 | Engage=9.29 | Depth=4.00 | Reward=2.116
+  Static:   Align=0.123 | Engage=4.12 | Depth=4.12 | Reward=0.503
+  PPO:      Align=0.713 | Engage=9.03 | Depth=4.21 | Reward=1.904
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.681 | Engage=8.95 | Depth=4.20 | Reward=1.917
+  NoTrans:  Align=0.710 | Engage=9.73 | Depth=4.13 | Reward=2.163
+  Static:   Align=0.118 | Engage=4.23 | Depth=4.23 | Reward=0.495
+  PPO:      Align=0.514 | Engage=7.59 | Depth=4.25 | Reward=1.688
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.583 | Engage=5.76 | Depth=2.88 | Reward=1.302
+  NoTrans:  Align=0.590 | Engage=7.20 | Depth=2.98 | Reward=1.680
+  Static:   Align=0.124 | Engage=3.27 | Depth=2.90 | Reward=0.383
+  PPO:      Align=0.520 | Engage=5.58 | Depth=3.08 | Reward=1.114
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.699 | Engage=9.60 | Depth=4.13 | Reward=1.881
+  NoTrans:  Align=0.697 | Engage=9.99 | Depth=4.30 | Reward=2.248
+  Static:   Align=0.124 | Engage=4.50 | Depth=4.50 | Reward=0.512
+  PPO:      Align=0.668 | Engage=8.92 | Depth=4.12 | Reward=1.831
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL + Transformer (Thesis)       73.0%      9.18    4.04   0.751    1.958
+         MARL (no Transformer)             79.0%      9.29    4.00   0.740    2.116
+         Single-Agent PPO                  72.5%      9.03    4.21   0.713    1.904
+         Static Honeypot                   73.5%      4.12    4.12   0.123    0.503
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             74.0%      9.73    4.13   0.710    2.163
+         MARL + Transformer (Thesis)       69.5%      8.95    4.20   0.681    1.917
+         Single-Agent PPO                  75.5%      7.59    4.25   0.514    1.688
+         Static Honeypot                   71.5%      4.23    4.23   0.118    0.495
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             60.0%      7.20    2.98   0.590    1.680
+         MARL + Transformer (Thesis)       63.0%      5.76    2.88   0.583    1.302
+         Single-Agent PPO                  60.5%      5.58    3.08   0.520    1.114
+         Static Honeypot                   55.0%      3.27    2.90   0.124    0.383
+  ------------------------------------------------------------------------------------------
+  Mix    MARL + Transformer (Thesis)       76.5%      9.60    4.13   0.699    1.881
+         MARL (no Transformer)             73.0%      9.99    4.30   0.697    2.248
+         Single-Agent PPO                  72.5%      8.92    4.12   0.668    1.831
+         Static Honeypot                   69.5%      4.50    4.50   0.124    0.512
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.751      0.740    0.123    0.713   +0.011
+  HiC       0.681      0.710    0.118    0.514   -0.029
+  Ran       0.583      0.590    0.124    0.520   -0.007
+  Mix       0.699      0.697    0.124    0.668   +0.002
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.18     4.04
+  HiE    MARL (no Transformer)            9.29     4.00
+  HiE    Static Honeypot                  4.12     4.12
+  HiE    Single-Agent PPO                 9.03     4.21
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.95     4.20
+  HiC    MARL (no Transformer)            9.73     4.13
+  HiC    Static Honeypot                  4.23     4.23
+  HiC    Single-Agent PPO                 7.59     4.25
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      5.76     2.88
+  Ran    MARL (no Transformer)            7.20     2.98
+  Ran    Static Honeypot                  3.27     2.90
+  Ran    Single-Agent PPO                 5.58     3.08
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.60     4.13
+  Mix    MARL (no Transformer)            9.99     4.30
+  Mix    Static Honeypot                  4.50     4.50
+  Mix    Single-Agent PPO                 8.92     4.12
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.708            0.700           +0.008  
+     30%       0.708            0.672           +0.036  ↑
+     50%       0.703            0.687           +0.016  
+     70%       0.742            0.714           +0.028  ↑
+     90%       0.710            0.702           +0.008  
+
+  Maximum gap: +0.036 at fog=30%
+  RESULT: Gap WIDENS with fog — Transformer h proves its value under partial observability.
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.737 | Engage=9.56 | Depth=4.25 | Reward=2.011
+  NoTrans:  Align=0.743 | Engage=10.05 | Depth=4.29 | Reward=2.274
+  Static:   Align=0.128 | Engage=4.27 | Depth=4.27 | Reward=0.505
+  PPO:      Align=0.744 | Engage=9.23 | Depth=4.00 | Reward=1.851
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.675 | Engage=8.45 | Depth=4.01 | Reward=1.827
+  NoTrans:  Align=0.723 | Engage=9.51 | Depth=4.04 | Reward=2.108
+  Static:   Align=0.117 | Engage=3.85 | Depth=3.85 | Reward=0.495
+  PPO:      Align=0.668 | Engage=8.47 | Depth=3.98 | Reward=1.746
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.572 | Engage=6.31 | Depth=3.12 | Reward=1.369
+  NoTrans:  Align=0.588 | Engage=7.52 | Depth=3.16 | Reward=1.754
+  Static:   Align=0.125 | Engage=2.88 | Depth=2.66 | Reward=0.385
+  PPO:      Align=0.615 | Engage=6.01 | Depth=2.90 | Reward=1.448
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.710 | Engage=9.31 | Depth=3.99 | Reward=1.840
+  NoTrans:  Align=0.702 | Engage=9.79 | Depth=4.20 | Reward=2.194
+  Static:   Align=0.122 | Engage=4.11 | Depth=4.11 | Reward=0.500
+  PPO:      Align=0.666 | Engage=8.39 | Depth=4.17 | Reward=1.582
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    Single-Agent PPO                  72.0%      9.23    4.00   0.744    1.851
+         MARL (no Transformer)             72.0%     10.05    4.29   0.743    2.274
+         MARL + Transformer (Thesis)       70.5%      9.56    4.25   0.737    2.011
+         Static Honeypot                   73.0%      4.27    4.27   0.128    0.505
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             72.0%      9.51    4.04   0.723    2.108
+         MARL + Transformer (Thesis)       72.5%      8.45    4.01   0.675    1.827
+         Single-Agent PPO                  75.0%      8.47    3.98   0.668    1.746
+         Static Honeypot                   76.5%      3.85    3.85   0.117    0.495
+  ------------------------------------------------------------------------------------------
+  Ran    Single-Agent PPO                  61.0%      6.01    2.90   0.615    1.448
+         MARL (no Transformer)             63.5%      7.52    3.16   0.588    1.754
+         MARL + Transformer (Thesis)       52.0%      6.31    3.12   0.572    1.369
+         Static Honeypot                   62.0%      2.88    2.66   0.125    0.385
+  ------------------------------------------------------------------------------------------
+  Mix    MARL + Transformer (Thesis)       73.0%      9.31    3.99   0.710    1.840
+         MARL (no Transformer)             71.5%      9.79    4.20   0.702    2.194
+         Single-Agent PPO                  75.5%      8.39    4.17   0.666    1.582
+         Static Honeypot                   71.5%      4.11    4.11   0.122    0.500
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.737      0.743    0.128    0.744   -0.006
+  HiC       0.675      0.723    0.117    0.668   -0.048
+  Ran       0.572      0.588    0.125    0.615   -0.015
+  Mix       0.710      0.702    0.122    0.666   +0.008
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.56     4.25
+  HiE    MARL (no Transformer)           10.05     4.29
+  HiE    Static Honeypot                  4.27     4.27
+  HiE    Single-Agent PPO                 9.23     4.00
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.45     4.01
+  HiC    MARL (no Transformer)            9.51     4.04
+  HiC    Static Honeypot                  3.85     3.85
+  HiC    Single-Agent PPO                 8.47     3.98
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      6.31     3.12
+  Ran    MARL (no Transformer)            7.52     3.16
+  Ran    Static Honeypot                  2.88     2.66
+  Ran    Single-Agent PPO                 6.01     2.90
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.31     3.99
+  Mix    MARL (no Transformer)            9.79     4.20
+  Mix    Static Honeypot                  4.11     4.11
+  Mix    Single-Agent PPO                 8.39     4.17
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.700            0.716           -0.016  
+     30%       0.702            0.686           +0.016  ↑
+     50%       0.689            0.719           -0.030  
+     70%       0.695            0.726           -0.030  
+     90%       0.698            0.708           -0.011  ↑
+
+  Maximum gap: +0.016 at fog=30%
+  RESULT: Gap WIDENS with fog — Transformer h proves its value under partial observability.
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.744 | Engage=9.51 | Depth=4.21 | Reward=2.019
+  NoTrans:  Align=0.748 | Engage=10.13 | Depth=4.32 | Reward=2.265
+  Static:   Align=0.127 | Engage=4.16 | Depth=4.16 | Reward=0.512
+  PPO:      Align=0.724 | Engage=9.30 | Depth=4.21 | Reward=2.186
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.662 | Engage=9.42 | Depth=4.47 | Reward=1.985
+  NoTrans:  Align=0.703 | Engage=9.74 | Depth=4.13 | Reward=2.148
+  Static:   Align=0.120 | Engage=4.44 | Depth=4.44 | Reward=0.510
+  PPO:      Align=0.646 | Engage=7.31 | Depth=3.79 | Reward=1.477
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.583 | Engage=5.45 | Depth=2.81 | Reward=1.222
+  NoTrans:  Align=0.589 | Engage=6.03 | Depth=2.56 | Reward=1.444
+  Static:   Align=0.126 | Engage=3.60 | Depth=3.19 | Reward=0.453
+  PPO:      Align=0.475 | Engage=5.50 | Depth=2.88 | Reward=1.079
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.692 | Engage=9.35 | Depth=4.07 | Reward=1.810
+  NoTrans:  Align=0.714 | Engage=9.51 | Depth=4.10 | Reward=2.157
+  Static:   Align=0.120 | Engage=4.08 | Depth=4.08 | Reward=0.500
+  PPO:      Align=0.514 | Engage=7.78 | Depth=4.38 | Reward=1.486
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL (no Transformer)             69.5%     10.13    4.32   0.748    2.265
+         MARL + Transformer (Thesis)       74.0%      9.51    4.21   0.744    2.019
+         Single-Agent PPO                  72.5%      9.30    4.21   0.724    2.186
+         Static Honeypot                   74.0%      4.16    4.16   0.127    0.512
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             71.5%      9.74    4.13   0.703    2.148
+         MARL + Transformer (Thesis)       70.0%      9.42    4.47   0.662    1.985
+         Single-Agent PPO                  80.5%      7.31    3.79   0.646    1.477
+         Static Honeypot                   69.0%      4.44    4.44   0.120    0.510
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             59.5%      6.03    2.56   0.589    1.444
+         MARL + Transformer (Thesis)       59.0%      5.45    2.81   0.583    1.222
+         Single-Agent PPO                  56.5%      5.50    2.88   0.475    1.079
+         Static Honeypot                   65.5%      3.60    3.19   0.126    0.453
+  ------------------------------------------------------------------------------------------
+  Mix    MARL (no Transformer)             73.0%      9.51    4.10   0.714    2.157
+         MARL + Transformer (Thesis)       72.5%      9.35    4.07   0.692    1.810
+         Single-Agent PPO                  68.0%      7.78    4.38   0.514    1.486
+         Static Honeypot                   73.0%      4.08    4.08   0.120    0.500
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.744      0.748    0.127    0.724   -0.003
+  HiC       0.662      0.703    0.120    0.646   -0.041
+  Ran       0.583      0.589    0.126    0.475   -0.006
+  Mix       0.692      0.714    0.120    0.514   -0.022
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.51     4.21
+  HiE    MARL (no Transformer)           10.13     4.32
+  HiE    Static Honeypot                  4.16     4.16
+  HiE    Single-Agent PPO                 9.30     4.21
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      9.42     4.47
+  HiC    MARL (no Transformer)            9.74     4.13
+  HiC    Static Honeypot                  4.44     4.44
+  HiC    Single-Agent PPO                 7.31     3.79
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      5.45     2.81
+  Ran    MARL (no Transformer)            6.03     2.56
+  Ran    Static Honeypot                  3.60     3.19
+  Ran    Single-Agent PPO                 5.50     2.88
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.35     4.07
+  Mix    MARL (no Transformer)            9.51     4.10
+  Mix    Static Honeypot                  4.08     4.08
+  Mix    Single-Agent PPO                 7.78     4.38
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.702            0.724           -0.021  
+     30%       0.698            0.681           +0.018  ↑
+     50%       0.716            0.716           -0.000  
+     70%       0.710            0.702           +0.008  ↑
+     90%       0.700            0.706           -0.007  
+
+  Maximum gap: +0.018 at fog=30%
+  RESULT: Gap WIDENS with fog — Transformer h proves its value under partial observability.
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.752 | Engage=9.25 | Depth=4.08 | Reward=1.953
+  NoTrans:  Align=0.755 | Engage=9.73 | Depth=4.14 | Reward=2.204
+  Static:   Align=0.126 | Engage=4.32 | Depth=4.32 | Reward=0.516
+  PPO:      Align=0.685 | Engage=7.69 | Depth=3.85 | Reward=1.473
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.671 | Engage=8.61 | Depth=4.07 | Reward=1.847
+  NoTrans:  Align=0.708 | Engage=9.86 | Depth=4.18 | Reward=2.183
+  Static:   Align=0.119 | Engage=4.04 | Depth=4.04 | Reward=0.485
+  PPO:      Align=0.495 | Engage=6.95 | Depth=4.21 | Reward=1.656
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.576 | Engage=5.56 | Depth=2.81 | Reward=1.263
+  NoTrans:  Align=0.597 | Engage=6.42 | Depth=2.77 | Reward=1.482
+  Static:   Align=0.123 | Engage=3.04 | Depth=2.75 | Reward=0.379
+  PPO:      Align=0.510 | Engage=5.53 | Depth=3.24 | Reward=1.242
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.706 | Engage=9.62 | Depth=4.18 | Reward=1.886
+  NoTrans:  Align=0.715 | Engage=9.88 | Depth=4.22 | Reward=2.209
+  Static:   Align=0.122 | Engage=4.28 | Depth=4.28 | Reward=0.529
+  PPO:      Align=0.673 | Engage=9.13 | Depth=4.28 | Reward=1.776
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL (no Transformer)             72.0%      9.73    4.14   0.755    2.204
+         MARL + Transformer (Thesis)       73.0%      9.25    4.08   0.752    1.953
+         Single-Agent PPO                  77.5%      7.69    3.85   0.685    1.473
+         Static Honeypot                   73.0%      4.32    4.32   0.126    0.516
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             71.0%      9.86    4.18   0.708    2.183
+         MARL + Transformer (Thesis)       71.5%      8.61    4.07   0.671    1.847
+         Single-Agent PPO                  72.5%      6.95    4.21   0.495    1.656
+         Static Honeypot                   73.5%      4.04    4.04   0.119    0.485
+  ------------------------------------------------------------------------------------------
+  Ran    MARL (no Transformer)             57.0%      6.42    2.77   0.597    1.482
+         MARL + Transformer (Thesis)       59.5%      5.56    2.81   0.576    1.263
+         Single-Agent PPO                  54.5%      5.53    3.24   0.510    1.242
+         Static Honeypot                   55.5%      3.04    2.75   0.123    0.379
+  ------------------------------------------------------------------------------------------
+  Mix    MARL (no Transformer)             71.0%      9.88    4.22   0.715    2.209
+         MARL + Transformer (Thesis)       73.5%      9.62    4.18   0.706    1.886
+         Single-Agent PPO                  71.0%      9.13    4.28   0.673    1.776
+         Static Honeypot                   76.0%      4.28    4.28   0.122    0.529
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.752      0.755    0.126    0.685   -0.003
+  HiC       0.671      0.708    0.119    0.495   -0.037
+  Ran       0.576      0.597    0.123    0.510   -0.021
+  Mix       0.706      0.715    0.122    0.673   -0.009
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.25     4.08
+  HiE    MARL (no Transformer)            9.73     4.14
+  HiE    Static Honeypot                  4.32     4.32
+  HiE    Single-Agent PPO                 7.69     3.85
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.61     4.07
+  HiC    MARL (no Transformer)            9.86     4.18
+  HiC    Static Honeypot                  4.04     4.04
+  HiC    Single-Agent PPO                 6.95     4.21
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      5.56     2.81
+  Ran    MARL (no Transformer)            6.42     2.77
+  Ran    Static Honeypot                  3.04     2.75
+  Ran    Single-Agent PPO                 5.53     3.24
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.62     4.18
+  Mix    MARL (no Transformer)            9.88     4.22
+  Mix    Static Honeypot                  4.28     4.28
+  Mix    Single-Agent PPO                 9.13     4.28
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.703            0.714           -0.011  
+     30%       0.693            0.720           -0.027  
+     50%       0.708            0.698           +0.010  ↑
+     70%       0.713            0.708           +0.005  
+     90%       0.700            0.703           -0.004  
+
+  Maximum gap: +0.010 at fog=50%
+  RESULT: Gap WIDENS with fog — Transformer h proves its value under partial observability.
+
+  Fog of War results saved -> results\fog_of_war_results.json
+PS C:\Users\User\thesis_project_pev_V2\thesis_project_pev\thesis_project\thesis_system> python evaluate.py --fog
+
+  Device: cpu | Episodes: 200
+
+  Strategy: HiE
+  ----------------------------------------
+  Thesis:   Align=0.749 | Engage=9.41 | Depth=4.17 | Reward=2.023
+  NoTrans:  Align=0.768 | Engage=8.65 | Depth=3.65 | Reward=2.001
+  Static:   Align=0.126 | Engage=4.14 | Depth=4.14 | Reward=0.514
+  PPO:      Align=0.765 | Engage=9.52 | Depth=4.04 | Reward=2.138
+
+  Strategy: HiC
+  ----------------------------------------
+  Thesis:   Align=0.680 | Engage=8.74 | Depth=4.09 | Reward=1.869
+  NoTrans:  Align=0.713 | Engage=9.92 | Depth=4.21 | Reward=2.220
+  Static:   Align=0.120 | Engage=3.92 | Depth=3.92 | Reward=0.479
+  PPO:      Align=0.494 | Engage=6.93 | Depth=4.22 | Reward=1.645
+
+  Strategy: Ran
+  ----------------------------------------
+  Thesis:   Align=0.569 | Engage=6.23 | Depth=3.06 | Reward=1.363
+  NoTrans:  Align=0.585 | Engage=6.54 | Depth=2.84 | Reward=1.544
+  Static:   Align=0.127 | Engage=3.33 | Depth=3.03 | Reward=0.405
+  PPO:      Align=0.651 | Engage=7.23 | Depth=2.98 | Reward=1.665
+
+  Strategy: Mix
+  ----------------------------------------
+  Thesis:   Align=0.710 | Engage=9.69 | Depth=4.19 | Reward=1.916
+  NoTrans:  Align=0.690 | Engage=9.57 | Depth=4.16 | Reward=2.175
+  Static:   Align=0.121 | Engage=4.03 | Depth=4.03 | Reward=0.496
+  PPO:      Align=0.680 | Engage=8.33 | Depth=3.96 | Reward=1.928
+
+
+============================================================================================================
+  THESIS RESULTS — Gated Fusion MARL vs Baselines
+============================================================================================================
+  Strategy Method                               DSR    Engage   Depth   Align   Reward
+  ------------------------------------------------------------------------------------------
+  HiE    MARL (no Transformer)             79.0%      8.65    3.65   0.768    2.001
+         Single-Agent PPO                  74.5%      9.52    4.04   0.765    2.138
+         MARL + Transformer (Thesis)       75.0%      9.41    4.17   0.749    2.023
+         Static Honeypot                   72.5%      4.14    4.14   0.126    0.514
+  ------------------------------------------------------------------------------------------
+  HiC    MARL (no Transformer)             75.5%      9.92    4.21   0.713    2.220
+         MARL + Transformer (Thesis)       73.5%      8.74    4.09   0.680    1.869
+         Single-Agent PPO                  72.5%      6.93    4.22   0.494    1.645
+         Static Honeypot                   74.0%      3.92    3.92   0.120    0.479
+  ------------------------------------------------------------------------------------------
+  Ran    Single-Agent PPO                  59.5%      7.23    2.98   0.651    1.665
+         MARL (no Transformer)             54.5%      6.54    2.84   0.585    1.544
+         MARL + Transformer (Thesis)       56.0%      6.23    3.06   0.569    1.363
+         Static Honeypot                   58.0%      3.33    3.03   0.127    0.405
+  ------------------------------------------------------------------------------------------
+  Mix    MARL + Transformer (Thesis)       74.5%      9.69    4.19   0.710    1.916
+         MARL (no Transformer)             75.5%      9.57    4.16   0.690    2.175
+         Single-Agent PPO                  76.5%      8.33    3.96   0.680    1.928
+         Static Honeypot                   73.0%      4.03    4.03   0.121    0.496
+  ------------------------------------------------------------------------------------------
+============================================================================================================
+  DSR    = Deception Success Rate (secondary; topology-saturated)
+  Engage = dwell time with high-affinity stall bonuses
+  Depth  = unique MITRE techniques attempted
+  Align  = technique-action alignment [0,1]  <- KEY METRIC
+  Reward = mean cumulative episode reward
+
+  Results saved -> results\evaluation_results.json
+
+  ALIGNMENT SUMMARY:
+  Strategy   Thesis   No-Trans   Static      PPO     Lift
+  ----------------------------------------------------
+  HiE       0.749      0.768    0.126    0.765   -0.019
+  HiC       0.680      0.713    0.120    0.494   -0.033
+  Ran       0.569      0.585    0.127    0.651   -0.017
+  Mix       0.710      0.690    0.121    0.680   +0.019
+
+  ENGAGEMENT vs DEPTH (decoupled):
+  Strategy Method                         Engage    Depth
+  ----------------------------------------------------
+  HiE    MARL + Transformer (Thesis)      9.41     4.17
+  HiE    MARL (no Transformer)            8.65     3.65
+  HiE    Static Honeypot                  4.14     4.14
+  HiE    Single-Agent PPO                 9.52     4.04
+  ----------------------------------------------------
+  HiC    MARL + Transformer (Thesis)      8.74     4.09
+  HiC    MARL (no Transformer)            9.92     4.21
+  HiC    Static Honeypot                  3.92     3.92
+  HiC    Single-Agent PPO                 6.93     4.22
+  ----------------------------------------------------
+  Ran    MARL + Transformer (Thesis)      6.23     3.06
+  Ran    MARL (no Transformer)            6.54     2.84
+  Ran    Static Honeypot                  3.33     3.03
+  Ran    Single-Agent PPO                 7.23     2.98
+  ----------------------------------------------------
+  Mix    MARL + Transformer (Thesis)      9.69     4.19
+  Mix    MARL (no Transformer)            9.57     4.16
+  Mix    Static Honeypot                  4.03     4.03
+  Mix    Single-Agent PPO                 8.33     3.96
+  ----------------------------------------------------
+
+========================================================================
+  FOG OF WAR ANALYSIS — Transformer Value Under Partial Observability
+========================================================================
+  Telemetry masking probability (fog) increases left to right.
+  At fog=0.9: agents receive ~10% of state; only h is reliable.
+
+    Fog% Thesis Align NoTrans Align Gap (T-NT)
+  --------------------------------------------
+      0%       0.717            0.714           +0.004  
+     30%       0.698            0.718           -0.020  
+     50%       0.700            0.702           -0.002  ↑
+     70%       0.721            0.701           +0.020  ↑
+     90%       0.692            0.716           -0.024  
+
+  Maximum gap: +0.020 at fog=70%
+  RESULT: Gap does not consistently widen — gate suppresses h even with fog (telemetry residual still dominates).
+
+  Fog of War results saved -> results\fog_of_war_results.json

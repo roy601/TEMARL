@@ -1,0 +1,405 @@
+{
+  "config": {
+    "n_eval_episodes": 200,
+    "strategies": [
+      "HiE",
+      "HiC",
+      "Ran",
+      "Mix"
+    ]
+  },
+  "part1_metric_discrimination": {
+    "per_metric_means": {
+      "alignment": {
+        "HiE": {
+          "Thesis": [
+            0.7535,
+            0.1396
+          ],
+          "NoTrans": [
+            0.7381,
+            0.1146
+          ],
+          "Static": [
+            0.123,
+            0.0203
+          ]
+        },
+        "HiC": {
+          "Thesis": [
+            0.6784,
+            0.1319
+          ],
+          "NoTrans": [
+            0.7043,
+            0.1044
+          ],
+          "Static": [
+            0.1201,
+            0.0179
+          ]
+        },
+        "Ran": {
+          "Thesis": [
+            0.5973,
+            0.1952
+          ],
+          "NoTrans": [
+            0.5993,
+            0.1386
+          ],
+          "Static": [
+            0.1279,
+            0.03
+          ]
+        },
+        "Mix": {
+          "Thesis": [
+            0.7263,
+            0.1292
+          ],
+          "NoTrans": [
+            0.7079,
+            0.1146
+          ],
+          "Static": [
+            0.1223,
+            0.0186
+          ]
+        }
+      },
+      "dsr": {
+        "HiE": {
+          "Thesis": [
+            0.78,
+            0.4142
+          ],
+          "NoTrans": [
+            0.685,
+            0.4645
+          ],
+          "Static": [
+            0.775,
+            0.4176
+          ]
+        },
+        "HiC": {
+          "Thesis": [
+            0.735,
+            0.4413
+          ],
+          "NoTrans": [
+            0.735,
+            0.4413
+          ],
+          "Static": [
+            0.735,
+            0.4413
+          ]
+        },
+        "Ran": {
+          "Thesis": [
+            0.625,
+            0.4841
+          ],
+          "NoTrans": [
+            0.575,
+            0.4943
+          ],
+          "Static": [
+            0.56,
+            0.4964
+          ]
+        },
+        "Mix": {
+          "Thesis": [
+            0.755,
+            0.4301
+          ],
+          "NoTrans": [
+            0.735,
+            0.4413
+          ],
+          "Static": [
+            0.735,
+            0.4413
+          ]
+        }
+      },
+      "engagement_length": {
+        "HiE": {
+          "Thesis": [
+            8.879,
+            5.2539
+          ],
+          "NoTrans": [
+            10.118,
+            5.3662
+          ],
+          "Static": [
+            3.85,
+            2.3911
+          ]
+        },
+        "HiC": {
+          "Thesis": [
+            8.52,
+            5.083
+          ],
+          "NoTrans": [
+            9.709,
+            5.775
+          ],
+          "Static": [
+            4.125,
+            2.435
+          ]
+        },
+        "Ran": {
+          "Thesis": [
+            5.511,
+            5.2511
+          ],
+          "NoTrans": [
+            7.424,
+            6.6554
+          ],
+          "Static": [
+            3.395,
+            2.6132
+          ]
+        },
+        "Mix": {
+          "Thesis": [
+            9.284,
+            5.5424
+          ],
+          "NoTrans": [
+            9.681,
+            5.6214
+          ],
+          "Static": [
+            4.205,
+            2.348
+          ]
+        }
+      },
+      "interaction_depth": {
+        "HiE": {
+          "Thesis": [
+            3.925,
+            2.3684
+          ],
+          "NoTrans": [
+            4.355,
+            2.4039
+          ],
+          "Static": [
+            3.85,
+            2.3911
+          ]
+        },
+        "HiC": {
+          "Thesis": [
+            4.03,
+            2.437
+          ],
+          "NoTrans": [
+            4.125,
+            2.4268
+          ],
+          "Static": [
+            4.125,
+            2.435
+          ]
+        },
+        "Ran": {
+          "Thesis": [
+            2.705,
+            2.1675
+          ],
+          "NoTrans": [
+            3.16,
+            2.3737
+          ],
+          "Static": [
+            3.09,
+            2.0861
+          ]
+        },
+        "Mix": {
+          "Thesis": [
+            3.985,
+            2.4072
+          ],
+          "NoTrans": [
+            4.155,
+            2.4251
+          ],
+          "Static": [
+            4.205,
+            2.348
+          ]
+        }
+      }
+    },
+    "discrimination_summary": {
+      "alignment": {
+        "mean_gap_marl_advantage": 0.5655,
+        "strategies_with_band_overlap": 0,
+        "discriminates": true
+      },
+      "dsr": {
+        "mean_gap_marl_advantage": 0.0225,
+        "strategies_with_band_overlap": 4,
+        "discriminates": false
+      },
+      "engagement_length": {
+        "mean_gap_marl_advantage": 4.1547,
+        "strategies_with_band_overlap": 4,
+        "discriminates": false
+      },
+      "interaction_depth": {
+        "mean_gap_marl_advantage": 0.1562,
+        "strategies_with_band_overlap": 4,
+        "discriminates": false
+      }
+    }
+  },
+  "part2_generalization": {
+    "matrix": {
+      "HiE": {
+        "HiE": 0.749,
+        "HiC": 0.6837,
+        "Ran": 0.6631,
+        "Mix": 0.6873
+      },
+      "HiC": {
+        "HiE": 0.7262,
+        "HiC": 0.6603,
+        "Ran": 0.5687,
+        "Mix": 0.6833
+      },
+      "Ran": {
+        "HiE": 0.474,
+        "HiC": 0.5096,
+        "Ran": 0.5674,
+        "Mix": 0.4927
+      },
+      "Mix": {
+        "HiE": 0.761,
+        "HiC": 0.7187,
+        "Ran": 0.5532,
+        "Mix": 0.7011
+      }
+    },
+    "diagonal_mean": 0.6694,
+    "off_diagonal_mean": 0.6268,
+    "generalization_drop": 0.0427
+  },
+  "part3_transformer_contribution": {
+    "HiE": {
+      "thesis": 0.7535,
+      "notrans": 0.7381,
+      "lift": 0.0154
+    },
+    "HiC": {
+      "thesis": 0.6784,
+      "notrans": 0.7043,
+      "lift": -0.0259
+    },
+    "Ran": {
+      "thesis": 0.5973,
+      "notrans": 0.5993,
+      "lift": -0.002
+    },
+    "Mix": {
+      "thesis": 0.7263,
+      "notrans": 0.7079,
+      "lift": 0.0184
+    },
+    "mean_lift": 0.0015
+  },
+  "part4_final_summary": {
+    "HiE": {
+      "Thesis": {
+        "engagement_length": 8.879,
+        "interaction_depth": 3.925,
+        "alignment_score": 0.7535,
+        "dsr": 0.78
+      },
+      "NoTrans": {
+        "engagement_length": 10.118,
+        "interaction_depth": 4.355,
+        "alignment_score": 0.7381,
+        "dsr": 0.685
+      },
+      "Static": {
+        "engagement_length": 3.85,
+        "interaction_depth": 3.85,
+        "alignment_score": 0.123,
+        "dsr": 0.775
+      }
+    },
+    "HiC": {
+      "Thesis": {
+        "engagement_length": 8.52,
+        "interaction_depth": 4.03,
+        "alignment_score": 0.6784,
+        "dsr": 0.735
+      },
+      "NoTrans": {
+        "engagement_length": 9.709,
+        "interaction_depth": 4.125,
+        "alignment_score": 0.7043,
+        "dsr": 0.735
+      },
+      "Static": {
+        "engagement_length": 4.125,
+        "interaction_depth": 4.125,
+        "alignment_score": 0.1201,
+        "dsr": 0.735
+      }
+    },
+    "Ran": {
+      "Thesis": {
+        "engagement_length": 5.511,
+        "interaction_depth": 2.705,
+        "alignment_score": 0.5973,
+        "dsr": 0.625
+      },
+      "NoTrans": {
+        "engagement_length": 7.424,
+        "interaction_depth": 3.16,
+        "alignment_score": 0.5993,
+        "dsr": 0.575
+      },
+      "Static": {
+        "engagement_length": 3.395,
+        "interaction_depth": 3.09,
+        "alignment_score": 0.1279,
+        "dsr": 0.56
+      }
+    },
+    "Mix": {
+      "Thesis": {
+        "engagement_length": 9.284,
+        "interaction_depth": 3.985,
+        "alignment_score": 0.7263,
+        "dsr": 0.755
+      },
+      "NoTrans": {
+        "engagement_length": 9.681,
+        "interaction_depth": 4.155,
+        "alignment_score": 0.7079,
+        "dsr": 0.735
+      },
+      "Static": {
+        "engagement_length": 4.205,
+        "interaction_depth": 4.205,
+        "alignment_score": 0.1223,
+        "dsr": 0.735
+      }
+    }
+  }
+}

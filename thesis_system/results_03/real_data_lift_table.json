@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "finetune_epochs": 20,
+    "finetune_lr": 5e-05,
+    "eval_episodes": 200,
+    "train_sessions": 4791,
+    "val_sessions": 846,
+    "avg_seq_length": 5.2139,
+    "vocab_size": 25,
+    "baseline_type": "fresh_random_init",
+    "finetuned_path": "results\\encoder_finetuned_real.pt"
+  },
+  "training_curves": {
+    "train_losses": [
+      4.1484,
+      2.9785,
+      2.1622,
+      1.9812,
+      1.9227,
+      1.8837,
+      1.8532,
+      1.8236,
+      1.7862,
+      1.759,
+      1.7306,
+      1.7061,
+      1.6844,
+      1.675,
+      1.6597,
+      1.6485,
+      1.6416,
+      1.6426,
+      1.6352,
+      1.6352
+    ],
+    "val_losses": [
+      3.6431,
+      2.3217,
+      1.9463,
+      1.8677,
+      1.826,
+      1.7914,
+      1.7567,
+      1.7216,
+      1.6869,
+      1.657,
+      1.6284,
+      1.6048,
+      1.5847,
+      1.5675,
+      1.5549,
+      1.546,
+      1.5395,
+      1.5356,
+      1.5334,
+      1.532
+    ]
+  },
+  "lift_table": {
+    "HiE": {
+      "strategy_name": "High Evasion",
+      "fresh_baseline": 0.055,
+      "real_finetuned": 0.0,
+      "absolute_lift": -0.055,
+      "relative_lift_pct": -100.0
+    },
+    "HiC": {
+      "strategy_name": "High Credential",
+      "fresh_baseline": 0.27,
+      "real_finetuned": 0.485,
+      "absolute_lift": 0.215,
+      "relative_lift_pct": 79.63
+    },
+    "Ran": {
+      "strategy_name": "Random",
+      "fresh_baseline": 0.07,
+      "real_finetuned": 0.055,
+      "absolute_lift": -0.015,
+      "relative_lift_pct": -21.43
+    },
+    "Mix": {
+      "strategy_name": "Mixed",
+      "fresh_baseline": 0.235,
+      "real_finetuned": 0.405,
+      "absolute_lift": 0.17,
+      "relative_lift_pct": 72.34
+    }
+  }
+}
