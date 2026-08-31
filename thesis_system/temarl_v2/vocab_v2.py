@@ -83,6 +83,11 @@ TACTIC_ORDER = [
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _GROUNDING = os.path.join(_HERE, "..", "data", "camlds_grounding.json")
+# Source-verified inventory, parsed from the published AttackBed playbooks by
+# parse_attackbed.py. It is the AUTHORITY ON MEMBERSHIP; `_GROUNDING` above is
+# retained solely to PIN THE HISTORICAL ID ORDER (see build_vocab).
+_GROUNDING_VERIFIED = os.path.join(_HERE, "..", "data",
+                                   "camlds_grounding_verified.json")
 
 
 def _load_camlds_inventory(path=_GROUNDING):
@@ -109,6 +114,21 @@ def build_vocab(camlds_inventory=None):
         meta = cam[code]
         table[code] = {"id": nxt, "name": meta.get("name", code),
                        "tactic": meta.get("tactic", "Unknown"), "source": "camlds"}
+        nxt += 1
+
+    # ── source-verified extension (APPEND-ONLY) ─────────────────────────────
+    # The hand reconstruction missed 6 techniques that the published playbooks
+    # actually execute (6.20% of CAM-LDS technique instances fell to UNK). They
+    # are appended AFTER the existing ids rather than merged into the sorted
+    # block, because renumbering would silently invalidate `payoff_frozen.json`
+    # (78x6, keyed by id) and every trained checkpoint. Appending keeps ids
+    # 0..77 bit-identical and leaves the frozen payoff's existing rows valid.
+    ver = _load_camlds_inventory(_GROUNDING_VERIFIED)
+    for code in sorted(c for c in ver if c not in table):
+        meta = ver[code]
+        table[code] = {"id": nxt, "name": meta.get("name", code),
+                       "tactic": meta.get("tactic", "Unknown"),
+                       "source": "camlds-verified"}
         nxt += 1
 
     n_tech = nxt

@@ -288,3 +288,65 @@ if __name__ == "__main__":
     print(f"    => a COMISET-trained model may only be scored on that subset; the")
     print(f"       valid headline direction is CAM-LDS -> COMISET.")
     print("=" * 82)
+
+
+# ── CAM-LDS: source-verified loader + scenario-level splitting ───────────────
+#
+# Why this is separate from load_camlds_sequences() above: that function reads
+# the PAPER RECONSTRUCTION and returns condensed per-scenario chains, reserved
+# as a held-out probe. The functions below read the SOURCE-VERIFIED grounding
+# parsed from the published AttackBed playbooks (parse_attackbed.py) at FULL
+# STEP RESOLUTION -- 36 runs / 1,339 labelled technique instances -- which is
+# what makes CAM-LDS trainable rather than merely a test probe.
+
+CAMLDS_VERIFIED_PATH = os.path.join(HERE, "..", "data",
+                                    "camlds_grounding_verified.json")
+
+
+def load_camlds_verified(path=CAMLDS_VERIFIED_PATH, collapse=False, min_len=2):
+    """Return (seqs, scenario_of_seq, info) from the source-verified grounding.
+
+    collapse=False by default: unlike COMISET (98.5% self-loops, where collapsing
+    consecutive repeats is essential), CAM-LDS repeats only 18.6% of the time and
+    those repeats are genuine repeated commands in the playbook, not logging
+    artefacts. Collapsing them would discard real signal.
+    """
+    with open(path, encoding="utf-8") as f:
+        g = json.load(f)
+    seqs, scen, dropped = [], [], 0
+    for fn, run in g["runs"].items():
+        ids = [technique_to_id(c) for c in run["sequence"]]
+        if collapse:
+            ids = collapse_runs(ids)
+        if len(ids) >= min_len:
+            seqs.append(ids); scen.append(run["scenario"])
+        else:
+            dropped += 1
+    return seqs, scen, {"n_runs": len(seqs), "n_dropped": dropped,
+                        "n_steps": sum(len(s) for s in seqs),
+                        "n_scenarios": len(set(scen)),
+                        "provenance": g.get("provenance", "")}
+
+
+def scenario_loso_folds(scen_of_seq):
+    """Leave-One-Scenario-Out folds over SEQUENCE indices.
+
+    CAM-LDS must NOT use session_split(). Scenario 1 alone is 18 of the 36 runs
+    and its variants share a mean Jaccard of 0.871, against 0.078 across
+    scenarios -- a 10.4x ratio. A run-level split therefore places near-duplicate
+    campaigns on both sides and reports memorisation as generalisation. Holding
+    out a WHOLE scenario is the only split at which a held-out number means
+    'generalises to an unseen campaign'.
+    """
+    scen = list(scen_of_seq)
+    order = sorted(set(scen), key=lambda x: int(x[1:]))
+    for held in order:
+        te = [i for i, s in enumerate(scen) if s == held]
+        tr = [i for i, s in enumerate(scen) if s != held]
+        yield held, np.array(tr), np.array(te)
+
+
+def windows_for_seqs(X, L, Y, S, seq_idx):
+    """Select the window rows belonging to a set of SEQUENCE indices."""
+    keep = np.isin(S, np.asarray(seq_idx))
+    return np.nonzero(keep)[0]
