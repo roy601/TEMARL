@@ -42,39 +42,86 @@ RUN_DIR = os.path.join(ATTACKBED, "ansible", "run")
 OUT_PATH = os.path.join(HERE, "..", "data", "camlds_grounding_verified.json")
 OLD_PATH = os.path.join(HERE, "..", "data", "camlds_grounding.json")
 
-TECH_RE = re.compile(r'^\s*techniques:\s*["\']?([^"\'\n]+)["\']?\s*$')
-# NB: 35 playbooks use `tactics:`; the 2 scenario-5 files use the SINGULAR
-# `tactic:`. Matching only the plural silently dropped scenario 5 entirely.
-TACT_RE = re.compile(r'^\s*tactics?:\s*["\']?([^"\'\n]+)["\']?\s*$')
-NAME_RE = re.compile(r'^\s*technique_name:\s*["\']?([^"\'\n]+)["\']?\s*$')
+# Keys we read out of a `metadata:` block. Values are extracted by
+# `_value()` below rather than by an anchored regex, because several playbooks
+# put an inline `#` comment after a quoted value -- which silently broke the
+# previous anchored patterns and dropped the whole step.
+KEY_RE = re.compile(r'^\s*(techniques|tactics?|technique_name)\s*:\s*(.*)$')
+META_RE = re.compile(r'^(\s*)metadata\s*:\s*$')
+CMD_RE = re.compile(r'^\s*-\s+type\s*:')
+
+
+def _value(raw):
+    """Extract a metadata value, tolerating inline comments.
+
+    If the value is quoted, take exactly the quoted span (anything after the
+    closing quote is a comment). Otherwise take everything up to an unquoted
+    `#`. This is what the previous anchored regexes got wrong.
+    """
+    raw = raw.strip()
+    if raw[:1] in ('"', "'"):
+        q = raw[0]
+        end = raw.find(q, 1)
+        return raw[1:end] if end > 0 else raw[1:]
+    return raw.split("#", 1)[0].strip()
+
+
 CODE_RE = re.compile(r'T\d{4}(?:\.\d{3})?')
 
 
 def parse_playbook(path):
-    """Return ordered [(technique_code, tactic, name)] in command order."""
+    """Return ordered [(technique_code, tactic, name)] in command order.
+
+    BLOCK-AWARE: collects all keys inside one `metadata:` block, then emits.
+    The previous version was a sequential state machine that armed on
+    `techniques:` and emitted on `tactics:`, so a block listing `tactics:`
+    first emitted nothing at all. See the Phase-1 audit.
+    """
     steps = []
-    pending_tech = None
-    pending_name = None
+    block = None          # dict of keys for the metadata block being read
+    meta_indent = None
+
+    def flush(b):
+        if not b or not b.get("techniques"):
+            return
+        codes = CODE_RE.findall(b["techniques"])
+        tactics = [t.strip() for t in b.get("tactics", "").split(",") if t.strip()]
+        names = [t.strip() for t in b.get("technique_name", "").split(",")]
+        for i, code in enumerate(codes):
+            # Technique and tactic lists are NOT always the same length: a
+            # sub-technique can belong to two tactics (e.g. T1098.004 is both
+            # Persistence and Privilege Escalation), so the playbooks sometimes
+            # list more tactics than techniques. Positional where possible,
+            # first tactic as fallback. This is a documented heuristic.
+            tac = tactics[i] if i < len(tactics) else (tactics[0] if tactics else "")
+            nm = names[i] if i < len(names) else (names[0] if names else "")
+            steps.append((code, tac, nm))
+
     with open(path, encoding="utf-8", errors="replace") as f:
         for line in f:
-            m = TECH_RE.match(line)
+            line = line.rstrip("\n")
+            if not line.strip() or line.lstrip().startswith("#"):
+                continue
+            indent = len(line) - len(line.lstrip())
+            m = META_RE.match(line)
             if m:
-                pending_tech = CODE_RE.findall(m.group(1))
-                pending_name = None
+                flush(block)
+                block, meta_indent = {}, len(m.group(1))
                 continue
-            m = NAME_RE.match(line)
-            if m and pending_tech is not None:
-                pending_name = m.group(1).strip()
+            if CMD_RE.match(line):
+                flush(block)
+                block, meta_indent = None, None
                 continue
-            m = TACT_RE.match(line)
-            if m and pending_tech is not None:
-                tactics = [t.strip() for t in m.group(1).split(",")]
-                for i, code in enumerate(pending_tech):
-                    steps.append((code,
-                                  tactics[i] if i < len(tactics) else tactics[0],
-                                  pending_name or ""))
-                pending_tech, pending_name = None, None
-    # a metadata block may omit `tactics:`; keep those techniques with tactic ""
+            if block is not None and meta_indent is not None and indent <= meta_indent:
+                flush(block)
+                block, meta_indent = None, None
+            if block is None:
+                continue
+            m = KEY_RE.match(line)
+            if m:
+                key = "tactics" if m.group(1).startswith("tactic") else m.group(1)
+                block[key] = _value(m.group(2))
+    flush(block)
     return steps
 
 

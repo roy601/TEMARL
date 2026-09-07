@@ -2,7 +2,7 @@
  "source": "AttackBed AttackMate playbooks (github.com/ait-testbed/attackbed), parsed directly. CAM-LDS: Landauer et al., arXiv:2603.04186v1.",
  "provenance": "SOURCE-VERIFIED (parsed from published playbooks). Supersedes the earlier hand reconstruction from the paper's prose/figures.",
  "n_playbooks": 36,
- "n_labelled_steps": 1339,
+ "n_labelled_steps": 1347,
  "runs": {
   "scenario_1_a_a.j2": {
    "scenario": "S1",
@@ -2495,6 +2495,7 @@
     "T1105",
     "T1574.008",
     "T1546",
+    "T1222.002",
     "T1105",
     "T1115",
     "T1564.001",
@@ -2514,6 +2515,7 @@
     "Command and Control",
     "Command and Control",
     "Persistence",
+    "Defense Evasion",
     "Defense Evasion",
     "Command and Control",
     "Collection",
@@ -2589,6 +2591,8 @@
     "T1219",
     "T1219",
     "T1219",
+    "T1219",
+    "T1219",
     "T1105",
     "T1219",
     "T1564.001",
@@ -2648,6 +2652,8 @@
     "Execution",
     "Execution",
     "Execution",
+    "Command and Control",
+    "Command and Control",
     "Command and Control",
     "Command and Control",
     "Command and Control",
@@ -2714,6 +2720,8 @@
     "T1219",
     "T1219",
     "T1219",
+    "T1219",
+    "T1219",
     "T1105",
     "T1219",
     "T1564.001",
@@ -2760,6 +2768,8 @@
     "Execution",
     "Execution",
     "Execution",
+    "Command and Control",
+    "Command and Control",
     "Command and Control",
     "Command and Control",
     "Command and Control",
@@ -2899,6 +2909,9 @@
     "T1592.002",
     "T1071.001",
     "T1573.001",
+    "T1190",
+    "T1059.004",
+    "T1095",
     "T1033",
     "T1057",
     "T1016",
@@ -2920,6 +2933,9 @@
     "Initial Access",
     "Reconnaissance",
     "Command and Control",
+    "Command and Control",
+    "Initial Access",
+    "Execution",
     "Command and Control",
     "Discovery",
     "Discovery",
@@ -3010,219 +3026,223 @@
  },
  "technique_inventory": {
   "T1003": {
-   "name": "T1003",
+   "name": "OS Credential Dumping",
    "tactic": "Credential Access"
   },
   "T1005": {
-   "name": "T1005",
+   "name": "Data from Local System",
    "tactic": "Collection"
   },
   "T1007": {
-   "name": "T1007",
+   "name": "System Service Discovery",
    "tactic": "Discovery"
   },
   "T1010": {
-   "name": "T1010",
+   "name": "Application Window Discovery",
    "tactic": "Discovery"
   },
   "T1014": {
-   "name": "T1014",
+   "name": "Rootkit",
    "tactic": "Persistence"
   },
   "T1016": {
-   "name": "T1016",
+   "name": "System Network Configuration Discovery",
    "tactic": "Discovery"
   },
   "T1018": {
-   "name": "T1018",
+   "name": "Remote System Discovery",
    "tactic": "Discovery"
   },
   "T1021": {
-   "name": "T1021",
+   "name": "Remote Services",
    "tactic": "Lateral Movement"
   },
   "T1033": {
-   "name": "T1033",
+   "name": "System Owner/User Discovery",
    "tactic": "Discovery"
   },
   "T1036": {
-   "name": "T1036",
+   "name": "Masquerading",
    "tactic": "Defense Evasion"
   },
   "T1039": {
-   "name": "T1039",
+   "name": "Data from Network Shared Drive",
    "tactic": "Collection"
   },
   "T1040": {
-   "name": "T1040",
+   "name": "Network Sniffing",
    "tactic": "Credential Access"
   },
   "T1041": {
-   "name": "T1041",
+   "name": "Exfiltration Over C2 Channel",
    "tactic": "Collection"
   },
   "T1046": {
-   "name": "T1046",
+   "name": "Network Service Discovery",
    "tactic": "Discovery"
   },
   "T1049": {
-   "name": "T1049",
+   "name": "System Network Connections Discovery",
    "tactic": "Discovery"
   },
   "T1053": {
-   "name": "T1053",
+   "name": "Scheduled Task/Job",
    "tactic": "Persistence"
   },
   "T1056": {
-   "name": "T1056",
+   "name": "Input Capture",
    "tactic": "Persistence"
   },
   "T1057": {
-   "name": "T1057",
+   "name": "Process Discovery",
    "tactic": "Discovery"
   },
   "T1059": {
-   "name": "T1059",
+   "name": "Command and Scripting Interpreter",
    "tactic": "Execution"
   },
   "T1068": {
-   "name": "T1068",
+   "name": "Exploitation for Privilege Escalation",
    "tactic": "Privilege Escalation"
   },
   "T1069": {
-   "name": "T1069",
+   "name": "Permission Groups Discovery",
    "tactic": "Discovery"
   },
   "T1070": {
-   "name": "T1070",
+   "name": "Indicator Removal",
    "tactic": "Defense Evasion"
   },
   "T1071": {
-   "name": "T1071",
+   "name": "Application Layer Protocol",
    "tactic": "Command and Control"
   },
   "T1072": {
-   "name": "T1072",
+   "name": "Software Deployment Tools",
    "tactic": "Execution"
   },
   "T1074": {
-   "name": "T1074",
+   "name": "Data Staged",
    "tactic": "Exfiltration"
   },
   "T1078": {
-   "name": "T1078",
+   "name": "Valid Accounts",
    "tactic": "Initial Access"
   },
   "T1080": {
-   "name": "T1080",
+   "name": "Taint Shared Content",
    "tactic": "Lateral Movement"
   },
   "T1082": {
-   "name": "T1082",
+   "name": "System Information Discovery",
    "tactic": "Discovery"
   },
   "T1083": {
-   "name": "T1083",
+   "name": "File and Directory Discovery",
    "tactic": "Discovery"
   },
   "T1087": {
-   "name": "T1087",
+   "name": "Account Discovery",
    "tactic": "Discovery"
   },
+  "T1095": {
+   "name": "T1095",
+   "tactic": "Command and Control"
+  },
   "T1098": {
-   "name": "T1098",
+   "name": "Account Manipulation",
    "tactic": "Persistence"
   },
   "T1105": {
-   "name": "T1105",
+   "name": "Ingress Tool Transfer",
    "tactic": "Command and Control"
   },
   "T1110": {
-   "name": "T1110",
+   "name": "Brute Force",
    "tactic": "Initial Access"
   },
   "T1115": {
-   "name": "T1115",
+   "name": "Clipboard Data",
    "tactic": "Persistence"
   },
   "T1120": {
-   "name": "T1120",
+   "name": "Peripheral Device Discovery",
    "tactic": "Discovery"
   },
   "T1124": {
-   "name": "T1124",
+   "name": "System Time Discovery",
    "tactic": "Discovery"
   },
   "T1133": {
-   "name": "T1133",
+   "name": "External Remote Services",
    "tactic": "Initial Access"
   },
   "T1136": {
-   "name": "T1136",
+   "name": "Create Account",
    "tactic": "Persistence"
   },
   "T1176": {
-   "name": "T1176",
+   "name": "Browser Extensions",
    "tactic": "Persistence"
   },
   "T1190": {
-   "name": "T1190",
+   "name": "Exploit Public-Facing Application",
    "tactic": "Initial Access"
   },
   "T1201": {
-   "name": "T1201",
+   "name": "Password Policy Discover",
    "tactic": "Discovery"
   },
   "T1204": {
-   "name": "T1204",
+   "name": "User Execution",
    "tactic": "Initial Access"
   },
   "T1205": {
-   "name": "T1205",
+   "name": "Traffic Signaling",
    "tactic": "Defense Evasion"
   },
   "T1210": {
-   "name": "T1210",
+   "name": "Exploitation of Remote Services",
    "tactic": "Lateral Movement"
   },
   "T1213": {
-   "name": "T1213",
+   "name": "Data from Information Repositories",
    "tactic": "Collection"
   },
   "T1218": {
-   "name": "T1218",
+   "name": "System Binary Proxy Execution",
    "tactic": "Defense Evasion"
   },
   "T1219": {
-   "name": "T1219",
+   "name": "Remote Access Software",
    "tactic": "Execution"
   },
   "T1222": {
-   "name": "T1222",
+   "name": "File and Directory Permissions Modification",
    "tactic": "Defense Evasion"
   },
   "T1485": {
-   "name": "T1485",
+   "name": "Data Destruction",
    "tactic": "Impact"
   },
   "T1486": {
-   "name": "T1486",
+   "name": "Data Encrypted for Impact",
    "tactic": "Impact"
   },
   "T1489": {
-   "name": "T1489",
+   "name": "Service Stop",
    "tactic": "Impact"
   },
   "T1490": {
-   "name": "T1490",
+   "name": "Inhibit System Recovery",
    "tactic": "Impact"
   },
   "T1497": {
-   "name": "T1497",
+   "name": "Virtualization/Sandbox Evasion",
    "tactic": "Defense Evasion"
   },
   "T1518": {
-   "name": "T1518",
+   "name": "Software Discovery",
    "tactic": "Discovery"
   },
   "T1525": {
@@ -3230,95 +3250,95 @@
    "tactic": "Execution"
   },
   "T1528": {
-   "name": "T1528",
+   "name": "Steal Application Access Token",
    "tactic": "Credential Access"
   },
   "T1531": {
-   "name": "T1531",
+   "name": "Account Access Removal",
    "tactic": "Impact"
   },
   "T1543": {
-   "name": "T1543",
+   "name": "Create or Modify System Process",
    "tactic": "Persistence"
   },
   "T1546": {
-   "name": "T1546",
+   "name": "Event Triggered Execution",
    "tactic": "Privilege Escalation"
   },
   "T1547": {
-   "name": "T1547",
+   "name": "Boot or Logon Autostart Execution",
    "tactic": "Persistence"
   },
   "T1548": {
-   "name": "T1548",
+   "name": "Abuse Elevation Control Mechanism",
    "tactic": "Privilege Escalation"
   },
   "T1550": {
-   "name": "T1550",
+   "name": "Use Alternate Authentication Material",
    "tactic": "Defense Evasion"
   },
   "T1556": {
-   "name": "T1556",
+   "name": "Modify Authentication Process",
    "tactic": "Persistence"
   },
   "T1557": {
-   "name": "T1557",
+   "name": "Adversary-in-the-Middle",
    "tactic": "Credential Access"
   },
   "T1560": {
-   "name": "T1560",
+   "name": "Archive Collected Data",
    "tactic": "Collection"
   },
   "T1564": {
-   "name": "T1564",
+   "name": "Hide Artifacts",
    "tactic": "Defense Evasion"
   },
   "T1565": {
-   "name": "T1565",
+   "name": "Data Manipulation",
    "tactic": "Impact"
   },
   "T1566": {
-   "name": "T1566",
+   "name": "Phishing",
    "tactic": "Execution"
   },
   "T1569": {
-   "name": "T1569",
+   "name": "System Services",
    "tactic": "Execution"
   },
   "T1572": {
-   "name": "T1572",
+   "name": "Protocol Tunneling",
    "tactic": "Command and Control"
   },
   "T1573": {
-   "name": "T1573",
+   "name": "Encrypted Channel",
    "tactic": "Command and Control"
   },
   "T1574": {
-   "name": "T1574",
+   "name": "Hijack Execution Flow",
    "tactic": "Persistence"
   },
   "T1589": {
-   "name": "T1589",
+   "name": "Gather Victim Identity Information",
    "tactic": "Reconnaissance"
   },
   "T1590": {
-   "name": "T1590",
+   "name": "Gather Victim Network Information",
    "tactic": "Reconnaissance"
   },
   "T1591": {
-   "name": "T1591",
+   "name": "Gather Victim Org Information",
    "tactic": "Reconnaissance"
   },
   "T1592": {
-   "name": "T1592",
+   "name": "Gather Victim Host Information",
    "tactic": "Reconnaissance"
   },
   "T1595": {
-   "name": "T1595",
+   "name": "Active Scanning",
    "tactic": "Reconnaissance"
   },
   "T1599": {
-   "name": "T1599",
+   "name": "Network Boundary Bridging",
    "tactic": "Defense Evasion"
   },
   "T1610": {
@@ -3326,11 +3346,11 @@
    "tactic": "Defense Evasion"
   },
   "T1614": {
-   "name": "T1614",
+   "name": "System Location Discovery",
    "tactic": "Discovery"
   },
   "T1615": {
-   "name": "T1615",
+   "name": "Group Policy Discovery",
    "tactic": "Discovery"
   }
  },

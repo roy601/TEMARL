@@ -1,0 +1,113 @@
+{
+ "all_pass": true,
+ "results": [
+  {
+   "module": "vocab_v2.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.05100417137145996,
+   "lines": [
+    "[F-DAT-01] ids 0-22 unchanged : PASS",
+    "[F-DAT-01] CAM-LDS UNK count  : 0  PASS",
+    "[F-DAT-01] COMISET UNK count  : 0  PASS"
+   ],
+   "label": "vocabulary: ids frozen, zero UNK on both corpora"
+  },
+  {
+   "module": "d3fend_payoff.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.2572636604309082,
+   "lines": [
+    "PASS  delta>=min         0.2698 >= 0.15",
+    "VERDICT: PASS \u2014 matrix ACCEPTED and FROZEN"
+   ],
+   "label": "D3FEND payoff + pre-registered headroom gate"
+  },
+  {
+   "module": "env_v2.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.7855336666107178,
+   "lines": [
+    "spread (oracle-random): +0.182   PASS  de-saturated   (v1: all policies 0.90-0.97)"
+   ],
+   "label": "env_v2 (CONTROL, unchanged): clock / DSR / SNR"
+  },
+  {
+   "module": "encoders.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 5.173823833465576,
+   "lines": [
+    "Transformer  max |h(pad=6) - h(pad=16)| = 0.00e+00  PASS",
+    "GRU          max |h(pad=6) - h(pad=16)| = 0.00e+00  PASS",
+    "SetEncoder   max |h(pad=6) - h(pad=16)| = 0.00e+00  PASS"
+   ],
+   "label": "history encoders: parity, capacity, PAD-invariance"
+  },
+  {
+   "module": "policy.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 1.9991340637207031,
+   "lines": [
+    "state||h  (v1 Contribution 2)    hypernet in_dim=77   IGM dQtot/dQi min=+6.929e-01 mean=+1.825  PASS",
+    "state only (standard QMIX)       hypernet in_dim=13   IGM dQtot/dQi min=+5.718e-01 mean=+2.212  PASS"
+   ],
+   "label": "GMU trunk, gate sweep, IGM monotonicity"
+  },
+  {
+   "module": "topology.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.20014142990112305,
+   "lines": [
+    "TOPOLOGY GENERATOR: ALL PASS"
+   ],
+   "label": "v3 topology generator"
+  },
+  {
+   "module": "entity_encoders.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 2.07707142829895,
+   "lines": [
+    "capacity spread 0.7%  PASS",
+    "ENTITY ENCODERS: ALL PASS"
+   ],
+   "label": "v3 entity encoders"
+  },
+  {
+   "module": "policy_entity.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 1.7506320476531982,
+   "lines": [
+    "ENTITY POLICY: ALL PASS"
+   ],
+   "label": "v3 entity policy"
+  },
+  {
+   "module": "env_entity.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.38465094566345215,
+   "lines": [
+    "TOTAL                             0",
+    "VERDICT: EXACT EQUIVALENCE"
+   ],
+   "label": "v3 fixed-environment equivalence"
+  },
+  {
+   "module": "tests_entity.py",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 2.045950174331665,
+   "lines": [
+    "26/26 PASSED"
+   ],
+   "label": "v3 test suite (26 tests)"
+  }
+ ]
+}
