@@ -121,12 +121,19 @@ def main():
     ap.add_argument("--out", default=os.path.join(RESULTS, "entity_v5.json"))
     ap.add_argument("--prereg-commit", default="unknown")
     ap.add_argument("--seeds", type=int, nargs="*", default=list(PR.SEEDS))
+    ap.add_argument("--arms", nargs="*", default=None,
+                    help='subset of arms as "History/Network" strings')
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     topos = {r: build_topologies(r) for r in PR.REGIMES}
+    arms = PR.ARMS
+    if args.arms:
+        want = {tuple(a.split("/")) for a in args.arms}
+        arms = [a for a in PR.ARMS if tuple(a) in want]
+        assert len(arms) == len(want), "unknown arm in --arms: %s" % want
     rows, t0 = [], time.time()
-    total = len(PR.ARMS) * len(args.seeds)
+    total = len(arms) * len(args.seeds)
     print("=" * 100)
     print("  TEMARL v5 — PRE-REGISTERED CONFIRMATORY RUN  (prereg %s)"
           % args.prereg_commit)
@@ -134,7 +141,7 @@ def main():
     print("  %d arms x %d seeds = %d runs | %s | device %s"
           % (len(PR.ARMS), len(args.seeds), total, PR.TRAINING, DEVICE))
 
-    for hist_name, net_name in PR.ARMS:
+    for hist_name, net_name in arms:
         for seed in args.seeds:
             ts = time.time()
             enc = pretrain(hist_name, seed, topos["B"])
@@ -162,6 +169,8 @@ def main():
                                       "declaration": PR.DECLARATION},
                            "device": DEVICE, "rows": rows,
                            "complete": len(rows) == total,
+                           "arms_run": [list(a) for a in arms],
+                           "seeds": list(args.seeds),
                            "seconds": time.time() - t0}, f, indent=1,
                           default=float)
             print("  [%2d/%2d] %-18s %-18s seed %d | acc %.3f | B %.4f  D %.4f "
