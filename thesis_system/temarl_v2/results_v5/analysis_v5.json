@@ -1,0 +1,430 @@
+{
+ "prereg_commit": "1413afb",
+ "complete": true,
+ "n_seeds": 10,
+ "validity_gate": [
+  {
+   "arm": "Transformer-RoPE/DeepSets",
+   "dsr_b": 0.6039999999999999,
+   "delta_vs_fixed": 0.05650000000000001,
+   "capture_pct": 61.748633879781416,
+   "p": 0.0004101176910643922,
+   "passes": true
+  },
+  {
+   "arm": "GRU/DeepSets",
+   "dsr_b": 0.6100000000000001,
+   "delta_vs_fixed": 0.062499999999999986,
+   "capture_pct": 68.30601092896171,
+   "p": 2.4983826553264622e-05,
+   "passes": true
+  },
+  {
+   "arm": "GRU-d32/DeepSets",
+   "dsr_b": 0.6055,
+   "delta_vs_fixed": 0.05800000000000003,
+   "capture_pct": 63.38797814207652,
+   "p": 0.0018173989037038156,
+   "passes": true
+  },
+  {
+   "arm": "Transformer-RoPE/EntityTransformer",
+   "dsr_b": 0.6075000000000002,
+   "delta_vs_fixed": 0.06,
+   "capture_pct": 65.57377049180326,
+   "p": 5.406896958239441e-05,
+   "passes": true
+  },
+  {
+   "arm": "GRU/EntityTransformer",
+   "dsr_b": 0.6175,
+   "delta_vs_fixed": 0.06999999999999999,
+   "capture_pct": 76.50273224043713,
+   "p": 0.00010024814523840952,
+   "passes": true
+  }
+ ],
+ "n_arms_passing_gate": 5,
+ "summary": {
+  "Transformer-RoPE/DeepSets": {
+   "means": {
+    "A": 0.6539999999999999,
+    "B": 0.6039999999999999,
+    "C": 0.6025,
+    "D": 0.48650000000000004
+   }
+  },
+  "GRU/DeepSets": {
+   "means": {
+    "A": 0.655,
+    "B": 0.6100000000000001,
+    "C": 0.6079999999999999,
+    "D": 0.4820000000000001
+   }
+  },
+  "GRU-d32/DeepSets": {
+   "means": {
+    "A": 0.652,
+    "B": 0.6055,
+    "C": 0.605,
+    "D": 0.492
+   }
+  },
+  "Transformer-RoPE/EntityTransformer": {
+   "means": {
+    "A": 0.6525,
+    "B": 0.6075000000000002,
+    "C": 0.607,
+    "D": 0.481
+   }
+  },
+  "GRU/EntityTransformer": {
+   "means": {
+    "A": 0.6565000000000001,
+    "B": 0.6175,
+    "C": 0.6134999999999999,
+    "D": 0.5000000000000001
+   }
+  }
+ },
+ "contrasts": [
+  {
+   "label": "H16-D",
+   "arm_a": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "arm_b": [
+    "GRU",
+    "DeepSets"
+   ],
+   "regime": "D",
+   "n_pairs": 10,
+   "mean_a": 0.48650000000000004,
+   "mean_b": 0.4820000000000001,
+   "delta": 0.004499999999999999,
+   "ci_low": -0.012376372701370266,
+   "ci_high": 0.021376372701370265,
+   "t": 0.5226241536656668,
+   "p_raw": 0.6138557912683121,
+   "cohens_d": 0.16526826857406474,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H16-C",
+   "arm_a": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "arm_b": [
+    "GRU",
+    "DeepSets"
+   ],
+   "regime": "C",
+   "n_pairs": 10,
+   "mean_a": 0.6025,
+   "mean_b": 0.6079999999999999,
+   "delta": -0.005500000000000005,
+   "ci_low": -0.013427978585014254,
+   "ci_high": 0.0024279785850142444,
+   "t": -1.3597413116600434,
+   "p_raw": 0.20699779104251284,
+   "cohens_d": -0.42998795731344414,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H17-B",
+   "arm_a": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "arm_b": [
+    "GRU",
+    "DeepSets"
+   ],
+   "regime": "B",
+   "n_pairs": 10,
+   "mean_a": 0.6039999999999999,
+   "mean_b": 0.6100000000000001,
+   "delta": -0.005999999999999983,
+   "ci_low": -0.016205392909851353,
+   "ci_high": 0.004205392909851386,
+   "t": -1.1523319193960597,
+   "p_raw": 0.27887299924891884,
+   "cohens_d": -0.3643993485583798,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H17-A",
+   "arm_a": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "arm_b": [
+    "GRU",
+    "DeepSets"
+   ],
+   "regime": "A",
+   "n_pairs": 10,
+   "mean_a": 0.6539999999999999,
+   "mean_b": 0.655,
+   "delta": -0.0009999999999999898,
+   "ci_low": -0.007334301680357321,
+   "ci_high": 0.005334301680357342,
+   "t": -0.3094263738776351,
+   "p_raw": 0.7640411601083021,
+   "cohens_d": -0.09784921094844093,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H18-D",
+   "arm_a": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "arm_b": [
+    "GRU-d32",
+    "DeepSets"
+   ],
+   "regime": "D",
+   "n_pairs": 10,
+   "mean_a": 0.48650000000000004,
+   "mean_b": 0.492,
+   "delta": -0.00550000000000001,
+   "ci_low": -0.023118814438611433,
+   "ci_high": 0.012118814438611411,
+   "t": -0.6118459353528225,
+   "p_raw": 0.5557786615058696,
+   "cohens_d": -0.19348267327629923,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H18-B",
+   "arm_a": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "arm_b": [
+    "GRU-d32",
+    "DeepSets"
+   ],
+   "regime": "B",
+   "n_pairs": 10,
+   "mean_a": 0.6039999999999999,
+   "mean_b": 0.6055,
+   "delta": -0.0015000000000000234,
+   "ci_low": -0.018160000000000013,
+   "ci_high": 0.015159999999999967,
+   "t": -0.17647058823529693,
+   "p_raw": 0.8638314242770794,
+   "cohens_d": -0.05580489988324912,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H19-DT",
+   "arm_a": [
+    "Transformer-RoPE",
+    "EntityTransformer"
+   ],
+   "arm_b": [
+    "Transformer-RoPE",
+    "DeepSets"
+   ],
+   "regime": "D",
+   "n_pairs": 10,
+   "mean_a": 0.481,
+   "mean_b": 0.48650000000000004,
+   "delta": -0.005499999999999994,
+   "ci_low": -0.023947268993900782,
+   "ci_high": 0.012947268993900793,
+   "t": -0.5843683421954856,
+   "p_raw": 0.5733268009569478,
+   "cohens_d": -0.18479349537723266,
+   "both_arms_passed_gate": true,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H19-DG",
+   "arm_a": [
+    "GRU",
+    "EntityTransformer"
+   ],
+   "arm_b": [
+    "GRU",
+    "DeepSets"
+   ],
+   "regime": "D",
+   "n_pairs": 10,
+   "mean_a": 0.5000000000000001,
+   "mean_b": 0.4820000000000001,
+   "delta": 0.018,
+   "ci_low": -0.000316651804664881,
+   "ci_high": 0.03631665180466488,
+   "t": 1.9261162125173386,
+   "p_raw": 0.08620752080752261,
+   "cohens_d": 0.6090914269525604,
+   "both_arms_passed_gate": true,
+   "p_holm": 0.6896601664601809,
+   "significant": false
+  }
+ ],
+ "verdicts": {
+  "H16": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "At UNSEEN topology sizes the Transformer history encoder beats the GRU on DSR (the arXiv:2410.17647 pattern)"
+  },
+  "H17": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "At TRAINED sizes the two are indistinguishable -- the other half of the same claim, which the pilot did not support: it showed the Transformer BEHIND at trained sizes"
+  },
+  "H18": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "The unseen-size advantage is architectural, not an h-width artefact: the Transformer also beats the width-matched GRU-d32"
+  },
+  "H19": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "The EntityTransformer network encoder beats DeepSets at unseen sizes -- the entity-attention half of the same paper, which v4 could not test because it froze the network encoder"
+  }
+ },
+ "prereg": {
+  "hypotheses": [
+   [
+    "H16",
+    "At UNSEEN topology sizes the Transformer history encoder beats the GRU on DSR (the arXiv:2410.17647 pattern)",
+    "dsr"
+   ],
+   [
+    "H17",
+    "At TRAINED sizes the two are indistinguishable -- the other half of the same claim, which the pilot did not support: it showed the Transformer BEHIND at trained sizes",
+    "dsr"
+   ],
+   [
+    "H18",
+    "The unseen-size advantage is architectural, not an h-width artefact: the Transformer also beats the width-matched GRU-d32",
+    "dsr"
+   ],
+   [
+    "H19",
+    "The EntityTransformer network encoder beats DeepSets at unseen sizes -- the entity-attention half of the same paper, which v4 could not test because it froze the network encoder",
+    "dsr"
+   ]
+  ],
+  "contrast_family": [
+   [
+    "H16-D",
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    [
+     "GRU",
+     "DeepSets"
+    ],
+    "D"
+   ],
+   [
+    "H16-C",
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    [
+     "GRU",
+     "DeepSets"
+    ],
+    "C"
+   ],
+   [
+    "H17-B",
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    [
+     "GRU",
+     "DeepSets"
+    ],
+    "B"
+   ],
+   [
+    "H17-A",
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    [
+     "GRU",
+     "DeepSets"
+    ],
+    "A"
+   ],
+   [
+    "H18-D",
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    [
+     "GRU-d32",
+     "DeepSets"
+    ],
+    "D"
+   ],
+   [
+    "H18-B",
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    [
+     "GRU-d32",
+     "DeepSets"
+    ],
+    "B"
+   ],
+   [
+    "H19-DT",
+    [
+     "Transformer-RoPE",
+     "EntityTransformer"
+    ],
+    [
+     "Transformer-RoPE",
+     "DeepSets"
+    ],
+    "D"
+   ],
+   [
+    "H19-DG",
+    [
+     "GRU",
+     "EntityTransformer"
+    ],
+    [
+     "GRU",
+     "DeepSets"
+    ],
+    "D"
+   ]
+  ],
+  "validity_gate": {
+   "rule": "every arm must beat the best_fixed baseline on regime B by a paired t-test over the 10 seeds, p < 0.05",
+   "baseline_file": "results_v5/baselines_v5.json",
+   "if_failed": "contrasts involving a failing arm are reported IN FULL but labelled VOID, and no architecture claim may rest on them"
+  },
+  "declaration": "Pre-registered before the confirmatory run. Hypotheses, arms, seeds, primary metric, contrast family, correction, encoder specs and training budget are fixed here and are not to be modified after observing results. Every declared contrast is reported whatever its outcome, including H17 where the pilot ran AGAINST the hypothesis. The validity gate is reported FIRST and may void the architecture claim. The full exploratory path that motivated this experiment -- including two failed hypotheses and a 3-seed pilot -- is disclosed in this file's docstring. The v4 null is not withdrawn. A null result here retires the architecture claim again."
+ }
+}
