@@ -1,0 +1,81 @@
+{
+ "prereg_commit": "7261a4a",
+ "complete": true,
+ "validity_gate": [
+  {
+   "arm": "GRU/EntityTransformer",
+   "dsr": 0.45967741935483875,
+   "p": 2.1958410220762444e-07,
+   "passes": true
+  },
+  {
+   "arm": "GRU/DeepSets",
+   "dsr": 0.4651612903225807,
+   "p": 3.3530747052947056e-08,
+   "passes": true
+  }
+ ],
+ "gate_ok": true,
+ "v5_original": {
+  "n": 10,
+  "mean_a": 0.5000000000000001,
+  "mean_b": 0.4820000000000001,
+  "delta": 0.018,
+  "se": 0.009345230512584122,
+  "d": 0.609091426973171,
+  "t": 1.9261162125173386,
+  "p": 0.04310376040376131,
+  "p_two_sided": 0.08620752080752261,
+  "ci_low": -0.000316651804664881,
+  "ci_high": 0.03631665180466488
+ },
+ "v6_replication": {
+  "n": 31,
+  "mean_a": 0.45967741935483875,
+  "mean_b": 0.4651612903225807,
+  "delta": -0.005483870967741937,
+  "se": 0.005761173522880157,
+  "d": -0.17096036033727385,
+  "t": -0.9518670017424523,
+  "p": 0.8256144913289958,
+  "p_two_sided": 0.34877101734200855,
+  "ci_low": -0.016775771072587042,
+  "ci_high": 0.00580802913710317
+ },
+ "pooled": {
+  "n": 41,
+  "mean_a": 0.4695121951219512,
+  "mean_b": 0.46926829268292686,
+  "delta": 0.0002439024390243891,
+  "se": 0.005114396286500667,
+  "d": 0.00744783143550803,
+  "t": 0.04768938998101575,
+  "p": 0.48110055412674685,
+  "p_two_sided": 0.9622011082534937,
+  "ci_low": -0.009780314282516918,
+  "ci_high": 0.010268119160565695
+ },
+ "prereg": {
+  "hypotheses": [
+   [
+    "H19-DG-rep",
+    "At unseen topology sizes, the EntityTransformer network encoder beats DeepSets on DSR, with the GRU history encoder held fixed (replication of v5 H19-DG at n=31, 90% power for d=0.61)",
+    "dsr"
+   ]
+  ],
+  "primary_contrast": [
+   "H19-DG-rep",
+   [
+    "GRU",
+    "EntityTransformer"
+   ],
+   [
+    "GRU",
+    "DeepSets"
+   ],
+   "D"
+  ],
+  "n_planned": 31,
+  "declaration": "Pre-registered before the replication ran, at a sample size FIXED in advance by a power analysis on the v5 effect size. Seeds are disjoint from v5's, so the replication is independent. The result is reported whatever it shows: if null, the pooled n=41 estimate is the final word and H19-DG is retired along with the rest of the architecture claim. No seed will be added after seeing the outcome, and no other contrast is re-tested. The seven other v5 contrasts stand exactly as reported."
+ }
+}

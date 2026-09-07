@@ -52,31 +52,44 @@ zero; regime D reaches only "bounded below 0.0203." Cost is 2–2.5× wall-clock
 
 ---
 
-## 2. Entity attention at unseen topology sizes — REPLICATION PENDING
+## 2. Entity attention at unseen topology sizes — REPLICATED AND REFUTED
+
+**This claim is retired.** It is documented here because the thesis should
+report it, not because it survived.
 
 **v5 result (pre-registered, reported as declared).** GRU/EntityTransformer vs
 GRU/DeepSets at unseen sizes: Δ +0.0180, *d* = 0.61, two-sided **p_holm =
-0.690, NOT SIGNIFICANT**. 90% CI [+0.0009, +0.0351].
+0.690, NOT SIGNIFICANT**. 90% CI [+0.0009, +0.0351]. Underpowered rather than
+refuted — n = 10 has 80% power only for *d* ≥ 1.00 — so a replication was
+pre-registered at n = 31 (90% power for *d* = 0.61), fresh seeds 100–130
+disjoint from v5's, in `prereg_v6.py` (commit `7261a4a`) **before it ran**.
 
-**Status.** Underpowered, not refuted: n = 10 has 80% power only for *d* ≥ 1.00.
-Power analysis gives n = 24 (80%), **n = 31 (90%)**, n = 38 (95%).
+| | n | EntityTransformer | DeepSets | Δ | *d* | p (one-sided) |
+|---|---|---|---|---|---|---|
+| v5 original | 10 | 0.5000 | 0.4820 | +0.0180 | +0.61 | — |
+| **v6 replication** | **31** | 0.4597 | 0.4652 | **−0.0055** | **−0.17** | **0.8256** |
+| **Pooled** | **41** | 0.4695 | 0.4693 | **+0.0002** | **+0.01** | 0.4811 |
 
-**Replication.** Pre-registered in `prereg_v6.py` (commit `7261a4a`) at
-n = 31 **fixed in advance**, fresh seeds 100–130 disjoint from v5's, one
-pre-declared contrast, one-sided (direction predicted in advance by
-arXiv:2410.17647). Reports the independent replication *and* the pooled n = 41
-estimate, whatever they show.
+The replication came out in the **opposite direction**. Pooled over all 41
+seeds the effect is **+0.0002 DSR** — indistinguishable from exactly zero.
+Secondary regimes agree: A +0.0019, B +0.0003, C −0.0006, all null.
 
-> **⚠ FILL IN BEFORE SUBMISSION.** If the replication is significant, this
-> becomes a second positive claim with independent published corroboration. If
-> not, the pooled estimate is the final word and this claim is retired — the
-> thesis then rests on §1 and §3–5, which is sufficient.
+**Validity gate passed** on the replication seeds (both arms beat `best_fixed`
+by +0.0308 and +0.0363, p = 0.0000), so this is a valid negative result, not a
+void one. Per the pre-registration the pooled estimate is the final word and
+**no further seeds will be added**.
 
 **Integrity note that must appear in the thesis.** The v5 data, re-tested
 one-sided, gives p = 0.0431. **That number must never be quoted as a result.**
 v5 was pre-registered two-sided with Holm correction and stands at p_holm =
-0.690. A one-sided test is valid only for the fresh v6 seeds, where the
-direction was fixed before the data existed.
+0.690. A one-sided test was valid only for the fresh v6 seeds, where the
+direction was fixed before the data existed — and there it returned p = 0.83.
+
+**What this adds to the thesis.** A pre-registered, adequately powered
+replication that refutes the study's own most promising lead is a genuine
+methodological contribution, and it strengthens §1: the equivalence result now
+stands after the one plausible route to an architecture win was tested properly
+and closed.
 
 ---
 
@@ -207,9 +220,12 @@ smoothing (−0.0588) and finer class granularity (−0.0305) — because they
    responsible agent is necessarily in-zone — yet contributes ~1.17 bits/agent of
    variance to the PPO ratio.
 3. **n = 10 detects only *d* ≥ 1.00.** Every observed |*d*| ≤ 0.61.
-4. **Effect sizes here are smaller than seed noise at n = 3.** Two
-   mutually-confirming n = 3 results both evaporated at n = 10. Report seed SD
-   beside any pilot effect.
+4. **Small-*n* effects in this domain do not survive.** Four times in this
+   project a promising effect vanished at adequate *n*: an n = 3 crossover
+   (+0.0333 → +0.0045 at n = 10), the n = 3 width-matched control that appeared
+   to confirm it (27.6% → 79.8% headroom at n = 10), and H19-DG (*d* = 0.61 at
+   n = 10 → *d* = −0.17 at n = 31). Report seed SD beside any pilot effect; here
+   regime-D seed SD (≈0.068) exceeded every effect ever claimed from it.
 5. **One environment, one scripted attacker.** A learning attacker could change
    the structure of the task entirely.
 6. **Attacker profiles derive from the older hand reconstruction**
