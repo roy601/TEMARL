@@ -1,0 +1,685 @@
+{
+ "prereg": {
+  "hypotheses": [
+   [
+    "H6",
+    "EntityTransformer > DeepSets on regime B (new topologies, TRAINED sizes)",
+    "dsr"
+   ],
+   [
+    "H7",
+    "EntityTransformer > DeepSets on regimes C and D (unseen structure, unseen sizes)",
+    "dsr"
+   ],
+   [
+    "H8",
+    "History GRU >= History Transformer under variable topology (does the CAM-LDS finding survive the regime change?)",
+    "dsr"
+   ]
+  ],
+  "arms": [
+   [
+    "EntityTransformer",
+    "Transformer"
+   ],
+   [
+    "EntityTransformer",
+    "GRU"
+   ],
+   [
+    "EntityTransformer",
+    "SetEncoder"
+   ],
+   [
+    "DeepSets",
+    "Transformer"
+   ],
+   [
+    "DeepSets",
+    "GRU"
+   ],
+   [
+    "DeepSets",
+    "SetEncoder"
+   ]
+  ],
+  "primary": "dsr",
+  "contrast_family": [
+   [
+    "H6-Transformer",
+    [
+     "EntityTransformer",
+     "Transformer"
+    ],
+    [
+     "DeepSets",
+     "Transformer"
+    ],
+    "B"
+   ],
+   [
+    "H6-GRU",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "DeepSets",
+     "GRU"
+    ],
+    "B"
+   ],
+   [
+    "H6-SetEncoder",
+    [
+     "EntityTransformer",
+     "SetEncoder"
+    ],
+    [
+     "DeepSets",
+     "SetEncoder"
+    ],
+    "B"
+   ],
+   [
+    "H7-C-GRU",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "DeepSets",
+     "GRU"
+    ],
+    "C"
+   ],
+   [
+    "H7-D-GRU",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "DeepSets",
+     "GRU"
+    ],
+    "D"
+   ],
+   [
+    "H8-hist-B",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "EntityTransformer",
+     "Transformer"
+    ],
+    "B"
+   ],
+   [
+    "H8-hist-D",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "EntityTransformer",
+     "Transformer"
+    ],
+    "D"
+   ]
+  ],
+  "declaration": "Pre-registered before any v3 training run. Hypotheses, metric, splits, seeds, contrast family and correction are fixed here and are not to be modified after observing results. A null or negative outcome is a valid result and will be reported as such."
+ },
+ "config": {
+  "seeds": [
+   0
+  ],
+  "train_episodes": 40,
+  "eval_episodes": 20
+ },
+ "topologies": {
+  "train": [
+   {
+    "name": "gen_s0_z5",
+    "n_zones": 5,
+    "n_hosts": 15,
+    "hash": "b87df6d3e6aae90b"
+   },
+   {
+    "name": "gen_s1_z6",
+    "n_zones": 6,
+    "n_hosts": 16,
+    "hash": "f38ee2b48f9599d6"
+   },
+   {
+    "name": "gen_s2_z7",
+    "n_zones": 7,
+    "n_hosts": 16,
+    "hash": "1c3b283b97e5e231"
+   },
+   {
+    "name": "gen_s3_z5",
+    "n_zones": 5,
+    "n_hosts": 10,
+    "hash": "b29e990553819a00"
+   },
+   {
+    "name": "gen_s4_z6",
+    "n_zones": 6,
+    "n_hosts": 11,
+    "hash": "3678907c9fb8d29a"
+   },
+   {
+    "name": "gen_s5_z7",
+    "n_zones": 7,
+    "n_hosts": 16,
+    "hash": "284c2a5f73e31785"
+   },
+   {
+    "name": "gen_s6_z5",
+    "n_zones": 5,
+    "n_hosts": 11,
+    "hash": "ef92b528dde360a5"
+   },
+   {
+    "name": "gen_s7_z6",
+    "n_zones": 6,
+    "n_hosts": 10,
+    "hash": "2b3b0eae8582c794"
+   },
+   {
+    "name": "gen_s8_z7",
+    "n_zones": 7,
+    "n_hosts": 12,
+    "hash": "17962167dbfd751a"
+   },
+   {
+    "name": "gen_s9_z5",
+    "n_zones": 5,
+    "n_hosts": 11,
+    "hash": "f36421114e69b3d1"
+   },
+   {
+    "name": "gen_s10_z6",
+    "n_zones": 6,
+    "n_hosts": 12,
+    "hash": "bd0e1b8eb3a19add"
+   },
+   {
+    "name": "gen_s11_z7",
+    "n_zones": 7,
+    "n_hosts": 14,
+    "hash": "ec120fc0502dea7e"
+   },
+   {
+    "name": "gen_s12_z5",
+    "n_zones": 5,
+    "n_hosts": 12,
+    "hash": "67bbd9c290b0a7b9"
+   },
+   {
+    "name": "gen_s13_z6",
+    "n_zones": 6,
+    "n_hosts": 15,
+    "hash": "57ddd2108a3e4fd4"
+   },
+   {
+    "name": "gen_s14_z7",
+    "n_zones": 7,
+    "n_hosts": 14,
+    "hash": "f7ff8650351f02d3"
+   },
+   {
+    "name": "gen_s15_z5",
+    "n_zones": 5,
+    "n_hosts": 14,
+    "hash": "29cd255c997b3aa7"
+   },
+   {
+    "name": "gen_s16_z6",
+    "n_zones": 6,
+    "n_hosts": 13,
+    "hash": "74da026b3446d270"
+   },
+   {
+    "name": "gen_s17_z7",
+    "n_zones": 7,
+    "n_hosts": 15,
+    "hash": "13c3561f5e74edac"
+   },
+   {
+    "name": "gen_s18_z5",
+    "n_zones": 5,
+    "n_hosts": 9,
+    "hash": "cd4215627cd325c7"
+   },
+   {
+    "name": "gen_s19_z6",
+    "n_zones": 6,
+    "n_hosts": 12,
+    "hash": "6dc965e3f40f0bdb"
+   },
+   {
+    "name": "gen_s20_z7",
+    "n_zones": 7,
+    "n_hosts": 15,
+    "hash": "5de76e1f15639d20"
+   },
+   {
+    "name": "gen_s21_z5",
+    "n_zones": 5,
+    "n_hosts": 12,
+    "hash": "64edd209274e39c4"
+   },
+   {
+    "name": "gen_s22_z6",
+    "n_zones": 6,
+    "n_hosts": 11,
+    "hash": "a8b62ccaf9710436"
+   },
+   {
+    "name": "gen_s23_z7",
+    "n_zones": 7,
+    "n_hosts": 15,
+    "hash": "e494dc62c7f03e65"
+   }
+  ],
+  "A": [
+   {
+    "name": "canonical_5zone",
+    "n_zones": 5,
+    "n_hosts": 10,
+    "hash": "abd3fdfeffa20cc2"
+   }
+  ],
+  "B": [
+   {
+    "name": "gen_s100_z5",
+    "n_zones": 5,
+    "n_hosts": 11,
+    "hash": "76215dc8f960a771"
+   },
+   {
+    "name": "gen_s101_z6",
+    "n_zones": 6,
+    "n_hosts": 14,
+    "hash": "ed7f0f88b3a68158"
+   },
+   {
+    "name": "gen_s102_z7",
+    "n_zones": 7,
+    "n_hosts": 17,
+    "hash": "1fa1d1b6d67844d9"
+   },
+   {
+    "name": "gen_s103_z5",
+    "n_zones": 5,
+    "n_hosts": 10,
+    "hash": "3fb61892e09ccf87"
+   },
+   {
+    "name": "gen_s104_z6",
+    "n_zones": 6,
+    "n_hosts": 10,
+    "hash": "628ba5f768a8384b"
+   },
+   {
+    "name": "gen_s105_z7",
+    "n_zones": 7,
+    "n_hosts": 16,
+    "hash": "4b343a21ee1ee9e7"
+   },
+   {
+    "name": "gen_s106_z5",
+    "n_zones": 5,
+    "n_hosts": 8,
+    "hash": "c1180847eccf6197"
+   },
+   {
+    "name": "gen_s107_z6",
+    "n_zones": 6,
+    "n_hosts": 9,
+    "hash": "c1fdfb2f5c38339c"
+   },
+   {
+    "name": "gen_s108_z7",
+    "n_zones": 7,
+    "n_hosts": 15,
+    "hash": "351c52d21a9b5f3f"
+   },
+   {
+    "name": "gen_s109_z5",
+    "n_zones": 5,
+    "n_hosts": 11,
+    "hash": "81ce5f4048b37fe2"
+   },
+   {
+    "name": "gen_s110_z6",
+    "n_zones": 6,
+    "n_hosts": 14,
+    "hash": "b2f74900906735a0"
+   },
+   {
+    "name": "gen_s111_z7",
+    "n_zones": 7,
+    "n_hosts": 16,
+    "hash": "9a723d4e0f0ef1e8"
+   }
+  ],
+  "C": [
+   {
+    "name": "gen_s200_z5",
+    "n_zones": 5,
+    "n_hosts": 9,
+    "hash": "a182f8d80fd85f1a"
+   },
+   {
+    "name": "gen_s201_z6",
+    "n_zones": 6,
+    "n_hosts": 12,
+    "hash": "6a88150324afd6d9"
+   },
+   {
+    "name": "gen_s202_z7",
+    "n_zones": 7,
+    "n_hosts": 14,
+    "hash": "451507739a106d5c"
+   },
+   {
+    "name": "gen_s203_z5",
+    "n_zones": 5,
+    "n_hosts": 11,
+    "hash": "afb1a409b111ee77"
+   },
+   {
+    "name": "gen_s204_z6",
+    "n_zones": 6,
+    "n_hosts": 12,
+    "hash": "2229408348a71e19"
+   },
+   {
+    "name": "gen_s205_z7",
+    "n_zones": 7,
+    "n_hosts": 18,
+    "hash": "559c551d18052f34"
+   },
+   {
+    "name": "gen_s206_z5",
+    "n_zones": 5,
+    "n_hosts": 10,
+    "hash": "47f0784d1139f803"
+   },
+   {
+    "name": "gen_s207_z6",
+    "n_zones": 6,
+    "n_hosts": 15,
+    "hash": "67ef22253f7a7048"
+   },
+   {
+    "name": "gen_s208_z7",
+    "n_zones": 7,
+    "n_hosts": 13,
+    "hash": "a5d4ebfd32de0fe2"
+   },
+   {
+    "name": "gen_s209_z5",
+    "n_zones": 5,
+    "n_hosts": 14,
+    "hash": "e6e3e963a6d44037"
+   },
+   {
+    "name": "gen_s210_z6",
+    "n_zones": 6,
+    "n_hosts": 13,
+    "hash": "489b6522ab51a5b3"
+   },
+   {
+    "name": "gen_s211_z7",
+    "n_zones": 7,
+    "n_hosts": 16,
+    "hash": "f9f10a449d4938db"
+   }
+  ],
+  "D": [
+   {
+    "name": "gen_s300_z9",
+    "n_zones": 9,
+    "n_hosts": 20,
+    "hash": "70f10c8124de45df"
+   },
+   {
+    "name": "gen_s301_z11",
+    "n_zones": 11,
+    "n_hosts": 19,
+    "hash": "cf7338c945505552"
+   },
+   {
+    "name": "gen_s302_z13",
+    "n_zones": 13,
+    "n_hosts": 26,
+    "hash": "c8fc4f8c371c359d"
+   },
+   {
+    "name": "gen_s303_z9",
+    "n_zones": 9,
+    "n_hosts": 18,
+    "hash": "ddb98d529f9f27fe"
+   },
+   {
+    "name": "gen_s304_z11",
+    "n_zones": 11,
+    "n_hosts": 26,
+    "hash": "6dd663b0b1fd159f"
+   },
+   {
+    "name": "gen_s305_z13",
+    "n_zones": 13,
+    "n_hosts": 24,
+    "hash": "4eacb61981ce9a09"
+   },
+   {
+    "name": "gen_s306_z9",
+    "n_zones": 9,
+    "n_hosts": 21,
+    "hash": "af6780e064d7626a"
+   },
+   {
+    "name": "gen_s307_z11",
+    "n_zones": 11,
+    "n_hosts": 20,
+    "hash": "e4a3de0c3ade7501"
+   },
+   {
+    "name": "gen_s308_z13",
+    "n_zones": 13,
+    "n_hosts": 23,
+    "hash": "237b8e58b51378e5"
+   },
+   {
+    "name": "gen_s309_z9",
+    "n_zones": 9,
+    "n_hosts": 25,
+    "hash": "33abfda0076e37c3"
+   },
+   {
+    "name": "gen_s310_z11",
+    "n_zones": 11,
+    "n_hosts": 22,
+    "hash": "475932cbe3d32f8c"
+   },
+   {
+    "name": "gen_s311_z13",
+    "n_zones": 13,
+    "n_hosts": 28,
+    "hash": "7609f7971f28c2b1"
+   }
+  ]
+ },
+ "rows": [
+  {
+   "seed": 0,
+   "network_encoder": "EntityTransformer",
+   "history_encoder": "Transformer",
+   "n_params": 110984,
+   "train_seconds": 8.048478364944458,
+   "A_dsr": 0.25,
+   "A_alignment": 0.1715823412698413,
+   "A_episode_return": 0.3212499999999999,
+   "A_engagement_length": 6.05,
+   "A_capture_rate": 0.25,
+   "B_dsr": 0.25,
+   "B_alignment": 0.15905853174603177,
+   "B_episode_return": 0.2705,
+   "B_engagement_length": 6.05,
+   "B_capture_rate": 0.25,
+   "C_dsr": 0.2,
+   "C_alignment": 0.16344543650793653,
+   "C_episode_return": 0.3144999999999999,
+   "C_engagement_length": 6.35,
+   "C_capture_rate": 0.2,
+   "D_dsr": 0.25,
+   "D_alignment": 0.09105158730158731,
+   "D_episode_return": -0.044500000000000005,
+   "D_engagement_length": 6.05,
+   "D_capture_rate": 0.25
+  },
+  {
+   "seed": 0,
+   "network_encoder": "EntityTransformer",
+   "history_encoder": "GRU",
+   "n_params": 110984,
+   "train_seconds": 8.254145860671997,
+   "A_dsr": 0.25,
+   "A_alignment": 0.19627083333333337,
+   "A_episode_return": 0.45249999999999996,
+   "A_engagement_length": 6.05,
+   "A_capture_rate": 0.25,
+   "B_dsr": 0.25,
+   "B_alignment": 0.1760803571428572,
+   "B_episode_return": 0.38774999999999993,
+   "B_engagement_length": 6.05,
+   "B_capture_rate": 0.25,
+   "C_dsr": 0.2,
+   "C_alignment": 0.179139880952381,
+   "C_episode_return": 0.38625,
+   "C_engagement_length": 6.35,
+   "C_capture_rate": 0.2,
+   "D_dsr": 0.25,
+   "D_alignment": 0.07710019841269841,
+   "D_episode_return": -0.04975000000000002,
+   "D_engagement_length": 6.05,
+   "D_capture_rate": 0.25
+  },
+  {
+   "seed": 0,
+   "network_encoder": "EntityTransformer",
+   "history_encoder": "SetEncoder",
+   "n_params": 110984,
+   "train_seconds": 7.37709903717041,
+   "A_dsr": 0.25,
+   "A_alignment": 0.1715823412698413,
+   "A_episode_return": 0.3212499999999999,
+   "A_engagement_length": 6.05,
+   "A_capture_rate": 0.25,
+   "B_dsr": 0.25,
+   "B_alignment": 0.15541170634920637,
+   "B_episode_return": 0.24949999999999997,
+   "B_engagement_length": 6.05,
+   "B_capture_rate": 0.25,
+   "C_dsr": 0.2,
+   "C_alignment": 0.16402083333333334,
+   "C_episode_return": 0.3109999999999999,
+   "C_engagement_length": 6.35,
+   "C_capture_rate": 0.2,
+   "D_dsr": 0.25,
+   "D_alignment": 0.05042460317460318,
+   "D_episode_return": -0.04100000000000003,
+   "D_engagement_length": 6.05,
+   "D_capture_rate": 0.25
+  },
+  {
+   "seed": 0,
+   "network_encoder": "DeepSets",
+   "history_encoder": "Transformer",
+   "n_params": 116943,
+   "train_seconds": 4.320572137832642,
+   "A_dsr": 0.25,
+   "A_alignment": 0.1715823412698413,
+   "A_episode_return": 0.3212499999999999,
+   "A_engagement_length": 6.05,
+   "A_capture_rate": 0.25,
+   "B_dsr": 0.25,
+   "B_alignment": 0.15836805555555558,
+   "B_episode_return": 0.27224999999999994,
+   "B_engagement_length": 6.05,
+   "B_capture_rate": 0.25,
+   "C_dsr": 0.2,
+   "C_alignment": 0.156421626984127,
+   "C_episode_return": 0.27774999999999994,
+   "C_engagement_length": 6.35,
+   "C_capture_rate": 0.2,
+   "D_dsr": 0.25,
+   "D_alignment": 0.09397123015873016,
+   "D_episode_return": -0.04450000000000002,
+   "D_engagement_length": 6.05,
+   "D_capture_rate": 0.25
+  },
+  {
+   "seed": 0,
+   "network_encoder": "DeepSets",
+   "history_encoder": "GRU",
+   "n_params": 116943,
+   "train_seconds": 4.028935432434082,
+   "A_dsr": 0.25,
+   "A_alignment": 0.1715823412698413,
+   "A_episode_return": 0.3212499999999999,
+   "A_engagement_length": 6.05,
+   "A_capture_rate": 0.25,
+   "B_dsr": 0.25,
+   "B_alignment": 0.15308234126984127,
+   "B_episode_return": 0.24774999999999997,
+   "B_engagement_length": 6.05,
+   "B_capture_rate": 0.25,
+   "C_dsr": 0.2,
+   "C_alignment": 0.1595763888888889,
+   "C_episode_return": 0.2899999999999999,
+   "C_engagement_length": 6.35,
+   "C_capture_rate": 0.2,
+   "D_dsr": 0.25,
+   "D_alignment": 0.07325892857142857,
+   "D_episode_return": 0.030749999999999972,
+   "D_engagement_length": 6.05,
+   "D_capture_rate": 0.25
+  },
+  {
+   "seed": 0,
+   "network_encoder": "DeepSets",
+   "history_encoder": "SetEncoder",
+   "n_params": 116943,
+   "train_seconds": 4.057309865951538,
+   "A_dsr": 0.35,
+   "A_alignment": 0.3349007936507936,
+   "A_episode_return": 1.012,
+   "A_engagement_length": 5.7,
+   "A_capture_rate": 0.35,
+   "B_dsr": 0.35,
+   "B_alignment": 0.27046428571428577,
+   "B_episode_return": 0.8579999999999999,
+   "B_engagement_length": 5.7,
+   "B_capture_rate": 0.35,
+   "C_dsr": 0.3,
+   "C_alignment": 0.28489682539682537,
+   "C_episode_return": 0.9404999999999999,
+   "C_engagement_length": 6.0,
+   "C_capture_rate": 0.3,
+   "D_dsr": 0.25,
+   "D_alignment": 0.13097420634920637,
+   "D_episode_return": 0.26525,
+   "D_engagement_length": 6.05,
+   "D_capture_rate": 0.25
+  }
+ ],
+ "total_seconds": 55.23524284362793
+}

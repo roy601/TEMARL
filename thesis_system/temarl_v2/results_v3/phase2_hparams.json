@@ -1,0 +1,2432 @@
+{
+ "config": {
+  "trials": 16,
+  "steps": 1000,
+  "batch": 128,
+  "seed": 0,
+  "max_len": 16,
+  "corpus": "both",
+  "comiset_pool": 15000,
+  "out": "C:\\Users\\User\\thesis_project_pev_V2\\thesis_project_pev\\thesis_project\\thesis_system\\temarl_v2\\results_v3\\phase2_hparams.json"
+ },
+ "device": "cpu",
+ "trials_per_architecture": 16,
+ "search_space": {
+  "Transformer-Sin": {
+   "n_layers": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "n_heads": [
+    2,
+    4,
+    8
+   ],
+   "d_ff": [
+    64,
+    128,
+    256,
+    512
+   ],
+   "d_model": [
+    32,
+    64,
+    128
+   ],
+   "lr": [
+    0.0001,
+    0.0003,
+    0.0005,
+    0.001
+   ]
+  },
+  "Transformer-NoPE": {
+   "n_layers": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "n_heads": [
+    2,
+    4,
+    8
+   ],
+   "d_ff": [
+    64,
+    128,
+    256,
+    512
+   ],
+   "d_model": [
+    32,
+    64,
+    128
+   ],
+   "lr": [
+    0.0001,
+    0.0003,
+    0.0005,
+    0.001
+   ]
+  },
+  "Transformer-RoPE": {
+   "n_layers": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "n_heads": [
+    2,
+    4,
+    8
+   ],
+   "d_ff": [
+    64,
+    128,
+    256,
+    512
+   ],
+   "d_model": [
+    32,
+    64,
+    128
+   ],
+   "lr": [
+    0.0001,
+    0.0003,
+    0.0005,
+    0.001
+   ]
+  },
+  "GRU": {
+   "hidden": [
+    64,
+    112,
+    192,
+    256
+   ],
+   "n_layers": [
+    1,
+    2,
+    3
+   ],
+   "d_model": [
+    32,
+    64,
+    128
+   ],
+   "lr": [
+    0.0001,
+    0.0003,
+    0.0005,
+    0.001
+   ]
+  },
+  "SetEncoder": {
+   "hidden": [
+    128,
+    256,
+    520,
+    768
+   ],
+   "d_model": [
+    32,
+    64,
+    128
+   ],
+   "lr": [
+    0.0001,
+    0.0003,
+    0.0005,
+    0.001
+   ]
+  }
+ },
+ "all_trials": [
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 0,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.7676056338028169,
+   "n_params": 552278
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 1,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.47183098591549294,
+   "n_params": 112086
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 2,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7253521126760564,
+   "n_params": 47702
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 3,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 64,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6056338028169014,
+   "n_params": 188630
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 4,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "val": 0.8098591549295775,
+   "n_params": 161174
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 5,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.5,
+   "n_params": 26678
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 6,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.5140845070422535,
+   "n_params": 26678
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 7,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6549295774647887,
+   "n_params": 94230
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 8,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.5492957746478874,
+   "n_params": 44694
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 9,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6619718309859155,
+   "n_params": 36438
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 10,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.704225352112676,
+   "n_params": 121942
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 11,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6690140845070423,
+   "n_params": 419798
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 12,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.7816901408450704,
+   "n_params": 260246
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 13,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.34507042253521125,
+   "n_params": 68726
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 14,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.4647887323943662,
+   "n_params": 31062
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "trial": 15,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.6830985915492958,
+   "n_params": 220630
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 0,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "val": 0.6338028169014085,
+   "n_params": 44694
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 1,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6408450704225352,
+   "n_params": 80982
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 2,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.7183098591549296,
+   "n_params": 78166
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 3,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.33098591549295775,
+   "n_params": 56470
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 4,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.676056338028169,
+   "n_params": 78166
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 5,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.704225352112676,
+   "n_params": 552278
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 6,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6549295774647887,
+   "n_params": 220630
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 7,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.3591549295774648,
+   "n_params": 43766
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 8,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.3591549295774648,
+   "n_params": 43766
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 9,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.5422535211267606,
+   "n_params": 56470
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 10,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.7183098591549296,
+   "n_params": 221526
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 11,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.7535211267605634,
+   "n_params": 617174
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 12,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.5211267605633803,
+   "n_params": 112086
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 13,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.7464788732394366,
+   "n_params": 617174
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 14,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.7746478873239436,
+   "n_params": 260246
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "trial": 15,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.5563380281690141,
+   "n_params": 47702
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 0,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.3873239436619718,
+   "n_params": 18358
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 1,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.3380281690140845,
+   "n_params": 112086
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 2,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7887323943661971,
+   "n_params": 68726
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 3,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.4647887323943662,
+   "n_params": 154838
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 4,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.7535211267605634,
+   "n_params": 418902
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 5,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.7323943661971831,
+   "n_params": 156310
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 6,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.8028169014084507,
+   "n_params": 156310
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 7,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.795774647887324,
+   "n_params": 211158
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 8,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.6126760563380281,
+   "n_params": 78166
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 9,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 64,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.1619718309859155,
+   "n_params": 14198
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 10,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.3028169014084507,
+   "n_params": 44694
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 11,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6267605633802817,
+   "n_params": 47702
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 12,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.4154929577464789,
+   "n_params": 211158
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 13,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.6197183098591549,
+   "n_params": 78166
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 14,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6267605633802817,
+   "n_params": 56470
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "trial": 15,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.5352112676056338,
+   "n_params": 617174
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 0,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 1,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.8380281690140845,
+   "n_params": 26550
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 1,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 2,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.7253521126760564,
+   "n_params": 51510
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 2,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 2,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.7323943661971831,
+   "n_params": 154198
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 3,
+   "cfg": {
+    "hidden": 192,
+    "n_layers": 2,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.795774647887324,
+   "n_params": 394518
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 4,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.7887323943661971,
+   "n_params": 1141206
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 5,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6830985915492958,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 6,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 1,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.7887323943661971,
+   "n_params": 67926
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 7,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 1,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.8450704225352113,
+   "n_params": 351702
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 8,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7887323943661971,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 9,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 1,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6197183098591549,
+   "n_params": 58326
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 10,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 2,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.8098591549295775,
+   "n_params": 134262
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 11,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7887323943661971,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 12,
+   "cfg": {
+    "hidden": 192,
+    "n_layers": 3,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.7323943661971831,
+   "n_params": 616854
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 13,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 2,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.7676056338028169,
+   "n_params": 134262
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 14,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.4507042253521127,
+   "n_params": 76470
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "trial": 15,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.7746478873239436,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 0,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.5211267605633803,
+   "n_params": 88278
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 1,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.3873239436619718,
+   "n_params": 55606
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 2,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.3591549295774648,
+   "n_params": 39486
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 3,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.647887323943662,
+   "n_params": 219862
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 4,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.5211267605633803,
+   "n_params": 78366
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 5,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.5845070422535211,
+   "n_params": 44310
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 6,
+   "cfg": {
+    "hidden": 128,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.5845070422535211,
+   "n_params": 27798
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 7,
+   "cfg": {
+    "hidden": 128,
+    "d_model": 128,
+    "lr": 0.001
+   },
+   "val": 0.6126760563380281,
+   "n_params": 55382
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 8,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.5845070422535211,
+   "n_params": 44310
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 9,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.31690140845070425,
+   "n_params": 22326
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 10,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.5985915492957746,
+   "n_params": 78366
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 11,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.4788732394366197,
+   "n_params": 55606
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 12,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "val": 0.5985915492957746,
+   "n_params": 44310
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 13,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.6408450704225352,
+   "n_params": 219862
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 14,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.5422535211267606,
+   "n_params": 39486
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "trial": 15,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.6408450704225352,
+   "n_params": 156126
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 0,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.6978633764670479,
+   "n_params": 552278
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 1,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.6575383689437255,
+   "n_params": 112086
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 2,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.6837195305446885,
+   "n_params": 47702
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 3,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 64,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6680710201625037,
+   "n_params": 188630
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 4,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "val": 0.6963587120072224,
+   "n_params": 161174
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 5,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6635570267830274,
+   "n_params": 26678
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 6,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6593439662955161,
+   "n_params": 26678
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 7,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6686728859464339,
+   "n_params": 94230
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 8,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.6629551609990972,
+   "n_params": 44694
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 9,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6638579596749925,
+   "n_params": 36438
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 10,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.6813120674089678,
+   "n_params": 121942
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 11,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6737887451098405,
+   "n_params": 419798
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 12,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6957568462232923,
+   "n_params": 260246
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 13,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6385795967499248,
+   "n_params": 68726
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 14,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.665663557026783,
+   "n_params": 31062
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "trial": 15,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.6743906108937707,
+   "n_params": 220630
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 0,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "val": 0.6265422810713211,
+   "n_params": 44694
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 1,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.682214866084863,
+   "n_params": 80982
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 2,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6915437857357809,
+   "n_params": 78166
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 3,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6418898585615408,
+   "n_params": 56470
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 4,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.6789046042732471,
+   "n_params": 78166
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 5,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6927475173036413,
+   "n_params": 552278
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 6,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.678603671381282,
+   "n_params": 220630
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 7,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6084863075534156,
+   "n_params": 43766
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 8,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6084863075534156,
+   "n_params": 43766
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 9,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.6686728859464339,
+   "n_params": 56470
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 10,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6828167318687932,
+   "n_params": 221526
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 11,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.6984652422509781,
+   "n_params": 617174
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 12,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.6665663557026783,
+   "n_params": 112086
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 13,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.6960577791152573,
+   "n_params": 617174
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 14,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.701474571170629,
+   "n_params": 260246
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "trial": 15,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.6728859464339453,
+   "n_params": 47702
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 0,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.593439662955161,
+   "n_params": 18358
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 1,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_ff": 64,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.5895275353596148,
+   "n_params": 112086
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 2,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 2,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.6984652422509781,
+   "n_params": 68726
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 3,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6199217574480891,
+   "n_params": 154838
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 4,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.711405356605477,
+   "n_params": 418902
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 5,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6777008727053867,
+   "n_params": 156310
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 6,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7102016250376166,
+   "n_params": 156310
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 7,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.6966596448991875,
+   "n_params": 211158
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 8,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 2,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.6692747517303641,
+   "n_params": 78166
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 9,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 64,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.4586217273547999,
+   "n_params": 14198
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 10,
+   "cfg": {
+    "n_layers": 1,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.4802888955762865,
+   "n_params": 44694
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 11,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 256,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6804092687330725,
+   "n_params": 47702
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 12,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.6382786638579597,
+   "n_params": 211158
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 13,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.6761962082455613,
+   "n_params": 78166
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 14,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 128,
+    "d_model": 32,
+    "lr": 0.0005
+   },
+   "val": 0.6795064700571772,
+   "n_params": 56470
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "trial": 15,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.6599458320794462,
+   "n_params": 617174
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 0,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 1,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7156184170929882,
+   "n_params": 26550
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 1,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 2,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.6864279265723744,
+   "n_params": 51510
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 2,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 2,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.6783027384893169,
+   "n_params": 154198
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 3,
+   "cfg": {
+    "hidden": 192,
+    "n_layers": 2,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.6906409870598856,
+   "n_params": 394518
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 4,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.7201324104724647,
+   "n_params": 1141206
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 5,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6894372554920253,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 6,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 1,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.6861269936804093,
+   "n_params": 67926
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 7,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 1,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.7177249473367439,
+   "n_params": 351702
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 8,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7243454709599759,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 9,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 1,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6713812819741197,
+   "n_params": 58326
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 10,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 2,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7228408065001505,
+   "n_params": 134262
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 11,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.7243454709599759,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 12,
+   "cfg": {
+    "hidden": 192,
+    "n_layers": 3,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.684923262112549,
+   "n_params": 616854
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 13,
+   "cfg": {
+    "hidden": 112,
+    "n_layers": 2,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.7065904303340355,
+   "n_params": 134262
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 14,
+   "cfg": {
+    "hidden": 64,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.6187180258802287,
+   "n_params": 76470
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "trial": 15,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.7162202828769184,
+   "n_params": 1026102
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 0,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 128,
+    "lr": 0.0001
+   },
+   "val": 0.5401745410773398,
+   "n_params": 88278
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 1,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.501655130905808,
+   "n_params": 55606
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 2,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.4965392717424014,
+   "n_params": 39486
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 3,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "val": 0.5657538368943725,
+   "n_params": 219862
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 4,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 64,
+    "lr": 0.0001
+   },
+   "val": 0.5281372253987361,
+   "n_params": 78366
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 5,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.5482997291603973,
+   "n_params": 44310
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 6,
+   "cfg": {
+    "hidden": 128,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.5546193198916641,
+   "n_params": 27798
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 7,
+   "cfg": {
+    "hidden": 128,
+    "d_model": 128,
+    "lr": 0.001
+   },
+   "val": 0.5573277159193499,
+   "n_params": 55382
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 8,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "val": 0.5552211856755943,
+   "n_params": 44310
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 9,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 32,
+    "lr": 0.0001
+   },
+   "val": 0.4718627746012639,
+   "n_params": 22326
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 10,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 64,
+    "lr": 0.0003
+   },
+   "val": 0.5501053265121878,
+   "n_params": 78366
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 11,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 32,
+    "lr": 0.0003
+   },
+   "val": 0.5362624134817936,
+   "n_params": 55606
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 12,
+   "cfg": {
+    "hidden": 256,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "val": 0.5633463737586518,
+   "n_params": 44310
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 13,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.5678603671381282,
+   "n_params": 219862
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 14,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "val": 0.5525127896479085,
+   "n_params": 39486
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "trial": 15,
+   "cfg": {
+    "hidden": 520,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "val": 0.5603370448390009,
+   "n_params": 156126
+  }
+ ],
+ "best": [
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-Sin",
+   "val": 0.8098591549295775,
+   "test": 0.8620689655172413,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 64,
+    "lr": 0.001
+   },
+   "n_params": 161174
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-NoPE",
+   "val": 0.7746478873239436,
+   "test": 0.8726790450928382,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "n_params": 260246
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "Transformer-RoPE",
+   "val": 0.8028169014084507,
+   "test": 0.8806366047745358,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "n_params": 156310
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "GRU",
+   "val": 0.8450704225352113,
+   "test": 0.8806366047745358,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 1,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "n_params": 351702
+  },
+  {
+   "corpus": "CAM-LDS",
+   "model": "SetEncoder",
+   "val": 0.647887323943662,
+   "test": 0.8461538461538461,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "n_params": 219862
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-Sin",
+   "val": 0.6978633764670479,
+   "test": 0.6940760389036251,
+   "cfg": {
+    "n_layers": 4,
+    "n_heads": 8,
+    "d_ff": 256,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "n_params": 552278
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-NoPE",
+   "val": 0.701474571170629,
+   "test": 0.6896551724137931,
+   "cfg": {
+    "n_layers": 3,
+    "n_heads": 8,
+    "d_ff": 512,
+    "d_model": 64,
+    "lr": 0.0005
+   },
+   "n_params": 260246
+  },
+  {
+   "corpus": "COMISET",
+   "model": "Transformer-RoPE",
+   "val": 0.711405356605477,
+   "test": 0.713527851458886,
+   "cfg": {
+    "n_layers": 2,
+    "n_heads": 4,
+    "d_ff": 512,
+    "d_model": 128,
+    "lr": 0.0005
+   },
+   "n_params": 418902
+  },
+  {
+   "corpus": "COMISET",
+   "model": "GRU",
+   "val": 0.7243454709599759,
+   "test": 0.7376952549366342,
+   "cfg": {
+    "hidden": 256,
+    "n_layers": 3,
+    "d_model": 32,
+    "lr": 0.001
+   },
+   "n_params": 1026102
+  },
+  {
+   "corpus": "COMISET",
+   "model": "SetEncoder",
+   "val": 0.5678603671381282,
+   "test": 0.5481874447391689,
+   "cfg": {
+    "hidden": 768,
+    "d_model": 128,
+    "lr": 0.0003
+   },
+   "n_params": 219862
+  }
+ ],
+ "seconds": 5127.0120849609375
+}

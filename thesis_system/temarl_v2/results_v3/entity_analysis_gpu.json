@@ -1,0 +1,354 @@
+{
+ "prereg": {
+  "hypotheses": [
+   [
+    "H6",
+    "EntityTransformer > DeepSets on regime B (new topologies, TRAINED sizes)",
+    "dsr"
+   ],
+   [
+    "H7",
+    "EntityTransformer > DeepSets on regimes C and D (unseen structure, unseen sizes)",
+    "dsr"
+   ],
+   [
+    "H8",
+    "History GRU >= History Transformer under variable topology (does the CAM-LDS finding survive the regime change?)",
+    "dsr"
+   ]
+  ],
+  "contrast_family": [
+   [
+    "H6-Transformer",
+    [
+     "EntityTransformer",
+     "Transformer"
+    ],
+    [
+     "DeepSets",
+     "Transformer"
+    ],
+    "B"
+   ],
+   [
+    "H6-GRU",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "DeepSets",
+     "GRU"
+    ],
+    "B"
+   ],
+   [
+    "H6-SetEncoder",
+    [
+     "EntityTransformer",
+     "SetEncoder"
+    ],
+    [
+     "DeepSets",
+     "SetEncoder"
+    ],
+    "B"
+   ],
+   [
+    "H7-C-GRU",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "DeepSets",
+     "GRU"
+    ],
+    "C"
+   ],
+   [
+    "H7-D-GRU",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "DeepSets",
+     "GRU"
+    ],
+    "D"
+   ],
+   [
+    "H8-hist-B",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "EntityTransformer",
+     "Transformer"
+    ],
+    "B"
+   ],
+   [
+    "H8-hist-D",
+    [
+     "EntityTransformer",
+     "GRU"
+    ],
+    [
+     "EntityTransformer",
+     "Transformer"
+    ],
+    "D"
+   ]
+  ],
+  "correction": "Holm-Bonferroni over the declared contrast family, alpha=0.05",
+  "declaration": "Pre-registered before any v3 training run. Hypotheses, metric, splits, seeds, contrast family and correction are fixed here and are not to be modified after observing results. A null or negative outcome is a valid result and will be reported as such."
+ },
+ "n_seeds": 10,
+ "summary": {
+  "EntityTransformer+Transformer": {
+   "means": {
+    "A": 0.4685,
+    "B": 0.445,
+    "C": 0.454,
+    "D": 0.3795
+   },
+   "gen_gap_B_minus_D": 0.0655,
+   "n_params": 110984,
+   "train_seconds": 127.30498213768006
+  },
+  "EntityTransformer+GRU": {
+   "means": {
+    "A": 0.4575,
+    "B": 0.4335,
+    "C": 0.43149999999999994,
+    "D": 0.368
+   },
+   "gen_gap_B_minus_D": 0.0655,
+   "n_params": 110984,
+   "train_seconds": 123.98275110721588
+  },
+  "EntityTransformer+SetEncoder": {
+   "means": {
+    "A": 0.4414999999999999,
+    "B": 0.4245,
+    "C": 0.42300000000000004,
+    "D": 0.36500000000000005
+   },
+   "gen_gap_B_minus_D": 0.05949999999999994,
+   "n_params": 110984,
+   "train_seconds": 122.26296963691712
+  },
+  "DeepSets+Transformer": {
+   "means": {
+    "A": 0.48450000000000004,
+    "B": 0.45949999999999996,
+    "C": 0.45549999999999996,
+    "D": 0.383
+   },
+   "gen_gap_B_minus_D": 0.07649999999999996,
+   "n_params": 116943,
+   "train_seconds": 70.35259284973145
+  },
+  "DeepSets+GRU": {
+   "means": {
+    "A": 0.4625,
+    "B": 0.43899999999999995,
+    "C": 0.445,
+    "D": 0.371
+   },
+   "gen_gap_B_minus_D": 0.06799999999999995,
+   "n_params": 116943,
+   "train_seconds": 67.15773339271546
+  },
+  "DeepSets+SetEncoder": {
+   "means": {
+    "A": 0.45899999999999996,
+    "B": 0.44000000000000006,
+    "C": 0.441,
+    "D": 0.3635
+   },
+   "gen_gap_B_minus_D": 0.07650000000000007,
+   "n_params": 116943,
+   "train_seconds": 65.02279179096222
+  }
+ },
+ "contrasts": [
+  {
+   "label": "H6-Transformer",
+   "arm_a": [
+    "EntityTransformer",
+    "Transformer"
+   ],
+   "arm_b": [
+    "DeepSets",
+    "Transformer"
+   ],
+   "regime": "B",
+   "n_pairs": 10,
+   "mean_a": 0.445,
+   "mean_b": 0.45949999999999996,
+   "delta": -0.014500000000000008,
+   "t": -1.1595877753956545,
+   "p_raw": 0.2760546882573358,
+   "cohens_d": -0.36669385170452923,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H6-GRU",
+   "arm_a": [
+    "EntityTransformer",
+    "GRU"
+   ],
+   "arm_b": [
+    "DeepSets",
+    "GRU"
+   ],
+   "regime": "B",
+   "n_pairs": 10,
+   "mean_a": 0.4335,
+   "mean_b": 0.43899999999999995,
+   "delta": -0.005500000000000005,
+   "t": -0.31918715173591605,
+   "p_raw": 0.7568685336473934,
+   "cohens_d": -0.10093583993287385,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H6-SetEncoder",
+   "arm_a": [
+    "EntityTransformer",
+    "SetEncoder"
+   ],
+   "arm_b": [
+    "DeepSets",
+    "SetEncoder"
+   ],
+   "regime": "B",
+   "n_pairs": 10,
+   "mean_a": 0.4245,
+   "mean_b": 0.44000000000000006,
+   "delta": -0.015499999999999996,
+   "t": -1.2265543420531326,
+   "p_raw": 0.25111045320108644,
+   "cohens_d": -0.3878705394760086,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H7-C-GRU",
+   "arm_a": [
+    "EntityTransformer",
+    "GRU"
+   ],
+   "arm_b": [
+    "DeepSets",
+    "GRU"
+   ],
+   "regime": "C",
+   "n_pairs": 10,
+   "mean_a": 0.43149999999999994,
+   "mean_b": 0.445,
+   "delta": -0.013500000000000002,
+   "t": -0.8933521661077753,
+   "p_raw": 0.3949286569376337,
+   "cohens_d": -0.28250275974865324,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H7-D-GRU",
+   "arm_a": [
+    "EntityTransformer",
+    "GRU"
+   ],
+   "arm_b": [
+    "DeepSets",
+    "GRU"
+   ],
+   "regime": "D",
+   "n_pairs": 10,
+   "mean_a": 0.368,
+   "mean_b": 0.371,
+   "delta": -0.0030000000000000027,
+   "t": -0.35828434289611505,
+   "p_raw": 0.72839041743239,
+   "cohens_d": -0.1132994573485703,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H8-hist-B",
+   "arm_a": [
+    "EntityTransformer",
+    "GRU"
+   ],
+   "arm_b": [
+    "EntityTransformer",
+    "Transformer"
+   ],
+   "regime": "B",
+   "n_pairs": 10,
+   "mean_a": 0.4335,
+   "mean_b": 0.445,
+   "delta": -0.0115,
+   "t": -0.5839703903486493,
+   "p_raw": 0.5735832009402821,
+   "cohens_d": -0.18466765195696877,
+   "p_holm": 1.0,
+   "significant": false
+  },
+  {
+   "label": "H8-hist-D",
+   "arm_a": [
+    "EntityTransformer",
+    "GRU"
+   ],
+   "arm_b": [
+    "EntityTransformer",
+    "Transformer"
+   ],
+   "regime": "D",
+   "n_pairs": 10,
+   "mean_a": 0.368,
+   "mean_b": 0.3795,
+   "delta": -0.011500000000000005,
+   "t": -1.0595341388411987,
+   "p_raw": 0.3169626326982023,
+   "cohens_d": -0.3350541137345647,
+   "p_holm": 1.0,
+   "significant": false
+  }
+ ],
+ "verdicts": {
+  "H6": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "EntityTransformer > DeepSets on regime B (new topologies, TRAINED sizes)",
+   "contrasts": [
+    "H6-Transformer",
+    "H6-GRU",
+    "H6-SetEncoder"
+   ]
+  },
+  "H7": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "EntityTransformer > DeepSets on regimes C and D (unseen structure, unseen sizes)",
+   "contrasts": [
+    "H7-C-GRU",
+    "H7-D-GRU"
+   ]
+  },
+  "H8": {
+   "verdict": "NOT SUPPORTED (no significant contrast)",
+   "description": "History GRU >= History Transformer under variable topology (does the CAM-LDS finding survive the regime change?)",
+   "contrasts": [
+    "H8-hist-B",
+    "H8-hist-D"
+   ]
+  }
+ }
+}
