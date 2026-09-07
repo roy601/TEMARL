@@ -102,7 +102,9 @@ class EntityDeceptionEnv:
                  profile_name: str = "Mixture", max_steps: int = 40,
                  seed: Optional[int] = None, alignment_driven_capture: bool = True,
                  max_entities: int = DEFAULT_MAX_ENTITIES,
-                 h_dim: int = 64):
+                 h_dim: int = 64,
+                 cap_p_min: float = CAP_P_MIN, cap_p_max: float = CAP_P_MAX,
+                 goal_steps: int = GOAL_STEPS):
         self.topo = topology if topology is not None else canonical_topology()
         if self.topo.n_hosts > max_entities:
             raise ValueError(f"topology has {self.topo.n_hosts} hosts > "
@@ -114,6 +116,13 @@ class EntityDeceptionEnv:
         self.profile_name = profile_name
         self.max_steps = max_steps
         self.alignment_driven_capture = alignment_driven_capture
+        # Capture calibration. Defaults are env_v2's frozen constants, so an
+        # unparameterised env is bit-identical to before; v5 overrides them
+        # because removing the goal drift roughly tripled episode length, which
+        # saturated DSR (env_v2's own gate rejects a saturated DSR).
+        self.cap_p_min = cap_p_min
+        self.cap_p_max = cap_p_max
+        self.goal_steps = goal_steps
         self.max_entities = max_entities
         self.h_dim = h_dim
         self.rng = np.random.default_rng(seed)
@@ -241,7 +250,8 @@ class EntityDeceptionEnv:
         self.ema_align = CAP_EMA * self.ema_align + (1 - CAP_EMA) * align
         if self.alignment_driven_capture and resp is not None:
             z = CAP_K * (self.ema_align - CAP_A_REF)
-            p_cap = CAP_P_MIN + (CAP_P_MAX - CAP_P_MIN) / (1.0 + np.exp(-z))
+            p_cap = self.cap_p_min + (self.cap_p_max - self.cap_p_min) / (
+                1.0 + np.exp(-z))
         else:
             p_cap = 0.9
         engaged = bool(self.rng.random() < p_cap)
@@ -265,7 +275,7 @@ class EntityDeceptionEnv:
         self.step_count += 1
         if self.captured:
             self.done = True
-        elif self.progress >= GOAL_STEPS:
+        elif self.progress >= self.goal_steps:
             self.reached_objective = True
             self.done = True
             reward += TERMINAL_PENALTY
