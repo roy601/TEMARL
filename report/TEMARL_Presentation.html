@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>TEMARL — Presentation</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  :root{
+    --ink:#12161c; --ink2:#39424f; --mute:#77808c; --line:#dde2e9;
+    --accent:#1d4ed8; --good:#0f7b4f; --bad:#a3341f; --warn:#8a5a00;
+    --band:#f5f7fa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+       color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .s{width:297mm;height:209.5mm;padding:15mm 18mm;page-break-after:always;
+     position:relative;display:flex;flex-direction:column;background:#fff}
+  .s:last-child{page-break-after:auto}
+  .n{position:absolute;bottom:9mm;right:18mm;font-size:8.5pt;color:var(--mute)}
+  .eyebrow{font-size:9pt;letter-spacing:.9pt;text-transform:uppercase;
+           color:var(--accent);font-weight:600;margin-bottom:4pt}
+  h1{font-size:33pt;line-height:1.1;margin:0 0 8pt;letter-spacing:-.5pt}
+  h2{font-size:21pt;line-height:1.2;margin:0 0 10pt;letter-spacing:-.2pt}
+  h3{font-size:12.5pt;margin:0 0 5pt}
+  p{margin:0 0 8pt;font-size:11.5pt;line-height:1.5;color:var(--ink2)}
+  .big{font-size:14pt;line-height:1.5;color:var(--ink)}
+  table{border-collapse:collapse;width:100%;font-size:10.2pt;margin:4pt 0}
+  th{background:var(--band);text-align:left;padding:5pt 7pt;font-size:9.4pt;
+     border-bottom:1.5px solid var(--ink);font-weight:600}
+  td{padding:5pt 7pt;border-bottom:1px solid var(--line);
+     font-variant-numeric:tabular-nums}
+  td.r,th.r{text-align:right}
+  tr.hi td{background:#eef4ff;font-weight:600}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14pt;flex:1}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:12pt}
+  .card{border:1px solid var(--line);border-radius:6px;padding:11pt 13pt;
+        background:#fff}
+  .card.g{border-left:5px solid var(--good);background:#f5fbf8}
+  .card.b{border-left:5px solid var(--bad);background:#fdf7f5}
+  .card.a{border-left:5px solid var(--accent);background:#f8fafe}
+  .card.w{border-left:5px solid var(--warn);background:#fefbf4}
+  .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:11pt;margin:8pt 0}
+  .kpi div{border:1px solid var(--line);border-radius:6px;padding:11pt;
+           text-align:center}
+  .kpi b{display:block;font-size:26pt;line-height:1.05;color:var(--accent);
+         letter-spacing:-.5pt}
+  .kpi span{font-size:9pt;color:var(--mute);line-height:1.35;display:block;
+            margin-top:4pt}
+  ul{margin:0 0 8pt;padding-left:18pt} li{margin-bottom:6pt;font-size:11.5pt;
+     line-height:1.45;color:var(--ink2)}
+  .good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+  code{font-family:Consolas,monospace;font-size:10pt;background:var(--band);
+       padding:1pt 4pt;border-radius:3px}
+  .title{justify-content:center;
+         background:linear-gradient(160deg,#0f1729 0%,#1d3a6e 55%,#1d4ed8 100%);
+         color:#fff}
+  .title h1{color:#fff;font-size:40pt}
+  .title p{color:#c7d6f2;font-size:13pt}
+  .title .eyebrow{color:#8fb4f5}
+  .rule{height:3px;background:var(--accent);width:56px;margin:9pt 0 13pt}
+  .foot{margin-top:auto;padding-top:8pt;border-top:1px solid var(--line);
+        font-size:9.4pt;color:var(--mute)}
+</style>
+<body>
+
+<!-- 1 -->
+<section class="s title">
+  <div class="eyebrow">BRAC University · B.Sc. Thesis Defence</div>
+  <h1>TEMARL</h1>
+  <p style="font-size:16pt;margin-bottom:14pt">Transformer-Enhanced Multi-Agent
+  Reinforcement Learning for Adaptive Honeypot Deception</p>
+  <p>Apurba Roy · Tushit Roy · Mark Dipto Gomes · Farjana Akter Shumi<br>
+  Supervisor: Md. Sakir Hossain · 8 September 2026</p>
+</section>
+
+<!-- 2 -->
+<section class="s">
+  <div class="eyebrow">The headline</div>
+  <h2>The system works. The architecture claim does not.</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card g">
+      <h3 class="good">✓ What we proved</h3>
+      <p class="big">The deception system contains attackers <b>60.4%</b> of the
+      time, versus <b>54.8%</b> for a defender with no attacker model
+      (p = 0.0004).</p>
+      <p class="big">The Transformer performs <b>statistically identically</b> to
+      GRU and LSTM — using <b>44%</b> and <b>35%</b> of their parameters.</p>
+    </div>
+    <div class="card b">
+      <h3 class="bad">✗ What we could not prove</h3>
+      <p class="big">That the Transformer <b>beats</b> GRU or LSTM at reading
+      attacker behaviour.</p>
+      <p class="big">Tested 8 pre-registered ways, plus a powered replication at
+      n = 41. Every result null. We report this honestly.</p>
+    </div>
+  </div>
+  <div class="n">2</div>
+</section>
+
+<!-- 3 -->
+<section class="s">
+  <div class="eyebrow">Key numbers</div>
+  <h2>Four figures that summarise the thesis</h2>
+  <div class="rule"></div>
+  <div class="kpi">
+    <div><b>0.6040</b><span>System containment rate<br>(vs 0.5475 with no attacker model)</span></div>
+    <div><b>62–77%</b><span>of the maximum achievable<br>gain, captured</span></div>
+    <div><b>44.4%</b><span>Transformer parameters<br>relative to GRU</span></div>
+    <div><b>p=0.0001</b><span>Statistical equivalence<br>proven, canonical map</span></div>
+  </div>
+  <div class="cols3" style="margin-top:8pt">
+    <div class="card a"><h3>Dataset</h3><p>CAM-LDS: 36 runs, 1,347 attacker
+    actions, 7 campaigns, 82 techniques. <b>Effective sample size: 3.09.</b></p></div>
+    <div class="card a"><h3>Environments</h3><p>Three built: frozen control,
+    variable-topology, and a repaired version after we found the original could
+    not test the hypothesis.</p></div>
+    <div class="card a"><h3>Models</h3><p>Six encoders compared under identical
+    conditions: Transformer, GRU, LSTM, GRU-d32, SetEncoder, plus two network
+    encoders.</p></div>
+  </div>
+  <div class="n">3</div>
+</section>
+
+<!-- 4 -->
+<section class="s">
+  <div class="eyebrow">The critical discovery</div>
+  <h2>Our first experiment could not have answered its own question</h2>
+  <div class="rule"></div>
+  <p class="big">We built a <b>reference ladder</b> to check whether the task
+  could reward sequence modelling at all. The key measure:</p>
+  <div class="card a" style="margin:6pt 0">
+    <p style="margin:0;font-size:13pt"><b>Sequence value</b> = (perfect
+    next-step prediction) − (perfect campaign label).<br>
+    If this is zero, <b>no</b> sequence model can distinguish itself — however
+    good it is.</p>
+  </div>
+  <table>
+    <tr><th>Environment</th><th class="r">Sequence value</th><th class="r">Models beating a no-model baseline</th><th class="r">Episode length</th></tr>
+    <tr><td>Original (experiment v4)</td><td class="r bad">+0.0005</td><td class="r bad">1 of 6</td><td class="r">5.5 steps</td></tr>
+    <tr class="hi"><td>Repaired (experiment v5)</td><td class="r good">+0.0800</td><td class="r good">5 of 5</td><td class="r">18.1 steps</td></tr>
+  </table>
+  <p><b>Cause:</b> the campaigns had been <b>clustered by their own correct
+  answer</b>, and the transition matrix had a bug that discarded 87% of the
+  sequence information. Only the second row is a fair test.</p>
+  <div class="n">4</div>
+</section>
+
+<!-- 5 -->
+<section class="s">
+  <div class="eyebrow">Dataset</div>
+  <h2>What we did to the data</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Rebuilt from source, audited twice</h3>
+      <ul>
+        <li>Re-parsed all 36 published playbooks instead of using a hand
+        reconstruction.</li>
+        <li>Wrote a <b>second independent parser</b> to check the first — it
+        found 3 more bugs.</li>
+        <li><b>5 defects fixed</b>; 8 lost actions recovered (1,339 → 1,347).</li>
+        <li>Vocabulary extended 78 → 84: <b>6.20%</b> of actions had been
+        silently discarded as unknown.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Three of our own claims withdrawn</h3>
+      <table>
+        <tr><th>Earlier claim</th><th>Truth</th></tr>
+        <tr><td>Counts match the paper "exactly"</td><td class="bad">82 vs 81 — the match was a bug artefact</td></tr>
+        <tr><td>Reconstruction "invented" T1095</td><td class="bad">T1095 is real; precision is 100%</td></tr>
+        <tr><td>COMISET is 1156× bigger</td><td class="bad">≈18× — 98.5% are repeats</td></tr>
+      </table>
+      <p style="font-size:10.5pt"><b>Clustering:</b> 7 campaigns were grouped
+      into 3 classes <i>by which decoy was best for them</i>. That made knowing
+      the group equal to knowing the answer — the root cause of the failure.</p>
+    </div>
+  </div>
+  <div class="n">5</div>
+</section>
+
+<!-- 6 -->
+<section class="s">
+  <div class="eyebrow">Main result</div>
+  <h2>Six architectures, one outcome</h2>
+  <div class="rule"></div>
+  <p>Repaired environment · 10 paired seeds · 200 test episodes · all models
+  passed the validity gate</p>
+  <table>
+    <tr><th>History model</th><th>Network model</th><th class="r">Canonical</th><th class="r">Trained sizes</th><th class="r">Unseen structure</th><th class="r">Unseen sizes</th><th class="r">Parameters</th></tr>
+    <tr class="hi"><td><b>Transformer-RoPE</b></td><td>DeepSets</td><td class="r">0.6540</td><td class="r">0.6040</td><td class="r">0.6025</td><td class="r">0.4865</td><td class="r"><b>156,310</b></td></tr>
+    <tr><td>GRU</td><td>DeepSets</td><td class="r">0.6550</td><td class="r">0.6100</td><td class="r">0.6080</td><td class="r">0.4820</td><td class="r">351,702</td></tr>
+    <tr><td>LSTM</td><td>DeepSets</td><td class="r">0.6560</td><td class="r">0.6085</td><td class="r">0.6115</td><td class="r">0.4845</td><td class="r">450,518</td></tr>
+    <tr><td>GRU-d32 (control)</td><td>DeepSets</td><td class="r">0.6520</td><td class="r">0.6055</td><td class="r">0.6050</td><td class="r">0.4920</td><td class="r">236,598</td></tr>
+    <tr><td>Transformer-RoPE</td><td>EntityTransformer</td><td class="r">0.6525</td><td class="r">0.6075</td><td class="r">0.6070</td><td class="r">0.4810</td><td class="r">156,310</td></tr>
+    <tr><td>GRU</td><td>EntityTransformer</td><td class="r">0.6565</td><td class="r">0.6175</td><td class="r">0.6135</td><td class="r">0.5000</td><td class="r">351,702</td></tr>
+    <tr><td colspan="2"><i>Reference: no attacker model</i></td><td class="r">0.5920</td><td class="r">0.5475</td><td class="r">0.5470</td><td class="r">0.4465</td><td class="r">—</td></tr>
+  </table>
+  <p>Six architectures span <b>0.0045</b> on the canonical map. All beat the
+  no-model baseline by +0.057 to +0.070 (p ≤ 0.0018).</p>
+  <div class="n">6</div>
+</section>
+
+<!-- 7 -->
+<section class="s">
+  <div class="eyebrow">Statistics</div>
+  <h2>From "no difference found" to "equivalence proven"</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div>
+      <h3>Why this matters</h3>
+      <p>A non-significant test cannot separate <i>"there is no effect"</i> from
+      <i>"our study was too small"</i>.</p>
+      <p>A <b>TOST equivalence test</b> can. It makes a positive claim: the
+      difference is <b>demonstrably below a stated threshold</b>.</p>
+      <div class="card g">
+        <p style="margin:0"><b>Transformer ≡ GRU</b> in 3 of 4 conditions<br>
+        <b>Transformer ≡ LSTM</b> in <b>all 4</b> conditions<br>
+        at <b>44.4%</b> and <b>34.7%</b> of their parameters</p>
+      </div>
+    </div>
+    <div>
+      <h3>Equivalence results (margin 0.02)</h3>
+      <table>
+        <tr><th>Condition</th><th class="r">vs GRU</th><th class="r">vs LSTM</th></tr>
+        <tr><td>Canonical map</td><td class="r good">0.0001 ✓</td><td class="r good">0.0029 ✓</td></tr>
+        <tr><td>Trained sizes</td><td class="r good">0.0124 ✓</td><td class="r good">0.0118 ✓</td></tr>
+        <tr><td>Unseen structure</td><td class="r good">0.0029 ✓</td><td class="r good">0.0432 ✓</td></tr>
+        <tr><td>Unseen sizes</td><td class="r">0.0527</td><td class="r good">0.0304 ✓</td></tr>
+      </table>
+      <p style="font-size:10.5pt">Values are p-values for equivalence; ✓ means
+      equivalence is statistically established.</p>
+    </div>
+  </div>
+  <div class="n">7</div>
+</section>
+
+<!-- 8 -->
+<section class="s">
+  <div class="eyebrow">Scientific rigour</div>
+  <h2>We gave the one promising lead a proper second chance</h2>
+  <div class="rule"></div>
+  <p class="big">One of the eight tests nearly reached significance. Rather than
+  claim it, we calculated the required sample size, <b>pre-registered a
+  replication at n = 31</b>, ran it once on fresh seeds, and reported the
+  outcome.</p>
+  <table>
+    <tr><th>Run</th><th class="r">n</th><th class="r">Entity attention</th><th class="r">Baseline</th><th class="r">Difference</th><th class="r">Effect size</th><th class="r">p</th></tr>
+    <tr><td>Original finding</td><td class="r">10</td><td class="r">0.5000</td><td class="r">0.4820</td><td class="r">+0.0180</td><td class="r">+0.61</td><td class="r">—</td></tr>
+    <tr><td>Pre-registered replication</td><td class="r">31</td><td class="r">0.4597</td><td class="r">0.4652</td><td class="r bad">−0.0055</td><td class="r">−0.17</td><td class="r">0.826</td></tr>
+    <tr class="hi"><td><b>Pooled final estimate</b></td><td class="r">41</td><td class="r">0.4695</td><td class="r">0.4693</td><td class="r">+0.0002</td><td class="r">+0.01</td><td class="r">0.481</td></tr>
+  </table>
+  <div class="card w">
+    <p style="margin:0"><b>Four times</b> a promising small-sample result vanished
+    when tested at proper sample size. Seed-to-seed variation (SD ≈ 0.068) was
+    larger than every effect ever claimed from small samples. <b>This is itself a
+    reportable finding.</b></p>
+  </div>
+  <div class="n">8</div>
+</section>
+
+<!-- 9 -->
+<section class="s">
+  <div class="eyebrow">Diagnosis</div>
+  <h2>Why the architecture claim failed — five reasons</h2>
+  <div class="rule"></div>
+  <table>
+    <tr><th style="width:3%">#</th><th>Reason</th><th class="r" style="width:20%">Evidence</th></tr>
+    <tr><td>1</td><td><b>The dataset is tiny.</b> Transformers need large data; this has 7 campaigns.</td><td class="r">Effective n = 3.09</td></tr>
+    <tr><td>2</td><td><b>The sequences are short.</b> Attention's advantage comes from long-range dependencies that do not exist at 18 steps.</td><td class="r">18.4 steps</td></tr>
+    <tr><td>3</td><td><b>Clustering removed the sequence problem</b>, turning it into 3-way classification.</td><td class="r">+0.0001</td></tr>
+    <tr><td>4</td><td><b>An estimator bug discarded 87%</b> of the sequential structure in the data.</td><td class="r">0.627 of 4.83 bits</td></tr>
+    <tr><td>5</td><td><b>The task is nearly saturated.</b> Both models already capture 62–77% of the maximum, leaving less headroom than random noise.</td><td class="r">~0.02 remaining</td></tr>
+  </table>
+  <div class="card a">
+    <p style="margin:0"><b>Important:</b> reasons 1, 2 and 5 are properties of
+    the <i>problem</i>, not defects in the Transformer. The model is not broken —
+    the task does not contain enough sequential structure for attention to
+    demonstrate an advantage.</p>
+  </div>
+  <div class="n">9</div>
+</section>
+
+<!-- 10 -->
+<section class="s">
+  <div class="eyebrow">Contributions</div>
+  <h2>What this thesis contributes</h2>
+  <div class="rule"></div>
+  <div class="cols">
+    <div class="card g">
+      <h3 class="good">1 · A working system</h3>
+      <p>First Transformer-enhanced MARL honeypot deception system grounded in
+      MITRE D3FEND with CAM-LDS attacker profiles. Captures <b>62–77%</b> of the
+      maximum achievable gain. Attacker-intent modelling is worth
+      <b>+0.148 to +0.171</b> containment.</p>
+    </div>
+    <div class="card g">
+      <h3 class="good">2 · Proven parameter efficiency</h3>
+      <p>Statistically demonstrated equivalence to GRU and LSTM at
+      <b>44.4%</b> and <b>34.7%</b> of their parameters. Not a null result —
+      a positive equivalence claim, p = 0.0001.</p>
+    </div>
+    <div class="card a">
+      <h3>3 · A methodological finding</h3>
+      <p>A pre-registered environment gate <b>can pass while the environment is
+      useless</b> for the hypothesis being tested. Architecture comparisons need
+      a <b>reference ladder</b> and a <b>validity gate</b> — without them, v4
+      produced 8 null results from 5 models that had never learned.</p>
+    </div>
+    <div class="card a">
+      <h3>4 · Data contributions</h3>
+      <p>A source-verified CAM-LDS grounding with <b>5 parser defects</b> found
+      and fixed, verified independently; a quantified estimator defect that
+      destroyed <b>87%</b> of the corpus's sequential information.</p>
+    </div>
+  </div>
+  <div class="n">10</div>
+</section>
+
+<!-- 11 -->
+<section class="s">
+  <div class="eyebrow">Integrity</div>
+  <h2>Every hypothesis was registered before the experiment ran</h2>
+  <div class="rule"></div>
+  <table>
+    <tr><th>Commit</th><th>Content</th><th>Timing</th></tr>
+    <tr><td><code>7499d29</code></td><td>v4 pre-registration</td><td class="good">Before the v4 run</td></tr>
+    <tr><td><code>1413afb</code></td><td>v5 pre-registration + environment repair</td><td class="good">Before the v5 run</td></tr>
+    <tr><td><code>0c25e12</code></td><td>v5 result — all 8 contrasts reported</td><td>After</td></tr>
+    <tr><td><code>7261a4a</code></td><td>Equivalence tests + v6 pre-registration</td><td class="good">Before the v6 run</td></tr>
+    <tr><td><code>4b53a26</code></td><td>v6 replication result</td><td>After</td></tr>
+  </table>
+  <div class="cols" style="flex:none">
+    <div class="card g"><h3 class="good">What we did</h3>
+      <ul style="margin:0">
+        <li>Reported every declared test, including those that failed</li>
+        <li>Recorded two of our own hypotheses that proved false</li>
+        <li>Withdrew four claims when better measurement contradicted them</li>
+      </ul></div>
+    <div class="card b"><h3 class="bad">What we refused to do</h3>
+      <ul style="margin:0">
+        <li>Add seeds until a result became significant</li>
+        <li>Drop a test that failed</li>
+        <li>Re-test v5 one-sided to turn p = 0.690 into p = 0.043</li>
+      </ul></div>
+  </div>
+  <div class="n">11</div>
+</section>
+
+<!-- 12 -->
+<section class="s">
+  <div class="eyebrow">Conclusion</div>
+  <h2>The honest version of this thesis is the defensible one</h2>
+  <div class="rule"></div>
+  <p class="big">The title's implied claim — that attention is what makes this
+  system work — is not supported. What <i>is</i> supported is more precise:</p>
+  <div class="card g" style="margin:10pt 0">
+    <p style="margin:0;font-size:15pt;line-height:1.55">
+    <b>A Transformer-based honeypot deception system that captures 62–77% of the
+    achievable defensive gain, and matches recurrent alternatives using roughly
+    one-third of their parameters — established under pre-registration, on an
+    instrument we first had to prove was capable of measuring it.</b></p>
+  </div>
+  <div class="cols3">
+    <div class="card"><h3>Limitation</h3><p style="font-size:10.5pt">Trained by
+    imitation learning, not reinforcement learning — under PPO no model beat the
+    baseline, and why remains open.</p></div>
+    <div class="card"><h3>Limitation</h3><p style="font-size:10.5pt">One
+    environment, one scripted attacker. A learning attacker could change the
+    conclusions.</p></div>
+    <div class="card"><h3>Future work</h3><p style="font-size:10.5pt">Test
+    entity attention on genuinely varying topologies with more power; resolve
+    the PPO failure.</p></div>
+  </div>
+  <div class="foot">TEMARL · BRAC University · All figures reproducible from
+  <code>results_v4/</code> … <code>results_v7/</code> in the repository.</div>
+  <div class="n">12</div>
+</section>
+
+</body></html>

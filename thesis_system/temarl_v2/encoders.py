@@ -239,6 +239,42 @@ class GRUIntentEncoder(IntentEncoder):
         return self.norm(self.proj(hN[-1]))
 
 
+# ── MODEL D — LSTM (second recurrent control) ────────────────────────────────
+
+class LSTMIntentEncoder(IntentEncoder):
+    """MODEL D. The other recurrent baseline.
+
+    The v1 manuscript listed an LSTM comparison as future work (Sec. 6.4) and it
+    stayed future work through v2-v6, so "attention vs recurrence" had until now
+    been tested against ONE recurrent architecture. This closes that gap.
+
+    Identical in every respect to GRUIntentEncoder except the cell: the same
+    embedding, the same `pack_padded_sequence` padding discipline (F-ARC-06 --
+    without it PAD embeddings contaminate the final hidden state and manufacture
+    a spurious "Transformer wins"), the same projection and the same final
+    LayerNorm. An LSTM cell has ~4/3 the parameters of a GRU cell at equal
+    hidden width, so capacity is reported rather than assumed equal.
+    """
+
+    NAME = "LSTM"
+
+    def __init__(self, hidden=None, n_layers=2, **kw):
+        super().__init__(**kw)
+        hidden = hidden or self.d_model
+        self.hidden = hidden
+        self.rnn = nn.LSTM(self.d_model, hidden, num_layers=n_layers,
+                           batch_first=True,
+                           dropout=DROPOUT if n_layers > 1 else 0.0)
+        self.proj = (nn.Identity() if hidden == self.d_model
+                     else nn.Linear(hidden, self.d_model))
+        self.norm = nn.LayerNorm(self.d_model)
+
+    def _trunk(self, emb, lengths, pad_mask):
+        packed = nn.utils.rnn.pack_padded_sequence(
+            emb, lengths.cpu(), batch_first=True, enforce_sorted=False)
+        _, (hN, _cN) = self.rnn(packed)       # hN: (layers, B, hidden)
+        return self.norm(self.proj(hN[-1]))
+
 # ── MODEL C — Set encoder (order-agnostic control) ───────────────────────────
 
 class SetIntentEncoder(IntentEncoder):
