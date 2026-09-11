@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>TEMARL — The Transformer Model</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  :root{
+    --ink:#14181f; --ink2:#39424f; --mute:#6b7480; --line:#d7dce3;
+    --accent:#6d28d9; --good:#0f7b4f; --bad:#a3341f; --warn:#8a5a00;
+    --band:#f6f4fb;
+  }
+  *{box-sizing:border-box}
+  body{font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+       color:var(--ink); font-size:10.2pt; line-height:1.52; margin:0}
+  h1{font-size:22pt;line-height:1.15;margin:0 0 4pt;letter-spacing:-.3pt}
+  h2{font-size:14pt;margin:19pt 0 6pt;padding-bottom:3pt;
+     border-bottom:2px solid var(--accent);page-break-after:avoid}
+  h3{font-size:11.4pt;margin:13pt 0 4pt;page-break-after:avoid}
+  h4{font-size:10.4pt;margin:10pt 0 3pt;color:var(--ink2)}
+  p{margin:0 0 7pt}
+  .sub{color:var(--mute);font-size:9.4pt;margin-bottom:2pt}
+  .lead{font-size:11pt;color:var(--ink2)}
+  table{border-collapse:collapse;width:100%;margin:7pt 0 11pt;
+        font-size:9.1pt;page-break-inside:avoid}
+  th{background:var(--band);text-align:left;padding:5pt 6pt;
+     border-bottom:1.5px solid var(--accent);font-weight:600;font-size:8.8pt}
+  td{padding:4pt 6pt;border-bottom:1px solid var(--line);
+     font-variant-numeric:tabular-nums}
+  td.n,th.n{text-align:right}
+  tr.hi td{background:#f3eefc;font-weight:600}
+  tr.dim td{color:var(--mute)}
+  .box{border:1px solid var(--line);border-left:4px solid var(--accent);
+       background:#fbfaff;padding:8pt 11pt;margin:9pt 0;page-break-inside:avoid}
+  .box.good{border-left-color:var(--good);background:#f4fbf7}
+  .box.bad{border-left-color:var(--bad);background:#fdf6f4}
+  .box.warn{border-left-color:var(--warn);background:#fefaf2}
+  .box h4{margin-top:0}
+  .good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+  code{font-family:Consolas,"Courier New",monospace;font-size:8.9pt;
+       background:var(--band);padding:.5pt 3pt;border-radius:2px}
+  pre{background:var(--band);border:1px solid var(--line);border-radius:4px;
+      padding:7pt 9pt;font-family:Consolas,monospace;font-size:8.6pt;
+      line-height:1.45;overflow-x:auto;margin:6pt 0}
+  ul,ol{margin:0 0 7pt;padding-left:17pt} li{margin-bottom:3pt}
+  .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:7pt;margin:9pt 0}
+  .kpi div{border:1px solid var(--line);border-radius:4px;padding:7pt;
+           text-align:center;background:#fff}
+  .kpi b{display:block;font-size:15pt;line-height:1.1;color:var(--accent)}
+  .kpi span{font-size:8pt;color:var(--mute);display:block;margin-top:3pt}
+  .foot{margin-top:14pt;padding-top:6pt;border-top:1px solid var(--line);
+        font-size:8.4pt;color:var(--mute)}
+</style>
+<body>
+
+<div class="sub">BRAC University · B.Sc. Thesis · Model Report · 11 September 2026</div>
+<h1>The TEMARL Transformer — Architecture, Configuration and Results</h1>
+<p class="lead">This document covers <b>only the Transformer model</b>: how it is
+built, every change made to it, and how it performs against reference baselines
+across all environments and test conditions. Comparisons against GRU, LSTM and
+reinforcement-learning variants are deliberately excluded here — they are in the
+main technical report.</p>
+
+<div class="kpi">
+  <div><b>0.6040</b><span>Containment rate<br>(baseline 0.5475)</span></div>
+  <div><b>61.7%</b><span>of maximum achievable<br>gain, captured</span></div>
+  <div><b>156,310</b><span>encoder parameters</span></div>
+  <div><b>p=0.0004</b><span>vs a defender with<br>no attacker model</span></div>
+</div>
+
+<h2>1. What the model does</h2>
+<p>The Transformer is the <b>attacker-intent encoder</b>. It reads the sequence
+of MITRE ATT&amp;CK techniques the attacker has performed so far and produces a
+single vector <b>h</b> that summarises "what kind of campaign is this, and where
+is it going". That vector is handed to the four defender agents, which use it to
+choose which decoy to place and where.</p>
+<pre>attacker techniques  [T1190, T1059, T1071, ...]
+        |
+        v
+  token embedding  (86-entry vocabulary: 84 techniques + PAD + UNK)
+        |
+        v
+  4 x Transformer encoder layer   (8 heads, feed-forward 512, rotary position)
+        |
+        v
+  last-real-token pooling  ->  LayerNorm  ->   h  (32 dimensions)
+        |
+        v
+  Gated Multimodal Unit  fuses h with network telemetry
+        |
+        v
+  four defender agents  ->  (decoy type, target machine)</pre>
+
+<h3>1.1 Final configuration</h3>
+<table>
+<tr><th>Component</th><th>Setting</th><th>Why this value</th></tr>
+<tr><td>Encoder layers</td><td class="n">4</td><td>Chosen by a 16-trial random search</td></tr>
+<tr><td>Attention heads</td><td class="n">8</td><td>Same search</td></tr>
+<tr><td>Feed-forward width</td><td class="n">512</td><td>Same search</td></tr>
+<tr><td>Model width (output <b>h</b>)</td><td class="n">32</td><td>Same search — notably narrow</td></tr>
+<tr><td><b>Position encoding</b></td><td><b>Rotary (RoPE)</b></td><td>Replaced sinusoidal — see §3</td></tr>
+<tr><td>Learning rate</td><td class="n">1×10⁻³</td><td>Same search</td></tr>
+<tr><td>Context window</td><td class="n">16 tokens</td><td>Matches the environment's episode length</td></tr>
+<tr><td>Vocabulary</td><td class="n">86</td><td>84 techniques + PAD + UNK</td></tr>
+<tr><td>Pooling</td><td>Last real token</td><td>With an all-padding guard</td></tr>
+<tr><td>Pre-training</td><td>1,500 steps, then <b>frozen</b></td><td>Keeps the representation stable while the policy learns</td></tr>
+<tr class="hi"><td><b>Total encoder parameters</b></td><td class="n"><b>156,310</b></td><td>—</td></tr>
+</table>
+
+<h2>2. Every change we made to the model</h2>
+<table>
+<tr><th>#</th><th>Change</th><th>Reason</th><th class="n">Measured effect</th></tr>
+<tr class="hi"><td>1</td><td><b>Sinusoidal → Rotary position encoding</b></td><td>Sinusoidal encoding degraded badly as context grew</td><td class="n good">+0.026 to +0.070 accuracy</td></tr>
+<tr class="hi"><td>2</td><td><b>16-trial hyperparameter search</b></td><td>The model had never been tuned at all</td><td class="n good">Closed a 0.1388 deficit to 0.0000</td></tr>
+<tr><td>3</td><td>Training target changed from "next technique" to "best decoy"</td><td>The defender needs the decoy, not the technique</td><td class="n good">0.867 → 0.934</td></tr>
+<tr><td>4</td><td>Pre-training extended 800 → 1,500 steps</td><td>At 150 steps the model looked broken (0.472); at 1,200 it led (0.886)</td><td class="n good">Ranking was inverting</td></tr>
+<tr><td>5</td><td>Context window 8 → 16 tokens</td><td>Episodes grew from 5.5 to 18 steps, so 8 tokens discarded half the history</td><td class="n">—</td></tr>
+<tr><td>6</td><td>Vocabulary extended 78 → 84 techniques</td><td>6.20% of attacker actions were being discarded as "unknown"</td><td class="n good">Zero unknowns</td></tr>
+</table>
+
+<div class="box good">
+<h4>The most important finding about this model</h4>
+<p>An early result reported that the Transformer was beaten on attack prediction
+by a margin of <b>0.1388</b> — a very large, highly significant gap
+(<i>d</i> = 1.65, p = 5.7×10⁻¹⁴). That result was widely quoted inside the
+project for two years.</p>
+<p><b>It was not a property of the model. It was our own configuration error.</b>
+Two fixes — rotary position encoding and an equal tuning budget — closed the
+entire gap to <b>+0.0000</b>, while the Transformer used <b>44%</b> of the
+parameters of the model it had supposedly lost to.</p>
+</div>
+
+<h3>2.1 Why rotary position encoding mattered so much</h3>
+<p>Accuracy on CAM-LDS, same model, only the position encoding changed:</p>
+<table>
+<tr><th class="n">Context length</th><th class="n">Sinusoidal</th><th class="n">Rotary (RoPE)</th><th class="n">No position encoding</th><th class="n">Rotary advantage</th></tr>
+<tr class="hi"><td class="n">8</td><td class="n">0.8596</td><td class="n"><b>0.8856</b></td><td class="n">0.8713</td><td class="n good">+0.026</td></tr>
+<tr><td class="n">16</td><td class="n">0.8375</td><td class="n">0.8812</td><td class="n">0.8553</td><td class="n good">+0.044</td></tr>
+<tr><td class="n">32</td><td class="n">0.8087</td><td class="n">0.8678</td><td class="n">0.8274</td><td class="n good">+0.059</td></tr>
+<tr><td class="n">64</td><td class="n">0.7961</td><td class="n">0.8661</td><td class="n">0.8043</td><td class="n good">+0.070</td></tr>
+</table>
+<p>Note also that <b>no position encoding at all</b> beat sinusoidal at every
+length beyond 8. The original choice was actively harmful.</p>
+
+<h2>3. How well the model predicts attacker behaviour</h2>
+
+<h3>3.1 On simulated campaigns</h3>
+<table>
+<tr><th>Measure</th><th class="n">Transformer</th><th class="n">Baseline</th><th>Reading</th></tr>
+<tr><td>Top-1 accuracy</td><td class="n">0.1414</td><td class="n">0.0595 (majority)</td><td class="good">2.4× the baseline</td></tr>
+<tr><td>Top-3 accuracy</td><td class="n">0.2930</td><td class="n">0.1637 (frequency)</td><td class="good">1.8× the baseline</td></tr>
+<tr><td>Macro-F1</td><td class="n">0.1093</td><td class="n">—</td><td>Balanced across rare classes</td></tr>
+<tr><td>Perplexity</td><td class="n">39.49</td><td class="n">80.00 (uniform)</td><td class="good">Less than half — real structure learned</td></tr>
+</table>
+
+<h3>3.2 On real honeypot data (COMISET)</h3>
+<table>
+<tr><th>Measure</th><th class="n">Transformer</th><th class="n">Majority baseline</th><th class="n">Frequency baseline</th></tr>
+<tr><td>Top-1 accuracy</td><td class="n">0.6463</td><td class="n">0.3752</td><td class="n">0.6835</td></tr>
+<tr><td>Top-3 accuracy</td><td class="n">0.9169</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>Macro-F1</td><td class="n">0.5112</td><td class="n">—</td><td class="n">—</td></tr>
+<tr><td>Perplexity</td><td class="n">2.684</td><td class="n">—</td><td class="n">—</td></tr>
+</table>
+<p class="warn"><b>Stated honestly:</b> a trivial frequency baseline scores
+0.6835 on this corpus, above the model's 0.6463. COMISET is 98.5% repeated
+actions, so "say the same thing again" is extremely strong. The model's
+advantage shows in <b>macro-F1</b> and <b>top-3</b>, which reward getting the
+rare, non-repeated transitions right. This is why COMISET was used only for
+pre-training experiments and never for the thesis's main results.</p>
+
+<h3>3.3 On genuinely unseen campaigns — the model's strongest result</h3>
+<p>The CAM-LDS data can be split three ways, from hardest to easiest:</p>
+<table>
+<tr><th>Protocol</th><th>What is held out</th><th class="n">Transformer</th><th class="n">Majority baseline</th><th class="n">Improvement</th></tr>
+<tr class="hi"><td><b>P1 — leave-one-campaign-out</b></td><td>An entire unseen campaign</td><td class="n">0.0661</td><td class="n">0.0224</td><td class="n good"><b>+0.0477 (3.0×)</b></td></tr>
+<tr><td>P2 — within-campaign variant</td><td>A variant of a seen campaign</td><td class="n">0.4934</td><td class="n">0.0859</td><td class="n">+0.408 (5.7×)</td></tr>
+<tr><td>P3 — random run split</td><td>Random runs</td><td class="n">0.5454</td><td class="n">0.1088</td><td class="n">+0.437 (5.0×)</td></tr>
+</table>
+<div class="box good">
+<h4>The model generalises to campaigns it has never seen</h4>
+<p>On <b>P1</b> — the hardest possible test, where an entire attack campaign is
+held out — the Transformer reaches <b>0.0661</b> against a majority baseline of
+<b>0.0224</b>, an improvement of <b>+0.0477</b>. This is the behaviour attention
+is expected to show: the advantage appears when the model must generalise to
+something genuinely new.</p>
+<p>The absolute number is small because with only 7 campaigns in the corpus, a
+held-out campaign shares almost nothing with the training data — roughly 92% of
+its techniques were never seen during training. That is a property of the
+dataset, not of the model.</p>
+</div>
+
+<h2>4. How well the model defends</h2>
+<p>The measure is <b>Deception Success Rate (DSR)</b> — the fraction of episodes
+in which the attacker is contained before reaching its objective.</p>
+
+<h3>4.1 Against reference defenders, in the final environment</h3>
+<table>
+<tr><th>Defender</th><th class="n">Canonical map</th><th class="n">Trained sizes</th><th class="n">Unseen structure</th><th class="n">Unseen sizes</th></tr>
+<tr class="dim"><td>No deception at all</td><td class="n">0.3680</td><td class="n">0.3635</td><td class="n">0.3615</td><td class="n">0.3515</td></tr>
+<tr class="dim"><td>Random decoys</td><td class="n">0.5320</td><td class="n">0.4935</td><td class="n">0.5030</td><td class="n">0.4080</td></tr>
+<tr><td><b>Best fixed decoy</b> — no attacker model</td><td class="n">0.5920</td><td class="n">0.5475</td><td class="n">0.5470</td><td class="n">0.4465</td></tr>
+<tr><td>Perfect campaign identification</td><td class="n">0.6050</td><td class="n">0.5590</td><td class="n">0.5565</td><td class="n">0.4490</td></tr>
+<tr class="hi"><td><b>The Transformer model</b></td><td class="n"><b>0.6540</b></td><td class="n"><b>0.6040</b></td><td class="n"><b>0.6025</b></td><td class="n"><b>0.4865</b></td></tr>
+<tr><td><i>Perfect next-technique prediction (ceiling)</i></td><td class="n">0.6845</td><td class="n">0.6390</td><td class="n">0.6370</td><td class="n">0.5035</td></tr>
+<tr><td><i>Absolute upper bound</i></td><td class="n">0.7430</td><td class="n">0.7155</td><td class="n">0.7150</td><td class="n">0.5730</td></tr>
+</table>
+
+<div class="box good">
+<h4>Three things this table establishes</h4>
+<ol>
+<li><b>The model beats a defender with no attacker model</b> by <b>+0.0565</b>
+containment (p = 0.0004, 10 paired seeds). It is not merely placing decoys —
+it is placing the <i>right</i> decoys.</li>
+<li><b>It exceeds perfect campaign identification</b> (0.6540 vs 0.6050). Knowing
+which of three campaign types you face is not enough; the model extracts more
+than that from the sequence.</li>
+<li><b>It captures 61.7% of everything a perfect predictor could achieve.</b>
+The gap between "no attacker model" and "perfect prediction" is 0.0915 DSR; the
+model takes 0.0565 of it.</li>
+</ol>
+</div>
+
+<h3>4.2 Headroom captured, by condition</h3>
+<table>
+<tr><th>Condition</th><th class="n">Model</th><th class="n">No-model baseline</th><th class="n">Gain</th><th class="n">Ceiling</th><th class="n">Share of possible gain</th></tr>
+<tr><td>Canonical map</td><td class="n">0.6540</td><td class="n">0.5920</td><td class="n good">+0.0620</td><td class="n">0.6845</td><td class="n"><b>67.0%</b></td></tr>
+<tr><td>Trained sizes</td><td class="n">0.6040</td><td class="n">0.5475</td><td class="n good">+0.0565</td><td class="n">0.6390</td><td class="n"><b>61.7%</b></td></tr>
+<tr><td>Unseen structure</td><td class="n">0.6025</td><td class="n">0.5470</td><td class="n good">+0.0555</td><td class="n">0.6370</td><td class="n"><b>61.7%</b></td></tr>
+<tr><td>Unseen sizes</td><td class="n">0.4865</td><td class="n">0.4465</td><td class="n good">+0.0400</td><td class="n">0.5035</td><td class="n"><b>70.2%</b></td></tr>
+</table>
+<p>The model holds up on networks whose <b>size and structure it never saw
+during training</b> — 70.2% of available gain at unseen sizes, its best result of
+the four.</p>
+
+<h3>4.3 Behaviour quality</h3>
+<table>
+<tr><th>Measure</th><th class="n">Transformer</th><th class="n">No-model baseline</th><th class="n">Ceiling</th></tr>
+<tr><td>Decoy-match quality (alignment)</td><td class="n">0.408</td><td class="n">0.338</td><td class="n">0.499</td></tr>
+<tr><td>Teacher-matching accuracy</td><td class="n">0.773</td><td class="n">—</td><td class="n">1.000</td></tr>
+<tr><td>Episode length (steps)</td><td class="n">~18</td><td class="n">18.1</td><td class="n">16.6</td></tr>
+<tr><td>Training time per run</td><td class="n">115 s</td><td class="n">—</td><td class="n">—</td></tr>
+</table>
+
+<h2>5. The model's efficiency</h2>
+<table>
+<tr><th>Property</th><th class="n">Value</th></tr>
+<tr class="hi"><td>Encoder parameters</td><td class="n"><b>156,310</b></td></tr>
+<tr><td>Output vector width</td><td class="n">32</td></tr>
+<tr><td>Policy network parameters</td><td class="n">~114,900</td></tr>
+<tr><td>Pre-training</td><td class="n">1,500 steps</td></tr>
+<tr><td>Training time</td><td class="n">115 s per run (CPU)</td></tr>
+<tr><td>Hardware used</td><td>CPU throughout — no GPU required</td></tr>
+</table>
+<div class="box">
+<p><b>On hardware:</b> an Intel Arc GPU was benchmarked and found to be
+<b>0.53× the speed of the CPU</b> at the batch size this workload uses (4), because
+kernel-launch latency dominates at small batches. The GPU only wins at batch 128
+or above. All results in this document were produced on CPU, which is the
+correct choice here.</p>
+</div>
+
+<h2>6. Where the model is weak — stated plainly</h2>
+<ol>
+<li><b>It is trained by imitation, not reinforcement learning.</b> Under PPO the
+model did not beat a fixed-decoy defender at any training budget tried (240
+episodes → 0.510; 1,200 → 0.523; baseline 0.5475). The results in this document
+come from behaviour cloning against an oracle teacher. Why PPO fails here is
+unresolved.</li>
+<li><b>Prediction accuracy on unseen campaigns is low in absolute terms</b>
+(0.0661). It beats the baseline by 3×, but the task is very hard with only 7
+campaigns.</li>
+<li><b>It is roughly 2× slower to train</b> than a recurrent encoder of the same
+job, despite being smaller.</li>
+<li><b>A trivial frequency baseline beats it on COMISET top-1.</b> Its advantage
+there is in macro-F1 and top-3.</li>
+<li><b>The dataset is very small</b> — effective sample size 3.09 independent
+campaigns. Transformers are designed for large-data regimes.</li>
+<li><b>Sequences are short</b> — 18 to 22 steps. Self-attention's main advantage
+is modelling long-range dependencies, which barely exist at this length.</li>
+<li><b>Results rest on one environment and one scripted attacker.</b> A learning
+attacker could change them.</li>
+</ol>
+
+<h2>7. Summary</h2>
+<div class="box good">
+<p style="font-size:11.5pt;line-height:1.6;margin:0"><b>The TEMARL Transformer
+is a 156,310-parameter attacker-intent encoder that contains attackers 60.4% of
+the time — 5.7 percentage points better than a defender with no attacker model
+(p = 0.0004) — capturing 62–70% of what a perfect predictor could achieve, and
+holding that advantage on network sizes and structures it never saw during
+training. It predicts genuinely unseen attack campaigns three times better than
+the baseline. It runs on a CPU in under two minutes per training run.</b></p>
+</div>
+<p>Two corrections to earlier project claims are recorded here for accuracy: the
+reported 0.1388 prediction deficit was an artefact of an unsuitable position
+encoding and an untuned configuration, and was eliminated entirely; and the
+statement that "the Transformer never won" was incorrect — it led on every
+condition in the v3 experiment and on the hardest CAM-LDS protocol.</p>
+
+<div class="foot">
+TEMARL · BRAC University · Apurba Roy (23101012), Tushit Roy (23101350),
+Mark Dipto Gomes (23101537), Farjana Akter Shumi (23101059) ·
+Supervisor: Md. Sakir Hossain · 11 September 2026.<br>
+This document covers the Transformer model only. Comparative results against
+GRU, LSTM and reinforcement-learning variants are in
+<code>TEMARL_Report_English.pdf</code>. All figures are reproducible from
+<code>results_v2/</code> … <code>results_v7/</code> in the repository.
+</div>
+</body></html>

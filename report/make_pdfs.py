@@ -27,7 +27,8 @@ CHROME_CANDIDATES = [
 
 DOCS = [("TEMARL_Report_English.html", "TEMARL_Report_English.pdf"),
         ("TEMARL_Report_Bangla.html", "TEMARL_Report_Bangla.pdf"),
-        ("TEMARL_Presentation.html", "TEMARL_Presentation.pdf")]
+        ("TEMARL_Presentation.html", "TEMARL_Presentation.pdf"),
+        ("TEMARL_Transformer_Only.html", "TEMARL_Transformer_Only.pdf")]
 
 
 def find_chrome():
