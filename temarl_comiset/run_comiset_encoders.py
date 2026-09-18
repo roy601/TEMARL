@@ -10,6 +10,7 @@ cells are skipped, so an interrupted run continues where it stopped.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import time
@@ -33,16 +34,45 @@ BUILD = {"Transformer-RoPE": TransformerRoPE, "GRU": GRUIntentEncoder,
 
 
 def corpus(path):
-    # the corpus ships gzipped (604 KB vs 24 MB); expand once on first use
-    if not os.path.exists(path) and os.path.exists(path + ".gz"):
+    """Expand the shipped .gz and REFUSE to run against a stale expansion.
+
+    A machine that already held an older comiset_lab_sessions.json silently ran
+    the whole experiment on the pre-repair corpus, because the original code
+    only expanded the .gz when the .json was absent. The .gz in the repository
+    is the single source of truth, so its metadata is compared against whatever
+    is on disk and the file is rewritten whenever they differ.
+    """
+    gz = path + ".gz"
+    if os.path.exists(gz):
         import gzip
-        import shutil
-        print("expanding", os.path.basename(path) + ".gz")
-        with gzip.open(path + ".gz", "rb") as src, open(path, "wb") as dst:
-            shutil.copyfileobj(src, dst)
+        want = json.loads(gzip.decompress(open(gz, "rb").read()))["metadata"]
+        have = None
+        if os.path.exists(path):
+            try:
+                have = json.load(open(path, encoding="utf-8"))["metadata"]
+            except Exception:
+                have = None
+        keys = ("sessions", "distinct_techniques", "total_labeled_records")
+        if have is None or any(have.get(k) != want.get(k) for k in keys):
+            if have is not None:
+                print("!! on-disk corpus does not match the shipped .gz "
+                      "(%s vs %s sessions) -- replacing it"
+                      % (have.get("sessions"), want.get("sessions")))
+            print("expanding", os.path.basename(gz))
+            with gzip.open(gz, "rb") as src, open(path, "wb") as dst:
+                import shutil
+                shutil.copyfileobj(src, dst)
+
     seqs, info = load_comiset_sequences(path=path)
     X, L, Y, S = to_windows(seqs, max_len=PR.MAX_LEN)
     return X, L, Y, S, info
+
+
+def fingerprint(path, info, n_windows):
+    """Identifies the corpus a result was produced from."""
+    h = hashlib.sha256(open(path, "rb").read()).hexdigest()[:16]
+    return {"sha256_16": h, "sessions_kept": int(info["n_kept"]),
+            "n_windows": int(n_windows)}
 
 
 def metrics(enc, X, L, Y, device, bs=2048):
@@ -158,17 +188,35 @@ def main():
     print("sessions    :", info["n_kept"], "| windows:", len(Y))
     print("arms        :", arms, "| seeds:", len(seeds), "| steps:", steps)
 
+    fp = fingerprint(path, info, len(Y))
+    print("corpus id   :", fp)
+
     os.makedirs(RESULTS, exist_ok=True)
     out = {"prereg": "prereg_comiset.py", "smoke": args.smoke, "device": str(device),
            "corpus": os.path.basename(path), "n_windows": int(len(Y)),
            "n_sessions": int(info["n_kept"]), "steps": steps, "batch": batch,
-           "results": {}}
+           "corpus_fingerprint": fp, "results": {}}
     if os.path.exists(OUT) and not args.smoke:
         try:
-            out = json.load(open(OUT, encoding="utf-8"))
-            out.setdefault("results", {})
+            prev = json.load(open(OUT, encoding="utf-8"))
         except Exception:
-            pass
+            prev = None
+        if prev is not None:
+            old_fp = prev.get("corpus_fingerprint")
+            if old_fp != fp:
+                raise SystemExit(
+                    "\nREFUSING TO CONTINUE: %s holds results from a DIFFERENT "
+                    "corpus.\n  on disk now : %s\n  in results  : %s\n"
+                    "Those cells are not comparable with the ones this run would "
+                    "add.\nDelete or rename the file and start the run again:\n"
+                    "    del results_comiset\\encoders_comiset.json\n" % (OUT, fp, old_fp))
+            if prev.get("steps") != steps:
+                raise SystemExit(
+                    "\nREFUSING TO CONTINUE: existing results used steps=%s, this "
+                    "run uses steps=%s.\nDelete the file and start again."
+                    % (prev.get("steps"), steps))
+            out = prev
+            out.setdefault("results", {})
 
     for arm in arms:
         out["results"].setdefault(arm, {})

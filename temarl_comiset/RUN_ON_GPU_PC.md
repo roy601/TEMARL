@@ -67,8 +67,32 @@ hours. Fix the wheel before continuing.
 python run_comiset_encoders.py --smoke
 ```
 
-Expected: 2 arms, 1 seed, 200 steps, top-1 roughly 0.53–0.65. Nothing is
-written. If this fails, stop and send me the traceback — do not run step 6.
+**Check these three lines before going on.** They identify the corpus, and a run
+against the wrong corpus is worthless:
+
+```
+sessions    : 6796 | windows: 27315
+corpus id   : {'sha256_16': '35c89d20c5be4a8d', 'sessions_kept': 6796, 'n_windows': 27315}
+  Transformer-RoPE   seed 0  top1 0.5352 ...  maj 0.3363  bigram 0.5388
+```
+
+`sessions` must be **6796**, not 5637. 5637 is the old pre-repair corpus, which
+was missing 43 of the raw file's 53 techniques. If the machine already held an
+older `data_local/comiset_lab_sessions.json`, the runner now detects it, prints
+`!! on-disk corpus does not match the shipped .gz`, and replaces it — let it.
+
+If this fails, stop and send me the traceback — do not run step 6.
+
+### If you have run this before on this machine
+
+Delete previous results first. Cells produced from a different corpus cannot be
+mixed with new ones, and the runner will refuse to continue rather than silently
+combine them:
+
+```bash
+del results_comiset\encoders_comiset.json      # PowerShell / cmd
+rm -f results_comiset/encoders_comiset.json    # Git Bash
+```
 
 ## 6. The real run
 
