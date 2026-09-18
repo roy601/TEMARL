@@ -1,0 +1,60 @@
+==============================================================================================================
+  TEMARL v7 — CALIBRATION (architecture-blind; rule fixed in source)
+  thresholds {'G1_headroom_abs': 1.0, 'G1_headroom_rel': 0.25, 'G2_coordination_rel': 0.15, 'G3_intent_rel': 0.1, 'G4_sequence_rel': 0.03, 'G5_ci_lower_gt': 0.0}
+  calibrate 522b193c70ae5690 | gates 0d77a16a69f4463a | frozen 351bf22ec2b4e86f
+==============================================================================================================
+
+  cell beta=0.2 p_goal=0.5 p_stay=0.6   fails   (57 s)
+  G1 discrimination  PASS  null 0.000 < random 2.260 < best-fixed 4.295 < ceiling 18.243 ; headroom 13.948 (76%)
+  G2 coordination    PASS  coord value 6.254 (34% of ceiling, vs clairvoyant/uncoord-naive); breadcrumb partner +6.254 +- 0.580; over capacity -13.105 +- 0.695
+  G3 intent value    FAIL  1.548 (8% of ceiling)
+  G4 sequence value  PASS  2.676 (14.7% of ceiling)
+
+  cell beta=0.2 p_goal=0.5 p_stay=0.8   fails   (54 s)
+  G1 discrimination  PASS  null 0.000 < random 2.094 < best-fixed 4.475 < ceiling 18.094 ; headroom 13.619 (75%)
+  G2 coordination    PASS  coord value 6.205 (34% of ceiling, vs clairvoyant/uncoord-naive); breadcrumb partner +6.205 +- 0.576; over capacity -13.108 +- 0.692
+  G3 intent value    FAIL  1.587 (9% of ceiling)
+  G4 sequence value  PASS  2.794 (15.4% of ceiling)
+
+  cell beta=0.2 p_goal=0.7 p_stay=0.6   PASSES G1-G4   (56 s)
+  G1 discrimination  PASS  null 0.000 < random 2.191 < best-fixed 4.369 < ceiling 18.124 ; headroom 13.755 (76%)
+  G2 coordination    PASS  coord value 6.174 (34% of ceiling, vs clairvoyant/uncoord-naive); breadcrumb partner +6.174 +- 0.573; over capacity -13.107 +- 0.688
+  G3 intent value    PASS  2.198 (12% of ceiling)
+  G4 sequence value  PASS  2.751 (15.2% of ceiling)
+
+  cell beta=0.2 p_goal=0.7 p_stay=0.8   PASSES G1-G4   (49 s)
+  G1 discrimination  PASS  null 0.000 < random 2.038 < best-fixed 4.463 < ceiling 17.983 ; headroom 13.520 (75%)
+  G2 coordination    PASS  coord value 6.124 (34% of ceiling, vs clairvoyant/uncoord-naive); breadcrumb partner +6.124 +- 0.567; over capacity -13.078 +- 0.685
+  G3 intent value    PASS  1.819 (10% of ceiling)
+  G4 sequence value  PASS  2.796 (15.5% of ceiling)
+
+  cell beta=0.4 p_goal=0.5 p_stay=0.6   fails   (48 s)
+  G1 discrimination  PASS  null 0.000 < random 1.793 < best-fixed 3.201 < ceiling 14.215 ; headroom 11.014 (77%)
+  G2 coordination    PASS  coord value 4.719 (33% of ceiling, vs clairvoyant/uncoord-averse); breadcrumb partner +6.279 +- 0.534; over capacity -10.727 +- 0.626
+  G3 intent value    FAIL  1.237 (9% of ceiling)
+  G4 sequence value  PASS  2.057 (14.5% of ceiling)
+
+  cell beta=0.4 p_goal=0.5 p_stay=0.8   fails   (47 s)
+  G1 discrimination  PASS  null 0.000 < random 1.727 < best-fixed 3.229 < ceiling 14.162 ; headroom 10.933 (77%)
+  G2 coordination    PASS  coord value 4.921 (35% of ceiling, vs clairvoyant/uncoord-averse); breadcrumb partner +6.253 +- 0.534; over capacity -10.762 +- 0.627
+  G3 intent value    FAIL  1.245 (9% of ceiling)
+  G4 sequence value  PASS  2.096 (14.8% of ceiling)
+
+  cell beta=0.4 p_goal=0.7 p_stay=0.6   PASSES G1-G4   (47 s)
+  G1 discrimination  PASS  null 0.000 < random 1.738 < best-fixed 3.487 < ceiling 14.175 ; headroom 10.688 (75%)
+  G2 coordination    PASS  coord value 4.845 (34% of ceiling, vs clairvoyant/uncoord-averse); breadcrumb partner +6.266 +- 0.533; over capacity -10.758 +- 0.626
+  G3 intent value    PASS  1.710 (12% of ceiling)
+  G4 sequence value  PASS  2.115 (14.9% of ceiling)
+
+  cell beta=0.4 p_goal=0.7 p_stay=0.8   fails   (51 s)
+  G1 discrimination  PASS  null 0.000 < random 1.699 < best-fixed 3.286 < ceiling 14.130 ; headroom 10.844 (77%)
+  G2 coordination    PASS  coord value 5.015 (35% of ceiling, vs clairvoyant/uncoord-averse); breadcrumb partner +6.239 +- 0.533; over capacity -10.790 +- 0.626
+  G3 intent value    FAIL  1.380 (10% of ceiling)
+  G4 sequence value  PASS  2.090 (14.8% of ceiling)
+
+==============================================================================================================
+  3 / 8 cells pass G1-G4
+  CHOSEN (smallest coordination value among passing cells): {'beta': 0.2, 'p_goal': 0.7, 'p_stay': 0.8, 'k_capacity': 2, 'goal_steps': 1}
+  wrote env_config.json and results_marl/calibration_grid.json
+==============================================================================================================
+exit 0

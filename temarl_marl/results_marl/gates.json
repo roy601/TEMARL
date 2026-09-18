@@ -1,0 +1,628 @@
+{
+ "config": {
+  "beta": 0.2,
+  "p_goal": 0.7,
+  "p_stay": 0.8,
+  "k_capacity": 2,
+  "goal_steps": 1
+ },
+ "thresholds": {
+  "G1_headroom_abs": 1.0,
+  "G1_headroom_rel": 0.25,
+  "G2_coordination_rel": 0.15,
+  "G3_intent_rel": 0.1,
+  "G4_sequence_rel": 0.03,
+  "G5_ci_lower_gt": 0.0
+ },
+ "gates": {
+  "G1": {
+   "ladder": {
+    "null": 0.0,
+    "random": 2.0966666666666667,
+    "best_fixed": 4.167666666666666,
+    "ceiling": 17.322333333333333
+   },
+   "headroom": 13.154666666666667,
+   "headroom_rel": 0.7594050070236882,
+   "pass": true
+  },
+  "G2": {
+   "best_uncoordinated": "clairvoyant/uncoord-naive",
+   "coordination_value": 5.768333333333333,
+   "coordination_rel": 0.3329997883272076,
+   "complementarity": 5.7683333333333335,
+   "complementarity_ci": 0.3068772348275144,
+   "over_capacity": -12.579666666666666,
+   "over_capacity_ci": 0.3837909262259896,
+   "pass": true
+  },
+  "G3": {
+   "intent_value": 1.948666666666666,
+   "intent_rel": 0.11249446764292721,
+   "pass": true
+  },
+  "G4": {
+   "sequence_value": 2.545000000000001,
+   "sequence_rel": 0.14692016087132223,
+   "pass": true
+  },
+  "G5": {
+   "folds": {
+    "S1": {
+     "ceiling": 27.106,
+     "best_fixed_from_train": 7.058,
+     "best_fixed_joint": [
+      5,
+      0,
+      5,
+      0
+     ],
+     "diff": 20.048,
+     "ci": 1.219910934816542,
+     "pass": true
+    },
+    "S2": {
+     "ceiling": 22.274,
+     "best_fixed_from_train": 7.632,
+     "best_fixed_joint": [
+      1,
+      3,
+      0,
+      0
+     ],
+     "diff": 14.642,
+     "ci": 0.9100540788370853,
+     "pass": true
+    },
+    "S3": {
+     "ceiling": 18.764,
+     "best_fixed_from_train": 0.532,
+     "best_fixed_joint": [
+      1,
+      0,
+      5,
+      0
+     ],
+     "diff": 18.232,
+     "ci": 0.7410413570299959,
+     "pass": true
+    },
+    "S4": {
+     "ceiling": 16.266,
+     "best_fixed_from_train": 1.834,
+     "best_fixed_joint": [
+      1,
+      4,
+      0,
+      0
+     ],
+     "diff": 14.432,
+     "ci": 0.7710957474832638,
+     "pass": true
+    },
+    "S5": {
+     "ceiling": 4.156,
+     "best_fixed_from_train": 0.684,
+     "best_fixed_joint": [
+      5,
+      0,
+      5,
+      0
+     ],
+     "diff": 3.472,
+     "ci": 0.13100319096604696,
+     "pass": true
+    },
+    "S6": {
+     "ceiling": 21.844,
+     "best_fixed_from_train": 0.976,
+     "best_fixed_joint": [
+      5,
+      4,
+      0,
+      0
+     ],
+     "diff": 20.868,
+     "ci": 1.337174045207861,
+     "pass": true
+    },
+    "S7": {
+     "ceiling": 16.262,
+     "best_fixed_from_train": 4.034,
+     "best_fixed_joint": [
+      1,
+      0,
+      5,
+      0
+     ],
+     "diff": 12.228,
+     "ci": 0.5854151312384793,
+     "pass": true
+    }
+   },
+   "pass": true
+  }
+ },
+ "summary": {
+  "null": {
+   "n": 3000,
+   "dwell": 0.0,
+   "dwell_ci": 0.0,
+   "depth": 0.0,
+   "depth_ci": 0.0,
+   "protected": 0.25066666666666665,
+   "protected_ci": 0.015511495011045123,
+   "exposed": 0.0,
+   "exposed_ci": 0.0,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 15.073666666666666,
+   "length_ci": 0.4509313634338812
+  },
+  "random": {
+   "n": 3000,
+   "dwell": 2.0966666666666667,
+   "dwell_ci": 0.07610839858143162,
+   "depth": 1.9013333333333333,
+   "depth_ci": 0.06646119541419498,
+   "protected": 0.286,
+   "protected_ci": 0.016173349102986335,
+   "exposed": 0.25733333333333336,
+   "exposed_ci": 0.015646342298685265,
+   "lure_chains": 0.099,
+   "lure_chains_ci": 0.012217745086940042,
+   "dead_ends": 0.007666666666666666,
+   "dead_ends_ci": 0.0031217629292512477,
+   "capacity_violations": 13.97,
+   "capacity_violations_ci": 0.40279894392552756,
+   "length": 16.060666666666666,
+   "length_ci": 0.45911140694290237
+  },
+  "best_fixed": {
+   "n": 3000,
+   "dwell": 4.167666666666666,
+   "dwell_ci": 0.1550086548806336,
+   "depth": 3.232,
+   "depth_ci": 0.10703401598792761,
+   "protected": 0.397,
+   "protected_ci": 0.017511435463452546,
+   "exposed": 0.2813333333333333,
+   "exposed_ci": 0.016093191727927964,
+   "lure_chains": 0.32133333333333336,
+   "lure_chains_ci": 0.032817081558224895,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 19.432333333333332,
+   "length_ci": 0.5051764792984699
+  },
+  "reactive/naive": {
+   "n": 3000,
+   "dwell": 4.1386666666666665,
+   "dwell_ci": 0.1797124367498855,
+   "depth": 2.9903333333333335,
+   "depth_ci": 0.11481394930753232,
+   "protected": 0.291,
+   "protected_ci": 0.016256889379093857,
+   "exposed": 0.274,
+   "exposed_ci": 0.015962886666167422,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.522,
+   "dead_ends_ci": 0.034431806104586994,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 16.484666666666666,
+   "length_ci": 0.47031652624069537
+  },
+  "reactive/averse": {
+   "n": 3000,
+   "dwell": 4.366333333333333,
+   "dwell_ci": 0.18669292163586984,
+   "depth": 3.159,
+   "depth_ci": 0.11946589445016903,
+   "protected": 0.2866666666666667,
+   "protected_ci": 0.01618462704449426,
+   "exposed": 0.18233333333333332,
+   "exposed_ci": 0.013819394700027332,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 16.464666666666666,
+   "length_ci": 0.47127107372889465
+  },
+  "clairvoyant/coord": {
+   "n": 3000,
+   "dwell": 17.322333333333333,
+   "dwell_ci": 0.41647771326564237,
+   "depth": 11.743333333333334,
+   "depth_ci": 0.2517851003880975,
+   "protected": 0.683,
+   "protected_ci": 0.016653588197941674,
+   "exposed": 0.3546666666666667,
+   "exposed_ci": 0.017122614309831037,
+   "lure_chains": 3.561,
+   "lure_chains_ci": 0.134331003236405,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 23.123666666666665,
+   "length_ci": 0.46824648457153506
+  },
+  "clairvoyant/uncoord-naive": {
+   "n": 3000,
+   "dwell": 11.554,
+   "dwell_ci": 0.3723974499950719,
+   "depth": 8.073,
+   "depth_ci": 0.22062460595899686,
+   "protected": 0.45766666666666667,
+   "protected_ci": 0.01783099707823766,
+   "exposed": 0.7023333333333334,
+   "exposed_ci": 0.016364569353932785,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 2.272666666666667,
+   "dead_ends_ci": 0.07868204101501854,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 19.932,
+   "length_ci": 0.4638510922498182
+  },
+  "clairvoyant/uncoord-averse": {
+   "n": 3000,
+   "dwell": 11.022666666666666,
+   "dwell_ci": 0.3758198886257331,
+   "depth": 7.312,
+   "depth_ci": 0.21420746713453306,
+   "protected": 0.358,
+   "protected_ci": 0.017158403076395077,
+   "exposed": 0.2816666666666667,
+   "exposed_ci": 0.016098987956135978,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.073333333333334,
+   "length_ci": 0.48575415994082694
+  },
+  "transition/coord": {
+   "n": 3000,
+   "dwell": 8.999,
+   "dwell_ci": 0.26861245442028536,
+   "depth": 6.197,
+   "depth_ci": 0.16346582805236984,
+   "protected": 0.49533333333333335,
+   "protected_ci": 0.017894473547927642,
+   "exposed": 0.2966666666666667,
+   "exposed_ci": 0.016348684572053074,
+   "lure_chains": 1.029,
+   "lure_chains_ci": 0.07314023495625703,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 19.868666666666666,
+   "length_ci": 0.464846091995954
+  },
+  "transition/uncoord-naive": {
+   "n": 3000,
+   "dwell": 7.071666666666666,
+   "dwell_ci": 0.24292553101894532,
+   "depth": 4.982,
+   "depth_ci": 0.14708552206764525,
+   "protected": 0.42533333333333334,
+   "protected_ci": 0.01769459193971865,
+   "exposed": 0.41533333333333333,
+   "exposed_ci": 0.01763682474643474,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.9096666666666666,
+   "dead_ends_ci": 0.05313622527342716,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.854333333333333,
+   "length_ci": 0.4664320684674423
+  },
+  "transition/uncoord-averse": {
+   "n": 3000,
+   "dwell": 6.669666666666667,
+   "dwell_ci": 0.2446455316148206,
+   "depth": 4.611666666666666,
+   "depth_ci": 0.14759493161208312,
+   "protected": 0.349,
+   "protected_ci": 0.01705968650848903,
+   "exposed": 0.24966666666666668,
+   "exposed_ci": 0.015490849696010797,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 17.798333333333332,
+   "length_ci": 0.48041516427366804
+  },
+  "script/coord": {
+   "n": 3000,
+   "dwell": 6.454,
+   "dwell_ci": 0.2092828245395163,
+   "depth": 4.697333333333333,
+   "depth_ci": 0.1318677846699185,
+   "protected": 0.4613333333333333,
+   "protected_ci": 0.01784166197469259,
+   "exposed": 0.2806666666666667,
+   "exposed_ci": 0.016081566452879455,
+   "lure_chains": 0.515,
+   "lure_chains_ci": 0.05214995235173158,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.44633333333333,
+   "length_ci": 0.4440030021036016
+  },
+  "script/uncoord-naive": {
+   "n": 3000,
+   "dwell": 5.499,
+   "dwell_ci": 0.19517478504758956,
+   "depth": 4.012666666666667,
+   "depth_ci": 0.12265847065514747,
+   "protected": 0.391,
+   "protected_ci": 0.0174648501414552,
+   "exposed": 0.3586666666666667,
+   "exposed_ci": 0.017165452376899936,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.5986666666666667,
+   "dead_ends_ci": 0.04787905921799386,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 17.727666666666668,
+   "length_ci": 0.44126975119355805
+  },
+  "script/uncoord-averse": {
+   "n": 3000,
+   "dwell": 5.419,
+   "dwell_ci": 0.19910838584805038,
+   "depth": 3.913666666666667,
+   "depth_ci": 0.1262085089166317,
+   "protected": 0.335,
+   "protected_ci": 0.016892777607953366,
+   "exposed": 0.23333333333333334,
+   "exposed_ci": 0.015137687021954293,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 17.388,
+   "length_ci": 0.45133250398696134
+  },
+  "bigram/coord": {
+   "n": 3000,
+   "dwell": 6.562666666666667,
+   "dwell_ci": 0.23980548785442335,
+   "depth": 4.7043333333333335,
+   "depth_ci": 0.14991159191931236,
+   "protected": 0.385,
+   "protected_ci": 0.017415492522270638,
+   "exposed": 0.283,
+   "exposed_ci": 0.016122063748576703,
+   "lure_chains": 0.44233333333333336,
+   "lure_chains_ci": 0.036616233745867206,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.143333333333334,
+   "length_ci": 0.4746197010670273
+  },
+  "bigram/uncoord-naive": {
+   "n": 3000,
+   "dwell": 4.705,
+   "dwell_ci": 0.17017112253808178,
+   "depth": 3.613,
+   "depth_ci": 0.11602914237113889,
+   "protected": 0.33166666666666667,
+   "protected_ci": 0.01685059779554445,
+   "exposed": 0.408,
+   "exposed_ci": 0.017589713808851253,
+   "lure_chains": 0.24,
+   "lure_chains_ci": 0.021605136904145786,
+   "dead_ends": 0.532,
+   "dead_ends_ci": 0.02950585175607554,
+   "capacity_violations": 6.549666666666667,
+   "capacity_violations_ci": 0.24582684985796172,
+   "length": 17.388333333333332,
+   "length_ci": 0.468030077168132
+  },
+  "bigram/uncoord-averse": {
+   "n": 3000,
+   "dwell": 4.649333333333334,
+   "dwell_ci": 0.23328446439721368,
+   "depth": 3.336,
+   "depth_ci": 0.1477232082187416,
+   "protected": 0.2986666666666667,
+   "protected_ci": 0.016380360530898763,
+   "exposed": 0.162,
+   "exposed_ci": 0.013187040957561534,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 16.72833333333333,
+   "length_ci": 0.47137586146596017
+  },
+  "nointent/coord": {
+   "n": 3000,
+   "dwell": 4.505333333333334,
+   "dwell_ci": 0.15614660513986942,
+   "depth": 3.385,
+   "depth_ci": 0.10150531814684842,
+   "protected": 0.37,
+   "protected_ci": 0.017279810491347185,
+   "exposed": 0.273,
+   "exposed_ci": 0.015944700551967016,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.331333333333333,
+   "length_ci": 0.4870256605776252
+  },
+  "nointent/uncoord-naive": {
+   "n": 3000,
+   "dwell": 3.175333333333333,
+   "dwell_ci": 0.13530164340119938,
+   "depth": 2.529333333333333,
+   "depth_ci": 0.09850610737379378,
+   "protected": 0.3626666666666667,
+   "protected_ci": 0.01720699273765655,
+   "exposed": 0.20033333333333334,
+   "exposed_ci": 0.014325142266384974,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.076,
+   "length_ci": 0.48764599325049995
+  },
+  "nointent/uncoord-averse": {
+   "n": 3000,
+   "dwell": 3.175333333333333,
+   "dwell_ci": 0.13530164340119938,
+   "depth": 2.529333333333333,
+   "depth_ci": 0.09850610737379378,
+   "protected": 0.3626666666666667,
+   "protected_ci": 0.01720699273765655,
+   "exposed": 0.20033333333333334,
+   "exposed_ci": 0.014325142266384974,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 18.076,
+   "length_ci": 0.48764599325049995
+  },
+  "clairvoyant/coord-nopartner": {
+   "n": 3000,
+   "dwell": 11.554,
+   "dwell_ci": 0.3723974499950719,
+   "depth": 8.073,
+   "depth_ci": 0.22062460595899686,
+   "protected": 0.45766666666666667,
+   "protected_ci": 0.01783099707823766,
+   "exposed": 0.7023333333333334,
+   "exposed_ci": 0.016364569353932785,
+   "lure_chains": 0.0,
+   "lure_chains_ci": 0.0,
+   "dead_ends": 2.272666666666667,
+   "dead_ends_ci": 0.07868204101501854,
+   "capacity_violations": 0.0,
+   "capacity_violations_ci": 0.0,
+   "length": 19.932,
+   "length_ci": 0.4638510922498182
+  },
+  "clairvoyant/coord-fillall": {
+   "n": 3000,
+   "dwell": 4.742666666666667,
+   "dwell_ci": 0.1541699171231765,
+   "depth": 3.9446666666666665,
+   "depth_ci": 0.11814990244121013,
+   "protected": 0.3506666666666667,
+   "protected_ci": 0.017078468771309627,
+   "exposed": 0.5216666666666666,
+   "exposed_ci": 0.01787844345352379,
+   "lure_chains": 0.4176666666666667,
+   "lure_chains_ci": 0.029813467632418655,
+   "dead_ends": 0.0,
+   "dead_ends_ci": 0.0,
+   "capacity_violations": 17.30366666666667,
+   "capacity_violations_ci": 0.4574368128567335,
+   "length": 17.30366666666667,
+   "length_ci": 0.4574368128567335
+  }
+ },
+ "meta": {
+  "best_fixed_joint": [
+   5,
+   0,
+   4,
+   0
+  ],
+  "clairvoyant/coord": {
+   "theta": 0.0
+  },
+  "clairvoyant/uncoord-naive": {
+   "theta": 0.0
+  },
+  "clairvoyant/uncoord-averse": {
+   "theta": 0.2
+  },
+  "transition/coord": {
+   "theta": 0.0
+  },
+  "transition/uncoord-naive": {
+   "theta": 0.1
+  },
+  "transition/uncoord-averse": {
+   "theta": 0.1
+  },
+  "script/coord": {
+   "theta": 0.0
+  },
+  "script/uncoord-naive": {
+   "theta": 0.1
+  },
+  "script/uncoord-averse": {
+   "theta": 0.1
+  },
+  "bigram/coord": {
+   "theta": 0.0
+  },
+  "bigram/uncoord-naive": {
+   "theta": 0.1
+  },
+  "bigram/uncoord-averse": {
+   "theta": 0.2
+  },
+  "nointent/coord": {
+   "theta": 0.0
+  },
+  "nointent/uncoord-naive": {
+   "theta": 0.1
+  },
+  "nointent/uncoord-averse": {
+   "theta": 0.1
+  },
+  "clairvoyant/coord-nopartner": {
+   "theta": 0.0
+  },
+  "clairvoyant/coord-fillall": {
+   "theta": 0.0
+  }
+ },
+ "gates_sha": "0d77a16a69f4463a",
+ "frozen": "351bf22ec2b4e86f",
+ "all_pass": true
+}

@@ -1,0 +1,38 @@
+==============================================================================================================
+  TEMARL v7 — VALIDITY GATES (thresholds fixed in source before any ladder number existed)
+  config {'beta': 0.2, 'p_goal': 0.7, 'p_stay': 0.8, 'k_capacity': 2, 'goal_steps': 1} | gates file 0d77a16a69f4463a | frozen 351bf22ec2b4e86f
+==============================================================================================================
+    clairvoyant/coord                    theta 0.0  dwell 17.322  depth 11.743  prot 0.683
+    clairvoyant/uncoord-naive            theta 0.0  dwell 11.554  depth  8.073  prot 0.458
+    clairvoyant/uncoord-averse           theta 0.2  dwell 11.023  depth  7.312  prot 0.358
+    transition/coord                     theta 0.0  dwell  8.999  depth  6.197  prot 0.495
+    transition/uncoord-naive             theta 0.1  dwell  7.072  depth  4.982  prot 0.425
+    transition/uncoord-averse            theta 0.1  dwell  6.670  depth  4.612  prot 0.349
+    script/coord                         theta 0.0  dwell  6.454  depth  4.697  prot 0.461
+    script/uncoord-naive                 theta 0.1  dwell  5.499  depth  4.013  prot 0.391
+    script/uncoord-averse                theta 0.1  dwell  5.419  depth  3.914  prot 0.335
+    bigram/coord                         theta 0.0  dwell  6.563  depth  4.704  prot 0.385
+    bigram/uncoord-naive                 theta 0.1  dwell  4.705  depth  3.613  prot 0.332
+    bigram/uncoord-averse                theta 0.2  dwell  4.649  depth  3.336  prot 0.299
+    nointent/coord                       theta 0.0  dwell  4.505  depth  3.385  prot 0.370
+    nointent/uncoord-naive               theta 0.1  dwell  3.175  depth  2.529  prot 0.363
+    nointent/uncoord-averse              theta 0.1  dwell  3.175  depth  2.529  prot 0.363
+    clairvoyant/coord-nopartner          theta 0.0  dwell 11.554  depth  8.073  prot 0.458
+    clairvoyant/coord-fillall            theta 0.0  dwell  4.743  depth  3.945  prot 0.351
+
+  G1 discrimination  PASS  null 0.000 < random 2.097 < best-fixed 4.168 < ceiling 17.322 ; headroom 13.155 (76%)
+  G2 coordination    PASS  coord value 5.768 (33% of ceiling, vs clairvoyant/uncoord-naive); breadcrumb partner +5.768 +- 0.307; over capacity -12.580 +- 0.384
+  G3 intent value    PASS  1.949 (11% of ceiling)
+  G4 sequence value  PASS  2.545 (14.7% of ceiling)
+  G5 LOSO S1        PASS  ceiling 27.106 vs best-fixed(train) 7.058 diff +20.048 +- 1.220
+  G5 LOSO S2        PASS  ceiling 22.274 vs best-fixed(train) 7.632 diff +14.642 +- 0.910
+  G5 LOSO S3        PASS  ceiling 18.764 vs best-fixed(train) 0.532 diff +18.232 +- 0.741
+  G5 LOSO S4        PASS  ceiling 16.266 vs best-fixed(train) 1.834 diff +14.432 +- 0.771
+  G5 LOSO S5        PASS  ceiling 4.156 vs best-fixed(train) 0.684 diff +3.472 +- 0.131
+  G5 LOSO S6        PASS  ceiling 21.844 vs best-fixed(train) 0.976 diff +20.868 +- 1.337
+  G5 LOSO S7        PASS  ceiling 16.262 vs best-fixed(train) 4.034 diff +12.228 +- 0.585
+
+  ALL GATES: PASS   (261 s)
+  wrote results_marl\gates.json
+==============================================================================================================
+exit 0
