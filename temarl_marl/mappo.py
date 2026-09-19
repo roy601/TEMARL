@@ -109,7 +109,9 @@ class ValueNorm:
         self.m = self.m2 = self.debias = 0.0
 
     def update(self, x: torch.Tensor):
-        x = x.detach().double()
+        # statistics in float64 on the CPU: identical to the CPU runs, and safe
+        # on GPUs without float64 support (e.g. Intel Arc)
+        x = x.detach().cpu().double()
         self.m = self.beta * self.m + (1 - self.beta) * float(x.mean())
         self.m2 = self.beta * self.m2 + (1 - self.beta) * float((x ** 2).mean())
         self.debias = self.beta * self.debias + (1 - self.beta)

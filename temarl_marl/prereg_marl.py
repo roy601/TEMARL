@@ -47,6 +47,13 @@ WHY v7 EXISTS (full disclosure of the path that led here)
    arm. Because other arms could be under-trained at a Transformer-sized
    budget, the CONVERGENCE flag below was pre-registered at the same time.
    GRU and LSTM were not trained before this file was committed.
+   RESULT (results_marl/learning_gate.json): at 1M steps the Transformer team
+   beat both baselines on every seed but captured 47.8% of the headroom (bar
+   50%); at 2M it captured 78.5% (dwell 7.62 / 8.58 / 7.79 vs best-fixed
+   4.11 / 4.70 / 4.18 and the transition planner 8.49 / 9.54 / 8.96) -> PASS.
+   ENV_STEPS = 2,000,000. Its validation curves were still rising slowly at
+   2M (last gain +1.7% to +2.8%, under the 5% flag), so v7 is a FIXED-BUDGET
+   comparison and is reported as one.
 6. Expectation stated in advance, so it cannot be rewritten afterwards: making
    the system multi-agent is not expected to make the Transformer win. On
    COMISET the GRU beat it at next-technique prediction with no RL involved.
@@ -58,7 +65,7 @@ and contradictions. A failing validity gate voids the contrasts it touches.
 
 from __future__ import annotations
 
-PREREG_ID = "v7-draft"
+PREREG_ID = "v7-2026-09-19"
 
 # ── arms ─────────────────────────────────────────────────────────────────────
 # (history encoder, learner). Capacity-matched encoders (encoders_marl.py).
@@ -71,7 +78,7 @@ SEEDS = tuple(range(10))
 LOSO_SEEDS = tuple(range(5))
 
 # ── budget (set by the learning gate before this file is committed) ─────────
-ENV_STEPS = None
+ENV_STEPS = 2_000_000
 SMOKE_ENV_STEPS = 8192
 N_TEST = 500
 
@@ -107,9 +114,10 @@ LOSO_CONTRASTS = [
 UNINTERPRETABLE_IF_G4_FAILS = ("A1", "A2", "A3", "L1", "L3")
 
 # CONVERGENCE FLAG (pre-registered with the Transformer-run learning gate).
-# An arm-seed is POSSIBLY UNDER-TRAINED when its best validation dwell came at
-# the FINAL evaluation and beat the previous evaluation by more than
-# CONVERGENCE_RISE_REL. If more than half of an arm's seeds are flagged, every
+# A trained cell (one per seed in the main study; one per seed and held-out
+# script in LOSO) is POSSIBLY UNDER-TRAINED when its best validation dwell came
+# at the FINAL evaluation and beat the previous evaluation by more than
+# CONVERGENCE_RISE_REL. If more than half of an arm's cells are flagged, every
 # contrast touching that arm is labelled BUDGET-LIMITED: reported in full, but
 # not interpreted as an architecture difference.
 CONVERGENCE_RISE_REL = 0.05

@@ -175,7 +175,7 @@ def main():
           "the last evaluation, still rising > %.0f%%" % (100 * PR.CONVERGENCE_RISE_REL))
     for arm in arms:
         n, k = conv.get(arm, (0, 0))
-        print("    %-26s %d / %d seeds flagged%s" % ("%s/%s" % arm, n, k,
+        print("    %-26s %d / %d cells flagged%s" % ("%s/%s" % arm, n, k,
               "  -> BUDGET-LIMITED" if arm in limited else ""))
 
     # 2. declared family

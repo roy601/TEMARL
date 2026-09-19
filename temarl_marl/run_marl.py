@@ -107,7 +107,12 @@ def run_cell(args):
     torch.save({"actor": out["actor"].state_dict(),
                 "encoder": None if pre["encoder"] is None else pre["encoder"].state_dict(),
                 "cell": c}, os.path.join(out_dir, "checkpoints", cell_name(c) + ".pt"))
+    import platform
+    import numpy
     rec = {"cell": c, "fingerprint": fp, "smoke": smoke, "env_config": cfg.to_dict(),
+           "runtime": {"device": device, "threads": threads, "torch": torch.__version__,
+                       "numpy": numpy.__version__, "python": platform.python_version(),
+                       "machine": platform.node()},
            "pretrain": pre["metrics"], "curve": out["curve"],
            "best_update": out["best_update"], "val_best": out["val_best"],
            "env_steps": out["env_steps"], "seconds": time.time() - t0,

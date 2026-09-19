@@ -1,0 +1,1039 @@
+{
+ "rule": {
+  "arm": "Transformer-RoPE",
+  "seeds": [
+   900,
+   901,
+   902
+  ],
+  "budgets": [
+   1000000,
+   2000000,
+   4000000
+  ],
+  "capture_min": 0.5
+ },
+ "rounds": [
+  {
+   "budget": 1000000,
+   "results": [
+    {
+     "seed": 900,
+     "budget": 1000000,
+     "pretrain": {
+      "arm": "Transformer-RoPE",
+      "top1": 0.4476447105407715,
+      "top3": 0.6328161358833313,
+      "majority": 0.057790578834897334,
+      "bigram": 0.3667193161757874,
+      "n_train_windows": 80807,
+      "seconds": 224.99917268753052
+     },
+     "mappo": {
+      "dwell": 6.266,
+      "depth": 4.406,
+      "protected": 0.374,
+      "exposed": 0.302,
+      "lure_chains": 0.212,
+      "dead_ends": 0.048,
+      "capacity_violations": 1.698,
+      "length": 17.486,
+      "decoys_deployed": 32.918
+     },
+     "mappo_h0": {
+      "dwell": 4.772,
+      "depth": 3.438,
+      "protected": 0.362,
+      "exposed": 0.28,
+      "lure_chains": 0.038,
+      "dead_ends": 0.0,
+      "capacity_violations": 2.202,
+      "length": 16.994,
+      "decoys_deployed": 35.802
+     },
+     "baselines": {
+      "best_fixed": {
+       "dwell": 4.11,
+       "depth": 3.116,
+       "protected": 0.4,
+       "exposed": 0.292,
+       "lure_chains": 0.338,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 18.674,
+       "decoys_deployed": 37.348
+      },
+      "reactive/naive": {
+       "dwell": 3.758,
+       "depth": 2.734,
+       "protected": 0.298,
+       "exposed": 0.278,
+       "lure_chains": 0.0,
+       "dead_ends": 0.472,
+       "capacity_violations": 0.0,
+       "length": 15.6,
+       "decoys_deployed": 14.6
+      },
+      "reactive/averse": {
+       "dwell": 4.1,
+       "depth": 2.958,
+       "protected": 0.296,
+       "exposed": 0.2,
+       "lure_chains": 0.0,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 15.554,
+       "decoys_deployed": 14.554
+      },
+      "transition/coord": {
+       "dwell": 8.494,
+       "depth": 5.862,
+       "protected": 0.47,
+       "exposed": 0.308,
+       "lure_chains": 0.932,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 18.974,
+       "decoys_deployed": 37.416
+      }
+     },
+     "curve": [
+      {
+       "update": 24,
+       "env_steps": 98304,
+       "train_dwell": 3.0075,
+       "val_dwell": 4.65,
+       "val_depth": 3.3466666666666667,
+       "seconds": 88.76115345954895
+      },
+      {
+       "update": 49,
+       "env_steps": 200704,
+       "train_dwell": 4.615,
+       "val_dwell": 5.236666666666666,
+       "val_depth": 3.7733333333333334,
+       "seconds": 178.4908812046051
+      },
+      {
+       "update": 73,
+       "env_steps": 299008,
+       "train_dwell": 5.5775,
+       "val_dwell": 5.73,
+       "val_depth": 3.9966666666666666,
+       "seconds": 262.2026641368866
+      },
+      {
+       "update": 98,
+       "env_steps": 401408,
+       "train_dwell": 5.4375,
+       "val_dwell": 5.8133333333333335,
+       "val_depth": 4.03,
+       "seconds": 343.7116026878357
+      },
+      {
+       "update": 122,
+       "env_steps": 499712,
+       "train_dwell": 6.005,
+       "val_dwell": 6.22,
+       "val_depth": 4.41,
+       "seconds": 420.29922914505005
+      },
+      {
+       "update": 146,
+       "env_steps": 598016,
+       "train_dwell": 6.755,
+       "val_dwell": 6.22,
+       "val_depth": 4.34,
+       "seconds": 497.6350076198578
+      },
+      {
+       "update": 171,
+       "env_steps": 700416,
+       "train_dwell": 6.4575,
+       "val_dwell": 6.086666666666667,
+       "val_depth": 4.243333333333333,
+       "seconds": 573.9661366939545
+      },
+      {
+       "update": 195,
+       "env_steps": 798720,
+       "train_dwell": 6.625,
+       "val_dwell": 6.23,
+       "val_depth": 4.3,
+       "seconds": 649.9912509918213
+      },
+      {
+       "update": 220,
+       "env_steps": 901120,
+       "train_dwell": 5.91,
+       "val_dwell": 6.433333333333334,
+       "val_depth": 4.5,
+       "seconds": 730.7472920417786
+      },
+      {
+       "update": 244,
+       "env_steps": 999424,
+       "train_dwell": 6.69,
+       "val_dwell": 6.86,
+       "val_depth": 4.613333333333333,
+       "seconds": 803.7661290168762
+      }
+     ],
+     "best_update": 244,
+     "seconds": 807.330020904541
+    },
+    {
+     "seed": 901,
+     "budget": 1000000,
+     "pretrain": {
+      "arm": "Transformer-RoPE",
+      "top1": 0.4568856954574585,
+      "top3": 0.6372786164283752,
+      "majority": 0.05690506145359528,
+      "bigram": 0.37268944159489015,
+      "n_train_windows": 81350,
+      "seconds": 225.57702660560608
+     },
+     "mappo": {
+      "dwell": 7.184,
+      "depth": 5.184,
+      "protected": 0.39,
+      "exposed": 0.296,
+      "lure_chains": 0.686,
+      "dead_ends": 0.002,
+      "capacity_violations": 1.056,
+      "length": 19.046,
+      "decoys_deployed": 37.236
+     },
+     "mappo_h0": {
+      "dwell": 4.788,
+      "depth": 3.728,
+      "protected": 0.322,
+      "exposed": 0.268,
+      "lure_chains": 0.194,
+      "dead_ends": 0.0,
+      "capacity_violations": 2.132,
+      "length": 17.996,
+      "decoys_deployed": 38.024
+     },
+     "baselines": {
+      "best_fixed": {
+       "dwell": 4.696,
+       "depth": 3.55,
+       "protected": 0.434,
+       "exposed": 0.254,
+       "lure_chains": 0.352,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 20.828,
+       "decoys_deployed": 41.656
+      },
+      "reactive/naive": {
+       "dwell": 4.594,
+       "depth": 3.198,
+       "protected": 0.286,
+       "exposed": 0.248,
+       "lure_chains": 0.0,
+       "dead_ends": 0.54,
+       "capacity_violations": 0.0,
+       "length": 16.878,
+       "decoys_deployed": 15.878
+      },
+      "reactive/averse": {
+       "dwell": 4.882,
+       "depth": 3.364,
+       "protected": 0.29,
+       "exposed": 0.178,
+       "lure_chains": 0.0,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 16.914,
+       "decoys_deployed": 15.914
+      },
+      "transition/coord": {
+       "dwell": 9.544,
+       "depth": 6.524,
+       "protected": 0.492,
+       "exposed": 0.282,
+       "lure_chains": 0.99,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 20.528,
+       "decoys_deployed": 40.504
+      }
+     },
+     "curve": [
+      {
+       "update": 24,
+       "env_steps": 98304,
+       "train_dwell": 2.9525,
+       "val_dwell": 3.51,
+       "val_depth": 2.83,
+       "seconds": 86.23389005661011
+      },
+      {
+       "update": 49,
+       "env_steps": 200704,
+       "train_dwell": 4.2425,
+       "val_dwell": 5.626666666666667,
+       "val_depth": 4.14,
+       "seconds": 176.71933603286743
+      },
+      {
+       "update": 73,
+       "env_steps": 299008,
+       "train_dwell": 4.6425,
+       "val_dwell": 6.1033333333333335,
+       "val_depth": 4.46,
+       "seconds": 258.480388879776
+      },
+      {
+       "update": 98,
+       "env_steps": 401408,
+       "train_dwell": 5.4775,
+       "val_dwell": 6.67,
+       "val_depth": 4.763333333333334,
+       "seconds": 338.985595703125
+      },
+      {
+       "update": 122,
+       "env_steps": 499712,
+       "train_dwell": 5.5475,
+       "val_dwell": 6.443333333333333,
+       "val_depth": 4.596666666666667,
+       "seconds": 413.6552608013153
+      },
+      {
+       "update": 146,
+       "env_steps": 598016,
+       "train_dwell": 6.3925,
+       "val_dwell": 6.83,
+       "val_depth": 4.8566666666666665,
+       "seconds": 488.8402714729309
+      },
+      {
+       "update": 171,
+       "env_steps": 700416,
+       "train_dwell": 6.1575,
+       "val_dwell": 6.923333333333333,
+       "val_depth": 4.943333333333333,
+       "seconds": 563.5366804599762
+      },
+      {
+       "update": 195,
+       "env_steps": 798720,
+       "train_dwell": 6.4075,
+       "val_dwell": 6.973333333333334,
+       "val_depth": 5.023333333333333,
+       "seconds": 638.1009829044342
+      },
+      {
+       "update": 220,
+       "env_steps": 901120,
+       "train_dwell": 6.49,
+       "val_dwell": 7.3533333333333335,
+       "val_depth": 5.273333333333333,
+       "seconds": 716.3265142440796
+      },
+      {
+       "update": 244,
+       "env_steps": 999424,
+       "train_dwell": 7.255,
+       "val_dwell": 7.516666666666667,
+       "val_depth": 5.406666666666666,
+       "seconds": 788.9873847961426
+      }
+     ],
+     "best_update": 244,
+     "seconds": 794.1007578372955
+    },
+    {
+     "seed": 902,
+     "budget": 1000000,
+     "pretrain": {
+      "arm": "Transformer-RoPE",
+      "top1": 0.4493980407714844,
+      "top3": 0.6307374238967896,
+      "majority": 0.05568096313017306,
+      "bigram": 0.36973288186606473,
+      "n_train_windows": 81403,
+      "seconds": 228.4534788131714
+     },
+     "mappo": {
+      "dwell": 6.23,
+      "depth": 4.322,
+      "protected": 0.318,
+      "exposed": 0.292,
+      "lure_chains": 0.042,
+      "dead_ends": 0.0,
+      "capacity_violations": 1.47,
+      "length": 17.822,
+      "decoys_deployed": 32.408
+     },
+     "mappo_h0": {
+      "dwell": 4.698,
+      "depth": 3.446,
+      "protected": 0.33,
+      "exposed": 0.296,
+      "lure_chains": 0.0,
+      "dead_ends": 0.0,
+      "capacity_violations": 1.954,
+      "length": 17.612,
+      "decoys_deployed": 35.704
+     },
+     "baselines": {
+      "best_fixed": {
+       "dwell": 4.18,
+       "depth": 3.208,
+       "protected": 0.388,
+       "exposed": 0.294,
+       "lure_chains": 0.362,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 19.562,
+       "decoys_deployed": 39.124
+      },
+      "reactive/naive": {
+       "dwell": 4.206,
+       "depth": 3.084,
+       "protected": 0.274,
+       "exposed": 0.284,
+       "lure_chains": 0.0,
+       "dead_ends": 0.568,
+       "capacity_violations": 0.0,
+       "length": 16.232,
+       "decoys_deployed": 15.232
+      },
+      "reactive/averse": {
+       "dwell": 4.378,
+       "depth": 3.172,
+       "protected": 0.27,
+       "exposed": 0.212,
+       "lure_chains": 0.0,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 16.252,
+       "decoys_deployed": 15.252
+      },
+      "transition/coord": {
+       "dwell": 8.96,
+       "depth": 6.3,
+       "protected": 0.472,
+       "exposed": 0.316,
+       "lure_chains": 1.158,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 19.922,
+       "decoys_deployed": 39.232
+      }
+     },
+     "curve": [
+      {
+       "update": 24,
+       "env_steps": 98304,
+       "train_dwell": 2.985,
+       "val_dwell": 5.196666666666666,
+       "val_depth": 3.566666666666667,
+       "seconds": 88.96856331825256
+      },
+      {
+       "update": 49,
+       "env_steps": 200704,
+       "train_dwell": 4.575,
+       "val_dwell": 5.806666666666667,
+       "val_depth": 4.0,
+       "seconds": 179.9295938014984
+      },
+      {
+       "update": 73,
+       "env_steps": 299008,
+       "train_dwell": 5.0675,
+       "val_dwell": 6.296666666666667,
+       "val_depth": 4.176666666666667,
+       "seconds": 262.2282078266144
+      },
+      {
+       "update": 98,
+       "env_steps": 401408,
+       "train_dwell": 5.4725,
+       "val_dwell": 6.366666666666666,
+       "val_depth": 4.22,
+       "seconds": 343.52657413482666
+      },
+      {
+       "update": 122,
+       "env_steps": 499712,
+       "train_dwell": 5.805,
+       "val_dwell": 6.306666666666667,
+       "val_depth": 4.183333333333334,
+       "seconds": 420.2738449573517
+      },
+      {
+       "update": 146,
+       "env_steps": 598016,
+       "train_dwell": 6.0925,
+       "val_dwell": 6.273333333333333,
+       "val_depth": 4.183333333333334,
+       "seconds": 497.41985297203064
+      },
+      {
+       "update": 171,
+       "env_steps": 700416,
+       "train_dwell": 5.665,
+       "val_dwell": 6.346666666666667,
+       "val_depth": 4.226666666666667,
+       "seconds": 574.4449095726013
+      },
+      {
+       "update": 195,
+       "env_steps": 798720,
+       "train_dwell": 5.7725,
+       "val_dwell": 6.206666666666667,
+       "val_depth": 4.193333333333333,
+       "seconds": 650.9243023395538
+      },
+      {
+       "update": 220,
+       "env_steps": 901120,
+       "train_dwell": 6.55,
+       "val_dwell": 6.706666666666667,
+       "val_depth": 4.36,
+       "seconds": 731.0107989311218
+      },
+      {
+       "update": 244,
+       "env_steps": 999424,
+       "train_dwell": 6.195,
+       "val_dwell": 6.7,
+       "val_depth": 4.3966666666666665,
+       "seconds": 804.1696209907532
+      }
+     ],
+     "best_update": 220,
+     "seconds": 807.1286964416504
+    }
+   ],
+   "judgement": {
+    "beats_baselines_every_seed": true,
+    "capture": 0.47795331139564196,
+    "captures": [
+     0.4917883211678832,
+     0.5132013201320133,
+     0.4288702928870293
+    ],
+    "pass": false
+   }
+  },
+  {
+   "budget": 2000000,
+   "results": [
+    {
+     "seed": 900,
+     "budget": 2000000,
+     "pretrain": {
+      "arm": "Transformer-RoPE",
+      "top1": 0.4476447105407715,
+      "top3": 0.6328161358833313,
+      "majority": 0.057790578834897334,
+      "bigram": 0.3667193161757874,
+      "n_train_windows": 80807,
+      "seconds": 228.58852577209473
+     },
+     "mappo": {
+      "dwell": 7.622,
+      "depth": 5.18,
+      "protected": 0.45,
+      "exposed": 0.336,
+      "lure_chains": 0.812,
+      "dead_ends": 0.018,
+      "capacity_violations": 0.956,
+      "length": 19.316,
+      "decoys_deployed": 38.582
+     },
+     "mappo_h0": {
+      "dwell": 5.142,
+      "depth": 3.83,
+      "protected": 0.372,
+      "exposed": 0.244,
+      "lure_chains": 0.028,
+      "dead_ends": 0.0,
+      "capacity_violations": 1.338,
+      "length": 17.224,
+      "decoys_deployed": 35.786
+     },
+     "baselines": {
+      "best_fixed": {
+       "dwell": 4.11,
+       "depth": 3.116,
+       "protected": 0.4,
+       "exposed": 0.292,
+       "lure_chains": 0.338,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 18.674,
+       "decoys_deployed": 37.348
+      },
+      "reactive/naive": {
+       "dwell": 3.758,
+       "depth": 2.734,
+       "protected": 0.298,
+       "exposed": 0.278,
+       "lure_chains": 0.0,
+       "dead_ends": 0.472,
+       "capacity_violations": 0.0,
+       "length": 15.6,
+       "decoys_deployed": 14.6
+      },
+      "reactive/averse": {
+       "dwell": 4.1,
+       "depth": 2.958,
+       "protected": 0.296,
+       "exposed": 0.2,
+       "lure_chains": 0.0,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 15.554,
+       "decoys_deployed": 14.554
+      },
+      "transition/coord": {
+       "dwell": 8.494,
+       "depth": 5.862,
+       "protected": 0.47,
+       "exposed": 0.308,
+       "lure_chains": 0.932,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 18.974,
+       "decoys_deployed": 37.416
+      }
+     },
+     "curve": [
+      {
+       "update": 49,
+       "env_steps": 200704,
+       "train_dwell": 4.615,
+       "val_dwell": 5.236666666666666,
+       "val_depth": 3.7733333333333334,
+       "seconds": 154.45140147209167
+      },
+      {
+       "update": 98,
+       "env_steps": 401408,
+       "train_dwell": 5.4375,
+       "val_dwell": 5.8133333333333335,
+       "val_depth": 4.03,
+       "seconds": 310.5677258968353
+      },
+      {
+       "update": 146,
+       "env_steps": 598016,
+       "train_dwell": 6.755,
+       "val_dwell": 6.22,
+       "val_depth": 4.34,
+       "seconds": 461.7573986053467
+      },
+      {
+       "update": 195,
+       "env_steps": 798720,
+       "train_dwell": 6.625,
+       "val_dwell": 6.23,
+       "val_depth": 4.3,
+       "seconds": 608.0146942138672
+      },
+      {
+       "update": 244,
+       "env_steps": 999424,
+       "train_dwell": 6.69,
+       "val_dwell": 6.86,
+       "val_depth": 4.613333333333333,
+       "seconds": 740.4492630958557
+      },
+      {
+       "update": 293,
+       "env_steps": 1200128,
+       "train_dwell": 6.595,
+       "val_dwell": 7.426666666666667,
+       "val_depth": 4.84,
+       "seconds": 865.6049144268036
+      },
+      {
+       "update": 342,
+       "env_steps": 1400832,
+       "train_dwell": 7.3,
+       "val_dwell": 7.573333333333333,
+       "val_depth": 4.933333333333334,
+       "seconds": 986.5511968135834
+      },
+      {
+       "update": 390,
+       "env_steps": 1597440,
+       "train_dwell": 7.8525,
+       "val_dwell": 7.75,
+       "val_depth": 5.05,
+       "seconds": 1102.742753982544
+      },
+      {
+       "update": 439,
+       "env_steps": 1798144,
+       "train_dwell": 7.67,
+       "val_dwell": 8.186666666666667,
+       "val_depth": 5.3966666666666665,
+       "seconds": 1213.2830860614777
+      },
+      {
+       "update": 488,
+       "env_steps": 1998848,
+       "train_dwell": 7.6175,
+       "val_dwell": 8.36,
+       "val_depth": 5.523333333333333,
+       "seconds": 1320.109786272049
+      }
+     ],
+     "best_update": 488,
+     "seconds": 1322.649662733078
+    },
+    {
+     "seed": 901,
+     "budget": 2000000,
+     "pretrain": {
+      "arm": "Transformer-RoPE",
+      "top1": 0.4568856954574585,
+      "top3": 0.6372786164283752,
+      "majority": 0.05690506145359528,
+      "bigram": 0.37268944159489015,
+      "n_train_windows": 81350,
+      "seconds": 229.75144004821777
+     },
+     "mappo": {
+      "dwell": 8.578,
+      "depth": 5.97,
+      "protected": 0.516,
+      "exposed": 0.33,
+      "lure_chains": 1.166,
+      "dead_ends": 0.002,
+      "capacity_violations": 0.52,
+      "length": 21.092,
+      "decoys_deployed": 41.684
+     },
+     "mappo_h0": {
+      "dwell": 4.836,
+      "depth": 3.648,
+      "protected": 0.41,
+      "exposed": 0.298,
+      "lure_chains": 0.14,
+      "dead_ends": 0.0,
+      "capacity_violations": 2.724,
+      "length": 19.21,
+      "decoys_deployed": 41.092
+     },
+     "baselines": {
+      "best_fixed": {
+       "dwell": 4.696,
+       "depth": 3.55,
+       "protected": 0.434,
+       "exposed": 0.254,
+       "lure_chains": 0.352,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 20.828,
+       "decoys_deployed": 41.656
+      },
+      "reactive/naive": {
+       "dwell": 4.594,
+       "depth": 3.198,
+       "protected": 0.286,
+       "exposed": 0.248,
+       "lure_chains": 0.0,
+       "dead_ends": 0.54,
+       "capacity_violations": 0.0,
+       "length": 16.878,
+       "decoys_deployed": 15.878
+      },
+      "reactive/averse": {
+       "dwell": 4.882,
+       "depth": 3.364,
+       "protected": 0.29,
+       "exposed": 0.178,
+       "lure_chains": 0.0,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 16.914,
+       "decoys_deployed": 15.914
+      },
+      "transition/coord": {
+       "dwell": 9.544,
+       "depth": 6.524,
+       "protected": 0.492,
+       "exposed": 0.282,
+       "lure_chains": 0.99,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 20.528,
+       "decoys_deployed": 40.504
+      }
+     },
+     "curve": [
+      {
+       "update": 49,
+       "env_steps": 200704,
+       "train_dwell": 4.2425,
+       "val_dwell": 5.626666666666667,
+       "val_depth": 4.14,
+       "seconds": 150.25469207763672
+      },
+      {
+       "update": 98,
+       "env_steps": 401408,
+       "train_dwell": 5.4775,
+       "val_dwell": 6.67,
+       "val_depth": 4.763333333333334,
+       "seconds": 301.22236013412476
+      },
+      {
+       "update": 146,
+       "env_steps": 598016,
+       "train_dwell": 6.3925,
+       "val_dwell": 6.83,
+       "val_depth": 4.8566666666666665,
+       "seconds": 447.8911974430084
+      },
+      {
+       "update": 195,
+       "env_steps": 798720,
+       "train_dwell": 6.4075,
+       "val_dwell": 6.973333333333334,
+       "val_depth": 5.023333333333333,
+       "seconds": 593.1536183357239
+      },
+      {
+       "update": 244,
+       "env_steps": 999424,
+       "train_dwell": 7.255,
+       "val_dwell": 7.516666666666667,
+       "val_depth": 5.406666666666666,
+       "seconds": 720.7175190448761
+      },
+      {
+       "update": 293,
+       "env_steps": 1200128,
+       "train_dwell": 7.28,
+       "val_dwell": 7.566666666666666,
+       "val_depth": 5.466666666666667,
+       "seconds": 842.9086928367615
+      },
+      {
+       "update": 342,
+       "env_steps": 1400832,
+       "train_dwell": 8.15,
+       "val_dwell": 8.113333333333333,
+       "val_depth": 5.796666666666667,
+       "seconds": 961.764655828476
+      },
+      {
+       "update": 390,
+       "env_steps": 1597440,
+       "train_dwell": 7.205,
+       "val_dwell": 8.133333333333333,
+       "val_depth": 5.766666666666667,
+       "seconds": 1073.3734300136566
+      },
+      {
+       "update": 439,
+       "env_steps": 1798144,
+       "train_dwell": 7.875,
+       "val_dwell": 8.46,
+       "val_depth": 5.923333333333333,
+       "seconds": 1180.5274028778076
+      },
+      {
+       "update": 488,
+       "env_steps": 1998848,
+       "train_dwell": 7.7125,
+       "val_dwell": 8.603333333333333,
+       "val_depth": 5.89,
+       "seconds": 1292.3417212963104
+      }
+     ],
+     "best_update": 488,
+     "seconds": 1296.3325278759003
+    },
+    {
+     "seed": 902,
+     "budget": 2000000,
+     "pretrain": {
+      "arm": "Transformer-RoPE",
+      "top1": 0.4493980407714844,
+      "top3": 0.6307374238967896,
+      "majority": 0.05568096313017306,
+      "bigram": 0.36973288186606473,
+      "n_train_windows": 81403,
+      "seconds": 227.79925632476807
+     },
+     "mappo": {
+      "dwell": 7.786,
+      "depth": 5.38,
+      "protected": 0.404,
+      "exposed": 0.338,
+      "lure_chains": 0.874,
+      "dead_ends": 0.0,
+      "capacity_violations": 0.718,
+      "length": 19.698,
+      "decoys_deployed": 39.802
+     },
+     "mappo_h0": {
+      "dwell": 5.036,
+      "depth": 3.68,
+      "protected": 0.322,
+      "exposed": 0.28,
+      "lure_chains": 0.02,
+      "dead_ends": 0.0,
+      "capacity_violations": 0.856,
+      "length": 17.53,
+      "decoys_deployed": 35.916
+     },
+     "baselines": {
+      "best_fixed": {
+       "dwell": 4.18,
+       "depth": 3.208,
+       "protected": 0.388,
+       "exposed": 0.294,
+       "lure_chains": 0.362,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 19.562,
+       "decoys_deployed": 39.124
+      },
+      "reactive/naive": {
+       "dwell": 4.206,
+       "depth": 3.084,
+       "protected": 0.274,
+       "exposed": 0.284,
+       "lure_chains": 0.0,
+       "dead_ends": 0.568,
+       "capacity_violations": 0.0,
+       "length": 16.232,
+       "decoys_deployed": 15.232
+      },
+      "reactive/averse": {
+       "dwell": 4.378,
+       "depth": 3.172,
+       "protected": 0.27,
+       "exposed": 0.212,
+       "lure_chains": 0.0,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 16.252,
+       "decoys_deployed": 15.252
+      },
+      "transition/coord": {
+       "dwell": 8.96,
+       "depth": 6.3,
+       "protected": 0.472,
+       "exposed": 0.316,
+       "lure_chains": 1.158,
+       "dead_ends": 0.0,
+       "capacity_violations": 0.0,
+       "length": 19.922,
+       "decoys_deployed": 39.232
+      }
+     },
+     "curve": [
+      {
+       "update": 49,
+       "env_steps": 200704,
+       "train_dwell": 4.575,
+       "val_dwell": 5.806666666666667,
+       "val_depth": 4.0,
+       "seconds": 152.30417037010193
+      },
+      {
+       "update": 98,
+       "env_steps": 401408,
+       "train_dwell": 5.4725,
+       "val_dwell": 6.366666666666666,
+       "val_depth": 4.22,
+       "seconds": 307.33463501930237
+      },
+      {
+       "update": 146,
+       "env_steps": 598016,
+       "train_dwell": 6.0925,
+       "val_dwell": 6.273333333333333,
+       "val_depth": 4.183333333333334,
+       "seconds": 456.80982661247253
+      },
+      {
+       "update": 195,
+       "env_steps": 798720,
+       "train_dwell": 5.7725,
+       "val_dwell": 6.206666666666667,
+       "val_depth": 4.193333333333333,
+       "seconds": 603.2929186820984
+      },
+      {
+       "update": 244,
+       "env_steps": 999424,
+       "train_dwell": 6.195,
+       "val_dwell": 6.7,
+       "val_depth": 4.3966666666666665,
+       "seconds": 734.5652647018433
+      },
+      {
+       "update": 293,
+       "env_steps": 1200128,
+       "train_dwell": 5.815,
+       "val_dwell": 7.31,
+       "val_depth": 4.8133333333333335,
+       "seconds": 858.2668750286102
+      },
+      {
+       "update": 342,
+       "env_steps": 1400832,
+       "train_dwell": 7.405,
+       "val_dwell": 7.966666666666667,
+       "val_depth": 5.126666666666667,
+       "seconds": 979.11456823349
+      },
+      {
+       "update": 390,
+       "env_steps": 1597440,
+       "train_dwell": 7.2825,
+       "val_dwell": 7.96,
+       "val_depth": 5.22,
+       "seconds": 1093.344269990921
+      },
+      {
+       "update": 439,
+       "env_steps": 1798144,
+       "train_dwell": 7.455,
+       "val_dwell": 8.19,
+       "val_depth": 5.346666666666667,
+       "seconds": 1203.372864484787
+      },
+      {
+       "update": 488,
+       "env_steps": 1998848,
+       "train_dwell": 8.8425,
+       "val_dwell": 8.416666666666666,
+       "val_depth": 5.45,
+       "seconds": 1313.1686992645264
+      }
+     ],
+     "best_update": 488,
+     "seconds": 1316.247897386551
+    }
+   ],
+   "judgement": {
+    "beats_baselines_every_seed": true,
+    "capture": 0.7854102567359016,
+    "captures": [
+     0.801094890510949,
+     0.8007425742574256,
+     0.7543933054393304
+    ],
+    "pass": true
+   }
+  }
+ ],
+ "chosen_budget": 2000000
+}
