@@ -1,0 +1,58 @@
+{
+  "fingerprint": "85fd8fafae2284dbd2addae75b929273543da6ad13d4bb422fe7b65244eb8d4b",
+  "config": {
+    "device": "cpu",
+    "epochs": "auto",
+    "pilot_cap": 100,
+    "pilot_seeds": [
+      101,
+      102,
+      103
+    ],
+    "seeds": [
+      0
+    ],
+    "split_seed": 2310,
+    "held_out": null,
+    "threads": 4,
+    "rl_steps": 2000000,
+    "val_repeats": 1,
+    "test_repeats": 1,
+    "prediction_only": false,
+    "smoke": true
+  },
+  "conditions": [
+    {
+      "name": "real_100",
+      "fraction": 1.0,
+      "ratio": 0.0,
+      "kind": "real"
+    },
+    {
+      "name": "markov_100",
+      "fraction": 1.0,
+      "ratio": 1.0,
+      "kind": "markov"
+    },
+    {
+      "name": "repeat_100",
+      "fraction": 1.0,
+      "ratio": 1.0,
+      "kind": "repeat"
+    }
+  ],
+  "training": {
+    "batch": 64,
+    "lr": 0.0005,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0
+  },
+  "expected_prediction_cells": 9,
+  "expected_rl_cells": 20,
+  "runtime": {
+    "python": "3.13.3",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.4.2",
+    "device": "cpu"
+  }
+}
