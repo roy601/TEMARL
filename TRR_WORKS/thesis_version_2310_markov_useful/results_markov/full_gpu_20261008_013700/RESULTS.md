@@ -1,9 +1,9 @@
 # Markov augmentation usefulness study
 
-**INCOMPLETE: pending cells must not be interpreted as final results.**
+**COMPLETE**
 
-Prediction cells: 360/360. Deception cells: 126/200.
-Confidence ablation cells: 0/120. [Confidence results](CONFIDENCE_RESULTS.md) | [All confidence records](CONFIDENCE_DETAILS.md).
+Prediction cells: 360/360. Deception cells: 200/200.
+Confidence ablation cells: 120/120. [Confidence results](CONFIDENCE_RESULTS.md) | [All confidence records](CONFIDENCE_DETAILS.md).
 Training seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]. Source SHA256: `2a1deea60f8b3fdc4a73f7a4456b8525ed576aff72e58c7d08de249bc25d195c`.
 
 The source is an AttackBed-derived playbook corpus. Test sequences are original held-out playbook sequences, not raw real-world logs.
@@ -286,18 +286,18 @@ Dwell = decoy-engaged steps; depth = distinct parent techniques engaged; protect
 | real_100 | LSTM + MAPPO | 10 | 15.233 +/- 0.340 | 10.478 +/- 0.292 | 37.343 +/- 3.127 |
 | real_100 | NoHistory + IPPO | 10 | 11.263 +/- 0.498 | 7.766 +/- 0.341 | 27.657 +/- 2.882 |
 | real_100 | NoHistory + MAPPO | 10 | 11.529 +/- 0.333 | 7.876 +/- 0.205 | 28.886 +/- 2.169 |
-| markov_100 | Transformer + IPPO | 8 | 14.023 +/- 0.448 | 9.482 +/- 0.409 | 36.643 +/- 4.005 |
-| markov_100 | Transformer + MAPPO | 8 | 14.288 +/- 0.842 | 9.626 +/- 0.592 | 36.464 +/- 4.123 |
-| markov_100 | GRU + IPPO | 8 | 14.157 +/- 0.697 | 9.644 +/- 0.564 | 34.286 +/- 5.111 |
-| markov_100 | GRU + MAPPO | 8 | 14.878 +/- 0.813 | 10.075 +/- 0.567 | 36.143 +/- 5.500 |
-| markov_100 | LSTM + IPPO | 7 | 14.119 +/- 0.633 | 9.639 +/- 0.524 | 31.388 +/- 5.504 |
-| markov_100 | LSTM + MAPPO | 7 | 14.391 +/- 1.368 | 9.795 +/- 0.915 | 33.837 +/- 4.697 |
-| repeat_100 | Transformer + IPPO | 0 | Pending | Pending | Pending |
-| repeat_100 | Transformer + MAPPO | 0 | Pending | Pending | Pending |
-| repeat_100 | GRU + IPPO | 0 | Pending | Pending | Pending |
-| repeat_100 | GRU + MAPPO | 0 | Pending | Pending | Pending |
-| repeat_100 | LSTM + IPPO | 0 | Pending | Pending | Pending |
-| repeat_100 | LSTM + MAPPO | 0 | Pending | Pending | Pending |
+| markov_100 | Transformer + IPPO | 10 | 14.072 +/- 0.419 | 9.551 +/- 0.397 | 35.600 +/- 4.163 |
+| markov_100 | Transformer + MAPPO | 10 | 14.120 +/- 0.850 | 9.529 +/- 0.627 | 35.143 +/- 4.581 |
+| markov_100 | GRU + IPPO | 10 | 14.016 +/- 0.702 | 9.555 +/- 0.553 | 33.771 +/- 4.654 |
+| markov_100 | GRU + MAPPO | 10 | 14.811 +/- 0.733 | 10.029 +/- 0.518 | 35.257 +/- 5.199 |
+| markov_100 | LSTM + IPPO | 10 | 14.285 +/- 0.645 | 9.780 +/- 0.555 | 32.371 +/- 5.670 |
+| markov_100 | LSTM + MAPPO | 10 | 14.394 +/- 1.264 | 9.782 +/- 0.860 | 33.886 +/- 4.319 |
+| repeat_100 | Transformer + IPPO | 10 | 15.045 +/- 0.861 | 10.227 +/- 0.729 | 36.800 +/- 3.730 |
+| repeat_100 | Transformer + MAPPO | 10 | 15.425 +/- 0.517 | 10.526 +/- 0.331 | 36.971 +/- 4.795 |
+| repeat_100 | GRU + IPPO | 10 | 15.188 +/- 0.537 | 10.373 +/- 0.492 | 36.171 +/- 4.504 |
+| repeat_100 | GRU + MAPPO | 10 | 15.436 +/- 0.702 | 10.507 +/- 0.566 | 37.143 +/- 4.710 |
+| repeat_100 | LSTM + IPPO | 10 | 14.987 +/- 0.893 | 10.218 +/- 0.651 | 36.143 +/- 4.776 |
+| repeat_100 | LSTM + MAPPO | 10 | 15.595 +/- 0.443 | 10.727 +/- 0.282 | 39.000 +/- 2.674 |
 
 ### Downstream paired tests
 
@@ -305,42 +305,53 @@ Holm correction is separate from the prediction family and includes all 36 downs
 
 | Contrast | Metric | Seeds | Delta | 95% CI | Raw p | Holm p |
 |---|---|---|---|---|---|---|
-| Transformer+IPPO: markov_100 minus real_100 | dwell | 8 | -0.59107 | [-1.2609627198781346, 0.07881986273527675] | 0.07537 | N/A |
-| Transformer+IPPO: markov_100 minus real_100 | depth | 8 | -0.40679 | [-1.021709894613737, 0.208138466042308] | 0.16174 | N/A |
-| Transformer+IPPO: markov_100 minus real_100 | protected | 8 | 0.03536 | [0.009349174843026584, 0.06136511087125915] | 0.01476 | N/A |
-| Transformer+IPPO: markov_100 minus repeat_100 | dwell | 0 | N/A | N/A | N/A | N/A |
-| Transformer+IPPO: markov_100 minus repeat_100 | depth | 0 | N/A | N/A | N/A | N/A |
-| Transformer+IPPO: markov_100 minus repeat_100 | protected | 0 | N/A | N/A | N/A | N/A |
-| Transformer+MAPPO: markov_100 minus real_100 | dwell | 8 | -0.56357 | [-1.5373370519338059, 0.4101941947909491] | 0.21344 | N/A |
-| Transformer+MAPPO: markov_100 minus real_100 | depth | 8 | -0.42821 | [-1.2503610186162033, 0.3939324471876311] | 0.25786 | N/A |
-| Transformer+MAPPO: markov_100 minus real_100 | protected | 8 | 0.02321 | [-0.025911568838008582, 0.07234014026658003] | 0.30070 | N/A |
-| Transformer+MAPPO: markov_100 minus repeat_100 | dwell | 0 | N/A | N/A | N/A | N/A |
-| Transformer+MAPPO: markov_100 minus repeat_100 | depth | 0 | N/A | N/A | N/A | N/A |
-| Transformer+MAPPO: markov_100 minus repeat_100 | protected | 0 | N/A | N/A | N/A | N/A |
-| GRU+IPPO: markov_100 minus real_100 | dwell | 8 | -1.15571 | [-1.9544391304437818, -0.3569894409847897] | 0.01111 | N/A |
-| GRU+IPPO: markov_100 minus real_100 | depth | 8 | -0.81821 | [-1.5036045141858345, -0.13282405724273738] | 0.02567 | N/A |
-| GRU+IPPO: markov_100 minus real_100 | protected | 8 | -0.03429 | [-0.0883794912242994, 0.019808062652870856] | 0.17762 | N/A |
-| GRU+IPPO: markov_100 minus repeat_100 | dwell | 0 | N/A | N/A | N/A | N/A |
-| GRU+IPPO: markov_100 minus repeat_100 | depth | 0 | N/A | N/A | N/A | N/A |
-| GRU+IPPO: markov_100 minus repeat_100 | protected | 0 | N/A | N/A | N/A | N/A |
-| GRU+MAPPO: markov_100 minus real_100 | dwell | 8 | -0.31500 | [-1.0205088811921583, 0.3905088811921592] | 0.32614 | N/A |
-| GRU+MAPPO: markov_100 minus real_100 | depth | 8 | -0.32143 | [-0.8667813015531645, 0.2239241586960221] | 0.20606 | N/A |
-| GRU+MAPPO: markov_100 minus real_100 | protected | 8 | -0.00500 | [-0.04611043776490925, 0.03611043776490923] | 0.78199 | N/A |
-| GRU+MAPPO: markov_100 minus repeat_100 | dwell | 0 | N/A | N/A | N/A | N/A |
-| GRU+MAPPO: markov_100 minus repeat_100 | depth | 0 | N/A | N/A | N/A | N/A |
-| GRU+MAPPO: markov_100 minus repeat_100 | protected | 0 | N/A | N/A | N/A | N/A |
-| LSTM+IPPO: markov_100 minus real_100 | dwell | 7 | -1.32245 | [-2.098224263289951, -0.5466736958937226] | 0.00587 | N/A |
-| LSTM+IPPO: markov_100 minus real_100 | depth | 7 | -0.90490 | [-1.4963817193796458, -0.3134141989877013] | 0.00958 | N/A |
-| LSTM+IPPO: markov_100 minus real_100 | protected | 7 | -0.08082 | [-0.1370303701690243, -0.02460228289220017] | 0.01255 | N/A |
-| LSTM+IPPO: markov_100 minus repeat_100 | dwell | 0 | N/A | N/A | N/A | N/A |
-| LSTM+IPPO: markov_100 minus repeat_100 | depth | 0 | N/A | N/A | N/A | N/A |
-| LSTM+IPPO: markov_100 minus repeat_100 | protected | 0 | N/A | N/A | N/A | N/A |
-| LSTM+MAPPO: markov_100 minus real_100 | dwell | 7 | -0.85837 | [-1.9868594910601325, 0.2701247971825813] | 0.11204 | N/A |
-| LSTM+MAPPO: markov_100 minus real_100 | depth | 7 | -0.71020 | [-1.5083244554449118, 0.08791629217960528] | 0.07232 | N/A |
-| LSTM+MAPPO: markov_100 minus real_100 | protected | 7 | -0.03469 | [-0.09015165735152827, 0.02076390224948744] | 0.17670 | N/A |
-| LSTM+MAPPO: markov_100 minus repeat_100 | dwell | 0 | N/A | N/A | N/A | N/A |
-| LSTM+MAPPO: markov_100 minus repeat_100 | depth | 0 | N/A | N/A | N/A | N/A |
-| LSTM+MAPPO: markov_100 minus repeat_100 | protected | 0 | N/A | N/A | N/A | N/A |
+| Transformer+IPPO: markov_100 minus real_100 | dwell | 10 | -0.60600 | [-1.1122267174564382, -0.09977328254356221] | 0.02408 | 0.60190 |
+| Transformer+IPPO: markov_100 minus real_100 | depth | 10 | -0.49257 | [-0.9824828365190816, -0.0026600206237761825] | 0.04901 | 1.00000 |
+| Transformer+IPPO: markov_100 minus real_100 | protected | 10 | 0.02171 | [-0.008157098916917255, 0.05158567034548869] | 0.13450 | 1.00000 |
+| Transformer+IPPO: markov_100 minus repeat_100 | dwell | 10 | -0.97314 | [-1.6251927570862472, -0.32109295719946673] | 0.00818 | 0.22175 |
+| Transformer+IPPO: markov_100 minus repeat_100 | depth | 10 | -0.67600 | [-1.2102167472621366, -0.14178325273786363] | 0.01870 | 0.48627 |
+| Transformer+IPPO: markov_100 minus repeat_100 | protected | 10 | -0.01200 | [-0.053450351555677275, 0.029450351555677292] | 0.52891 | 1.00000 |
+| Transformer+MAPPO: markov_100 minus real_100 | dwell | 10 | -0.92743 | [-1.8815113276819657, 0.02665418482482307] | 0.05543 | 1.00000 |
+| Transformer+MAPPO: markov_100 minus real_100 | depth | 10 | -0.69857 | [-1.4855488134429218, 0.08840595630006387] | 0.07557 | 1.00000 |
+| Transformer+MAPPO: markov_100 minus real_100 | protected | 10 | 0.00600 | [-0.04282019055518374, 0.05482019055518375] | 0.78728 | 1.00000 |
+| Transformer+MAPPO: markov_100 minus repeat_100 | dwell | 10 | -1.30543 | [-2.110671359624178, -0.5001857832329647] | 0.00518 | 0.15529 |
+| Transformer+MAPPO: markov_100 minus repeat_100 | depth | 10 | -0.99771 | [-1.55394828305684, -0.4414802883717317] | 0.00285 | 0.09412 |
+| Transformer+MAPPO: markov_100 minus repeat_100 | protected | 10 | -0.01829 | [-0.07450946124842425, 0.03793803267699569] | 0.48063 | 1.00000 |
+| GRU+IPPO: markov_100 minus real_100 | dwell | 10 | -1.29686 | [-2.0009973305581448, -0.5927169551561406] | 0.00242 | 0.08244 |
+| GRU+IPPO: markov_100 minus real_100 | depth | 10 | -0.92143 | [-1.509355990261167, -0.33350115259597624] | 0.00626 | 0.18158 |
+| GRU+IPPO: markov_100 minus real_100 | protected | 10 | -0.03514 | [-0.07800529379058882, 0.007719579504874542] | 0.09662 | 1.00000 |
+| GRU+IPPO: markov_100 minus repeat_100 | dwell | 10 | -1.17257 | [-1.7867602645964236, -0.5583825925464331] | 0.00194 | 0.06778 |
+| GRU+IPPO: markov_100 minus repeat_100 | depth | 10 | -0.81857 | [-1.3182009754112725, -0.318941881731585] | 0.00487 | 0.15108 |
+| GRU+IPPO: markov_100 minus repeat_100 | protected | 10 | -0.02400 | [-0.05839277933553485, 0.010392779335534862] | 0.14889 | 1.00000 |
+| GRU+MAPPO: markov_100 minus real_100 | dwell | 10 | -0.48029 | [-1.1553817145103307, 0.19481028593890248] | 0.14200 | 1.00000 |
+| GRU+MAPPO: markov_100 minus real_100 | depth | 10 | -0.43714 | [-0.9205513048440646, 0.04626559055835028] | 0.07111 | 1.00000 |
+| GRU+MAPPO: markov_100 minus real_100 | protected | 10 | -0.01343 | [-0.0509559665849016, 0.024098823727758727] | 0.43912 | 1.00000 |
+| GRU+MAPPO: markov_100 minus repeat_100 | dwell | 10 | -0.62514 | [-1.3644902167495716, 0.11420450246385816] | 0.08808 | 1.00000 |
+| GRU+MAPPO: markov_100 minus repeat_100 | depth | 10 | -0.47800 | [-1.0388571359858831, 0.08285713598588296] | 0.08595 | 1.00000 |
+| GRU+MAPPO: markov_100 minus repeat_100 | protected | 10 | -0.01886 | [-0.05838618894775992, 0.0206719032334742] | 0.30859 | 1.00000 |
+| LSTM+IPPO: markov_100 minus real_100 | dwell | 10 | -0.98714 | [-1.8612471064142757, -0.11303860787143905] | 0.03096 | 0.71197 |
+| LSTM+IPPO: markov_100 minus real_100 | depth | 10 | -0.63657 | [-1.3177600193930958, 0.044617162250238485] | 0.06366 | 1.00000 |
+| LSTM+IPPO: markov_100 minus real_100 | protected | 10 | -0.06029 | [-0.11124574010549323, -0.009325688465935317] | 0.02537 | 0.60879 |
+| LSTM+IPPO: markov_100 minus repeat_100 | dwell | 10 | -0.70200 | [-1.4730808546795606, 0.06908085467956027] | 0.06954 | 1.00000 |
+| LSTM+IPPO: markov_100 minus repeat_100 | depth | 10 | -0.43800 | [-0.9991028760779637, 0.12310287607796355] | 0.11123 | 1.00000 |
+| LSTM+IPPO: markov_100 minus repeat_100 | protected | 10 | -0.03771 | [-0.07827035175440322, 0.002841780325831815] | 0.06473 | 1.00000 |
+| LSTM+MAPPO: markov_100 minus real_100 | dwell | 10 | -0.83914 | [-1.7349513163064496, 0.05666560202073512] | 0.06313 | 1.00000 |
+| LSTM+MAPPO: markov_100 minus real_100 | depth | 10 | -0.69600 | [-1.3651082551791305, -0.026891744820869756] | 0.04309 | 0.94793 |
+| LSTM+MAPPO: markov_100 minus real_100 | protected | 10 | -0.03457 | [-0.0741620733791418, 0.005019216236284631] | 0.07965 | 1.00000 |
+| LSTM+MAPPO: markov_100 minus repeat_100 | dwell | 10 | -1.20171 | [-2.002131658541335, -0.4012969128872368] | 0.00792 | 0.22175 |
+| LSTM+MAPPO: markov_100 minus repeat_100 | depth | 10 | -0.94514 | [-1.5029434472646737, -0.38734226702104047] | 0.00401 | 0.12829 |
+| LSTM+MAPPO: markov_100 minus repeat_100 | protected | 10 | -0.05114 | [-0.07704003089437972, -0.02524568339133459] | 0.00156 | 0.05618 |
+
+### Validation-selected original-only ablation
+
+Selected encoder: LSTM. Selection uses mean validation dwell; test results do not select the winner.
+
+| Model | Dwell | Depth | Protection % |
+|---|---|---|---|
+| LSTM+IPPO | 15.272 +/- 0.765 | 10.417 +/- 0.572 | 38.400 +/- 3.179 |
+| NoHistory+IPPO | 11.263 +/- 0.498 | 7.766 +/- 0.341 | 27.657 +/- 2.882 |
+| LSTM+MAPPO | 15.233 +/- 0.340 | 10.478 +/- 0.292 | 37.343 +/- 3.127 |
+| NoHistory+MAPPO | 11.529 +/- 0.333 | 7.876 +/- 0.205 | 28.886 +/- 2.169 |
 
 ## 7. Generalization and limitations
 
