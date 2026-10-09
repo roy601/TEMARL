@@ -1,3 +1,21 @@
-torch>=2.0
+# Temarl_Test_v1_L1 dependencies
+#
+# DO NOT add torch here. On Windows, `pip install torch` fetches the CPU-ONLY
+# wheel and will REPLACE an existing CUDA build, silently turning a GPU machine
+# into a CPU one. The GPU box already has a working CUDA torch from the previous
+# study; leave it alone.
+#
+# Verify it rather than reinstalling it:
+#     python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+#
+# If torch is genuinely missing, install the CUDA build explicitly, e.g.:
+#     pip install torch --index-url https://download.pytorch.org/whl/cu124
+#
+# Required: torch >= 2.0 (CUDA build for --device cuda)
+
 numpy>=1.24
+
+# Optional. stats_cmd falls back to its own incomplete-beta implementation when
+# scipy is absent; the two agree to 8 decimal places (verified). Install it if
+# convenient, skip it if that risks disturbing the environment.
 scipy>=1.10

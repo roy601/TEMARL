@@ -69,8 +69,23 @@ PILOT_EPOCH_EQUIVALENTS = 300
 
 
 def device_of(spec: str = "auto") -> torch.device:
+    """Resolve the device, failing loudly if CUDA was asked for and is absent.
+
+    Without this check an explicit `--device cuda` on a CPU-only torch build
+    returns a cuda device object and dies hours later inside a training loop
+    with an opaque error. The usual cause is `pip install torch`, which fetches
+    the CPU-only wheel on Windows and replaces a working CUDA install.
+    """
     if spec == "auto":
         return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if spec == "cuda" and not torch.cuda.is_available():
+        raise SystemExit(
+            f"--device cuda requested but CUDA is not available.\n"
+            f"  torch {torch.__version__}, CUDA build: {torch.version.cuda}\n"
+            f"This torch is not a CUDA build (or no GPU is visible).\n"
+            f"Install the CUDA wheel explicitly, e.g.\n"
+            f"  pip install torch --index-url https://download.pytorch.org/whl/cu124\n"
+            f"or run with --device cpu (much slower).")
     return torch.device(spec)
 
 
