@@ -1,0 +1,217 @@
+{
+ "spec": {
+  "ENCODERS": [
+   "Transformer",
+   "GRU",
+   "LSTM"
+  ],
+  "ORDER_FREE": "OrderFree",
+  "NO_HISTORY": "NoHistory",
+  "PREDICTION_ARMS": [
+   "Transformer",
+   "GRU",
+   "LSTM",
+   "OrderFree"
+  ],
+  "WINDOWS": [
+   8,
+   16,
+   32,
+   64
+  ],
+  "PILOT_SEEDS": [
+   101,
+   102,
+   103
+  ],
+  "MAIN_SEEDS": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "SAMPLERS": [
+   "ordinary",
+   "overlap"
+  ],
+  "REFERENCE_WINDOW": 16,
+  "PILOT_CELLS": 48,
+  "OVERLAP_PILOT_CELLS": 9,
+  "MAIN_PREDICTION_CELLS": 160,
+  "NOHISTORY_PREDICTION_CELLS": 10,
+  "OVERLAP_MAIN_CELLS": 30,
+  "PRIMARY_PREDICTION_METRIC": "micro_f1",
+  "SECONDARY_PREDICTION_METRICS": [
+   "bce",
+   "macro_f1",
+   "exact_set_accuracy",
+   "precision_at_1",
+   "recall_at_3",
+   "recall_at_5"
+  ],
+  "THRESHOLD_GRID": [
+   0.1,
+   0.2,
+   0.3,
+   0.4,
+   0.5
+  ],
+  "THRESHOLD_RULE": "maximise validation micro-F1; ties take the SMALLEST threshold. Selected on validation only, never on test.",
+  "CHECKPOINT_RULE": "validation-best is PRIMARY; the final checkpoint is reported as secondary. Test never selects anything.",
+  "BATCH_SIZE": 32,
+  "LEARNING_RATE": 0.0005,
+  "WEIGHT_DECAY": 0.01,
+  "VAL_EVERY_UPDATES": 64,
+  "MIN_DELTA": 0.0001,
+  "PATIENCE_GRID": [
+   16,
+   32,
+   64
+  ],
+  "PATIENCE_TOLERANCE": 0.001,
+  "BUDGET_FACTOR": 1.25,
+  "PILOT_MIN_UPDATES": 8192,
+  "PILOT_EPOCH_EQUIVALENTS": 300,
+  "PILOT_DOUBLING_ALLOWED": 1,
+  "PATIENCE_RULE": "smallest patience whose mean validation BCE is within 0.001 of the best, pilot configurations weighted equally",
+  "BUDGET_RULE": "ceil(1.25 x max configuration-wise median validation-best update / 64) x 64. A budget heuristic, not a convergence proof.",
+  "LEARNERS": [
+   "IPPO",
+   "MAPPO"
+  ],
+  "RL_ARMS": [
+   [
+    "Transformer",
+    "IPPO"
+   ],
+   [
+    "GRU",
+    "IPPO"
+   ],
+   [
+    "LSTM",
+    "IPPO"
+   ],
+   [
+    "Transformer",
+    "MAPPO"
+   ],
+   [
+    "GRU",
+    "MAPPO"
+   ],
+   [
+    "LSTM",
+    "MAPPO"
+   ]
+  ],
+  "RL_CONTROLS": [
+   [
+    "OrderFree",
+    "IPPO"
+   ],
+   [
+    "NoHistory",
+    "IPPO"
+   ],
+   [
+    "OrderFree",
+    "MAPPO"
+   ],
+   [
+    "NoHistory",
+    "MAPPO"
+   ]
+  ],
+  "RL_SEEDS": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "RL_ENV_STEPS": 2000000,
+  "RL_VAL_REPEATS": 10,
+  "RL_TEST_REPEATS": 50,
+  "RL_PRIMARY_METRIC": "dwell",
+  "RL_SECONDARY_METRICS": [
+   "depth",
+   "protected"
+  ],
+  "RL_GUARD_METRICS": [
+   "exposed",
+   "lure_chains",
+   "dead_ends",
+   "capacity_violations",
+   "length",
+   "decoys_deployed"
+  ],
+  "RL_SELECTION": "highest mean validation dwell; test never selects.",
+  "MAIN_RL_CELLS": 100,
+  "CONTEXT_RL_CELLS": 60,
+  "CONTEXT_WINDOW_RULE": "ONE longer window (32 or 64) is preselected on POOLED VALIDATION prediction performance, before any RL run at that window. All six encoder-learner combinations are then retrained there -- not only the architecture that happens to lead.",
+  "AGGREGATION_PRIMARY": "max",
+  "AGGREGATION_SENSITIVITY": "mean",
+  "AGGREGATION_NOTE": "Set-based engagement: max compatibility is primary, mean is a SEPARATELY TRAINED sensitivity condition. Neither is a measured real-world engagement probability.",
+  "BASELINES": [
+   "null",
+   "static_best",
+   "random",
+   "best_fixed",
+   "reactive",
+   "clairvoyant_local",
+   "clairvoyant_coord"
+  ],
+  "BASELINE_NOTE": "Tunable baselines (best_fixed, static_best) are fitted on VALIDATION. Clairvoyant rungs read future state and are measuring instruments for the ladder, never comparison arms. All baselines obey the same capacity rule as the policies.",
+  "CORRECTION": "holm",
+  "ALPHA": 0.05,
+  "TEST": "two-sided paired t-test across matched training seeds",
+  "PREDICTION_FAMILY": "All encoder-vs-encoder contrasts at the reference window, all window-vs-reference contrasts within each encoder, and the overlap-vs-ordinary contrast. Corrected together.",
+  "RL_FAMILY": "All encoder-vs-encoder, MAPPO-vs-IPPO, encoder-vs-NoHistory and context-window contrasts on dwell, depth and protection. Corrected together, separately from the prediction family.",
+  "EQUIVALENCE_NOTE": "Non-significance is NOT equivalence. An equivalence claim requires a predeclared margin and a TOST; absent that, report 'no clear difference detected'.",
+  "INDEPENDENCE_NOTE": "Seeds, environment repeats and prediction windows are NOT independent attack campaigns. The corpus contains 36 playbooks from 7 scenarios; that is the real sample size for any generalisation claim.",
+  "HYPOTHESES": {
+   "H1_history": "Encoder arms beat NoHistory on dwell. (Replication: the previous study found ~+33% under flattened labels.)",
+   "H2_order": "Sequence encoders differ from the OrderFree control, which sees WHICH commands occurred but not their order. If null, the finding is 'history matters, order does not detectably' -- a legitimate outcome, and the question the previous study could not answer because this control was dropped.",
+   "H3_architecture": "No prediction given. Previous studies found no clear difference; two-sided and direction-aware.",
+   "H4_window": "No prediction given. Longer windows may or may not help; a prediction gain need not transfer to deception.",
+   "H5_learner": "No prediction given for MAPPO vs IPPO.",
+   "H6_patience": "No prediction given; the patience study selects a shared budget, it does not test a hypothesis.",
+   "H7_overlap": "No prediction given. Overlap repeats windows within the same update budget; it adds optimisation, not information."
+  },
+  "NEGATIVE_RESULTS_NOTE": "Null and negative results are valid outcomes and are reported in full, whatever their direction."
+ },
+ "args": {
+  "stage": "all",
+  "output": "results\\main",
+  "device": "cuda",
+  "split_seed": 2310,
+  "held_out": null,
+  "aggregation": "max",
+  "threads": 4,
+  "smoke": false,
+  "verbose": false
+ },
+ "device": "cuda",
+ "env_config": {
+  "beta": 0.2,
+  "p_goal": 0.7,
+  "p_stay": 0.8,
+  "k_capacity": 2,
+  "goal_steps": 1,
+  "aggregation": "max"
+ },
+ "started": "2026-10-09 15:05:35",
+ "smoke": false
+}
