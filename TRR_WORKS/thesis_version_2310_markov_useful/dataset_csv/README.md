@@ -18,12 +18,26 @@ in `_frozen.FROZEN_SHA256`. Dataset paper: Landauer et al., CAM-LDS, arXiv:2603.
 | `tactic_labelled` | the tactic the playbook itself labels this step with |
 | `vocab_id` | union-vocab id (`vocab_v2`); 0 UNK over the whole corpus |
 | `next_parent_technique` | next step's parent (empty on last step) — bigram convenience |
+| `command_index`, `label_index_in_command`, `n_labels_in_command`, `is_multilabel_command`, `command_type` | which AttackMate command this label came from, and where inside it — recovered by `../parse_commands.py` |
+| `transition_from_prev` | `within_command` (label-order artefact) or `between_command` (real transition); empty on step 0 |
 | `leakage_group` | sha256 prefix of the model-input sequence; identical sequences share it |
 | `split_seed2310` | frozen train/validation/test split from `markov_data.split_runs(seed=2310)` |
+
+### The within-command flattening problem
+The 1347 labels are only **889 commands**; 211 commands (23.7%) are multi-label and one
+(`linpeas`, once per S1 run) carries 13. Measured on this export:
+**458 of 1311 bigram occurrences (34.9%) are within-command label order, not observed
+transitions**, and **62 of 235 bigram types exist only that way**. Filter on
+`transition_from_prev == "between_command"`, or switch to `camlds_commands.csv`.
 
 **`tactic_labelled` != `tactic_parent_vocab` on 206/1347 steps** (e.g. T1219 labelled
 Execution, vocab Command and Control). The playbook label is per-step intent; the vocab
 label is the parent technique's canonical tactic. Pick one and declare it — do not mix.
+
+## camlds_commands.csv — 889 rows, one per AttackMate command
+The command-level representation. `technique_set` / `parent_technique_set` / `vocab_id_set` /
+`tactic_set` are semicolon-joined **sets**, so a 13-label command (`linpeas`) is one row, not 13
+consecutive tokens. Use this, not `camlds_steps.csv`, for any multi-hot / set-target model.
 
 ## camlds_scenarios.csv — 7 rows, scenario grounding
 Run/step/group counts are source-verified. `entry_zone`, `target_host`, `target_zone`,

