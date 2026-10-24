@@ -94,7 +94,11 @@ def v1_integrity(found: dict[str, str], offline: bool) -> None:
         say("  --offline: skipped. Re-run without it to verify.")
         return
 
-    published: dict[str, tuple[str, int]] = {}
+    # Fetch BOTH versions. A file that differs between them is not corrupt --
+    # it is simply the other version, and v2 announces that it changed
+    # manifestations_filtered (runc init audit events for Scenario 7). Comparing
+    # against one version alone reports that legitimate difference as damage.
+    per_version: dict[str, dict[str, tuple[str, int]]] = {}
     for rid in ZENODO_RECORDS:
         try:
             req = urllib.request.Request(
@@ -103,20 +107,24 @@ def v1_integrity(found: dict[str, str], offline: bool) -> None:
         except Exception as e:  # noqa: BLE001
             say(f"  could not read record {rid}: {e}")
             continue
+        d = {}
         for f in rec.get("files", []):
             key = f.get("key")
-            cks = str(f.get("checksum", ""))
-            if key and key not in published:
-                published[key] = (cks.split(":")[-1], int(f.get("size", 0)))
-        if published:
-            say(f"  checksums from Zenodo record {rid} ({len(published)} files)")
-            break
+            if key:
+                d[key] = (str(f.get("checksum", "")).split(":")[-1],
+                          int(f.get("size", 0)))
+        per_version[rid] = d
+        say(f"  record {rid} ({rec['metadata'].get('publication_date')}): "
+            f"{len(d)} files")
 
-    if not published:
+    if not per_version:
         say("  !! no checksum metadata retrieved — cannot verify.")
         return
+    published = per_version.get(ZENODO_RECORDS[0], {})
 
     ok = bad = missing = 0
+    versions: set[str] = set()
+    matched: dict[str, list[str]] = {}
     say("")
     for name in sorted(found):
         if name not in published:
@@ -126,7 +134,6 @@ def v1_integrity(found: dict[str, str], offline: bool) -> None:
                 say(f"  {name:<46} NOT IN RECORD")
                 missing += 1
             continue
-        want, wsize = published[name]
         path = found[name]
         gsize = os.path.getsize(path)
         d = hashlib.md5()  # noqa: S324 - matching Zenodo's published algorithm
@@ -134,22 +141,55 @@ def v1_integrity(found: dict[str, str], offline: bool) -> None:
             for chunk in iter(lambda: fh.read(1 << 22), b""):
                 d.update(chunk)
         got = d.hexdigest()
-        if got == want and gsize == wsize:
+        # Which published version, if any, does this file match?
+        hits = [rid for rid, tbl in per_version.items()
+                if name in tbl and tbl[name][0] == got and tbl[name][1] == gsize]
+        if hits:
             ok += 1
+            versions.update(hits)
+            matched[name] = hits
         else:
             bad += 1
-            say(f"  {name:<46} MISMATCH")
-            say(f"      size  disk {gsize}  published {wsize}")
-            say(f"      md5   disk {got}")
-            say(f"            published {want}")
+            say(f"  {name:<46} MATCHES NO PUBLISHED VERSION")
+            say(f"      disk  size {gsize}  md5 {got}")
+            for rid, tbl in per_version.items():
+                if name in tbl:
+                    say(f"      {rid}  size {tbl[name][1]}  md5 {tbl[name][0]}")
     say("")
     say(f"  verified OK : {ok}")
-    say(f"  MISMATCHED  : {bad}")
+    say(f"  CORRUPT     : {bad}")
     say(f"  not in record: {missing}")
+    say("")
     if bad:
-        say("  !! Re-download any mismatched archive before using it.")
+        say("  !! Re-download the archives above: they match NO published version,")
+        say("     so they are genuinely damaged rather than simply a different one.")
     else:
-        say("  All archives present in the record match their published MD5.")
+        say("  Every archive matches a published version. The download is intact.")
+
+    # Say plainly which version the set as a whole is.
+    split = collections.Counter()
+    for name, hits in matched.items():
+        split["+".join(sorted(hits))] += 1
+    say("")
+    say("  version each file matches:")
+    for k, c in split.most_common():
+        label = " (identical in both versions)" if "+" in k else ""
+        say(f"      {k:<22} {c} files{label}")
+    only = {name: h for name, h in matched.items() if len(h) == 1}
+    if only:
+        say("")
+        say("  files that pin the version:")
+        for name, h in sorted(only.items()):
+            say(f"      {name:<46} = record {h[0]}")
+        pinned = {h[0] for h in only.values()}
+        if len(pinned) == 1:
+            rid = pinned.pop()
+            say("")
+            say(f"  >> This download is version {rid}. Record it, and do not mix it")
+            say("     with files fetched from the other record.")
+        else:
+            say("")
+            say("  >> !! MIXED VERSIONS in one folder. Pick one and re-fetch the rest.")
 
 
 # ── V2 ─ sequence equivalence, per run and per step ─────────────────────────
@@ -295,10 +335,30 @@ def v3_missing(found: dict[str, str], repo: str, data_dir: str) -> None:
             m = pat.match(n)
             if m:
                 have.add((m.group(1), int(m.group(2))))
-    want = {(r["scenario"], int(r["event_id"])) for r in rel}
+    key_counts = collections.Counter((r["scenario"], int(r["event_id"])) for r in rel)
+    want = set(key_counts)
+    dup = {k: c for k, c in key_counts.items() if c > 1}
     miss = sorted(want - have)
     extra = sorted(have - want)
-    say(f"  label rows            : {len(want)}")
+    say(f"  label ROWS            : {len(rel)}")
+    say(f"  distinct (scenario, step) keys : {len(want)}")
+    if dup:
+        extra = sum(c - 1 for c in dup.values())
+        say(f"  keys appearing MORE THAN ONCE  : {len(dup)}  (+{extra} extra rows)")
+        say("")
+        say("  >> This, not missing data, is the 904-vs-883 gap. Some steps ran the")
+        say("     same command several times and each repetition got its own row.")
+        say("     Keying on (scenario, event_id) silently DROPS those rows, so the")
+        say("     extractor must decide explicitly: collapse repeats into one step,")
+        say("     or keep them as separate steps. Write the choice down.")
+        say("")
+        for k in sorted(dup)[:8]:
+            rs = [r for r in rel if (r["scenario"], int(r["event_id"])) == k]
+            say(f"     {k[0]} step {k[1]}  x{dup[k]}  "
+                f"tech={rs[0]['techniques']}  cmd={rs[0]['cmd'][:40]}")
+        if len(dup) > 8:
+            say(f"     ... and {len(dup) - 8} more")
+        say("")
     say(f"  steps/ folders        : {len(have)}")
     say(f"  labelled, NO folder   : {len(miss)}")
     say(f"  folder, NO label row  : {len(extra)}")
