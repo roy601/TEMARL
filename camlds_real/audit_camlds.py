@@ -327,25 +327,60 @@ def zones(found: dict[str, str], repo: str):
                 return subnet_of(ip)
         return None
 
-    say(f"  {'scenario-variant':<36} {'steps':>6}  {'entry zone':<16} {'target zone':<16}")
-    derived: dict[str, dict[str, str]] = {}
+    # DECLARED EXCLUSION, stated here so it is reviewable.
+    # Every step's folder holds logs from several hosts at once: the victim, the
+    # attacker (which logs its own commands) and the SIEM (which logs alerts about
+    # everything). Only the victim says where the attack WENT, so the other three
+    # are infrastructure and are excluded from zone derivation. Without this the
+    # attacker's own subnet wins every scenario, which is what the first run showed.
+    INFRA = {"attacker", "wazuh", "mgmt"}
+
+    def victims(hs: set[str]) -> list[str]:
+        return sorted(h for h in hs if h.lower() not in INFRA)
+
+    say("  DECLARED: hosts excluded from zone derivation = "
+        f"{', '.join(sorted(INFRA))}")
+    say("            (attacker = origin, wazuh = SIEM, mgmt = out-of-band admin)")
+    say("")
+    say(f"  {'scenario-variant':<30} {'steps':>5}  {'entry':<16} {'target':<16} victim-host path")
+    derived: dict[str, dict] = {}
     for sc in scenarios:
         steps = sorted(k[1] for k in seen if k[0] == sc)
-        first_hosts = seen[(sc, steps[0])]
-        last_hosts = seen[(sc, steps[-1])]
-        ez = next((z for z in (to_zone(h) for h in sorted(first_hosts)) if z), "UNMAPPED")
-        tz = next((z for z in (to_zone(h) for h in sorted(last_hosts)) if z), "UNMAPPED")
-        derived[sc] = {"entry": ez, "target": tz,
-                       "n_steps": len(steps),
-                       "first_hosts": sorted(first_hosts),
-                       "last_hosts": sorted(last_hosts)}
-        say(f"  {sc:<36} {len(steps):>6}  {ez:<16} {tz:<16}")
+        # ordered, de-duplicated victim hosts across the whole run
+        path: list[str] = []
+        for st in steps:
+            for h in victims(seen[(sc, st)]):
+                if not path or path[-1] != h:
+                    if h not in path:
+                        path.append(h)
+        ez = to_zone(path[0]) if path else "NO-VICTIM"
+        tz = to_zone(path[-1]) if path else "NO-VICTIM"
+        derived[sc] = {
+            "entry_zone": ez or "UNMAPPED", "target_zone": tz or "UNMAPPED",
+            "n_steps": len(steps), "victim_host_path": path,
+            "entry_host": path[0] if path else None,
+            "target_host": path[-1] if path else None,
+        }
+        say(f"  {sc:<30} {len(steps):>5}  {str(ez):<16} {str(tz):<16} "
+            f"{' -> '.join(path) if path else '(none)'}")
 
-    unmapped = sorted({h for v in seen.values() for h in v if not to_zone(h)})
+    allhosts = sorted({h for v in seen.values() for h in v})
+    say("")
+    say(f"  all host folders seen ({len(allhosts)}): {', '.join(allhosts)}")
+    unmapped = [h for h in allhosts if not to_zone(h)]
     if unmapped:
-        say(f"\n  !! {len(unmapped)} host tokens did not map to the inventory:")
-        say(f"     {', '.join(unmapped[:20])}")
+        say(f"  !! {len(unmapped)} did not map to the inventory: {', '.join(unmapped)}")
         say("     Fix the mapping before trusting the zones above.")
+
+    ez_set = collections.Counter(v["entry_zone"] for v in derived.values())
+    tz_set = collections.Counter(v["target_zone"] for v in derived.values())
+    say("")
+    say(f"  distinct ENTRY zones across {len(derived)} runs: {dict(ez_set)}")
+    say(f"  distinct TARGET zones across {len(derived)} runs: {dict(tz_set)}")
+    if len(tz_set) == 1:
+        say("  >> All runs share one target zone. Either the campaigns genuinely")
+        say("     converge, or the exclusion list is still wrong. Check the host")
+        say("     paths above before accepting this.")
 
     # Q4b: compare with the hand-typed grounding
     say("")
@@ -362,14 +397,65 @@ def zones(found: dict[str, str], repo: str):
     else:
         g = json.load(open(gp, encoding="utf-8"))
         say(f"  hand-typed file: {os.path.relpath(gp, repo)}")
-        hand = g.get("scenarios", {})
-        say(f"  it declares {len(hand)} scenarios; the release has "
+        hand = g.get("scenarios", [])
+        # This file has shipped as both a dict and a list of dicts.
+        if isinstance(hand, dict):
+            items = list(hand.items())
+        else:
+            items = [((d.get("id") or d.get("name") or f"#{i}"), d)
+                     for i, d in enumerate(hand) if isinstance(d, dict)]
+        say(f"  it declares {len(items)} scenarios; the release has "
             f"{len(scenarios)} scenario-variants.")
         say("  Hand-typed entry/target per scenario:")
-        for k, v in list(hand.items())[:12]:
-            if isinstance(v, dict):
-                say(f"    {k:<28} entry={v.get('entry_zone')!s:<16} "
-                    f"target={v.get('target_zone')!s:<16} goal={v.get('terminal_tactic')!s}")
+        for k, v in items[:12]:
+            if not isinstance(v, dict):
+                continue
+            ez = v.get("entry_zone") or v.get("entry")
+            tz = v.get("target_zone") or v.get("target")
+            goal = v.get("terminal_tactic") or v.get("goal_tactic") or v.get("goal")
+            say(f"    {str(k):<28} entry={str(ez):<16} target={str(tz):<16} goal={goal}")
+        if items and not any(
+                (v.get("entry_zone") or v.get("entry")) for _, v in items
+                if isinstance(v, dict)):
+            say("    !! no entry/target keys found. Available keys on the first entry:")
+            first = next((v for _, v in items if isinstance(v, dict)), {})
+            say(f"       {sorted(first.keys())}")
+
+        # ── the actual agreement check ──────────────────────────────────────
+        # The hand-typed file names zones symbolically ("Internet", "DMZ") and
+        # also records target_host. That host is the bridge: host -> subnet is
+        # inventory fact, so the symbolic name can be tied to a subnet WITHOUT
+        # inventing anything. Then the derived target host is compared against
+        # the hand-typed one, which is the claim that actually matters.
+        say("")
+        say("  --- subnet <-> symbolic-zone mapping, recovered from target_host ---")
+        name_of: dict[str, set[str]] = collections.defaultdict(set)
+        say(f"  {'scenario':<6} {'hand target_host':<18} {'-> subnet':<18} "
+            f"{'hand calls it':<12} {'derived target host(s)'}")
+        for k, v in items:
+            if not isinstance(v, dict):
+                continue
+            th = str(v.get("target_host") or "")
+            tz = str(v.get("target_zone") or "")
+            sub = to_zone(th) if th else None
+            if sub and tz:
+                name_of[sub].add(tz)
+            base = re.sub(r"^S", "", str(v.get("id") or k))
+            drv = sorted({d["target_host"] for s, d in derived.items()
+                          if s.split("_")[0] == base and d.get("target_host")})
+            agree = "" if not drv else (
+                "  <= MATCH" if any(th.lower() == x.lower() for x in drv)
+                else "  <= DIFFERS")
+            say(f"  {str(k):<6} {th:<18} {str(sub):<18} {tz:<12} "
+                f"{', '.join(drv) if drv else '(no release run)'}{agree}")
+        say("")
+        for sub, names in sorted(name_of.items()):
+            flag = "" if len(names) == 1 else "   !! AMBIGUOUS"
+            say(f"    {sub:<18} = {', '.join(sorted(names))}{flag}")
+        say("")
+        say("  >> This recovers the grouping rule from the existing annotation rather")
+        say("     than inventing one. Any subnet with no row here was never named by")
+        say("     the hand-typed file and still needs a declared decision.")
         say("")
         say("  >> The release names scenario VARIANTS (e.g. 1_autostart_localaccount)")
         say("     while the hand-typed file names base scenarios. Decide, and WRITE DOWN,")
