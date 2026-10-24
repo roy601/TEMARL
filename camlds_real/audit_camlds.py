@@ -78,6 +78,19 @@ def head(s: str) -> None:
 
 # ── Q1 ─ inventory ──────────────────────────────────────────────────────────
 
+DUP_RE = re.compile(r"^(?P<stem>.+?)\s*\((?P<n>\d+)\)(?P<ext>\.[A-Za-z0-9]+)$")
+
+
+def canonical(basename: str) -> str:
+    """Strip a browser duplicate marker: 'manifestations_filtered (1).zip'.
+
+    Browsers append ' (N)' when a file is downloaded twice, so the archive the
+    rest of this script looks for by name would otherwise be reported missing.
+    """
+    m = DUP_RE.match(basename)
+    return f"{m.group('stem')}{m.group('ext')}" if m else basename
+
+
 def inventory(data_dir: str, do_hash: bool) -> dict[str, str]:
     head("Q1  INVENTORY — what is actually on this machine")
     found: dict[str, str] = {}
@@ -95,6 +108,7 @@ def inventory(data_dir: str, do_hash: bool) -> dict[str, str]:
         return found
 
     total = 0
+    dups: list[str] = []
     say(f"  {len(zips)} archives under {data_dir}\n")
     say(f"  {'file':<46} {'MB':>9}  {'sha256[:16]' if do_hash else ''}")
     for p in sorted(zips):
@@ -107,9 +121,22 @@ def inventory(data_dir: str, do_hash: bool) -> dict[str, str]:
                 for chunk in iter(lambda: f.read(1 << 22), b""):
                     d.update(chunk)
             h = d.hexdigest()[:16]
-        say(f"  {os.path.basename(p):<46} {sz / 1e6:>9.1f}  {h}")
-        found[os.path.basename(p)] = p
-    say(f"\n  TOTAL {total / 1e9:.2f} GB")
+        base = os.path.basename(p)
+        canon = canonical(base)
+        if canon != base:
+            dups.append(base)
+        say(f"  {base:<46} {sz / 1e6:>9.1f}  {h}")
+        # Keep the first spelling seen; a ' (1)' copy is the same download.
+        found.setdefault(canon, p)
+    say(f"\n  TOTAL {total / 1e9:.2f} GB  ({len(found)} distinct archives)")
+    if dups:
+        say("")
+        say(f"  NOTE  {len(dups)} file(s) carry a browser duplicate marker ' (N)':")
+        for d_ in dups:
+            say(f"          {d_}   -> treated as {canonical(d_)}")
+        say("        Matched on the canonical name. If any of these were a SECOND,")
+        say("        different download rather than a repeat, delete the stray copy")
+        say("        and re-run, because only one spelling is read.")
 
     # Which release does this look like?
     pcap_like = sum(1 for n in found if "_pcaps" in n)
@@ -314,23 +341,43 @@ def zones(found: dict[str, str], repo: str):
 
 # ── Q5 ─ does attack_times.csv match our corpus? ────────────────────────────
 
-def cross_check(repo: str, data_dir: str) -> None:
-    head("Q5  Does `attack_times.csv` line up with our parsed corpus?")
-    path = None
+def _find_attack_times(repo: str, data_dir: str) -> tuple[str, list[dict]] | None:
+    """Loose file first, then inside any zip (the analysis repo downloads as one)."""
     for cand in (os.path.join(data_dir, "attack_times.csv"),
                  os.path.join(repo, "camlds_real", "attack_times.csv"),
                  os.path.join(data_dir, "attack-manifestations-interpretation",
                               "attack_times.csv")):
         if os.path.isfile(cand):
-            path = cand
-            break
-    if not path:
-        say("  !! attack_times.csv not found. Get it (107 KB) from:")
+            text = open(cand, encoding="utf-8", errors="replace").read()
+            return cand, list(csv.DictReader(text.splitlines(), delimiter=";"))
+
+    for root, _, files in os.walk(data_dir):
+        for fn in files:
+            if not fn.lower().endswith(".zip"):
+                continue
+            p = os.path.join(root, fn)
+            try:
+                with zipfile.ZipFile(p) as z:
+                    hit = next((n for n in z.namelist()
+                                if n.endswith("attack_times.csv")), None)
+                    if hit:
+                        text = z.read(hit).decode("utf-8", "replace")
+                        return f"{fn}::{hit}", list(
+                            csv.DictReader(text.splitlines(), delimiter=";"))
+            except Exception:  # noqa: BLE001, S112
+                continue
+    return None
+
+
+def cross_check(repo: str, data_dir: str) -> None:
+    head("Q5  Does `attack_times.csv` line up with our parsed corpus?")
+    hit = _find_attack_times(repo, data_dir)
+    if not hit:
+        say("  !! attack_times.csv not found, loose or inside any zip. Get it (107 KB):")
         say("     https://raw.githubusercontent.com/ait-aecid/"
             "attack-manifestations-interpretation/main/attack_times.csv")
         return
-
-    rows = list(csv.DictReader(open(path, encoding="utf-8"), delimiter=";"))
+    path, rows = hit
     say(f"  {path}  ->  {len(rows)} rows")
 
     variants = collections.Counter(r["scenario"] for r in rows)
