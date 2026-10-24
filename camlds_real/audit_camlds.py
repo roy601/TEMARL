@@ -206,21 +206,44 @@ def check_attackmate(found: dict[str, str]) -> None:
 
 # ── Q3/Q4 ─ steps layout and zone derivation ────────────────────────────────
 
-STEP_RE = re.compile(r"^steps/([^/]+?)-(\d+)/([^/]+)/")
+# Real layout, confirmed from the release on 2026-10-24:
+#   manifestations_filtered/<grouping>/<scenario>-<step>/<host>/<log path>
+# where <grouping> is steps | sequences | techniques. The analysis repo's README
+# recommends `steps`, because sequences and techniques duplicate the same logs.
+STEP_RE = re.compile(
+    r"^manifestations_filtered/(?P<group>steps|sequences|techniques)/"
+    r"(?P<scenario>[^/]+?)-(?P<step>\d+)/(?P<host>[^/]+)/")
+
+# Transcribed from attackbed/ansible/hosts.example (ait-testbed/attackbed,
+# commit 4d43354). Used only when the clone is absent, so the audit runs on a
+# machine that holds the data but not the testbed repo. The clone wins when
+# present, so provenance stays with the source.
+HOSTS_FALLBACK = {
+    "mgmt": "57.128.7.116", "inetfw": "192.168.100.254", "inetdns": "192.42.2.2",
+    "corpdns": "192.42.0.233", "docker": "172.17.100.125", "webcam": "172.17.100.80",
+    "adminpc1": "10.12.0.222", "videoserver": "172.17.100.121",
+    "client": "192.168.50.100", "adminpc2": "10.12.0.223",
+    "reposerver": "172.17.100.122", "linuxshare": "192.168.100.23",
+    "lanturtle": "192.168.100.27", "attacker": "192.42.1.174",
+    "wazuh": "192.168.100.130",
+}
 
 
-def parse_hosts_example(repo: str) -> dict[str, str]:
-    """host -> IP, from the AttackBed ansible inventory."""
+def parse_hosts_example(repo: str) -> tuple[dict[str, str], str]:
+    """host -> IP, from the AttackBed ansible inventory; fall back to the table."""
     p = os.path.join(repo, "attackbed", "ansible", "hosts.example")
     hosts: dict[str, str] = {}
-    if not os.path.isfile(p):
-        say(f"  !! hosts.example not found at {p}")
-        return hosts
-    for line in open(p, encoding="utf-8", errors="replace"):
-        m = re.match(r"^\s*(\S+)\s+ansible_host=(\d+\.\d+\.\d+\.\d+)", line)
-        if m:
-            hosts[m.group(1)] = m.group(2)
-    return hosts
+    if os.path.isfile(p):
+        for line in open(p, encoding="utf-8", errors="replace"):
+            m = re.match(r"^\s*(\S+)\s+ansible_host=(\d+\.\d+\.\d+\.\d+)", line)
+            if m:
+                hosts[m.group(1)] = m.group(2)
+        if hosts:
+            return hosts, f"attackbed clone ({os.path.relpath(p, repo)})"
+    say(f"  note: no attackbed clone at {p}")
+    say("        using the transcribed inventory instead (commit 4d43354).")
+    say("        `git clone https://github.com/ait-testbed/attackbed` to use the source.")
+    return dict(HOSTS_FALLBACK), "transcribed fallback table"
 
 
 def subnet_of(ip: str) -> str:
@@ -230,14 +253,18 @@ def subnet_of(ip: str) -> str:
 def zones(found: dict[str, str], repo: str):
     head("Q3  `manifestations_filtered.zip` layout  +  Q4  ZONE DERIVATION")
 
-    hosts = parse_hosts_example(repo)
+    hosts, hsrc = parse_hosts_example(repo)
     if hosts:
         nets = collections.defaultdict(list)
         for h, ip in hosts.items():
             nets[subnet_of(ip)].append(h)
-        say(f"  AttackBed inventory: {len(hosts)} hosts in {len(nets)} subnets\n")
+        say(f"  AttackBed inventory [{hsrc}]: {len(hosts)} hosts in {len(nets)} subnets\n")
         for net, hs in sorted(nets.items()):
             say(f"    {net:<18} {', '.join(sorted(hs))}")
+        say("")
+        say(f"  >> {len(nets)} subnets, but our topology is a 5-ZONE star. The mapping")
+        say("     is not one-to-one, so a grouping rule must be DECLARED and written")
+        say("     down before the zones below mean anything.")
         say("")
 
     mf = found.get("manifestations_filtered.zip")
@@ -256,21 +283,37 @@ def zones(found: dict[str, str], repo: str):
         return
 
     say(f"  {len(names)} entries in manifestations_filtered.zip")
-    tops = collections.Counter(n.split("/")[0] for n in names if "/" in n)
-    say(f"  top-level: {dict(tops.most_common(6))}\n")
+    groups = collections.Counter()
+    for n in names:
+        parts = n.split("/")
+        if len(parts) > 1 and parts[0] == "manifestations_filtered" and parts[1]:
+            groups[parts[1]] += 1
+    say(f"  groupings present: {dict(groups.most_common())}")
+    say("  (the analysis repo recommends `steps`; sequences/techniques duplicate logs)\n")
 
-    # (scenario, step) -> hosts seen
-    seen: dict[tuple[str, int], set[str]] = collections.defaultdict(set)
+    # (grouping, scenario, step) -> hosts seen
+    by_group: dict[str, dict[tuple[str, int], set[str]]] = collections.defaultdict(
+        lambda: collections.defaultdict(set))
     for n in names:
         m = STEP_RE.match(n)
         if m:
-            seen[(m.group(1), int(m.group(2)))].add(m.group(3))
-    if not seen:
-        say("  !! no paths matched steps/<scenario>-<step>/<host>/ .")
+            by_group[m.group("group")][
+                (m.group("scenario"), int(m.group("step")))].add(m.group("host"))
+    if not by_group:
+        say("  !! no paths matched "
+            "manifestations_filtered/<group>/<scenario>-<step>/<host>/ .")
         say("     Print a few entries and adjust STEP_RE before trusting anything below:")
         for n in names[:10]:
             say(f"       {n}")
         return
+
+    pick = "steps" if "steps" in by_group else sorted(by_group)[0]
+    say(f"  using grouping: {pick}"
+        f"{'' if pick == 'steps' else '  (steps/ absent — note this in the write-up)'}")
+    for g, d in sorted(by_group.items()):
+        say(f"    {g:<12} {len(d):>5} (scenario, step) pairs")
+    say("")
+    seen = by_group[pick]
 
     scenarios = sorted({s for s, _ in seen})
     say(f"  matched {len(seen)} (scenario, step) pairs across {len(scenarios)} scenario-variants")
@@ -340,6 +383,75 @@ def zones(found: dict[str, str], repo: str):
 
 
 # ── Q5 ─ does attack_times.csv match our corpus? ────────────────────────────
+
+# ── Q6 ─ what is actually inside attackmate.json? ───────────────────────────
+
+def peek_attackmate(found: dict[str, str]) -> None:
+    """Read ONE execution record so the extractor can be written against truth."""
+    head("Q6  Schema of `attacker/logs/attackmate.json` (one scenario)")
+    scen = sorted(n for n in found
+                  if n.startswith("scenario_") and "_pcaps" not in n)
+    if not scen:
+        say("  !! no scenario zip to read.")
+        return
+    name = scen[0]
+    try:
+        with zipfile.ZipFile(found[name]) as z:
+            target = next((n for n in z.namelist()
+                           if n.endswith("attacker/logs/attackmate.json")), None)
+            if not target:
+                say(f"  !! {name} has no attacker/logs/attackmate.json")
+                return
+            raw = z.read(target)
+            # The playbooks ship inside the release too — this is how the
+            # 36-playbooks-vs-34-runs question gets settled.
+            pbs = [n for n in z.namelist()
+                   if "/attackmate/playbooks/" in n and not n.endswith("/")]
+    except Exception as e:  # noqa: BLE001
+        say(f"  !! unreadable: {e}")
+        return
+
+    say(f"  {name} :: {target}   ({len(raw) / 1e3:.1f} KB)")
+    say(f"  playbooks shipped in this archive: {len(pbs)}")
+    for p in pbs[:8]:
+        say(f"      {p.split('/playbooks/', 1)[-1]}")
+    say("")
+
+    text = raw.decode("utf-8", "replace").strip()
+    obj = None
+    try:
+        obj = json.loads(text)
+        say(f"  parses as a single JSON {type(obj).__name__}")
+    except json.JSONDecodeError:
+        lines = [l for l in text.splitlines() if l.strip()]
+        say(f"  not one JSON document — looks like JSON Lines ({len(lines)} lines)")
+        try:
+            obj = [json.loads(l) for l in lines]
+            say("  all lines parse individually")
+        except Exception as e:  # noqa: BLE001
+            say(f"  !! line parse failed: {e}")
+            say(f"  first 300 chars: {text[:300]}")
+            return
+
+    recs = obj if isinstance(obj, list) else [obj]
+    say(f"  records: {len(recs)}")
+    keys = collections.Counter(k for r in recs if isinstance(r, dict) for k in r)
+    say(f"  keys seen across records:")
+    for k, c in keys.most_common(25):
+        say(f"      {k:<28} in {c}/{len(recs)}")
+    say("")
+    say("  FIRST RECORD:")
+    say("    " + json.dumps(recs[0], indent=2)[:1200].replace("\n", "\n    "))
+    if len(recs) > 1:
+        say("")
+        say("  LAST RECORD:")
+        say("    " + json.dumps(recs[-1], indent=2)[:800].replace("\n", "\n    "))
+    say("")
+    say("  >> The extractor needs, per record: an ordering key, the command that")
+    say("     ran, its technique label(s) if present, and an execution status so")
+    say("     failed or retried steps can be handled explicitly rather than")
+    say("     silently becoming attack transitions.")
+
 
 def _find_attack_times(repo: str, data_dir: str) -> tuple[str, list[dict]] | None:
     """Loose file first, then inside any zip (the analysis repo downloads as one)."""
@@ -443,6 +555,7 @@ def main() -> int:
     check_attackmate(found)
     zones(found, a.repo)
     cross_check(a.repo, a.data)
+    peek_attackmate(found)
 
     head("WHAT TO DO NEXT")
     say("  1. If Q4 produced zones, diff them against the hand-typed ones by hand and")
