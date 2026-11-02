@@ -31,15 +31,18 @@ TACTIC_ORDER = ["reconnaissance", "resource-development", "initial-access", "exe
 EXPECT = {"techniques": 191, "AA22-277A": 26, "AA22-138B": 12, "AA22-174A": 13}
 
 
-def sequence(path, tactics):
-    seq = []
-    for _, ids, _, _ in parse_advisory(path):
+def sequence(path, tactics, tactic_names):
+    """Parents in first-occurrence order, each with the tactic of the row it first appears under."""
+    seq, listed = [], {}
+    for tac, ids, _, _ in parse_advisory(path):
         for i in ids:
             p = i.split(".")[0]
             if p not in seq:
                 seq.append(p)
+                listed[p] = tactic_names[tac]
     dropped = [p for p in seq if set(tactics[p]) <= PRE_ACCESS]
-    return [p for p in seq if p not in dropped], dropped
+    kept = [p for p in seq if p not in dropped]
+    return kept, [listed[p] for p in kept], dropped
 
 
 def main():
@@ -88,10 +91,20 @@ def main():
             w.writerow([attack_id(d["groups"][g])] + [int(t in d["uses"][g]) for t in tech])
     files["matrix"] = p
 
+    # advisory tactic cells are either "TA0002" or a header like "Command and Control"
+    tactic_names = {}
+    for o in d["objs"]:
+        if o["type"] == "x-mitre-tactic":
+            tactic_names[attack_id(o)] = o["x_mitre_shortname"]
+            tactic_names[o["name"]] = o["x_mitre_shortname"]
     seqs = {}
     for adv, (rel, _) in ADVISORIES.items():
-        s, dropped = sequence(os.path.join(a.raw, rel), tactics)
-        seqs[adv] = {"source": rel, "dropped_pre_access": dropped, "sequence": s}
+        s, listed, dropped = sequence(os.path.join(a.raw, rel), tactics, tactic_names)
+        seqs[adv] = {"source": rel, "dropped_pre_access": dropped, "sequence": s,
+                     "listed_tactic": listed}
+        bad = [(t, l) for t, l in zip(s, listed) if l not in tactics[t]]
+        if bad:
+            problems.append(f"{adv}: listed under a tactic ATT&CK does not give it: {bad}")
         if len(s) != EXPECT[adv]:
             problems.append(f"{adv}: {len(s)} techniques != {EXPECT[adv]}")
         missing = [t for t in s if t not in tech]
