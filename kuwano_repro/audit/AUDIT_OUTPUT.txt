@@ -1,0 +1,149 @@
+
+==============================================================================
+A. ATT&CK VERSIONS - object counts
+==============================================================================
+  v11.0: 17,107 objects | live parent techniques 191 | groups {'live': 131, 'revoked': 5, 'deprecated': 1} | live groups using >=1 technique 128 | group->technique 'uses' {'to live technique': 2995, 'to revoked/deprecated technique': 29}
+  v11.3: 17,134 objects | live parent techniques 191 | groups {'revoked': 5, 'live': 130, 'deprecated': 2} | live groups using >=1 technique 127 | group->technique 'uses' {'to live technique': 2992, 'to revoked/deprecated technique': 29}
+  v12.1: 18,403 objects | live parent techniques 193 | groups {'live': 133, 'deprecated': 9, 'revoked': 5} | live groups using >=1 technique 130 | group->technique 'uses' {'to live technique': 3103, 'to revoked/deprecated technique': 16}
+  paper: 133 groups, 191 techniques, 14 tactics (v11)
+
+==============================================================================
+B. COLD-START COUNTS (paper p.810) - which matrix definition reproduces them
+==============================================================================
+  v11.0: {'T1129': 0, 'T1497': 6, 'T1039': 7, 'T1095': 7, 'T1029': 1}  MATCH
+  v11.3: {'T1129': 0, 'T1497': 6, 'T1039': 7, 'T1095': 7, 'T1029': 1}  MATCH
+  v12.1: {'T1129': 0, 'T1497': 5, 'T1039': 7, 'T1095': 7, 'T1029': 1}  differs
+  paper : {'T1129': 0, 'T1497': 6, 'T1039': 7, 'T1095': 7, 'T1029': 1}
+  (definition: live groups, direct 'uses' to live techniques, sub-techniques rolled up to parent)
+
+==============================================================================
+C. v11.0 vs v11.3 - does the choice change the matrix?
+==============================================================================
+  groups only in 11.0: ['G0141'] | only in 11.3: []
+  groups whose technique set differs: 0
+  parent technique sets identical: True
+
+==============================================================================
+D. TACTICS (v11.0)
+==============================================================================
+  defense-evasion          42
+  discovery                30
+  persistence              19
+  collection               17
+  credential-access        16
+  command-and-control      16
+  privilege-escalation     13
+  impact                   13
+  execution                12
+  reconnaissance           10
+  initial-access           9
+  lateral-movement         9
+  exfiltration             9
+  resource-development     7
+  parents in more than one tactic: 25
+  parents in a pre-access tactic: 17 (of which also post-access: 0)
+
+==============================================================================
+E. CISA ADVISORIES - every table row, ids taken from link targets
+==============================================================================
+
+  -- AA22-277A (cisa_aa22-277a_wayback/aa22-277a_20230129.html)
+    Initial Access T1078                        Valid Accounts | T1078 | Actors obtained and abused credenti
+    Execution  T1047                        Windows Management Instrumentation | T1047 | Actors used Imp
+    Execution  T1059.003                    Command and Scripting Interpreter | T1059 | Actors abused co
+    Execution  T1059.001                    Command and Scripting Interpreter: PowerShell | T1059.001 | 
+    Execution  T1059.003                    Command and Scripting Interpreter: Windows Command Shell | T
+    Execution  T1059.006                    Command and Scripting Interpreter: Python | T1059.006 | The 
+    Execution  T1129                        Shared Modules | T1129 | Actors executed malicious payloads 
+    Execution  T1569                        System Services | T1569 | Actors abused system services to e
+    Persistence T1078                        Valid Accounts | T1078 | Actors obtained and abused credenti
+    Persistence T1543                        Create or Modify System Process | T1543 | Actors were observ
+    Privilege Escalation T1078                        Valid Accounts | T1078 | Actors obtained and abused credenti
+    Defense Evasion T1036.005                    Masquerading: Match Legitimate Name or Location | T1036.005 
+    Defense Evasion T1070.004                    Indicator Removal on Host | T1070 | Actors deleted or modifi
+    Defense Evasion T1070.004                    Indicator Removal on Host: File Deletion | T1070.004 | Actor
+    Defense Evasion T1078                        Valid Accounts | T1078 | Actors obtained and abused credenti
+    Defense Evasion T1497.001                    Virtualization/Sandbox Evasion: System Checks | T1497.001 | 
+    Defense Evasion T1562.001                    Impair Defenses: Disable or Modify Tools | T1562.001 | Actor
+    Defense Evasion T1574                        Hijack Execution Flow | T1574 | Actors were observed using h
+    Discovery  T1016                        System Network Configuration Discovery | T1016 | Actors used
+    Discovery  T1016.001                    System Network Configuration Discovery: Internet Connection 
+    Discovery  T1033                        System Owner/User Discovery | T1033 | Actors attempted to id
+    Discovery  T1049                        System Network Connections Discovery | T1049 | Actors used t
+    Discovery  T1057                        Process Discovery | T1057 | Actors used the tasklist command
+    Discovery  T1082                        System Information Discovery | T1082 | Actors used the ipcon
+    Discovery  T1083                        File and Directory Discovery | T1083 | Actors enumerated fil
+    Discovery  T1497.001                    Virtualization/Sandbox Evasion: System Checks | T1497.001 | 
+    Lateral Movement T1021.002                    Remote Services: SMB/Windows Admin Shares | T1021.002 | Acto
+    Collection T1560                        Archive Collected Data: Archive via Utility | T1560.001 | Ac
+    Collection T1039                        Data from Network Shared Drive | T1039 | Actors likely used 
+    Collection T1074.002                    Data Staged: Remote Data Staging | T1074.002 | The actors sp
+    Command and Control T1095                        Non-Application Layer Protocol | T1095 | Actors used a non-a
+    Command and Control T1105                        Ingress Tool Transfer | T1105 | Actors used the certutil com
+    Command and Control T1090                        Proxy | T1090 | Actors are known to use VPN and VPS provider
+    Exfiltration T1029                        Schedule Transfer | T1029 | Actors scheduled data exfiltrati
+    Exfiltration T1567.002                    Exfiltration Over Web Service: Exfiltration to Cloud Storage
+    distinct parents 26 | pre-access [] | not live in v11.0 [] | used 26 (paper 26) MATCH
+    order (first occurrence): T1078 T1047 T1059 T1129 T1569 T1543 T1036 T1070 T1497 T1562 T1574 T1016 T1033 T1049 T1057 T1082 T1083 T1021 T1560 T1039 T1074 T1095 T1105 T1090 T1029 T1567
+    multi-tactic in this sequence: {'T1078': ['defense-evasion', 'persistence', 'privilege-escalation', 'initial-access'], 'T1543': ['persistence', 'privilege-escalation'], 'T1497': ['defense-evasion', 'discovery'], 'T1574': ['persistence', 'privilege-escalation', 'defense-evasion']}
+
+  -- AA22-138B (cisa_aa22-138b_wayback/aa22-138b_20230129.html)
+    TA0042     T1588.001                    Resource Development [ TA0042 ] | Obtain Capabilities: Malwa
+    TA0002     T1059                        Execution [ TA0002 ] | Command and Scripting Interpreter [ T
+    TA0002     T1059.004                    Command and Scripting Interpreter: Unix Shell [ T1059.004 ]
+    TA0002     T1203                        Exploitation for Client Execution [ T1203 ]
+    TA0003     T1505.003                    Persistence [ TA0003 ] | Server Software Component: Web Shel
+    TA0004     T1068                        Privilege Escalation [ TA0004 ] | Exploitation for Privilege
+    TA0005     T1222.002,T1070              Defense Evasion [ TA0005 ] | File and Directory Permissions 
+    TA0006     T1003.008                    Credential Access [ TA0006 ] | OS Credential Dumping: /etc/p
+    TA0009     T1560                        Collection [ TA0009 ] | Archive Collected Data [ T1560 ]
+    TA0011     T1071.001                    Command and Control [ TA0011 ] | Application Layer Protocol:
+    TA0011     T1573.001                    Encrypted Channel: Symmetric Cryptography [ T1573.001 ]
+    TA0011     T1090                        Proxy [ T1090 ]
+    TA0011     T1105                        Ingress Tool Transfer [ T1105 ]
+    TA0004     (no technique)               Exfiltration [ TA0004 ] | 
+    distinct parents 13 | pre-access ['T1588'] | not live in v11.0 [] | used 12 (paper 12) MATCH
+    order (first occurrence): T1059 T1203 T1505 T1068 T1222 T1070 T1003 T1560 T1071 T1573 T1090 T1105
+    multi-tactic in this sequence: {}
+
+  -- AA22-174A (cisa_aa22-174a_wayback/aa22-174a_20230201.html)
+    TA0001     T1190                        Initial Access [ TA0001 ] | Exploit Public-Facing Applicatio
+    TA0002     T1059.001                    Execution [ TA0002 ] | Command and Scripting Interpreter: Po
+    TA0002     T1053.005                    Scheduled Task/Job: Scheduled Task [ T1053.005 ]
+    TA0003     T1505.003                    Persistence [ TA0003 ] | Server Software Component: Web Shel
+    TA0005     T1036.004                    Defense Evasion [ TA0005 ] | Masquerading: Masquerade Task o
+    TA0006     (no technique)               Credential Access [ TA0006 ] | 
+    TA0008     T1021.001                    Lateral Movement [ TA0008 ] | Remote Services: Remote Deskto
+    TA0009     T1056.001                    Collection [ TA0009 ] | Archive Collected Data: Archive via    <-- shown text ['T1560.001'] differs from link
+    TA0009     T1560.001                    Input Capture: Keylogging [ T1056.001 ]   <-- shown text ['T1056.001'] differs from link
+    TA0011     T1071.001                    Command and Control [ TA0011 ] | Application Layer Protocol:
+    TA0011     T1573.001                    Encrypted Channel: Symmetric Cryptography [ 1573.001 ]   <-- shown text ['1573.001'] differs from link
+    TA0011     T1105                        Ingress Tool Transfer [ T1105 ]
+    TA0011     T1571                        Non-Standard Port [ T1571 ]
+    TA0011     T1090                         | Proxy [ T1090 ]
+    distinct parents 13 | pre-access [] | not live in v11.0 [] | used 13 (paper 13) MATCH
+    order (first occurrence): T1190 T1059 T1053 T1505 T1036 T1021 T1056 T1560 T1071 T1573 T1105 T1571 T1090
+    multi-tactic in this sequence: {'T1053': ['execution', 'persistence', 'privilege-escalation'], 'T1056': ['collection', 'credential-access']}
+
+  paper sec.5.3 example inputs for AA22-277A: T1078 T1047 T1059 T1129 -> MATCH
+
+==============================================================================
+F. PAPER TABLE 1 (p.806) against v11.0
+==============================================================================
+  (paper's rows realigned by one: its header cell 'G0018' is the first data row)
+  G0018 admin@338      paper 10101 | roll-up 10101 ok | exact-id only 00101 DIFF
+  G0006 APT1           paper 01000 | roll-up 11000 DIFF | exact-id only 00000 DIFF
+  G0026 APT18          paper 10001 | roll-up 10001 ok | exact-id only 00001 DIFF
+  G0007 APT28          paper 11101 | roll-up 11101 ok | exact-id only 00101 DIFF
+  G0060 BRONZE BUTLER  paper 10101 | roll-up 10101 ok | exact-id only 00101 DIFF
+  G0006 T1059-family links in v11.0: ['T1059.003']
+
+==============================================================================
+G. EDGE CASES ON THE TEST TRAJECTORIES (v11.0, live groups)
+==============================================================================
+  AA22-277A: SDC == 1 at never
+  AA22-277A: non-zero tie across the k=60 boundary at 9 of 25 steps [(3, 0.1176, '3 of 6 tied kept'), (5, 0.1176, '3 of 5 tied kept'), (7, 0.1429, '1 of 4 tied kept'), (8, 0.1538, '2 of 4 tied kept'), (9, 0.1538, '3 of 4 tied kept'), (10, 0.1667, '1 of 3 tied kept')] ...
+  AA22-138B: SDC == 1 at never
+  AA22-138B: non-zero tie across the k=60 boundary at 6 of 11 steps [(1, 0.0625, '1 of 2 tied kept'), (3, 0.1176, '2 of 3 tied kept'), (4, 0.1176, '3 of 5 tied kept'), (6, 0.1333, '4 of 7 tied kept'), (7, 0.1481, '1 of 3 tied kept'), (11, 0.1818, '1 of 6 tied kept')]
+  AA22-174A: SDC == 1 at never
+  AA22-174A: non-zero tie across the k=60 boundary at 8 of 12 steps [(2, 0.0833, '1 of 3 tied kept'), (3, 0.1176, '3 of 6 tied kept'), (4, 0.1176, '1 of 3 tied kept'), (5, 0.1538, '4 of 5 tied kept'), (6, 0.1739, '1 of 2 tied kept'), (7, 0.1818, '4 of 6 tied kept')] ...

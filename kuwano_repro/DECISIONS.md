@@ -4,14 +4,21 @@ The paper leaves these points unspecified. Each one is settled by evidence (the 
 or by matching Tables 5–7), never by preference. An entry is closed only with the
 evidence that closed it. Nothing below may be decided while writing method code.
 
-| # | Open question | Where the paper is silent | How it will be settled | Status |
-|---|---|---|---|---|
-| D1 | Which ATT&CK version | Says v11 (2022-04-25) but accessed the site 2023-01-31 (v12.1 live) | Count groups and techniques in each version; the paper says 133 and 191. Then whichever version reproduces Tables 5–7 | OPEN |
-| D2 | Group × technique matrix: what counts as "used" | Only "techniques which they have used" (§5.1) | Audit: direct group `uses` technique relations; sub-technique uses rolled up to parent or not; revoked/deprecated objects; techniques used only through software | OPEN |
-| D3 | Sub-technique roll-up | 191 implies parent techniques only; never stated | Audit the CISA tables (they list sub-techniques) and the STIX counts | OPEN |
-| D4 | Exact technique list and order per advisory | Only "in tactic order" (§6.2); AA22-138B drops one pre-initial-access technique | Audit each advisory's ATT&CK table; the counts must be 26, 13→12, 13; order within a tactic tested against the tables | OPEN |
-| D5 | Candidate universe ("after the most late-stage tactic observed", §4.1) | Not in Algorithm 1. Multi-tactic techniques and same-tactic inclusion unstated | Table 5 row 1 has 173 = 191 − 17 Recon/ResDev − 1 input; derive the rule and check it on all 48 rows | OPEN |
-| D6 | Weight when Similarity = 1 (d = 0, so 1/d is undefined) | Not handled | Audit whether SDC = 1 occurs at all in the test runs; if it does, test the candidate rules against the tables | OPEN |
-| D7 | Threshold comparison: `>` or `>=` 0.17 | Symbol lost in the PDF; text says "higher than" | Test both against the tables | OPEN |
-| D8 | Tie-breaking in the top-k sort | Not specified | Audit whether ties straddle the k = 60 boundary with non-zero similarity; if they do, test the candidate rules | OPEN |
-| D9 | Are input techniques excluded from the output? | Not stated | Table 5 row 1: TP + FN = 25 = 26 − 1, so the input is excluded from positives; confirm it is excluded from candidates too | OPEN |
+Evidence for every row: `audit/AUDIT.md` (sections in brackets).
+
+| # | Question | Status | Decision and evidence |
+|---|---|---|---|
+| D1 | Which ATT&CK version | **CLOSED** | **v11.0.** 191 live parents; reproduces all 5 cold-start counts (v12.1 fails one); the advisories link to `/versions/v11/`; v11.3 gives identical technique sets per group but deprecates G0141 [§1]. Paper's "133 groups" matches no v11 count; harmless except for tie-breaking (D8) |
+| D2 | What counts as "used" | **CLOSED** | Live groups, direct `uses` to live techniques; software-mediated techniques excluded; links to revoked or deprecated techniques excluded. Reproduces 5/5 cold-start counts and 4/5 rows of Table 1 [§2]. APT1 × T1059 differs (unexplained, one cell) |
+| D3 | Sub-technique roll-up | **CLOSED** | **Roll up to parent.** Without it, T1497 = 1, not 6, and 0/5 Table 1 rows match [§2] |
+| D4 | Technique list and order per advisory | **PARTLY CLOSED** | Lists closed: ids from link targets, deduplicated to parents in first-occurrence order, pre-access dropped. Gives 26 / 12 / 13 exactly [§3]. **Open:** in 174A, T1056 then T1560 (links) or T1560 then T1056 (visible text). Settle against Table 7 |
+| D5 | Candidate universe after the latest observed tactic | OPEN | Row 1 of Table 5 fits 191 − 17 pre-access − 1 input [§4]. Same-tactic inclusion and multi-tactic assignment (6 test techniques are multi-tactic) need all 48 rows |
+| D6 | Weight when Similarity = 1 | **CLOSED, no effect** | SDC = 1 never occurs on any test step [§5] |
+| D7 | `>` or `>=` 0.17 | OPEN | Test both against the tables |
+| D8 | Tie-breaking in the top-k sort | OPEN, **matters** | Non-zero ties straddle k = 60 at 23 of 48 steps [§5]. Candidates: name order (suggested by Table 1's excerpt), group-id order, STIX file order |
+| D9 | Inputs excluded from the output | **PARTLY CLOSED** | Excluded from positives (TP + FN = N − input in all 48 rows). Exclusion from candidates is confirmed together with D5 |
+
+**Unexplained discrepancies in the paper**, recorded and not acted on:
+
+1. "133 groups": v11.0 has 131 live groups (128 using any technique).
+2. Table 1, APT1 × T1059: the paper shows 0; v11.0 has APT1 → T1059.003.
