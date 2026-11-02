@@ -1,7 +1,11 @@
 """Phase 4: every setting of the open decisions against all 48 rows of Tables 5-7.
 
-    python validate.py            > results/VALIDATION.txt
-    python validate.py --detail   (also prints every mismatched cell of the best settings)
+    python validate.py --detail --out results/VALIDATION.txt
+    python validate.py            (ranking only, to the screen)
+
+--detail also prints every mismatched cell of the best settings. Use --out rather than
+shell redirection: it writes UTF-8 with LF line endings on every OS, so the file's SHA-256
+is comparable across machines (PowerShell's '>' re-encodes the text).
 
 Settings: tiebreak (D8) x inclusive (D7) x universe x observed_tactic (D5) x 174A order (D4).
 A row matches only if Prediction, TP, FP, TN and FN all equal the paper's.
@@ -9,6 +13,7 @@ A row matches only if Prediction, TP, FP, TN and FN all equal the paper's.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import csv
 import itertools
 import os
@@ -31,8 +36,15 @@ def paper_rows():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--detail", action="store_true")
+    ap.add_argument("--out", help="write the report to this file (UTF-8, LF) instead of the screen")
     a = ap.parse_args()
+    if a.out:
+        with open(a.out, "w", encoding="utf-8", newline="\n") as fh, contextlib.redirect_stdout(fh):
+            return report(a.detail)
+    return report(a.detail)
 
+
+def report(detail):
     data, seqs, paper = kw.load(), kw.load_sequences(), paper_rows()
     orders = {"links": seqs["AA22-174A"]["variants"]["links"],
               "visible_text": seqs["AA22-174A"]["variants"]["visible_text"]}
@@ -90,7 +102,7 @@ def main():
         print(f"{r['rows']:>4} {r['per']['AA22-277A']:>4} {r['per']['AA22-138B']:>4} {r['per']['AA22-174A']:>4} "
               f"{r['cells']:>9}  tie={s['tiebreak']:<5} {'>=' if s['inclusive'] else '> '} "
               f"univ={s['universe']:<10} obs={s['observed_tactic']:<6} 174A={s['order174']}")
-    if a.detail:
+    if detail:
         top = results[0]["rows"]
         for r in results:
             if r["rows"] < top:

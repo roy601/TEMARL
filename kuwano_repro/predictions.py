@@ -52,7 +52,7 @@ def main():
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()
         w.writerows(rows)
-    with open(os.path.join(OUT, "PREDICTIONS.md"), "w", encoding="utf-8") as fh:
+    with open(os.path.join(OUT, "PREDICTIONS.md"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(md) + "\n")
     print(f"{len(rows)} predictions written to results/PREDICTIONS.csv and .md")
     return 0
