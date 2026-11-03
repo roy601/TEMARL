@@ -8,7 +8,7 @@ Evidence: `audit/AUDIT.md` (§ = section) for D1–D3, D6; `results/VALIDATION.m
 
 | # | Question | Status | Decision and evidence |
 |---|---|---|---|
-| D1 | Which ATT&CK version | **CLOSED** | **v11.0.** 191 live parents; reproduces all 5 cold-start counts (v12.1 fails one); the advisories link to `/versions/v11/`; v11.3 gives identical technique sets per group but deprecates G0141 [audit §1] |
+| D1 | Which ATT&CK version | **CLOSED** | **v11.0.** 191 live parents; reproduces all 5 cold-start counts (v12.1 fails one); the advisories' versioned links all point to `/versions/v11/` (138B and 174A exclusively, 277A in 20 of 35); v11.3 gives identical technique sets per group but deprecates G0141 [audit §1] |
 | D2 | What counts as "used" | **CLOSED** | Live groups, direct `uses` to live techniques; software-mediated techniques excluded; links to revoked or deprecated techniques excluded. 5/5 cold-start counts, 4/5 Table 1 rows [audit §2] |
 | D3 | Sub-technique roll-up | **CLOSED** | **Roll up to parent.** Without it, T1497 = 1, not 6, and 0/5 Table 1 rows match [audit §2] |
 | D4 | Technique list and order per advisory | **CLOSED** | Ids from link targets, deduplicated to parents in first-occurrence order, pre-access dropped: 26 / 12 / 13 [audit §3]. 174A: **visible-text order** (T1560 before T1056) gives 12/12 rows; link order gives 11/12 [validation] |

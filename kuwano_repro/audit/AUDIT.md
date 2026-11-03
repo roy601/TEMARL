@@ -16,7 +16,9 @@ Every number below comes from the script, not from reading the paper.
 | Cold-start counts (p. 810) reproduced | **yes, 5/5** | **yes, 5/5** | no (T1497: 5 vs 6) | – |
 
 - v12.1 is ruled out: it has 193 techniques and gets one cold-start count wrong.
-- The advisories themselves link to `attack.mitre.org/versions/v11/`.
+- The advisories' versioned links all point to v11: AA22-138B and AA22-174A link only to
+  `attack.mitre.org/versions/v11/`; AA22-277A does so in 20 of its 35 technique links (the
+  other 15 are unversioned). (Corrected 2026-11-02: this line first said all links were v11.)
 - v11.0 and v11.3 give the **same technique set for every group**. The only difference is
   that v11.3 deprecates one group, G0141. Since G0141 is in v11.0 and v11.3 has 130 live
   groups, v11.0 is used and v11.3 is redundant.
@@ -103,7 +105,8 @@ from all 48 rows in validation. That needs the method, so D5 stays open.
 
 - **SDC = 1 never occurs**, on any step of any advisory. The undefined 1/0 weight is
   never reached, so D6 is closed with no effect.
-- **Ties at the k = 60 boundary occur often**: at 23 of 48 steps there are tied groups with
+- **Ties at the k = 60 boundary occur often**: at 23 of 48 steps (AA22-174A in link order;
+  22 with the visible-text order later adopted) there are tied groups with
   non-zero similarity on both sides of the cut, for example "3 of 6 tied groups kept". So
   **the tie-break rule changes the output** and must be settled against Tables 5–7. The
   candidates are STIX file order, group-id order, and group-name order. The excerpt in
