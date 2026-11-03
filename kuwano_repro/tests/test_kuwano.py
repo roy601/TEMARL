@@ -66,6 +66,33 @@ class Algorithm1(unittest.TestCase):
         with self.assertRaises(ZeroDivisionError):
             kw.recommend({"t2"}, d, k=4)
 
+    def test_limit_rule_for_similarity_one(self):
+        # D = {t2} is identical to the observed {t2}. Hand computation, k = 4, top = D, A, B, C:
+        #   D: SDC 1 -> infinite weight on t2 (n = 1)
+        #   A = {t1,t2}: SDC 2*1/3 = 2/3 -> weight 3 on t1 and t2
+        #   B = {t1,t3}: SDC 0;  C = {t3}: SDC 0
+        # so t1 = (0, 3/4), t2 = (1, 3/4), t3 = (0, 0)
+        d = toy()
+        d.groups["D"] = frozenset({"t2"})
+        for r in d.rank.values():
+            r["D"] = 9
+        scores, rec = kw.recommend_limit({"t2"}, d, k=4, threshold=F(1))
+        self.assertEqual(scores, {"t1": (0, F(3, 4)), "t2": (1, F(3, 4)), "t3": (0, F(0))})
+        self.assertEqual(rec, {"t2"})                      # n > 0 wins; 3/4 < 1 for the rest
+        ranked = sorted(scores, key=lambda t: scores[t], reverse=True)
+        self.assertEqual(ranked[0], "t2")
+        with self.assertRaises(ZeroDivisionError):         # the validated path is unchanged
+            kw.recommend({"t2"}, d, k=4)
+
+    def test_limit_rule_equals_validated_path_without_similarity_one(self):
+        d = toy()
+        # none of these equals a toy group's set ({"t3"} would: it is group C)
+        for obs, k in (({"t1"}, 1), ({"t1"}, 2), ({"t1"}, 3), ({"t2"}, 2), ({"t1", "t2", "t3"}, 3)):
+            sup, rec = kw.recommend(obs, d, k=k, threshold=F(3, 2))
+            lim, rec_l = kw.recommend_limit(obs, d, k=k, threshold=F(3, 2))
+            self.assertEqual({t: (0, r) for t, r in sup.items()}, lim)
+            self.assertEqual(rec, rec_l)
+
     def test_observed_technique_can_be_recommended(self):
         # Algorithm 1 itself does not drop inputs; evaluate() does, through candidates().
         _, rec = kw.recommend({"t1"}, toy(), k=2, threshold=F(1))
@@ -119,6 +146,16 @@ class RealData(unittest.TestCase):
                     self.assertEqual(r["prediction"], r["tp"] + r["fp"])
                     self.assertEqual(r["tp"] + r["fn"], n - r["input"])
                     self.assertGreaterEqual(min(r.values()), 0)
+
+    def test_limit_rule_equals_validated_path_on_paper_data(self):
+        # Similarity 1 never occurs on the paper's test sequences, so both paths must agree exactly.
+        for v in self.s.values():
+            seq = v["sequence"]
+            for i in range(1, len(seq)):
+                sup, rec = kw.recommend(seq[:i], self.d)
+                lim, rec_l = kw.recommend_limit(seq[:i], self.d)
+                self.assertEqual({t: (0, r) for t, r in sup.items()}, lim)
+                self.assertEqual(rec, rec_l)
 
     def test_deterministic(self):
         v = self.s["AA22-138B"]

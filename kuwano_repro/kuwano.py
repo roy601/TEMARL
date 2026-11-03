@@ -90,6 +90,40 @@ def recommend(observed, data: Data, *, k: int = K, threshold: Fraction = THRESHO
     return support, rec
 
 
+def recommend_limit(observed, data: Data, *, k: int = K, threshold: Fraction = THRESHOLD,
+                    tiebreak: str = "name", inclusive: bool = True):
+    """Algorithm 1 with a declared rule for Similarity = 1. For Idea 01 only.
+
+    The paper defines no weight when d = 1 - Similarity = 0. Here the limit is taken: as
+    Similarity -> 1 the weight 1/d -> infinity, so a technique's score behaves like
+    n/eps + finite, where n is the number of identical neighbours using it. Each technique
+    therefore gets the pair (n, SupportRate of the non-identical neighbours), compared
+    lexicographically, and any technique with n > 0 is recommended.
+
+    `recommend()` above is the validated reproduction and is left exactly as it was. When
+    no neighbour has Similarity 1, every n is 0 and this function returns the same
+    SupportRate and the same recommendations (asserted in tests).
+    """
+    obs = frozenset(observed)
+    sim = {g: sdc(obs, T) for g, T in data.groups.items()}
+    order = data.rank[tiebreak]
+    top = sorted(sim, key=lambda g: (-sim[g], order[g]))[:k]
+    scores = {}
+    for t in data.techniques:
+        n, score = 0, Fraction(0)
+        for g in top:
+            s = sim[g]
+            if s != 0 and t in data.groups[g]:
+                if s == 1:
+                    n += 1
+                else:
+                    score += 1 / (1 - s)
+        scores[t] = (n, score / k)
+    rec = {t for t, (n, r) in scores.items()
+           if n > 0 or (r >= threshold if inclusive else r > threshold)}
+    return scores, rec
+
+
 def tactic_of(t, listed, data: Data, how: str) -> int:
     if how == "listed":
         return TACTIC_ORDER.index(listed)
