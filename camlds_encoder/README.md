@@ -38,6 +38,26 @@ python camlds_encoder/run.py --stage train --device cuda
 - **When finished,** commit and push `camlds_encoder/out/`. Git ignores the `encoder.pt` checkpoints:
   **keep them on the GPU PC**, because MAPPO needs them later.
 
+## Improvement 1 (validation only): training at every position
+
+The rule for keeping an improvement was fixed before any variant ran: `SELECTION_RULE.md`.
+
+```
+git pull
+python camlds_encoder/run_variants.py --stage baseline_val --device cuda
+python camlds_encoder/run_variants.py --stage train --variant causal --device cuda
+python camlds_encoder/run_variants.py --stage train --variant allpos --device cuda
+```
+
+| Stage | What it does | Expected time |
+|---|---|---|
+| `baseline_val` | Reloads the 320 baseline checkpoints, saves their validation outputs, checks they reproduce the recorded validation loss | a few minutes |
+| `train --variant causal` | Control: causal attention, loss on the last position only. 320 trainings | about 1.3 hours (like the baseline) |
+| `train --variant allpos` | Causal attention, loss at every position. 320 trainings | about 1.3 hours, maybe more |
+
+Then commit and push `camlds_encoder/out/` as before. `compare_validation.py` then applies the rule
+on this PC.
+
 ## Files
 
 | File | Purpose |
@@ -45,4 +65,8 @@ python camlds_encoder/run.py --stage train --device cuda
 | `port.py` | Imports the frozen modules, checks their hashes, sets 81 labels |
 | `data.py` | Folds, train/validation/test runs, windows; returns test inputs only |
 | `run.py` | Stages `check`, `pilot`, `train` |
-| `tests/test_port.py` | 9 tests: `python -m unittest discover -s camlds_encoder/tests` |
+| `summarise.py` | Integrity checks and validation summary of the baseline run |
+| `variants.py` | `baseline`, `causal`, `allpos`; the training loop is the frozen one with only the loss line changed |
+| `run_variants.py` | Stages `baseline_val`, `train --variant` |
+| `compare_validation.py` | Applies `SELECTION_RULE.md` |
+| `tests/` | 16 tests: `python -m unittest discover -s camlds_encoder/tests` |

@@ -74,9 +74,10 @@ def windows(steps, names, window: int = W):
 def fold_data(fold: dict, window: int = W) -> dict:
     st = fold["_steps"]
     Xtr, Mtr, Ytr, _, _ = windows(st, fold["train_runs"], window)
-    Xva, Mva, Yva, own_va, _ = windows(st, fold["val_runs"], window)
+    Xva, Mva, Yva, own_va, rows_va = windows(st, fold["val_runs"], window)
     Xte, Mte, _, own_te, rows_te = windows(st, fold["test_runs"], window)
     return {"train": (Xtr, Mtr, Ytr), "val": (Xva, Mva, Yva), "val_owners": own_va,
+            "val_source_rows": rows_va,
             "test_inputs": (Xte, Mte), "test_owners": own_te, "test_source_rows": rows_te}
 
 
