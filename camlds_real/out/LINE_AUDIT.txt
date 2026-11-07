@@ -1,0 +1,65 @@
+
+==============================================================================
+A. FILE LEVEL
+==============================================================================
+  bytes 106,740 | BOM False | CRLF lines 0 | non-ASCII bytes 0 | double quotes 0
+  lines 905 (header + 904 rows) | header ok True
+  rows with wrong field count: 0 []
+  fully duplicated rows: 0
+
+==============================================================================
+B. EVERY FIELD OF EVERY ROW
+==============================================================================
+    904  end is a whole second
+     12  technique absent from ATT&CK v11
+         row 813 6_screensharing_binary ev38 T1566.004
+         row 814 6_screensharing_binary ev39 T1566.004
+         row 817 6_screensharing_binary ev42 T1566.004
+         row 818 6_screensharing_binary ev43 T1566.004
+         row 819 6_screensharing_binary ev44 T1566.004
+         row 820 6_screensharing_binary ev43 T1566.004
+     10  two labels share a parent
+  distinct technique tokens: 97 | parent tokens: 81 | instances: 1351
+
+==============================================================================
+C. TIME ORDER WITHIN EACH RUN
+==============================================================================
+  runs 34 | steps per run min 3 max 42
+  overlap: 6_macro_cron ev2->ev3 -0.64s
+  duplicate starts 0 | overlaps 1
+  duration s: median 7.0 max 1667 | gap s: median 9.6 max 461
+  start-time span: 20348 .. 20474 (days since epoch), 15 distinct days
+
+==============================================================================
+D. LABEL CONSISTENCY: same command, different labels
+==============================================================================
+  distinct commands 151
+  commands carrying more than one label set: 21, covering 386 rows
+    id                                                           {('T1033',): 63, ('T1021',): 1, ('T1078.002',): 2, ('T1078.003',): 3}
+    rm                                                           {('T1070.004',): 27, ('T1546',): 3, ('T1485',): 6, ('T1490',): 6}
+    key                                                          {('T1003.008',): 3, ('T1213',): 3, ('T1039',): 3, ('T1083',): 1, ('T1059.004',): 1, ('T1036.005', 'T1564.001'): 1, ('T1574',): 1, ('T1072',): 2, ('T1059.004', 'T1072', 'T1105'): 1, ('T1105', 'T1204.002'): 2, ('T1204.002',): 2, ('T1056.001', 'T1056.004', 'T1115', 'T1176'): 2, ('T1056.004',): 1, ('T1105', 'T1204.001', 'T1566.004'): 2, ('T1204.001', 'T1219'): 2, ('T1219', 'T1566.004'): 4, ('T1105', 'T1219', 'T1564.001'): 2, ('T1219', 'T1222.002'): 3, ('T1105', 'T1219'): 1, ('T1219', 'T1574.008'): 1, ('T1059.004', 'T1219'): 2}
+    python3__c__import_pty_pty_spawn___bash_____                 {('T1059',): 33, ('T1059.004',): 4}
+    export_SHELL_bash                                            {('T1059',): 33, ('T1059.004',): 4}
+    export_TERM_xterm256_color                                   {('T1059',): 33, ('T1059.004',): 4}
+    stty_rows_38_columns_116                                     {('T1059',): 27, ('T1059.004',): 4}
+    execute                                                      {('T1074.001', 'T1560.001'): 2, ('T1201',): 4, ('T1003.008',): 2, ('T1018', 'T1046'): 4, ('T1599',): 2}
+    _wq__                                                        {('T1547',): 3, ('T1053',): 3, ('T1543.002',): 2, ('T1053.003',): 4}
+    shell                                                        {('T1059',): 6, ('T1059.004',): 4}
+    click                                                        {('T1021.005',): 3, ('T1056.001', 'T1056.004', 'T1115', 'T1176'): 2, ('T1115',): 1, ('T1219',): 4}
+    split___filter__cat__FILE___xargs_bash__c____C_2000_README_t {('T1136.001', 'T1218'): 3, ('T1218', 'T1556.003'): 3, ('T1098.004', 'T1218'): 3}
+    download                                                     {('T1003.008', 'T1041'): 3, ('T1041',): 2, ('T1005',): 2}
+    rambo_                                                       {('T1078.003',): 5, ('T1548.003',): 1}
+    move                                                         {('T1056.001', 'T1056.004', 'T1115', 'T1176'): 2, ('T1115',): 1, ('T1219',): 2}
+    start_https_listener                                         {('T1071.001', 'T1573.001'): 2, ('T1071.001', 'T1573'): 1, ('T1071.001',): 1}
+    _i_                                                          {('T1078.003',): 3, ('T1548.003',): 1}
+    _wq_                                                         {('T1059', 'T1574'): 1, ('T1053.003', 'T1071.001', 'T1105'): 1, ('T1080',): 1, ('T1059.004', 'T1072', 'T1105'): 1}
+    sudo__i                                                      {('T1021.005',): 2, ('T1078.003',): 2}
+    GET                                                          {('T1550.001',): 1, ('T1592.002',): 1}
+    chmod__x__home_judy__local_share_firefox_firefox_startup     {('T1222.002',): 1, ('T1219', 'T1222.002'): 1}
+  (scenario, event_id) with different content across variants: 0 of 243
+
+==============================================================================
+E. EXTRACTED CORPUS vs SOURCE, ROW BY ROW
+==============================================================================
+  source rows 904 | corpus steps 904 | mismatches none
+  runs whose exec_index order differs from time order: 0
