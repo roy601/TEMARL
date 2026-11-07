@@ -1,0 +1,48 @@
+# camlds_encoder: TEMARL's encoder on CAM-LDS (precondition B2)
+
+**What it is.** The Transformer encoder the thesis proposes, from `Temarl_Test_v1_L1/`, run on the
+CAM-LDS corpus (`camlds_real/`).
+
+**What changed: only the label count, from 84 to 81.** The code is imported, not copied. `port.py`
+checks the SHA-256 of every reused module before anything runs, and a test proves that the trunk is
+the same size with 84 or 81 labels.
+
+**What it uses, all frozen:**
+
+- **Folds:** split protocol 1.0 minus the 2 excluded S2 folds, so 32 folds.
+- **Validation runs:** the 1.0 rule.
+- **Window:** 16 steps.
+- **Labels:** the 81 pinned in protocol 1.1.
+- **Training rules:** BCE, validation-best checkpoint and threshold, from `study_spec.py`.
+
+**Blinding.** No test score is computed anywhere here. Test outputs are saved and hashed (sealed),
+and are scored only after the design is frozen as protocol 1.2.
+
+## Run on the GPU PC
+
+```
+git pull
+python camlds_encoder/run.py --stage check
+python camlds_encoder/run.py --stage pilot --device cuda
+python camlds_encoder/run.py --stage train --device cuda
+```
+
+| Stage | What it does | Expected time (RTX 4080 SUPER, from the old study's measured speed) |
+|---|---|---|
+| `check` | Verifies every pinned file; test points match protocol 1.1 | under a minute |
+| `pilot` | 32 folds × 3 seeds, trained to a cap; chooses patience and update budget from **validation** curves | about 1 hour |
+| `train` | 32 folds × 10 seeds = 320 trainings; validation scores; sealed test outputs | up to about 2 hours |
+
+- **Interrupted?** Run the same command again. Finished trainings are skipped.
+- **"Locked by" error?** Another run is using the folder. If none is, delete `camlds_encoder/out/.running`.
+- **When finished,** commit and push `camlds_encoder/out/`. Git ignores the `encoder.pt` checkpoints:
+  **keep them on the GPU PC**, because MAPPO needs them later.
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `port.py` | Imports the frozen modules, checks their hashes, sets 81 labels |
+| `data.py` | Folds, train/validation/test runs, windows; returns test inputs only |
+| `run.py` | Stages `check`, `pilot`, `train` |
+| `tests/test_port.py` | 9 tests: `python -m unittest discover -s camlds_encoder/tests` |
