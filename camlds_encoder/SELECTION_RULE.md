@@ -41,3 +41,26 @@ target labels, each group separately, and training length.
 
 The kept design, and whether GRU/LSTM are run, are then frozen as **protocol 1.2** before any test
 result is opened.
+
+## Record of decisions
+
+| Date | Candidate | Compared with | Decision | Report |
+|---|---|---|---|---|
+| 2026-11-08 | 1 `allpos` | baseline | **Kept** (novel +0.044, 10 of 10 seeds; all points +0.038) | `out/VALIDATION_COMPARISON_allpos.txt` |
+
+The current design is now `allpos`. Its S1 group fell on novel points (−0.033, the same 8 steps of
+one validation run); S1 will be reported on its own when the test results are opened.
+
+## Candidate 2 as built (declared 2026-11-08, before it runs)
+
+`repeat` = `allpos` + RepeatNet's repeat/new split, compared with `allpos` under the rule above.
+
+- **Two output layers** on the same 64-D state. A label that already occurs at or before the
+  position, inside the window, is scored by the **repeat** layer; any other label by the **new**
+  layer (the existing head). As in RepeatNet, each side scores only its own labels.
+- **Not used: RepeatNet's soft repeat-or-new switch.** With one yes/no score per label, it would
+  hold at least one label of a step at 0.5 or below whenever the step mixes a seen and a new label.
+  Measured: 50 of the 870 CAM-LDS targets are such steps.
+- **Everything else is `allpos`:** same encoder, same starting weights for each seed, same loss at
+  every position, same training rules and budget. One layer is added (5,265 parameters); the 64-D
+  state used by MAPPO is unchanged.

@@ -108,5 +108,71 @@ class Causal(unittest.TestCase):
             self.assertAlmostEqual(c.loss(x, mk, y).item(), want, places=6)
 
 
+class Repeat(unittest.TestCase):
+    def setUp(self):
+        torch.manual_seed(0)
+        self.m = V.build_variant("repeat", 16).eval()
+
+    def test_starts_from_the_allpos_weights_plus_one_layer(self):
+        torch.manual_seed(7)
+        a = V.build_variant("allpos", 16).state_dict()
+        torch.manual_seed(7)
+        r = V.build_variant("repeat", 16).state_dict()
+        self.assertEqual(set(r) - set(a), {"repeat_head.weight", "repeat_head.bias"})
+        for k in a:
+            self.assertTrue(torch.equal(a[k], r[k]), k)
+        extra = sum(r[k].numel() for k in ("repeat_head.weight", "repeat_head.bias"))
+        self.assertEqual(extra, 64 * 81 + 81)
+
+    def test_seen_labels_use_the_repeat_layer_and_others_the_new_layer(self):
+        x, mk, _ = toy()
+        with torch.no_grad():
+            h = self.m.history(x, mk)
+            out, rep, new = self.m(x, mk), self.m.repeat_head(h), self.m.head(h)
+        seen = x.amax(1) > 0.5
+        self.assertTrue(seen.any() and (~seen).any())
+        self.assertTrue(torch.equal(out[seen], rep[seen]))
+        self.assertTrue(torch.equal(out[~seen], new[~seen]))
+
+    def test_seen_at_a_position_ignores_later_steps(self):
+        x, mk, _ = toy(B=1, real=(16,))
+        x2 = x.clone()
+        x2[0, 10] = 0
+        x2[0, 10, 5] = 1                                          # change step 10 only
+        with torch.no_grad():
+            a = self.m.position_logits(self.m.states(x, mk), x)
+            b = self.m.position_logits(self.m.states(x2, mk), x2)
+        self.assertTrue(torch.allclose(a[0, :10], b[0, :10], atol=1e-6))
+        s = V.RepeatPredictor.seen(x)
+        self.assertTrue(torch.equal(s[0, 3], x[0, :4].amax(0) > 0.5))
+
+    def test_last_position_of_training_logits_is_the_prediction(self):
+        x, mk, _ = toy()
+        with torch.no_grad():
+            a = self.m.position_logits(self.m.states(x, mk), x)[:, -1]
+            self.assertTrue(torch.allclose(a, self.m(x, mk), atol=1e-6))
+
+    def test_loss_is_allpos_loss_on_the_routed_logits(self):
+        x, mk, y = toy(B=2, real=(3, 16))
+        with torch.no_grad():
+            logits = self.m.position_logits(self.m.states(x, mk), x)
+            want, n = 0.0, 0
+            for b in range(2):
+                for k in range(16):
+                    if mk[b, k] < 0.5:
+                        continue
+                    tgt = y[b] if k == 15 else x[b, k + 1]
+                    want += torch.nn.functional.binary_cross_entropy_with_logits(logits[b, k], tgt).item()
+                    n += 1
+            self.assertAlmostEqual(self.m.loss(x, mk, y).item(), want / n, places=5)
+
+    def test_no_nan_with_heavy_padding(self):
+        x, mk, y = toy()
+        for mode in (True, False):
+            self.m.train(mode)
+            self.assertTrue(torch.isfinite(self.m.loss(x, mk, y)))
+            self.assertTrue(torch.isfinite(self.m(x, mk)).all())
+
+
 if __name__ == "__main__":
     unittest.main()

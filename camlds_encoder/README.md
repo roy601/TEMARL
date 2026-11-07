@@ -58,6 +58,25 @@ python camlds_encoder/run_variants.py --stage train --variant allpos --device cu
 Then commit and push `camlds_encoder/out/` as before. `compare_validation.py` then applies the rule
 on this PC.
 
+**Result (2026-11-08): `allpos` kept.** It is now the design every later candidate must beat.
+
+## Improvement 2 (validation only): repeat/new split
+
+`allpos` plus a separate output layer for techniques already seen in the window (RepeatNet). The
+exact design is declared in `SELECTION_RULE.md`.
+
+```
+git pull
+python camlds_encoder/run_variants.py --stage train --variant repeat --device cuda
+```
+
+| Stage | What it does | Expected time |
+|---|---|---|
+| `train --variant repeat` | 320 trainings, like `allpos` | about 1.6 hours (`allpos` took 98 minutes) |
+
+Then commit and push `camlds_encoder/out/`. The comparison is
+`compare_validation.py --candidate repeat --current allpos`.
+
 ## Files
 
 | File | Purpose |
@@ -66,7 +85,7 @@ on this PC.
 | `data.py` | Folds, train/validation/test runs, windows; returns test inputs only |
 | `run.py` | Stages `check`, `pilot`, `train` |
 | `summarise.py` | Integrity checks and validation summary of the baseline run |
-| `variants.py` | `baseline`, `causal`, `allpos`; the training loop is the frozen one with only the loss line changed |
+| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`; the training loop is the frozen one with only the loss line changed |
 | `run_variants.py` | Stages `baseline_val`, `train --variant` |
 | `compare_validation.py` | Applies `SELECTION_RULE.md` |
-| `tests/` | 16 tests: `python -m unittest discover -s camlds_encoder/tests` |
+| `tests/` | 22 tests: `python -m unittest discover -s camlds_encoder/tests` |

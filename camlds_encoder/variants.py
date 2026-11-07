@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Encoder variants for VALIDATION-ONLY design work (protocol 1.1, Section 6).
 
-Each variant changes one thing relative to the baseline and keeps the rest identical: the same
-layers (so the same parameter count), the same initial weights for a given seed, the same
-optimiser, batch size, learning rate, patience, update budget, checkpoint and threshold rules.
-Validation BCE and predictions always use the LAST position, i.e. the real task, for every variant.
+Each variant changes one thing relative to the design it is compared with and keeps the rest
+identical: the same encoder layers, the same initial encoder and head weights for a given seed,
+the same optimiser, batch size, learning rate, patience, update budget, checkpoint and threshold
+rules. Validation BCE and predictions always use the LAST position, i.e. the real task.
 
   baseline  the frozen Transformer: bidirectional attention inside the window, loss on the last
             position only (Temarl_Test_v1_L1/encoders_cmd.py, unchanged)
@@ -13,6 +13,15 @@ Validation BCE and predictions always use the LAST position, i.e. the real task,
   allpos    causal attention, loss at EVERY real position: position k predicts step k+1, and the
             last position predicts the target. The SASRec training scheme (Kang & McAuley,
             ICDM 2018), here with multi-label BCE.
+  repeat    allpos (kept 2026-11-08) + a repeat/new split of the output, after RepeatNet
+            (Ren et al., AAAI 2019). Two output layers on the same 64-D state: a label that
+            already occurs at or before the position inside the window is scored by the REPEAT
+            layer, any other label by the NEW layer (the existing head). Like RepeatNet, the
+            repeat side never scores unseen labels and the new side never scores seen ones.
+            Multi-label adaptation: RepeatNet's soft repeat-or-explore gate is not used. With
+            one sigmoid per label it would cap a step that mixes a seen and a new label at 0.5
+            for at least one of them; 50 of the 870 CAM-LDS targets are such steps.
+            Adds 5,265 parameters (one 64x81 layer); the encoder and the 64-D h are unchanged.
 
 `train_variant` is train_cmd.train_one with one line changed: the loss is `model.loss(x, m, y)`.
 camlds_encoder/tests/test_variants.py proves that for `baseline` it reproduces train_one exactly.
@@ -29,7 +38,7 @@ from torch import nn
 
 from port import Enc, NT, T
 
-VARIANTS = ("baseline", "causal", "allpos")
+VARIANTS = ("baseline", "causal", "allpos", "repeat")
 
 
 class BaselinePredictor(Enc.CommandPredictor):
@@ -79,13 +88,39 @@ class CausalPredictor(nn.Module):
     def forward(self, x, mask):
         return self.head(self.history(x, mask))
 
+    def position_logits(self, states, x):
+        """Logits at every position, (B, W, NT)."""
+        return self.head(states)
+
     def loss(self, x, mask, y):
         if not self.all_positions:
             return self._crit(self(x, mask), y).mean()
-        logits = self.head(self.states(x, mask))               # (B, W, NT)
+        logits = self.position_logits(self.states(x, mask), x)  # (B, W, NT)
         target = torch.cat([x[:, 1:], y[:, None]], 1)          # position k -> step k+1; last -> y
         per_pos = self._crit(logits, target).mean(-1)          # mean over labels, as the baseline
         return (per_pos * mask).sum() / mask.sum()             # real positions only
+
+
+class RepeatPredictor(CausalPredictor):
+    """allpos + RepeatNet's repeat/new split. The repeat layer is built last, so the encoder and
+    the new-label head start from exactly the allpos weights for the same seed."""
+
+    def __init__(self, max_len: int):
+        super().__init__(max_len, all_positions=True)
+        self.repeat_head = nn.Linear(Enc.H_DIM, NT)
+
+    @staticmethod
+    def seen(x):
+        """(B, W, NT): label occurs at or before each position. Padding is all-zero, so it adds
+        nothing. Never looks at later steps."""
+        return torch.cummax(x, dim=1).values > 0.5
+
+    def position_logits(self, states, x):
+        return torch.where(self.seen(x), self.repeat_head(states), self.head(states))
+
+    def forward(self, x, mask):
+        h = self.history(x, mask)
+        return torch.where(x.amax(dim=1) > 0.5, self.repeat_head(h), self.head(h))
 
 
 def build_variant(variant: str, max_len: int) -> nn.Module:
@@ -95,6 +130,8 @@ def build_variant(variant: str, max_len: int) -> nn.Module:
         return CausalPredictor(max_len, all_positions=False)
     if variant == "allpos":
         return CausalPredictor(max_len, all_positions=True)
+    if variant == "repeat":
+        return RepeatPredictor(max_len)
     raise ValueError(f"Unknown variant {variant}")
 
 
