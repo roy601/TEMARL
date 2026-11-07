@@ -1,0 +1,64 @@
+A. INTEGRITY
+  PASS  320 cells, one per fold and seed
+  PASS  no smoke cell; 81 labels; window 16
+  PASS  every cell used the pilot's patience and budget
+  PASS  no test metric stored (only the sealed block)
+  PASS  sealed test files match their SHA-256
+  PASS  sealed test outputs: right shape, all finite
+  PASS  sealed test points = protocol 1.1 side file
+  PASS  thresholds inside the frozen grid
+
+B. TRAINING
+  pilot: 96 cells, 51 min; patience 16 checks; budget 9152 updates
+  pilot configurations still improving at the 8,192 cap: 3 ['Transformer_1_autostart_pam', 'Transformer_1_cron_localaccount', 'Transformer_1_racecondition_sshkey']
+  main cells that used the whole budget (stopped by the cap, not by patience): 0 of 320
+    of which the best checkpoint was in the last 10%: 0 []
+  updates: median 4032; best update median 3328; training time 76 min
+  thresholds chosen on validation: {0.1: 11, 0.2: 25, 0.3: 98, 0.4: 65, 0.5: 121} (at a grid end: 132)
+  validation cells predicting nothing for some point: 236; median empty share 3.7%
+
+C. VALIDATION micro-F1 (Transformer: mean over 10 seeds; SD across seeds)
+   Baselines on the same windows. Validation sets are small (one run per scenario), so per-fold numbers are noisy.
+  fold                         val pts  copies   Transformer repeat prev label prior
+  1_autostart_localaccount          27    70%    0.965 ±0.007       0.306       0.293
+  1_autostart_pam                   27    70%    0.969 ±0.006       0.306       0.293
+  1_autostart_sshkey                27    70%    0.971 ±0.008       0.306       0.293
+  1_cron_localaccount               27    70%    0.958 ±0.006       0.306       0.293
+  1_cron_pam                        27    70%    0.962 ±0.009       0.306       0.293
+  1_cron_sshkey                     27    70%    0.963 ±0.009       0.306       0.293
+  1_pwnkit_localaccount             27    70%    0.971 ±0.011       0.306       0.293
+  1_pwnkit_pam                      27    70%    0.969 ±0.010       0.306       0.293
+  1_pwnkit_sshkey                   27    70%    0.972 ±0.013       0.306       0.293
+  1_racecondition_localaccount      27    70%    0.962 ±0.009       0.306       0.293
+  1_racecondition_pam               27    70%    0.965 ±0.009       0.306       0.293
+  1_racecondition_sshkey            27    70%    0.959 ±0.006       0.306       0.293
+  1_sudo_localaccount               27    70%    0.971 ±0.006       0.306       0.293
+  1_sudo_pam                        27    70%    0.970 ±0.008       0.306       0.293
+  1_sudo_sshkey                     27    70%    0.971 ±0.006       0.306       0.293
+  1_validaccount_localaccount       27    70%    0.970 ±0.008       0.306       0.293
+  1_validaccount_pam                27    70%    0.967 ±0.007       0.306       0.293
+  1_validaccount_sshkey             27    70%    0.962 ±0.007       0.306       0.293
+  3_ssh_apt                         25    28%    0.854 ±0.026       0.321       0.231
+  3_ssh_healthcheck                 31    26%    0.784 ±0.015       0.366       0.254
+  3_ssh_puppet                      31    26%    0.794 ±0.030       0.366       0.254
+  3_vnc_apt                         31    23%    0.636 ±0.049       0.366       0.254
+  3_vnc_healthcheck                 31    26%    0.791 ±0.025       0.366       0.254
+  3_vnc_puppet                      31    26%    0.789 ±0.022       0.366       0.254
+  6_macro_binary                    20     0%    0.589 ±0.089       0.439       0.138
+  6_macro_cron                      22     0%    0.476 ±0.065       0.340       0.147
+  6_plugin                          22    45%    0.805 ±0.037       0.340       0.194
+  6_screensharing_binary            22    45%    0.806 ±0.035       0.340       0.179
+  6_screensharing_cron              22    45%    0.798 ±0.034       0.340       0.168
+  S2                                80    46%    0.843 ±0.010       0.336       0.270
+  S3                                69    43%    0.830 ±0.023       0.267       0.198
+  S6                                78    36%    0.829 ±0.018       0.288       0.202
+
+D. BY GROUP (mean of fold means)
+  scenario_held_out  S2   folds  1 | Transformer 0.843 | repeat prev 0.336 | label prior 0.270 | Transformer above repeat-prev in 1 of 1 folds | validation copies 46%
+  scenario_held_out  S3   folds  1 | Transformer 0.830 | repeat prev 0.267 | label prior 0.198 | Transformer above repeat-prev in 1 of 1 folds | validation copies 43%
+  scenario_held_out  S6   folds  1 | Transformer 0.829 | repeat prev 0.288 | label prior 0.202 | Transformer above repeat-prev in 1 of 1 folds | validation copies 36%
+  scenario_held_out  all  folds  3 | Transformer 0.834 | repeat prev 0.297 | label prior 0.223 | Transformer above repeat-prev in 3 of 3 folds | validation copies 42%
+  variant_held_out   S1   folds 18 | Transformer 0.967 | repeat prev 0.306 | label prior 0.293 | Transformer above repeat-prev in 18 of 18 folds | validation copies 70%
+  variant_held_out   S3   folds  6 | Transformer 0.775 | repeat prev 0.358 | label prior 0.250 | Transformer above repeat-prev in 6 of 6 folds | validation copies 26%
+  variant_held_out   S6   folds  5 | Transformer 0.695 | repeat prev 0.360 | label prior 0.165 | Transformer above repeat-prev in 5 of 5 folds | validation copies 27%
+  variant_held_out   all  folds 29 | Transformer 0.880 | repeat prev 0.326 | label prior 0.262 | Transformer above repeat-prev in 29 of 29 folds | validation copies 54%
