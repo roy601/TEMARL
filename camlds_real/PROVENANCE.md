@@ -48,17 +48,31 @@ packets feed nothing the models read.
 | Licence | code GPL-3.0, data CC BY 4.0 |
 | Rows | 904 |
 
-> **Repository commit: NOT YET RECORDED.** The analysis repo was downloaded as
-> a GitHub ZIP rather than cloned, so no commit hash was captured. Record it
-> before any confirmatory run.
+> **Repository commit: `42bbd2cf8409f64a1e6c8fc936c91725e8c558b2`** (2026-10-21,
+> latest on `main` when checked on 2026-11-07). The repo was downloaded as a GitHub
+> ZIP, so the hash was recovered afterwards: four files were compared by CRC-32
+> with the ZIP and match, including `README.md`, which differs at the previous
+> commit. The current `attack_times.csv` is also identical by SHA-256.
 
-`attackmate.json` inside the scenario archives is **not** a label source. Across
-all 34 runs and 1,806 records it carries exactly four keys — `start-datetime`,
-`type`, `cmd`, `parameters` — with **no technique label and no execution
-outcome**. `parameters` holds playbook configuration written *before* the run
-(`exit_on_error`, `error_if`, `loop_count`), so success and failure are not
-recoverable from it. It is useful only for untruncated command text and for the
-setup/sleep steps `attack_times.csv` omits.
+`attackmate.json` is the source of these labels, not a separate one (corrected
+2026-11-07). Across all 34 runs and 1,806 records it has four top-level keys:
+`start-datetime`, `type`, `cmd`, `parameters`. **907 records carry techniques in
+`parameters.metadata`**, and `extract_attack_logs.py` generates `attack_times.csv`
+from them: all 904 rows match their record exactly, in the same order
+(`out/ATTACKMATE_RECONCILE.txt`). The other 3 are `sleep` records, folded into the
+previous step's time window. The labels are therefore written into the playbook,
+so they describe the intended step, not an independent review of each run. There
+is **no execution outcome**: `parameters` is configuration written *before* the
+run (`exit_on_error`, `error_if`, `loop_count`), so success and failure are not
+recoverable from it.
+
+**`start` and `end` are log windows, not command times.** In the same script,
+`start` is the command's start minus 2 s, and `end` is the output time plus 4 s
+plus any following `sleep`. A hand-kept table then moves some windows, with
+reasons in comments such as "enlarge to capture cron-triggered exfiltration".
+This changes 11 starts (one more table entry has no row in the release) and some
+ends. In 4 of the 34 runs, all in S6, one +40 s move swaps two neighbouring steps
+relative to execution order. `steps.jsonl` keeps the CSV order.
 
 ## 3. Extraction rules
 
@@ -160,9 +174,11 @@ server under `nikto`/`ffuf` logs thousands of requests regardless of whether it
 is the objective) and by collection settings. **Agreement with an existing
 annotation does not independently validate that annotation.**
 
-> **Open: S4.** Its target is `Firewall`, which fails every derivation route and
-> is not one of the five defended zones. It needs checking against the paper's
-> topology directly, which is not machine-verifiable here.
+> **Resolved 2026-11-07: S4.** The target is the firewall host. The implant's
+> `auditf.service` is in `scenario_4/inetfw/configs/etc/systemd/system/`. `inetfw`
+> has addresses on 5 networks (`facts.json`), so it sits between zones, not inside
+> one. Keep `Firewall` as its own target; do not map it to a defended zone. This
+> was checked against the release, not against the paper's topology figure.
 
 ## 6. Measured structure — read before choosing a split
 
@@ -219,7 +235,7 @@ measured; none of it adds campaigns.
 
 ## 8. Not yet done
 
-- [ ] Record the analysis-repo commit hash (downloaded as a ZIP, so unknown)
-- [ ] Verify the S4 `Firewall` zone against the paper's topology
+- [x] Record the analysis-repo commit hash (`42bbd2c`, §2)
+- [x] Verify the S4 `Firewall` zone (against the release, §5)
 - [ ] Freeze the split protocol, including validation selection
 - [ ] Report unseen test labels once the split exists

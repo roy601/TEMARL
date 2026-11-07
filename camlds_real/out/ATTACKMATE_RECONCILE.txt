@@ -1,0 +1,117 @@
+A. JOIN
+  labelled steps 904 | attackmate records 1806 | runs 34
+  steps matched 904 | unmatched 0 | records used twice 0
+  matched at exactly -2 s: 893 | matched with another shift: 11
+    1_autostart_localaccount   ev15  rec#25   CSV time moved -82 s meta={'techniques': 'T1547'}
+    1_autostart_pam            ev15  rec#25   CSV time moved -82 s meta={'techniques': 'T1547'}
+    1_autostart_sshkey         ev15  rec#25   CSV time moved -82 s meta={'techniques': 'T1547'}
+    6_macro_binary             ev22  rec#47   CSV time moved +40 s meta={'techniques': 'T1053.003'}
+    6_macro_cron               ev22  rec#47   CSV time moved +40 s meta={'techniques': 'T1053.003'}
+    6_screensharing_binary     ev45  rec#51   CSV time moved -150 s meta={'techniques': 'T1219'}
+    6_screensharing_binary     ev47  rec#116  CSV time moved -60 s meta={'techniques': 'T1219'}
+    6_screensharing_binary     ev22  rec#174  CSV time moved +40 s meta={'techniques': 'T1053.003'}
+    6_screensharing_cron       ev45  rec#50   CSV time moved -150 s meta={'techniques': 'T1219'}
+    6_screensharing_cron       ev47  rec#114  CSV time moved -60 s meta={'techniques': 'T1219'}
+    6_screensharing_cron       ev22  rec#161  CSV time moved +40 s meta={'techniques': 'T1053.003'}
+
+B. LABELS: attack_times.csv vs attackmate metadata, row by row
+  techniques identical, same order: 904 | same set, other order: 0 | different: 0
+  tactics cell equals metadata text: 682 | differs: 222
+    x37  ('reconnaissancereconnaissance', 'Reconnaissance')
+    x18  ('initial-accessexecution', 'Initial Access')
+    x18  ('discoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscoverydiscovery', 'Discovery')
+    x14  ('execution_persistence_privilege-escalation', 'Persistence')
+    x9  ('persistence_privilege-escalation', 'Persistence')
+    x8  ('defense-evasion_persistence_privilege-escalation_initial-access', 'Privilege Escalation')
+    x8  ('persistencecollection_credential-accesscollection_credential-accesscollection', 'Persistence')
+    x8  ('initial-accesscommand-and-control', 'Execution')
+    x6  ('command-and-controlcredential-access_defense-evasion_persistence', 'Command and Control,Persistence,Credential Access')
+    x6  ('impactimpact', 'Impact')
+    x6  ('defense-evasioncommand-and-control', 'Defense Evasion,Execution')
+    x5  ('defense-evasion_persistence_privilege-escalation_initial-access', 'Initial Access')
+
+C. RECORDS WITH TECHNIQUES THAT ARE NOT IN attack_times.csv
+  3 records
+    scenario_1_racecondition_localaccount  rec#28   sleep        'sleep' ['T1546']
+    scenario_1_racecondition_pam           rec#28   sleep        'sleep' ['T1546']
+    scenario_1_racecondition_sshkey        rec#28   sleep        'sleep' ['T1546']
+
+D. RECORDS NOT IN attack_times.csv, BY TYPE
+  902 records (1,806 - 904)
+    msf-session      all  648 | labelled  488 | unlabelled  160
+    sleep            all  361 | labelled    0 | unlabelled  361
+    vnc              all  293 | labelled   92 | unlabelled  201
+    ssh              all  221 | labelled  168 | unlabelled   53
+    shell            all  125 | labelled   85 | unlabelled   40
+    sliver-session   all   37 | labelled   37 | unlabelled    0
+    msf-module       all   34 | labelled   19 | unlabelled   15
+    mktemp           all   20 | labelled    0 | unlabelled   20
+    setvar           all   15 | labelled    0 | unlabelled   15
+    msf-payload      all   10 | labelled    0 | unlabelled   10
+    include          all   10 | labelled    0 | unlabelled   10
+    sliver           all    8 | labelled    5 | unlabelled    3
+    webserv          all    8 | labelled    0 | unlabelled    8
+    debug            all    5 | labelled    0 | unlabelled    5
+    sftp             all    3 | labelled    3 | unlabelled    0
+    loop             all    3 | labelled    3 | unlabelled    0
+    regex            all    2 | labelled    2 | unlabelled    0
+    http-client      all    2 | labelled    2 | unlabelled    0
+    father           all    1 | labelled    0 | unlabelled    1
+  metadata keys on unlabelled records: {'delayed_manifestation': 5, 'tactics': 3, 'technique_name': 3, 'techniques': 3, 'action': 51, 'description': 3}
+
+E. ORDER: CSV start time vs attackmate execution order
+  runs in a different order: 4 of 34 | steps at a different position: 8 | adjacent pairs reversed: 4 of 870
+    6_macro_binary             2 steps
+    6_macro_cron               2 steps
+    6_screensharing_binary     2 steps
+    6_screensharing_cron       2 steps
+
+F. DELAYED-MANIFESTATION AND OTHER METADATA
+    scenario_1_autostart_localaccount      rec#29   not in CSV 'ssh -i ~/.ssh/attacker_mgmt -o StrictHos' delayed='120s' techniques=None
+    scenario_1_autostart_pam               rec#29   not in CSV 'ssh -i ~/.ssh/attacker_mgmt -o StrictHos' delayed='120s' techniques=None
+    scenario_1_autostart_sshkey            rec#29   not in CSV 'ssh -i ~/.ssh/attacker_mgmt -o StrictHos' delayed='120s' techniques=None
+    scenario_3_ssh_apt                     rec#35   not in CSV 'ssh -i ~/.ssh/attacker_mgmt -o StrictHos' delayed='120s' techniques=None
+    scenario_3_vnc_apt                     rec#57   not in CSV 'ssh -i ~/.ssh/attacker_mgmt -o StrictHos' delayed='120s' techniques=None
+  other keys: {'technique_name:"Ingress Tool Transfer,Modify Authentication Process': 6, 'technique_name:"Ingress Tool Transfer,Account Manipulation': 6, 'technique_name:"Ingress Tool Transfer,Create Account': 1, 'tactic': 3}
+
+G. HOSTS REACHED BY COMMAND, PER SCENARIO (parameters.hostname, parameters.target)
+  S1: [('hostname=192.42.0.254', 18)]
+  S2: [('hostname=fw.attackbed.com', 2)]
+  S3: [('hostname=fw.attackbed.com', 20)]
+  S4: [('hostname=fw.attackbed.com', 2)]
+  S6: [('hostname=localhost', 7)]
+
+H. HOW MUCH OF THE TIMING IS SCRIPTED
+  attack time 52,445 s | scripted sleep 25,097 s (47.9%) | random sleeps {'False': 361}
+  labelled neighbours 870 | with a sleep between them 196 (22.5%)
+  gap between labelled steps, execution order: median 16.4 s, max 1,671 s
+
+I. UNLABELLED RECORDS, PER SCENARIO
+  S1: records  811 | labelled 522 | interactive 184 | control 105
+  S2: records   72 | labelled  47 | interactive  11 | control  14
+  S3: records  343 | labelled 160 | interactive  95 | control  88
+  S4: records   46 | labelled  22 | interactive   8 | control  16
+  S5: records    7 | labelled   3 | interactive   1 | control   3
+  S6: records  501 | labelled 137 | interactive 171 | control 193
+  S7: records   26 | labelled  13 | interactive   2 | control  11
+  all: labelled 904 | interactive 472 | control 430
+
+J. RAW FILES, BY FILE NAME (LINE_SCAN.json)
+  non-UTF-8 lines 87,284: {'compose.ISO-8859-*.inc': 87237, 'Xedit': 47}
+  non-UTF-8 lines in names that include a binary file: 0
+  most lines: collectd.log 66,502,778, audit.log 38,154,803, fields.yml 9,651,168, eve.json 5,232,238, words 4,903,698
+
+K. HOSTS (FACTS_SUMMARY.csv)
+  files 183 | parse errors 0
+  S1: ['attacker', 'corpdns', 'inetfw', 'videoserver', 'wazuh']
+  S2: ['attacker', 'corpdns', 'inetfw', 'videoserver', 'wazuh']
+  S3: ['attacker', 'corpdns', 'inetfw', 'linuxshare', 'reposerver', 'wazuh']
+  S4: ['attacker', 'corpdns', 'inetfw', 'linuxshare', 'reposerver', 'wazuh']
+  S5: ['adminpc', 'attacker', 'corpdns', 'inetfw', 'videoserver', 'wazuh']
+  S6: ['attacker', 'client', 'corpdns', 'inetfw', 'videoserver', 'wazuh']
+  S7: ['attacker', 'corpdns', 'docker', 'inetfw', 'wazuh']
+  attacker elsewhere: scenario_5 192.168.100.27
+  inetfw addresses: ['10.12.0.254', '172.17.100.254', '192.168.100.254', '192.168.50.254', '192.42.0.254']
+
+L. DO THE LOGS COVER EACH ATTACK? (first and last stamp only; gaps inside are not tested)
+  log ranges 182 | cover the whole attack 182 | do not 0

@@ -20,6 +20,8 @@ same run, not in git because it is 103.6 MB) and from `deep_audit.py`.
 
 ## Correction 1: "NO technique label in ANY record of ANY run. Confirmed by full read, not by sampling."
 
+> **Partly wrong; see Correction 5.** attackmate.json does carry technique labels.
+
 **This is true of attackmate.json only. It is false of the dataset.**
 
 - **The labels exist, in two places:**
@@ -33,8 +35,8 @@ same run, not in git because it is 103.6 MB) and from `deep_audit.py`.
   archive. That covers every scenario run (one file each). But the two manifestation
   archives hold **5,520** attackmate.json files, and only 1 was read from each.
 
-**Use instead:** "attackmate.json carries no technique labels. The labels are in
-attack_times.csv (and in the technique folders of the manifestation archives)."
+**Use instead:** "The labels in attack_times.csv are generated from `parameters.metadata` in
+attackmate.json." (Replaced 2026-11-07. The earlier wording here was wrong; see Correction 5.)
 
 ## Correction 2: "facts.json describes the ATTACKER host, so it cannot identify targets."
 
@@ -99,12 +101,29 @@ Earlier statements in the review that prompted this note, now re-measured and su
 2. "5,554 attackmate.json files in the manifestation archives." **Wrong.** 5,554 is the total
    over all archives; the manifestation archives hold 5,520.
 
+## Correction 5 (2026-11-07): attackmate.json does carry labels
+
+Found by reading all 1,806 records (`out/ATTACKMATE_RECONCILE.txt`, from `reconcile_attackmate.py`).
+
+- **The wrong claim.** `DEEP_AUDIT.md`, Correction 1 above and `PROVENANCE.md` §2 all said
+  attackmate.json has no technique labels. **907 records have them**, in
+  `parameters.metadata.techniques`. Correction 1 noted that values were never read, and still
+  repeated the conclusion. That was my error.
+- **How they relate to the CSV.** 904 of the 907 are the 904 rows of attack_times.csv, with
+  identical labels in the same order. The authors' `extract_attack_logs.py` generates the CSV
+  from these records. The other 3 are `sleep` records (T1546), which that script folds into the
+  previous step's time window. So the agreement shows correct copying, not independent proof
+  that the labels are right.
+- **Record count.** "1,808 records across 36 runs" in `DEEP_AUDIT.md` is wrong: it is **1,806
+  across 34**. The audit also read one file from each of the 2 manifestation archives, which
+  explains 36. The 2 extra records fit that, but were not measured separately.
+
 ## Effect on the thesis pipeline
 
 **None.**
 
 - `extract_camlds.py` reads `attack_times.csv`, the correct label source.
-- `PROVENANCE.md` already states correctly that attackmate.json is not a label source.
+- attack_times.csv and attackmate.json hold the same labels, so the corpus does not change.
 - No step uses facts.json, the totals or the line counts.
 
 These corrections matter only where `DEEP_AUDIT.md` itself is cited.

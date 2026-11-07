@@ -23,7 +23,7 @@ behaviour.
 | Current design (`encoders_cmd.py`, `train_cmd.py`) | Lack | Our data shows |
 |---|---|---|
 | Custom model, informed by FlowTransformer | No single published architecture to cite for this task | – |
-| Ignores time | Timestamps exist now and are unused | Gaps from under 1 s to 461 s |
+| Ignores time | Not a real loss on this data (Section 4) | 47.9% of attack time is fixed scripted sleep |
 | No repeat handling | Treats repeated and new techniques alike | 47.2% of target labels repeat |
 | Plain binary cross-entropy | No handling of label imbalance | 10 labels occur once |
 | Loss on the last position only | Each window gives one target | About 464 training steps per fold (median) |
@@ -36,9 +36,8 @@ behaviour.
 |---|---|---|---|---|---|
 | 1 | **SASRec** | Causal self-attention, trained at every position | Well-known published base for next-step prediction | Loss at every position, not only the last | [Kang & McAuley, ICDM 2018](https://arxiv.org/abs/1808.09781) |
 | 2 | **Repeat-explore head** | Separates "repeat" from "new" | 47.2% of target labels repeat | Adds a gated head; the trunk is unchanged | [RepeatNet, AAAI 2019](https://ojs.aaai.org/index.php/AAAI/article/view/4408); gate idea in [BasketFormer](https://cdn.amazon.science/db/e1/a5a526154cfdb5e29a0baaaa43c5/scipub-approval152129-48092713-basketformer-contrastive-masked-language-modeling-with-temporal-encoding-and-repeatexplore-gating-for-nextbasket-recommendation.pdf) (venue not stated in the PDF) |
-| 3 | **TiSASRec** | Time gaps inside attention | Uses our new timestamps | Attention sees time intervals | [Li, Wang & McAuley, WSDM 2020](https://doi.org/10.1145/3336191.3371786) |
-| 4 | **Asymmetric Loss** (a loss, not a model) | Reduces the pull of easy negatives | Few positives among 81 labels | Replaces plain BCE | [Ridnik et al., ICCV 2021](https://arxiv.org/abs/2009.14119) |
-| 5 | **DNNTSP** (comparison arm) | Built for "sequence of sets", our exact task shape | Independent published benchmark | Graph plus attention, not a pure Transformer | [Yu et al., KDD 2020](https://arxiv.org/abs/2006.11483) |
+| 3 | **Asymmetric Loss** (a loss, not a model) | Reduces the pull of easy negatives | Few positives among 81 labels | Replaces plain BCE | [Ridnik et al., ICCV 2021](https://arxiv.org/abs/2009.14119) |
+| 4 | **DNNTSP** (comparison arm) | Built for "sequence of sets", our exact task shape | Independent published benchmark | Graph plus attention, not a pure Transformer | [Yu et al., KDD 2020](https://arxiv.org/abs/2006.11483) |
 
 Supporting evidence:
 
@@ -47,13 +46,11 @@ Supporting evidence:
 - [FlowTransformer](https://arxiv.org/abs/2304.14746), a network-intrusion study already in our references,
   reports that the classification head had the largest impact. This supports starting with the head.
 
-**Risk.** Time gaps here come from scripted runs, so TiSASRec may learn script timing rather than attacker
-behaviour. It stays only if validation supports it.
-
 ## 4. Considered and not recommended
 
 | Option | Reason |
 |---|---|
+| [TiSASRec](https://doi.org/10.1145/3336191.3371786) (WSDM 2020) | Measured on the command logs: 47.9% of attack time is fixed scripted sleep, and none of the 361 sleeps is random. It would partly learn the script's timing, not the attacker's |
 | [BERT4Rec](https://doi.org/10.1145/3357384.3357895) (CIKM 2019) | Its original results could not be reproduced with default settings ([Petrov & Macdonald, RecSys 2022](https://arxiv.org/abs/2207.07483)). Too risky on this little data |
 | [GTrXL](https://proceedings.mlr.press/v119/parisotto20a.html) (ICML 2020) | Fixes training instability in RL. Our encoder is frozen and receives no RL gradients |
 | [Multi-Agent Transformer](https://arxiv.org/abs/2205.14953) (NeurIPS 2022) | Replaces MAPPO, not the encoder. It would change the framework itself |
@@ -72,7 +69,7 @@ Expect modest gains. An honest small result is still a valid thesis finding.
 
 1. Finish the dataset work first (`camlds_real/DATASET_REPORT.md`).
 2. Keep the current Transformer as the **baseline**, and keep the 64-D `h` output so MAPPO needs no change.
-3. Add one component at a time: all-position training, then repeat head, time gaps, Asymmetric Loss.
+3. Add one component at a time: all-position training, then repeat head, Asymmetric Loss.
 4. Keep a component only if it improves **validation** results across 10 seeds. Never use test data to choose.
 5. Judge on **novel points**, not only on the overall score.
 6. Freeze the chosen design as a **new protocol version before any test result is opened**. The frozen

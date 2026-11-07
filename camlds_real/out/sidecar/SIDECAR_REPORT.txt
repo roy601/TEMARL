@@ -1,0 +1,32 @@
+CAM-LDS side files (protocol 1.1). Rebuild: python camlds_real/build_sidecar.py
+
+1. LINK TO COMMAND RECORDS
+  steps linked 904 of 904, one-to-one | CSV start moved by the authors: 11
+  runs whose CSV order differs from execution order: 4 ['6_macro_binary', '6_macro_cron', '6_screensharing_binary', '6_screensharing_cron']
+
+4. COLLAPSE_REPEATS
+  steps 904 -> 883 (removed 21 re-executions); runs 34
+
+5. LABEL LIST
+  out/vocab.json parent_techniques: 81 | equals the labels in steps.jsonl: True | sorted: True | SHA-256 04e134e5d9b9b2d23909535e787e19732b0e43164ad72d1b2d9d0e519428f64c
+
+2 and 3. TEST POINTS: COPY OR NOVEL; TARGET LABELS: REPEAT OR NEW
+  main             variant_held_out   points  790 | copy  425 (53.8%) {'S1': '67%', 'S3': '24%', 'S6': '39%'} | target labels 1158, repeat 560 (48.4%)
+  main             scenario_held_out  points  331 | copy    0 (0.0%) {'S2': '0%', 'S3': '0%', 'S6': '0%'} | target labels  437, repeat 254 (58.1%)
+  collapse_repeats variant_held_out   points  769 | copy  419 (54.5%) {'S1': '68%', 'S3': '23%', 'S6': '38%'} | target labels 1130, repeat 532 (47.1%)
+  collapse_repeats scenario_held_out  points  322 | copy    0 (0.0%) {'S2': '0%', 'S3': '0%', 'S6': '0%'} | target labels  421, repeat 238 (56.5%)
+
+CHECKS AGAINST EARLIER MEASUREMENTS
+  PASS  corpus-wide points 870
+  PASS  corpus-wide repeat labels 600 of 1,270
+  PASS  variant points 790 (protocol 1.0)
+  PASS  scenario points 331 (protocol 1.0)
+  PASS  variant copy share 53.8% (DATASET_REPORT)
+  PASS  scenario copy share 0%
+  PASS  collapse leaves 883 steps
+  PASS  81 labels
+  PASS  steps.jsonl unchanged (protocol 1.0 hash)
+
+FILES (SHA-256 after CRLF->LF)
+  out/sidecar/steps_link.jsonl  1353136bf41d6f02f77c012568f25988182ec3a9c36d8e9751823cc999f593fa
+  out/sidecar/points.jsonl  de8f7c5de71bb9ef419f786e226b1028b7fa8fc22d7d1649fb532c8d8c7b969d

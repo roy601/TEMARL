@@ -11,7 +11,15 @@ frozen and is not edited; this file only records what has been done.
 | 4 | Port TEMARL's encoder pipeline to `camlds_real` (B2); freeze its configuration; record the GRU/LSTM decision | open | |
 | 5 | Train and evaluate TEMARL; open all test numbers together; apply Section 7 | open | |
 
-Precondition **B1** (commit hash of the CAM-LDS analysis repository) is still open.
+Precondition **B1** (commit hash of the CAM-LDS analysis repository) was met on 2026-11-07:
+`42bbd2c` (`camlds_real/PROVENANCE.md` §2). `PROTOCOL.md` and `spec.py` still list it as open,
+because frozen files are not edited in place. Protocol 1.1 records it (A7).
+
+**Protocol 1.1** (`PROTOCOL_1.1.md`, `spec_1_1.py`), approved 2026-11-07: adds copy/novel and
+repeat/new reporting, defines `collapse_repeats`, pins the 81-label list, records the CSV-order
+limitation, rules out time features. Side files built by `camlds_real/build_sidecar.py` (9 checks
+pass; 13 tests in `camlds_real/tests`). `python idea01_kuwano/spec_1_1.py` → PASS. **Frozen only once
+committed and pushed**, which must happen before any test result is opened.
 
 ## Step 3: what was produced, and what was not
 
