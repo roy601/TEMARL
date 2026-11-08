@@ -99,6 +99,24 @@ Then commit and push `camlds_encoder/out/`. The comparison is
 **Result (2026-11-08): `asl` rejected** (no benefit shown under the frozen budget and threshold
 grid; see `SELECTION_RULE.md`). The design stays `allpos`.
 
+## Secondary encoders (validation only): GRU and LSTM
+
+The frozen GRU and LSTM, trained the same way as `allpos`. They are reported beside the Transformer
+and never replace it. The exact design is declared in `SELECTION_RULE.md`.
+
+```
+git pull
+python camlds_encoder/run_variants.py --stage train --variant gru_allpos --device cuda
+python camlds_encoder/run_variants.py --stage train --variant lstm_allpos --device cuda
+```
+
+| Stage | What it does | Expected time |
+|---|---|---|
+| `train --variant gru_allpos` | 320 trainings | not yet measured on the GPU; about 4 to 5 hours if the CPU speed ratio holds |
+| `train --variant lstm_allpos` | 320 trainings | the same |
+
+Then commit and push `camlds_encoder/out/`.
+
 ## Files
 
 | File | Purpose |
@@ -107,8 +125,8 @@ grid; see `SELECTION_RULE.md`). The design stays `allpos`.
 | `data.py` | Folds, train/validation/test runs, windows; returns test inputs only |
 | `run.py` | Stages `check`, `pilot`, `train` |
 | `summarise.py` | Integrity checks and validation summary of the baseline run |
-| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`, `asl`; the training loop is the frozen one with only the loss line changed |
+| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`, `asl`, `gru_allpos`, `lstm_allpos`; the training loop is the frozen one with only the loss line changed |
 | `run_variants.py` | Stages `baseline_val`, `train --variant` |
 | `compare_validation.py` | Applies `SELECTION_RULE.md` |
 | `diagnose_validation.py` | Explains a decision: error types, training length, thresholds |
-| `tests/` | 30 tests: `python -m unittest discover -s camlds_encoder/tests` |
+| `tests/` | 36 tests: `python -m unittest discover -s camlds_encoder/tests` |

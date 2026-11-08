@@ -32,6 +32,12 @@ rules. Validation BCE and predictions always use the LAST position, i.e. the rea
             starting weights, same random stream as allpos. Validation BCE still chooses the
             checkpoint and drives patience (frozen rule).
             REJECTED 2026-11-08 (SELECTION_RULE.md).
+  gru_allpos, lstm_allpos
+            SECONDARY encoders, not candidates: they never replace the Transformer. The frozen
+            GRU and LSTM (same cells, capacity, weights and prediction path), trained with the
+            all-position loss the Transformer now uses. Recurrence is causal by construction.
+            `gru_last` and `lstm_last` exist only for tests: they keep the frozen last-position
+            loss, to prove the harness reproduces the frozen GRU and LSTM training exactly.
 
 `train_variant` is train_cmd.train_one with one line changed: the loss is `model.loss(x, m, y)`.
 camlds_encoder/tests/test_variants.py proves that for `baseline` it reproduces train_one exactly.
@@ -48,7 +54,9 @@ from torch import nn
 
 from port import Enc, NT, T
 
-VARIANTS = ("baseline", "causal", "allpos", "repeat", "asl")
+VARIANTS = ("baseline", "causal", "allpos", "repeat", "asl", "gru_allpos", "lstm_allpos")
+SECONDARY = {"gru_allpos": "GRU", "lstm_allpos": "LSTM"}        # secondary encoders, never selected
+_LAST_ONLY = {"gru_last": "GRU", "lstm_last": "LSTM"}           # tests only
 
 # Asymmetric Loss settings: Alibaba-MIIL/ASL train.py, criterion for multi-label COCO
 ASL_GAMMA_NEG, ASL_GAMMA_POS, ASL_CLIP, ASL_EPS = 4.0, 0.0, 0.05, 1e-8
@@ -169,6 +177,53 @@ class ASLPredictor(CausalPredictor):
         self._crit = AsymmetricLoss()
 
 
+class RecurrentPredictor(Enc.CommandPredictor):
+    """The frozen GRU or LSTM predictor. Prediction and h are the frozen path, unchanged;
+    `states` is that same computation returning every position, used only for the loss."""
+
+    def __init__(self, arm: str, max_len: int, all_positions: bool):
+        super().__init__(arm, max_len)
+        self.all_positions = all_positions
+        self._crit = nn.BCEWithLogitsLoss(reduction="none")
+
+    def recurrence(self, x, mask):
+        """(B, W, hidden). The loop of RecurrentEncoderCmd.forward, keeping every position."""
+        enc = self.encoder
+        enc._check(x, mask)
+        seq = enc.embed(x)
+        live_all = mask > 0.5
+        for layer, cell in enumerate(enc.cells):
+            h = seq.new_zeros(len(seq), enc.hidden)
+            c = torch.zeros_like(h)
+            outputs = []
+            for t in range(seq.shape[1]):
+                live = live_all[:, t][:, None]
+                if enc.kind == "GRU":
+                    h = torch.where(live, cell(seq[:, t], h), h)
+                else:
+                    hn, cn = cell(seq[:, t], (h, c))
+                    h = torch.where(live, hn, h)
+                    c = torch.where(live, cn, c)
+                outputs.append(h)
+            seq = torch.stack(outputs, 1)
+            if layer < len(enc.cells) - 1:
+                seq = enc.drop(seq)
+        return seq
+
+    def states(self, x, mask):
+        """(B, W, 64), for the loss only. Projecting 16 steps at once differs from the frozen
+        last-step output by float rounding (at most about 1e-6); prediction and h never use it."""
+        return self.encoder.norm(self.encoder.proj(self.recurrence(x, mask)))
+
+    def loss(self, x, mask, y):
+        if not self.all_positions:
+            return nn.functional.binary_cross_entropy_with_logits(self(x, mask), y)   # frozen loss
+        logits = self.head(self.states(x, mask))               # (B, W, NT)
+        target = torch.cat([x[:, 1:], y[:, None]], 1)          # position k -> step k+1; last -> y
+        per_pos = self._crit(logits, target).mean(-1)          # mean over labels, as allpos
+        return (per_pos * mask).sum() / mask.sum()             # real positions only
+
+
 def build_variant(variant: str, max_len: int) -> nn.Module:
     if variant == "baseline":
         return BaselinePredictor(max_len)
@@ -180,6 +235,10 @@ def build_variant(variant: str, max_len: int) -> nn.Module:
         return RepeatPredictor(max_len)
     if variant == "asl":
         return ASLPredictor(max_len)
+    if variant in SECONDARY:
+        return RecurrentPredictor(SECONDARY[variant], max_len, all_positions=True)
+    if variant in _LAST_ONLY:
+        return RecurrentPredictor(_LAST_ONLY[variant], max_len, all_positions=False)
     raise ValueError(f"Unknown variant {variant}")
 
 

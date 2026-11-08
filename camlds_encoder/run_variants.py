@@ -6,6 +6,8 @@
     python camlds_encoder/run_variants.py --stage train --variant allpos --device cuda
     python camlds_encoder/run_variants.py --stage train --variant repeat --device cuda
     python camlds_encoder/run_variants.py --stage train --variant asl --device cuda
+    python camlds_encoder/run_variants.py --stage train --variant gru_allpos --device cuda
+    python camlds_encoder/run_variants.py --stage train --variant lstm_allpos --device cuda
     python camlds_encoder/run_variants.py --stage all --smoke --device cpu     # NOT a result
 
   baseline_val  loads each baseline checkpoint (encoder.pt, kept on the GPU PC), saves its
@@ -31,7 +33,10 @@ import run as R  # noqa: E402
 import variants as V  # noqa: E402
 from port import Enc, Mx, NT, SPEC, T  # noqa: E402
 
-CANDIDATES = ("causal", "allpos", "repeat", "asl")
+CANDIDATES = ("causal", "allpos", "repeat", "asl", "gru_allpos", "lstm_allpos")
+# GRU and LSTM: twice the pilot's budget, as a safety limit only (SELECTION_RULE.md). No allpos
+# training reached 9,152 updates, so allpos is the same under this limit.
+SECONDARY_UPDATE_BUDGET = 18304
 
 
 def save_logits(cell, name, arr):
@@ -72,6 +77,9 @@ def stage_train(args, out, device):
     budget = R.read_json(os.path.join(out, "budget.json"))
     if budget.get("smoke") and not args.smoke:
         raise SystemExit("budget.json comes from a smoke run; it cannot be used for a real run.")
+    limits = {k: budget[k] for k in ("shared_patience", "shared_update_budget")}
+    if args.variant in V.SECONDARY and not args.smoke:
+        limits["shared_update_budget"] = SECONDARY_UPDATE_BUDGET
     seeds = SPEC.MAIN_SEEDS[:1] if args.smoke else SPEC.MAIN_SEEDS
     jobs = [(f, s) for f in R.pick_folds("main", args.smoke) for s in seeds]
     for i, (f, seed) in enumerate(jobs, 1):
@@ -81,8 +89,8 @@ def stage_train(args, out, device):
         print(f"  [{i}/{len(jobs)}] {args.variant} {f['fold']} s{seed}", flush=True)
         d = data.fold_data(f)
         res, model = V.train_variant(args.variant, data.W, seed, d["train"], d["val"],
-                                     budget["shared_update_budget"], device=device, checkpoint_dir=cell,
-                                     patience_checks=budget["shared_patience"], progress=args.verbose)
+                                     limits["shared_update_budget"], device=device, checkpoint_dir=cell,
+                                     patience_checks=limits["shared_patience"], progress=args.verbose)
         T.load_best(model, res)
         Xva, Mva, Yva = d["val"]
         lo_va = T.predict(model, Xva, Mva, device)
@@ -95,7 +103,7 @@ def stage_train(args, out, device):
             "updates_completed": res.updates_completed, "best_update": res.best_update,
             "best_validation_bce": res.best_val_bce, "cap_reached": res.cap_reached, "seconds": res.seconds,
             "parameters": res.parameters, "curve": res.curve,
-            "budget": {k: budget[k] for k in ("shared_patience", "shared_update_budget")},
+            "budget": limits,
             "sealed_test": {**save_logits(cell, "test_logits.npy", lo_te),
                             "source_rows": d["test_source_rows"], "owners": d["test_owners"]},
             "smoke": args.smoke})

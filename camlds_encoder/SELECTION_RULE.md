@@ -98,3 +98,22 @@ under the rule above.
   So ASL may over-predict and the grid cannot follow. We will report how many trainings pick 0.5.
   If `asl` is rejected while most pick 0.5, the result is written as "no benefit shown under the
   frozen threshold grid", not "ASL is worse".
+
+## Secondary encoders: GRU and LSTM (decided and declared 2026-11-08, before they run)
+
+**Decision: run them.** They are not candidates: they never replace the Transformer, and the rule
+above is not applied to them. They are reported in full beside it and enter the Holm family
+(protocol 1.0).
+
+- **Models:** the frozen GRU and LSTM of `Temarl_Test_v1_L1`, unchanged: same cells, same prediction
+  path, capacity-matched size (77,920 and 77,793 trainable parameters; the Transformer has 77,713).
+- **Training:** the same loss at every position as `allpos`. Otherwise the comparison would favour
+  the Transformer, which gained from that training. With the frozen last-position loss, the harness
+  reproduces the frozen GRU and LSTM training bit for bit (tested).
+- **Patience:** 16 checks, the Transformer's. It was chosen from the Transformer's pilot only; this
+  is reported as a limitation.
+- **Update budget: 18,304** (twice the pilot's 9,152), as a safety limit only, because the `asl`
+  run showed 9,152 can be too small. No `allpos` training reached 9,152, so `allpos` is the same
+  under this limit. We will report how many GRU and LSTM trainings reach it.
+- **Validation report, no decision:**
+  `compare_validation.py --candidate gru_allpos --current allpos --control lstm_allpos --report-only`.

@@ -100,11 +100,21 @@ def fold_info_for(smoke):
     return info
 
 
+def _write(out, candidate, log):
+    txt = "\n".join(log) + "\n"
+    with open(os.path.join(out, f"VALIDATION_COMPARISON_{candidate}.txt"), "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(txt)
+    print(txt)
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--candidate", required=True)
     ap.add_argument("--current", default="baseline")
     ap.add_argument("--control", default=None, help="reported beside the candidate, never selected")
+    ap.add_argument("--report-only", action="store_true",
+                    help="secondary encoders: print the scores, apply no rule, make no decision")
     ap.add_argument("--smoke", action="store_true")
     a = ap.parse_args()
     out = os.path.join(HERE, "out_smoke" if a.smoke else "out")
@@ -135,6 +145,10 @@ def main():
     c1 = st.mean(d_novel) > 0
     c2 = better >= (MIN_SEEDS_BETTER if not a.smoke else 1)
     c3 = st.mean(d_all) >= -MAX_ALL_DROP
+    if a.report_only:
+        say(f"\nREPORT ONLY: {a.candidate} is a secondary encoder. No rule applied, no decision made.")
+        say("  per-seed novel differences: " + " ".join(f"{x:+.3f}" for x in d_novel))
+        return _write(out, a.candidate, log)
     say("\nRULE")
     say(f"  1 novel points improve        : mean difference {st.mean(d_novel):+.4f}  -> {'yes' if c1 else 'no'}")
     say(f"  2 in at least 8 of 10 seeds   : {better} of {len(seeds)} seeds  -> {'yes' if c2 else 'no'}")
@@ -142,12 +156,7 @@ def main():
     keep = c1 and c2 and c3
     say(f"\nDECISION: {'KEEP ' + a.candidate if keep else 'KEEP ' + a.current + ' (candidate rejected)'}")
     say("  per-seed novel differences: " + " ".join(f"{x:+.3f}" for x in d_novel))
-    txt = "\n".join(log) + "\n"
-    name = f"VALIDATION_COMPARISON_{a.candidate}.txt"
-    with open(os.path.join(out, name), "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(txt)
-    print(txt)
-    return 0
+    return _write(out, a.candidate, log)
 
 
 if __name__ == "__main__":

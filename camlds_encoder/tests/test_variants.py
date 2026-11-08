@@ -174,6 +174,85 @@ class Repeat(unittest.TestCase):
             self.assertTrue(torch.isfinite(self.m(x, mk)).all())
 
 
+class Recurrent(unittest.TestCase):
+    PAIRS = (("gru_allpos", "GRU", "gru_last"), ("lstm_allpos", "LSTM", "lstm_last"))
+
+    def test_harness_reproduces_the_frozen_train_one_exactly(self):
+        f = data.folds("main")[-1]
+        d = data.fold_data(f)
+        torch.set_num_threads(1)
+        for _, arm, last in self.PAIRS:
+            a, ma = port.T.train_one(arm, 16, 3, d["train"], d["val"], 65, device=CPU, patience_checks=None)
+            b, mb = V.train_variant(last, 16, 3, d["train"], d["val"], 65, device=CPU)
+            self.assertEqual([p["validation_bce"] for p in a.curve], [p["validation_bce"] for p in b.curve], arm)
+            for k, t in ma.state_dict().items():
+                self.assertTrue(torch.equal(t, mb.state_dict()[k]), (arm, k))
+
+    def test_same_weights_and_same_prediction_as_the_frozen_arm(self):
+        x, mk, _ = toy()
+        for v, arm, _ in self.PAIRS:
+            torch.manual_seed(7)
+            frozen = port.Enc.build_model(arm, 16).eval()
+            torch.manual_seed(7)
+            m = V.build_variant(v, 16).eval()
+            self.assertEqual(frozen.state_dict().keys(), m.state_dict().keys())
+            for k, t in frozen.state_dict().items():
+                self.assertTrue(torch.equal(t, m.state_dict()[k]), (arm, k))
+            with torch.no_grad():
+                self.assertTrue(torch.equal(frozen(x, mk), m(x, mk)), arm)
+
+    def test_last_state_is_the_frozen_output_even_with_dropout(self):
+        x, mk, _ = toy()
+        for v, arm, _ in self.PAIRS:
+            torch.manual_seed(0)
+            m = V.build_variant(v, 16).train()
+            torch.manual_seed(5)
+            a = m.encoder(x, mk)
+            torch.manual_seed(5)
+            last = m.recurrence(x, mk)[:, -1].clone()   # contiguous memory, like the frozen h
+            self.assertTrue(torch.equal(a, m.encoder.norm(m.encoder.proj(last))), arm)  # bit-identical
+            torch.manual_seed(5)
+            b = m.states(x, mk)[:, -1]                            # projected at (B, W, H): rounding
+            self.assertTrue(torch.allclose(a, b, atol=2e-6), arm)
+
+    def test_a_step_never_sees_later_steps(self):
+        x, mk, _ = toy(B=1, real=(16,))
+        x2 = x.clone()
+        x2[0, 10] = 0
+        x2[0, 10, 5] = 1
+        for v, arm, _ in self.PAIRS:
+            torch.manual_seed(0)
+            m = V.build_variant(v, 16).eval()
+            with torch.no_grad():
+                a, b = m.states(x, mk), m.states(x2, mk)
+            self.assertTrue(torch.equal(a[0, :10], b[0, :10]), arm)
+            self.assertFalse(torch.allclose(a[0, 10:], b[0, 10:]), arm)
+
+    def test_loss_uses_next_steps_and_real_positions_only(self):
+        x, mk, y = toy(B=2, real=(3, 16))
+        for v, arm, _ in self.PAIRS:
+            torch.manual_seed(0)
+            m = V.build_variant(v, 16).eval()
+            with torch.no_grad():
+                logits = m.head(m.states(x, mk))
+                want, n = 0.0, 0
+                for b in range(2):
+                    for k in range(16):
+                        if mk[b, k] < 0.5:
+                            continue
+                        tgt = y[b] if k == 15 else x[b, k + 1]
+                        want += torch.nn.functional.binary_cross_entropy_with_logits(logits[b, k], tgt).item()
+                        n += 1
+                self.assertAlmostEqual(m.loss(x, mk, y).item(), want / n, places=5, msg=arm)
+
+    def test_finite_with_heavy_padding(self):
+        x, mk, y = toy()
+        for v, arm, _ in self.PAIRS:
+            torch.manual_seed(0)
+            m = V.build_variant(v, 16).train()
+            self.assertTrue(torch.isfinite(m.loss(x, mk, y)), arm)
+
+
 def asl_by_hand(z, y, gneg=4.0, gpos=0.0, clip=0.05, eps=1e-8):
     """The authors' formula in float64 numpy, written out independently."""
     p = 1 / (1 + np.exp(-z))
