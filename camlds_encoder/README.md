@@ -99,6 +99,23 @@ Then commit and push `camlds_encoder/out/`. The comparison is
 **Result (2026-11-08): `asl` rejected** (no benefit shown under the frozen budget and threshold
 grid; see `SELECTION_RULE.md`). The design stays `allpos`.
 
+## Improvement 3, second run (validation only): ASL with a larger budget
+
+`asl_long` repeats `asl` with 18,304 updates instead of 9,152. It is a second chance decided after
+the first result, and the only rerun ASL gets. See `SELECTION_RULE.md`.
+
+```
+git pull
+python camlds_encoder/run_variants.py --stage train --variant asl_long --device cuda
+```
+
+| Stage | What it does | Expected time |
+|---|---|---|
+| `train --variant asl_long` | 320 trainings | up to about 7 hours (the first run took about 3.5) |
+
+Then commit and push `camlds_encoder/out/`. The comparison is
+`compare_validation.py --candidate asl_long --current allpos`.
+
 ## Secondary encoders (validation only): GRU and LSTM
 
 The frozen GRU and LSTM, trained the same way as `allpos`. They are reported beside the Transformer
@@ -125,8 +142,8 @@ Then commit and push `camlds_encoder/out/`.
 | `data.py` | Folds, train/validation/test runs, windows; returns test inputs only |
 | `run.py` | Stages `check`, `pilot`, `train` |
 | `summarise.py` | Integrity checks and validation summary of the baseline run |
-| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`, `asl`, `gru_allpos`, `lstm_allpos`; the training loop is the frozen one with only the loss line changed |
+| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`, `asl`, `asl_long`, `gru_allpos`, `lstm_allpos`; the training loop is the frozen one with only the loss line changed |
 | `run_variants.py` | Stages `baseline_val`, `train --variant` |
 | `compare_validation.py` | Applies `SELECTION_RULE.md` |
 | `diagnose_validation.py` | Explains a decision: error types, training length, thresholds |
-| `tests/` | 36 tests: `python -m unittest discover -s camlds_encoder/tests` |
+| `tests/` | 38 tests: `python -m unittest discover -s camlds_encoder/tests` |

@@ -174,6 +174,30 @@ class Repeat(unittest.TestCase):
             self.assertTrue(torch.isfinite(self.m(x, mk)).all())
 
 
+class LongRuns(unittest.TestCase):
+    def test_asl_long_is_the_same_model_and_loss_as_asl(self):
+        x, mk, y = toy()
+        out = {}
+        for v in ("asl", "asl_long"):
+            torch.manual_seed(7)
+            m = V.build_variant(v, 16).train()
+            torch.manual_seed(9)
+            out[v] = (m.state_dict(), m.loss(x, mk, y).item())
+        self.assertEqual(out["asl"][1], out["asl_long"][1])
+        for k, t in out["asl"][0].items():
+            self.assertTrue(torch.equal(t, out["asl_long"][0][k]), k)
+
+    def test_only_the_declared_runs_get_the_longer_budget(self):
+        import run_variants as RV
+        pilot = {"shared_patience": 16, "shared_update_budget": 9152}
+        for v in ("causal", "allpos", "repeat", "asl"):
+            self.assertEqual(RV.limits_for(v, pilot, False), pilot, v)
+        for v in ("asl_long", "gru_allpos", "lstm_allpos"):
+            self.assertEqual(RV.limits_for(v, pilot, False),
+                             {"shared_patience": 16, "shared_update_budget": 18304}, v)
+            self.assertEqual(RV.limits_for(v, pilot, True), pilot, v)     # smoke keeps its own
+
+
 class Recurrent(unittest.TestCase):
     PAIRS = (("gru_allpos", "GRU", "gru_last"), ("lstm_allpos", "LSTM", "lstm_last"))
 

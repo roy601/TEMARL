@@ -117,3 +117,20 @@ above is not applied to them. They are reported in full beside it and enter the 
   under this limit. We will report how many GRU and LSTM trainings reach it.
 - **Validation report, no decision:**
   `compare_validation.py --candidate gru_allpos --current allpos --control lstm_allpos --report-only`.
+
+## Candidate 3, second run (decided and declared 2026-11-08, after seeing the first result)
+
+`asl_long` is `asl` run again with a larger update budget. **This is a second chance, decided after
+the first run was rejected.** The thesis must say so.
+
+- **Why:** 274 of the first run's 320 trainings used the whole budget of 9,152 updates.
+- **The only change:** the update budget is 18,304, the same limit as GRU and LSTM. Same model, loss,
+  seeds, patience, threshold grid and checkpoint rule as `asl`.
+- **The same rule decides:** `compare_validation.py --candidate asl_long --current allpos`, with the
+  three conditions above, unchanged.
+- **The first run stays on record** as rejected. Its files are not touched or replaced.
+- **This is the only rerun.** Whatever happens, ASL gets no third run, even if trainings reach the
+  new limit again. If they do, we report how many and the result stands.
+- **If `asl_long` is kept,** the final design becomes ASL with this budget, reported as chosen on a
+  second attempt. `allpos` is unaffected by the larger limit, because none of its trainings reached
+  9,152.

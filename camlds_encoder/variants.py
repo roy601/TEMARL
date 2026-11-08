@@ -32,6 +32,10 @@ rules. Validation BCE and predictions always use the LAST position, i.e. the rea
             starting weights, same random stream as allpos. Validation BCE still chooses the
             checkpoint and drives patience (frozen rule).
             REJECTED 2026-11-08 (SELECTION_RULE.md).
+  asl_long  the same model and loss as asl, run again with twice the update budget, because 274
+            of asl's 320 trainings used the whole budget. A second chance decided after seeing
+            the first result; declared as such in SELECTION_RULE.md. The only change is the
+            budget, set in run_variants.py.
   gru_allpos, lstm_allpos
             SECONDARY encoders, not candidates: they never replace the Transformer. The frozen
             GRU and LSTM (same cells, capacity, weights and prediction path), trained with the
@@ -54,7 +58,7 @@ from torch import nn
 
 from port import Enc, NT, T
 
-VARIANTS = ("baseline", "causal", "allpos", "repeat", "asl", "gru_allpos", "lstm_allpos")
+VARIANTS = ("baseline", "causal", "allpos", "repeat", "asl", "asl_long", "gru_allpos", "lstm_allpos")
 SECONDARY = {"gru_allpos": "GRU", "lstm_allpos": "LSTM"}        # secondary encoders, never selected
 _LAST_ONLY = {"gru_last": "GRU", "lstm_last": "LSTM"}           # tests only
 
@@ -233,7 +237,7 @@ def build_variant(variant: str, max_len: int) -> nn.Module:
         return CausalPredictor(max_len, all_positions=True)
     if variant == "repeat":
         return RepeatPredictor(max_len)
-    if variant == "asl":
+    if variant in ("asl", "asl_long"):
         return ASLPredictor(max_len)
     if variant in SECONDARY:
         return RecurrentPredictor(SECONDARY[variant], max_len, all_positions=True)

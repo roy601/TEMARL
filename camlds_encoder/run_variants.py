@@ -6,6 +6,7 @@
     python camlds_encoder/run_variants.py --stage train --variant allpos --device cuda
     python camlds_encoder/run_variants.py --stage train --variant repeat --device cuda
     python camlds_encoder/run_variants.py --stage train --variant asl --device cuda
+    python camlds_encoder/run_variants.py --stage train --variant asl_long --device cuda
     python camlds_encoder/run_variants.py --stage train --variant gru_allpos --device cuda
     python camlds_encoder/run_variants.py --stage train --variant lstm_allpos --device cuda
     python camlds_encoder/run_variants.py --stage all --smoke --device cpu     # NOT a result
@@ -33,10 +34,19 @@ import run as R  # noqa: E402
 import variants as V  # noqa: E402
 from port import Enc, Mx, NT, SPEC, T  # noqa: E402
 
-CANDIDATES = ("causal", "allpos", "repeat", "asl", "gru_allpos", "lstm_allpos")
-# GRU and LSTM: twice the pilot's budget, as a safety limit only (SELECTION_RULE.md). No allpos
-# training reached 9,152 updates, so allpos is the same under this limit.
-SECONDARY_UPDATE_BUDGET = 18304
+CANDIDATES = ("causal", "allpos", "repeat", "asl", "asl_long", "gru_allpos", "lstm_allpos")
+# GRU, LSTM and the ASL rerun: twice the pilot's budget (SELECTION_RULE.md). No allpos training
+# reached 9,152 updates, so allpos is the same under this limit.
+LONG_UPDATE_BUDGET = 18304
+LONG_BUDGET_VARIANTS = (*V.SECONDARY, "asl_long")
+
+
+def limits_for(variant, budget, smoke):
+    """Patience and update budget of a variant. A smoke run always keeps its own tiny budget."""
+    limits = {k: budget[k] for k in ("shared_patience", "shared_update_budget")}
+    if variant in LONG_BUDGET_VARIANTS and not smoke:
+        limits["shared_update_budget"] = LONG_UPDATE_BUDGET
+    return limits
 
 
 def save_logits(cell, name, arr):
@@ -77,9 +87,7 @@ def stage_train(args, out, device):
     budget = R.read_json(os.path.join(out, "budget.json"))
     if budget.get("smoke") and not args.smoke:
         raise SystemExit("budget.json comes from a smoke run; it cannot be used for a real run.")
-    limits = {k: budget[k] for k in ("shared_patience", "shared_update_budget")}
-    if args.variant in V.SECONDARY and not args.smoke:
-        limits["shared_update_budget"] = SECONDARY_UPDATE_BUDGET
+    limits = limits_for(args.variant, budget, args.smoke)
     seeds = SPEC.MAIN_SEEDS[:1] if args.smoke else SPEC.MAIN_SEEDS
     jobs = [(f, s) for f in R.pick_folds("main", args.smoke) for s in seeds]
     for i, (f, seed) in enumerate(jobs, 1):
