@@ -48,9 +48,21 @@ result is opened.
 |---|---|---|---|---|
 | 2026-11-08 | 1 `allpos` | baseline | **Kept** (novel +0.044, 10 of 10 seeds; all points +0.038) | `out/VALIDATION_COMPARISON_allpos.txt` |
 | 2026-11-08 | 2 `repeat` | `allpos` | **Rejected** (novel −0.068, 0 of 10 seeds; all points −0.058) | `out/VALIDATION_COMPARISON_repeat.txt` |
+| 2026-11-08 | 3 `asl` | `allpos` | **Rejected** (novel −0.017, 1 of 10 seeds; all points −0.034) | `out/VALIDATION_COMPARISON_asl.txt` |
 
 `repeat` failed on the labels it was built for: on already-seen labels its false positives rose
 from 362 to 1,302 (precision 0.942 → 0.816), i.e. it predicts that seen techniques come back.
+
+`asl` over-predicted: on all validation points its false positives rose from 1,375 to 3,162
+(precision 0.901 → 0.805; recall 0.894 → 0.933). Details: `out/DIAGNOSIS_asl.txt`.
+
+**How to read the `asl` rejection.** 274 of its 320 trainings used the whole update budget, which
+was set from the baseline's pilot; none of the earlier variants did. Validation BCE was still
+falling in 273 of those 274. This was not foreseen when the design was declared. The 46 trainings
+that stopped on their own were also behind `allpos` on novel points (0.764 vs 0.797), but they are
+not a random subset. The top threshold, 0.5, was chosen by 159 of 320 trainings, just under the
+"most" declared above. Because of the budget, the result is written as **"no benefit shown under
+the frozen training budget and threshold grid"**, not "ASL is worse".
 
 The current design is now `allpos`. Its S1 group fell on novel points (−0.033, the same 8 steps of
 one validation run); S1 will be reported on its own when the test results are opened.

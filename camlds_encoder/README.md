@@ -96,6 +96,9 @@ python camlds_encoder/run_variants.py --stage train --variant asl --device cuda
 Then commit and push `camlds_encoder/out/`. The comparison is
 `compare_validation.py --candidate asl --current allpos`.
 
+**Result (2026-11-08): `asl` rejected** (no benefit shown under the frozen budget and threshold
+grid; see `SELECTION_RULE.md`). The design stays `allpos`.
+
 ## Files
 
 | File | Purpose |
@@ -107,4 +110,5 @@ Then commit and push `camlds_encoder/out/`. The comparison is
 | `variants.py` | `baseline`, `causal`, `allpos`, `repeat`, `asl`; the training loop is the frozen one with only the loss line changed |
 | `run_variants.py` | Stages `baseline_val`, `train --variant` |
 | `compare_validation.py` | Applies `SELECTION_RULE.md` |
+| `diagnose_validation.py` | Explains a decision: error types, training length, thresholds |
 | `tests/` | 30 tests: `python -m unittest discover -s camlds_encoder/tests` |

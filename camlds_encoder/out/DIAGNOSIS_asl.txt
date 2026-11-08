@@ -1,0 +1,31 @@
+DIAGNOSIS: asl vs allpos. Validation only; explains the decision, does not make it.
+
+ERRORS, summed over all 320 cells
+                arm        precision  recall  false pos  false neg
+  all points    allpos         0.901   0.894       1375       1482
+  all points    asl            0.805   0.933       3162        945
+  novel points  allpos         0.780   0.786       1315       1271
+  novel points  asl            0.712   0.841       2017        945
+  repeat labels allpos         0.942   0.928        362        451
+  repeat labels asl            0.867   0.925        891        473
+  new labels    allpos         0.869   0.867       1013       1031
+  new labels    asl            0.762   0.939       2271        472
+  labels predicted per step, allpos: 1.39
+  labels predicted per step, asl: 1.63
+
+TRAINING LENGTH AND THRESHOLDS
+  allpos     hit the update budget 0/320 | median best update 4512 | median best validation BCE 0.00412 | threshold 0.5 chosen 124/320
+  asl        hit the update budget 274/320 | median best update 8960 | median best validation BCE 0.04897 | threshold 0.5 chosen 159/320
+
+CANDIDATE CELLS THAT HIT THE BUDGET (274): median validation BCE along the budget
+  at  25%: 0.10347
+  at  50%: 0.07286
+  at  75%: 0.05962
+  at  90%: 0.05257
+  at 100%: 0.04941
+  still falling over the last quarter: 273/274
+
+NOVEL-POINT MICRO-F1 ON THE SAME CELLS, split by whether the candidate hit the budget
+  (not a random split: which cells hit the budget depends on the fold)
+  hit the budget       cells 274: allpos 0.7810  asl 0.7725
+  stopped by patience  cells  46: allpos 0.7967  asl 0.7637

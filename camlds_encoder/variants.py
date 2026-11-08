@@ -31,6 +31,7 @@ rules. Validation BCE and predictions always use the LAST position, i.e. the rea
             gradient clipping acts on the same scale. No new parameters: same model, same
             starting weights, same random stream as allpos. Validation BCE still chooses the
             checkpoint and drives patience (frozen rule).
+            REJECTED 2026-11-08 (SELECTION_RULE.md).
 
 `train_variant` is train_cmd.train_one with one line changed: the loss is `model.loss(x, m, y)`.
 camlds_encoder/tests/test_variants.py proves that for `baseline` it reproduces train_one exactly.
