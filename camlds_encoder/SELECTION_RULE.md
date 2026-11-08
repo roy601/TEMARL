@@ -47,6 +47,10 @@ result is opened.
 | Date | Candidate | Compared with | Decision | Report |
 |---|---|---|---|---|
 | 2026-11-08 | 1 `allpos` | baseline | **Kept** (novel +0.044, 10 of 10 seeds; all points +0.038) | `out/VALIDATION_COMPARISON_allpos.txt` |
+| 2026-11-08 | 2 `repeat` | `allpos` | **Rejected** (novel −0.068, 0 of 10 seeds; all points −0.058) | `out/VALIDATION_COMPARISON_repeat.txt` |
+
+`repeat` failed on the labels it was built for: on already-seen labels its false positives rose
+from 362 to 1,302 (precision 0.942 → 0.816), i.e. it predicts that seen techniques come back.
 
 The current design is now `allpos`. Its S1 group fell on novel points (−0.033, the same 8 steps of
 one validation run); S1 will be reported on its own when the test results are opened.

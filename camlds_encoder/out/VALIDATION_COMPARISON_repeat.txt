@@ -1,0 +1,25 @@
+VALIDATION COMPARISON: candidate repeat vs current allpos
+Validation only. Score = micro-F1 pooled within each group, groups weighted equally. Rule: SELECTION_RULE.md
+
+validation points per group (novel / all): S1 variants 144/486, S3 variants 134/180, S6 variants 78/108, scenario held out 132/227
+
+score                   allpos        repeat
+novel                   0.7736        0.7056
+all                     0.8522        0.7946
+copy                    0.9795        0.9834
+repeat labels           0.8955        0.7924
+new labels              0.8016        0.7964
+
+per group, novel points (mean over seeds):
+  S1 variants               0.8657        0.9013
+  S3 variants               0.7745        0.7005
+  S6 variants               0.7053        0.5298
+  scenario held out         0.7491        0.6908
+
+RULE
+  1 novel points improve        : mean difference -0.0680  -> no
+  2 in at least 8 of 10 seeds   : 0 of 10 seeds  -> no
+  3 all points fall <= 0.01     : mean difference -0.0576  -> no
+
+DECISION: KEEP allpos (candidate rejected)
+  per-seed novel differences: -0.037 -0.088 -0.090 -0.062 -0.070 -0.069 -0.076 -0.045 -0.067 -0.074
