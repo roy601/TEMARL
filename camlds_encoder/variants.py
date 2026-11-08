@@ -22,6 +22,15 @@ rules. Validation BCE and predictions always use the LAST position, i.e. the rea
             one sigmoid per label it would cap a step that mixes a seen and a new label at 0.5
             for at least one of them; 50 of the 870 CAM-LDS targets are such steps.
             Adds 5,265 parameters (one 64x81 layer); the encoder and the 64-D h are unchanged.
+            REJECTED 2026-11-08 (SELECTION_RULE.md).
+  asl       allpos with the training loss BCE replaced by the Asymmetric Loss (Ridnik et al.,
+            ICCV 2021), as the authors' AsymmetricLoss (Alibaba-MIIL/ASL, losses.py) with the
+            settings of their train.py: gamma_neg 4, gamma_pos 0, clip 0.05, eps 1e-8, no
+            gradient through the focusing weight. One change from their code: the loss is
+            AVERAGED like allpos (mean over labels, then over real positions), not summed, so
+            gradient clipping acts on the same scale. No new parameters: same model, same
+            starting weights, same random stream as allpos. Validation BCE still chooses the
+            checkpoint and drives patience (frozen rule).
 
 `train_variant` is train_cmd.train_one with one line changed: the loss is `model.loss(x, m, y)`.
 camlds_encoder/tests/test_variants.py proves that for `baseline` it reproduces train_one exactly.
@@ -38,7 +47,35 @@ from torch import nn
 
 from port import Enc, NT, T
 
-VARIANTS = ("baseline", "causal", "allpos", "repeat")
+VARIANTS = ("baseline", "causal", "allpos", "repeat", "asl")
+
+# Asymmetric Loss settings: Alibaba-MIIL/ASL train.py, criterion for multi-label COCO
+ASL_GAMMA_NEG, ASL_GAMMA_POS, ASL_CLIP, ASL_EPS = 4.0, 0.0, 0.05, 1e-8
+
+
+class AsymmetricLoss(nn.Module):
+    """Element-wise ASL, line for line the authors' AsymmetricLoss.forward without the final sum.
+    loss = -[ y log p + (1-y) log p_m ] * (1 - p_t)^gamma, p_m = min(1 - p + clip, 1).
+    """
+
+    def __init__(self, gamma_neg=ASL_GAMMA_NEG, gamma_pos=ASL_GAMMA_POS, clip=ASL_CLIP, eps=ASL_EPS):
+        super().__init__()
+        self.gamma_neg, self.gamma_pos, self.clip, self.eps = gamma_neg, gamma_pos, clip, eps
+
+    def forward(self, logits, target):
+        xs_pos = torch.sigmoid(logits)
+        xs_neg = 1 - xs_pos
+        if self.clip > 0:
+            xs_neg = (xs_neg + self.clip).clamp(max=1)          # easy negatives (p < clip) count 0
+        loss = target * torch.log(xs_pos.clamp(min=self.eps)) + \
+            (1 - target) * torch.log(xs_neg.clamp(min=self.eps))
+        if self.gamma_neg > 0 or self.gamma_pos > 0:
+            with torch.no_grad():                               # the authors' default: no gradient
+                pt = xs_pos * target + xs_neg * (1 - target)
+                gamma = self.gamma_pos * target + self.gamma_neg * (1 - target)
+                weight = torch.pow(1 - pt, gamma)
+            loss = loss * weight
+        return -loss
 
 
 class BaselinePredictor(Enc.CommandPredictor):
@@ -123,6 +160,14 @@ class RepeatPredictor(CausalPredictor):
         return torch.where(x.amax(dim=1) > 0.5, self.repeat_head(h), self.head(h))
 
 
+class ASLPredictor(CausalPredictor):
+    """allpos with the element-wise BCE replaced by ASL. Same modules, so same weights."""
+
+    def __init__(self, max_len: int):
+        super().__init__(max_len, all_positions=True)
+        self._crit = AsymmetricLoss()
+
+
 def build_variant(variant: str, max_len: int) -> nn.Module:
     if variant == "baseline":
         return BaselinePredictor(max_len)
@@ -132,6 +177,8 @@ def build_variant(variant: str, max_len: int) -> nn.Module:
         return CausalPredictor(max_len, all_positions=True)
     if variant == "repeat":
         return RepeatPredictor(max_len)
+    if variant == "asl":
+        return ASLPredictor(max_len)
     raise ValueError(f"Unknown variant {variant}")
 
 

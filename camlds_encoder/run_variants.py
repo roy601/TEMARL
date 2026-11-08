@@ -5,6 +5,7 @@
     python camlds_encoder/run_variants.py --stage train --variant causal --device cuda
     python camlds_encoder/run_variants.py --stage train --variant allpos --device cuda
     python camlds_encoder/run_variants.py --stage train --variant repeat --device cuda
+    python camlds_encoder/run_variants.py --stage train --variant asl --device cuda
     python camlds_encoder/run_variants.py --stage all --smoke --device cpu     # NOT a result
 
   baseline_val  loads each baseline checkpoint (encoder.pt, kept on the GPU PC), saves its
@@ -30,7 +31,7 @@ import run as R  # noqa: E402
 import variants as V  # noqa: E402
 from port import Enc, Mx, NT, SPEC, T  # noqa: E402
 
-CANDIDATES = ("causal", "allpos", "repeat")
+CANDIDATES = ("causal", "allpos", "repeat", "asl")
 
 
 def save_logits(cell, name, arr):

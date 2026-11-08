@@ -77,6 +77,25 @@ python camlds_encoder/run_variants.py --stage train --variant repeat --device cu
 Then commit and push `camlds_encoder/out/`. The comparison is
 `compare_validation.py --candidate repeat --current allpos`.
 
+**Result (2026-11-08): `repeat` rejected.** The design stays `allpos`.
+
+## Improvement 3 (validation only): Asymmetric Loss
+
+`allpos` with BCE replaced by the Asymmetric Loss (Ridnik et al., ICCV 2021), the authors' settings.
+The exact design, and a known risk, are declared in `SELECTION_RULE.md`.
+
+```
+git pull
+python camlds_encoder/run_variants.py --stage train --variant asl --device cuda
+```
+
+| Stage | What it does | Expected time |
+|---|---|---|
+| `train --variant asl` | 320 trainings, like `allpos` | about 1.6 hours |
+
+Then commit and push `camlds_encoder/out/`. The comparison is
+`compare_validation.py --candidate asl --current allpos`.
+
 ## Files
 
 | File | Purpose |
@@ -85,7 +104,7 @@ Then commit and push `camlds_encoder/out/`. The comparison is
 | `data.py` | Folds, train/validation/test runs, windows; returns test inputs only |
 | `run.py` | Stages `check`, `pilot`, `train` |
 | `summarise.py` | Integrity checks and validation summary of the baseline run |
-| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`; the training loop is the frozen one with only the loss line changed |
+| `variants.py` | `baseline`, `causal`, `allpos`, `repeat`, `asl`; the training loop is the frozen one with only the loss line changed |
 | `run_variants.py` | Stages `baseline_val`, `train --variant` |
 | `compare_validation.py` | Applies `SELECTION_RULE.md` |
-| `tests/` | 22 tests: `python -m unittest discover -s camlds_encoder/tests` |
+| `tests/` | 30 tests: `python -m unittest discover -s camlds_encoder/tests` |

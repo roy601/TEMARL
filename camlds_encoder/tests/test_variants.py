@@ -174,5 +174,83 @@ class Repeat(unittest.TestCase):
             self.assertTrue(torch.isfinite(self.m(x, mk)).all())
 
 
+def asl_by_hand(z, y, gneg=4.0, gpos=0.0, clip=0.05, eps=1e-8):
+    """The authors' formula in float64 numpy, written out independently."""
+    p = 1 / (1 + np.exp(-z))
+    pneg = np.minimum(1 - p + clip, 1)
+    l = y * np.log(np.maximum(p, eps)) + (1 - y) * np.log(np.maximum(pneg, eps))
+    pt = p * y + pneg * (1 - y)
+    return -l * (1 - pt) ** (gpos * y + gneg * (1 - y))
+
+
+class ASL(unittest.TestCase):
+    def setUp(self):
+        g = np.random.default_rng(1)
+        self.z = g.normal(0, 4, (64, 81))
+        self.y = (g.random((64, 81)) < 0.1).astype(np.float64)
+        self.crit = V.AsymmetricLoss()
+
+    def test_settings_are_the_authors_train_py(self):
+        self.assertEqual((V.ASL_GAMMA_NEG, V.ASL_GAMMA_POS, V.ASL_CLIP, V.ASL_EPS), (4.0, 0.0, 0.05, 1e-8))
+
+    def test_matches_the_formula_written_by_hand(self):
+        got = self.crit(torch.from_numpy(self.z), torch.from_numpy(self.y)).numpy()
+        np.testing.assert_allclose(got, asl_by_hand(self.z, self.y), rtol=1e-10, atol=1e-12)
+
+    def test_easy_negatives_count_zero(self):
+        z = torch.tensor([[-4.0, -10.0]], dtype=torch.float64)       # p < 0.05
+        self.assertTrue(torch.equal(self.crit(z, torch.zeros_like(z)), torch.zeros_like(z)))
+
+    def test_no_gradient_through_the_focusing_weight(self):
+        z = torch.from_numpy(self.z).requires_grad_(True)
+        self.crit(z, torch.from_numpy(self.y)).sum().backward()
+        p, y = 1 / (1 + np.exp(-self.z)), self.y
+        pneg = np.minimum(1 - p + 0.05, 1)
+        w = (1 - (p * y + pneg * (1 - y))) ** (4 * (1 - y))
+        d_neg = np.where(1 - p + 0.05 < 1, p * (1 - p) / pneg, 0.0)  # d(-log pneg)/dz, 0 when clipped
+        want = y * -(1 - p) + (1 - y) * w * d_neg                    # weight held constant
+        np.testing.assert_allclose(z.grad.numpy(), want, rtol=1e-8, atol=1e-12)
+
+    def test_without_focusing_and_clip_it_is_bce(self):
+        z, y = torch.from_numpy(self.z / 4), torch.from_numpy(self.y)
+        bce = torch.nn.functional.binary_cross_entropy_with_logits(z, y, reduction="none")
+        self.assertTrue(torch.allclose(V.AsymmetricLoss(0.0, 0.0, 0.0)(z, y), bce, atol=1e-10))
+
+    def test_same_weights_and_same_random_stream_as_allpos(self):
+        out = {}
+        for v in ("allpos", "asl"):
+            torch.manual_seed(7)
+            m = V.build_variant(v, 16)
+            out[v] = (m.state_dict(), torch.rand(5))
+        self.assertEqual(out["asl"][0].keys(), out["allpos"][0].keys())
+        for k in out["allpos"][0]:
+            self.assertTrue(torch.equal(out["asl"][0][k], out["allpos"][0][k]), k)
+        self.assertTrue(torch.equal(out["asl"][1], out["allpos"][1]))
+
+    def test_loss_is_the_allpos_average_of_asl(self):
+        torch.manual_seed(0)
+        m = V.build_variant("asl", 16).eval()
+        x, mk, y = toy(B=2, real=(3, 16))
+        with torch.no_grad():
+            logits = m.head(m.states(x, mk)).double().numpy()
+            want, n = 0.0, 0
+            for b in range(2):
+                for k in range(16):
+                    if mk[b, k] < 0.5:
+                        continue
+                    tgt = (y[b] if k == 15 else x[b, k + 1]).double().numpy()
+                    want += asl_by_hand(logits[b, k], tgt).mean()
+                    n += 1
+            self.assertAlmostEqual(m.loss(x, mk, y).item(), want / n, places=5)
+
+    def test_finite_with_padding_and_extreme_logits(self):
+        torch.manual_seed(0)
+        m = V.build_variant("asl", 16).train()
+        x, mk, y = toy()
+        self.assertTrue(torch.isfinite(m.loss(x, mk, y)))
+        z = torch.tensor([[-80.0, 80.0, 0.0]])
+        self.assertTrue(torch.isfinite(self.crit(z, torch.tensor([[1.0, 0.0, 1.0]]))).all())
+
+
 if __name__ == "__main__":
     unittest.main()

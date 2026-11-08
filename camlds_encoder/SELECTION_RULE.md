@@ -68,3 +68,21 @@ one validation run); S1 will be reported on its own when the test results are op
 - **Everything else is `allpos`:** same encoder, same starting weights for each seed, same loss at
   every position, same training rules and budget. One layer is added (5,265 parameters); the 64-D
   state used by MAPPO is unchanged.
+
+## Candidate 3 as built (declared 2026-11-08, before it runs)
+
+`asl` = `allpos` with the training loss BCE replaced by the Asymmetric Loss, compared with `allpos`
+under the rule above.
+
+- **The loss is the authors' code** (Alibaba-MIIL/ASL, `AsymmetricLoss`), with the settings of their
+  `train.py`: gamma_neg 4, gamma_pos 0, clip 0.05, no gradient through the focusing weight. Not tuned.
+- **One change from their code:** the loss is averaged like `allpos`, not summed, so gradient
+  clipping works on the same scale.
+- **Everything else is `allpos`:** same model (no new parameters), same starting weights and random
+  stream for each seed, same training rules and budget. Validation BCE still chooses the checkpoint
+  and drives patience; validation micro-F1 still chooses the threshold.
+- **Known risk, stated before the run.** ASL barely punishes a wrong label below probability 0.5
+  (measured: 0.3% of BCE's penalty at 0.3, 3.5% at 0.5), and the frozen threshold grid stops at 0.5.
+  So ASL may over-predict and the grid cannot follow. We will report how many trainings pick 0.5.
+  If `asl` is rejected while most pick 0.5, the result is written as "no benefit shown under the
+  frozen threshold grid", not "ASL is worse".
