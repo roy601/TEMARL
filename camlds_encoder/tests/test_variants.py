@@ -197,6 +197,18 @@ class LongRuns(unittest.TestCase):
                              {"shared_patience": 16, "shared_update_budget": 18304}, v)
             self.assertEqual(RV.limits_for(v, pilot, True), pilot, v)     # smoke keeps its own
 
+    def test_collapse_repeats_gets_the_longer_budget_and_its_own_folder(self):
+        import run_variants as RV
+        pilot = {"shared_patience": 16, "shared_update_budget": 9152}
+        for v in RV.COLLAPSE_VARIANTS:
+            self.assertEqual(RV.limits_for(v, pilot, False, "collapse_repeats")["shared_update_budget"], 18304, v)
+            self.assertEqual(RV.limits_for(v, pilot, True, "collapse_repeats"), pilot, v)
+        self.assertEqual(RV.limits_for("allpos", pilot, False, "main")["shared_update_budget"], 9152)
+        self.assertEqual(RV.COLLAPSE_VARIANTS, ("allpos", "gru_allpos", "lstm_allpos"))
+        a, b = RV.cell_path("o", "main", "allpos", "f", 1), RV.cell_path("o", "collapse_repeats", "allpos", "f", 1)
+        self.assertEqual(os.path.normpath(a), os.path.normpath("o/variants/allpos/f/s1"))   # existing runs
+        self.assertNotEqual(a, b)
+
 
 class Recurrent(unittest.TestCase):
     PAIRS = (("gru_allpos", "GRU", "gru_last"), ("lstm_allpos", "LSTM", "lstm_last"))

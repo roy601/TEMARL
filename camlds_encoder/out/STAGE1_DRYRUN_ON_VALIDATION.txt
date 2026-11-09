@@ -1,0 +1,52 @@
+DRY RUN ON VALIDATION DATA. NOT A TEST RESULT. The code path of Stage 1, reproducing the recorded validation scores (largest difference 0.0e+00).
+Micro-F1 unless stated. Mean over the 10 seeds, then over the folds.
+
+== main: variant held out, 29 folds ==  (the primary result)
+                                Transformer          GRU         LSTM
+  Micro-F1, all                       0.898        0.897        0.898
+  Micro-F1, novel                     0.819        0.830        0.835
+  Micro-F1, copy                      0.979        0.988        0.988
+  Micro-F1, repeated labels           0.940        0.941        0.940
+  Micro-F1, new labels                0.853        0.848        0.849
+  Micro-F1, S1, all                   0.958        0.968        0.970
+  Micro-F1, S3, all                   0.814        0.820        0.821
+  Micro-F1, S6, all                   0.784        0.736        0.728
+  Micro-F1, S1, novel                 0.866        0.907        0.917
+  Micro-F1, S3, novel                 0.777        0.775        0.777
+  Micro-F1, S6, novel                 0.701        0.620        0.612
+  Exact-set accuracy, all             0.877        0.869        0.869
+  Exact-set accuracy, novel           0.822        0.804        0.805
+  Exact-set accuracy, copy            0.942        0.962        0.962
+  Macro-F1, all                       0.861        0.847        0.846
+  Macro-F1, novel                     0.776        0.758        0.757
+  Macro-F1, copy                      0.981        0.984        0.983
+  Precision@1, all                    0.913        0.906        0.906
+  Precision@1, novel                  0.914        0.898        0.897
+  Precision@1, copy                   0.953        0.966        0.968
+  Recall@3, all                       0.909        0.904        0.906
+  Recall@3, novel                     0.905        0.898        0.898
+  Recall@3, copy                      0.943        0.944        0.946
+  Recall@5, all                       0.948        0.948        0.947
+  Recall@5, novel                     0.950        0.950        0.948
+  Recall@5, copy                      0.976        0.978        0.978
+  Recall ceiling, mean of folds        0.973   (labels unseen in training)
+
+  Transformer minus GRU / LSTM (family of two, Holm)
+    vs GRU   mean +0.0011  95% CI [-0.0072, +0.0100]  p 0.2455  Holm p 0.4910  folds Transformer ahead 6/29  S1 -0.010  S3 -0.006  S6 +0.048
+    -> no difference shown
+    vs LSTM  mean +0.0006  95% CI [-0.0087, +0.0112]  p 0.2455  Holm p 0.4910  folds Transformer ahead 6/29  S1 -0.012  S3 -0.007  S6 +0.056
+    -> no difference shown
+
+  Scenario held out, 3 folds, descriptive only (all points, recall ceiling beside each)
+    S2    Transformer 0.851  GRU 0.867  LSTM 0.870  ceiling 0.781
+    S3    Transformer 0.861  GRU 0.863  LSTM 0.875  ceiling 0.686
+    S6    Transformer 0.855  GRU 0.873  LSTM 0.881  ceiling 0.412
+
+== Does the improvement hold? Transformer against the old Transformer, main condition, descriptive only ==
+  The score that chose it (4 groups, equal weight, as SELECTION_RULE.md):
+    all    points: old 0.8138 -> new 0.8522
+    novel  points: old 0.7293 -> new 0.7736
+  Mean over the variant-held-out folds (18 of the 29 are S1):
+    all    points: old 0.880 -> new 0.898  folds better 11/29  S1 -0.008  S3 +0.039  S6 +0.089
+    novel  points: old 0.815 -> new 0.819  folds better 12/29  S1 -0.033  S3 +0.039  S6 +0.100
+

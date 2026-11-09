@@ -136,6 +136,26 @@ python camlds_encoder/run_variants.py --stage train --variant lstm_allpos --devi
 
 Then commit and push `camlds_encoder/out/`.
 
+## Protocol 1.2: `collapse_repeats`, then Stage 1
+
+The design is frozen in `idea01_kuwano/PROTOCOL_1.2.md`. Check: `python idea01_kuwano/spec_1_2.py`.
+
+```
+git pull
+python camlds_encoder/run_variants.py --stage train --variant allpos --condition collapse_repeats --device cuda
+python camlds_encoder/run_variants.py --stage train --variant gru_allpos --condition collapse_repeats --device cuda
+python camlds_encoder/run_variants.py --stage train --variant lstm_allpos --condition collapse_repeats --device cuda
+```
+
+| Stage | Trainings | Expected time (from the main condition) |
+|---|---|---|
+| `allpos` | 320 | about 1.6 hours |
+| `gru_allpos` | 320 | about 6 hours |
+| `lstm_allpos` | 320 | about 3.8 hours |
+
+Then commit and push `camlds_encoder/out/`. Stage 1 is opened once, on this PC, with
+`python camlds_encoder/evaluate_test.py --open-test`.
+
 ## Files
 
 | File | Purpose |
@@ -148,4 +168,5 @@ Then commit and push `camlds_encoder/out/`.
 | `run_variants.py` | Stages `baseline_val`, `train --variant` |
 | `compare_validation.py` | Applies `SELECTION_RULE.md` |
 | `diagnose_validation.py` | Explains a decision: error types, training length, thresholds |
-| `tests/` | 38 tests: `python -m unittest discover -s camlds_encoder/tests` |
+| `evaluate_test.py` | Stage 1: scores the test split once, after the freeze. `--validation-dry-run` opens nothing |
+| `tests/` | 66 tests: `python -m unittest discover -s camlds_encoder/tests` |

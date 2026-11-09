@@ -9,6 +9,7 @@
     python camlds_encoder/run_variants.py --stage train --variant asl_long --device cuda
     python camlds_encoder/run_variants.py --stage train --variant gru_allpos --device cuda
     python camlds_encoder/run_variants.py --stage train --variant lstm_allpos --device cuda
+    python camlds_encoder/run_variants.py --stage train --variant allpos --condition collapse_repeats --device cuda
     python camlds_encoder/run_variants.py --stage all --smoke --device cpu     # NOT a result
 
   baseline_val  loads each baseline checkpoint (encoder.pt, kept on the GPU PC), saves its
@@ -39,14 +40,20 @@ CANDIDATES = ("causal", "allpos", "repeat", "asl", "asl_long", "gru_allpos", "ls
 # reached 9,152 updates, so allpos is the same under this limit.
 LONG_UPDATE_BUDGET = 18304
 LONG_BUDGET_VARIANTS = (*V.SECONDARY, "asl_long")
+COLLAPSE_VARIANTS = ("allpos", "gru_allpos", "lstm_allpos")     # protocol 1.2, Section 4
 
 
-def limits_for(variant, budget, smoke):
+def limits_for(variant, budget, smoke, condition="main"):
     """Patience and update budget of a variant. A smoke run always keeps its own tiny budget."""
     limits = {k: budget[k] for k in ("shared_patience", "shared_update_budget")}
-    if variant in LONG_BUDGET_VARIANTS and not smoke:
+    if not smoke and (variant in LONG_BUDGET_VARIANTS or condition == "collapse_repeats"):
         limits["shared_update_budget"] = LONG_UPDATE_BUDGET
     return limits
+
+
+def cell_path(out, condition, variant, fold, seed):
+    folder = "variants" if condition == "main" else f"variants_{condition}"
+    return os.path.join(out, folder, variant, fold, f"s{seed}")
 
 
 def save_logits(cell, name, arr):
@@ -87,14 +94,16 @@ def stage_train(args, out, device):
     budget = R.read_json(os.path.join(out, "budget.json"))
     if budget.get("smoke") and not args.smoke:
         raise SystemExit("budget.json comes from a smoke run; it cannot be used for a real run.")
-    limits = limits_for(args.variant, budget, args.smoke)
+    if args.condition != "main" and args.variant not in COLLAPSE_VARIANTS:
+        raise SystemExit(f"{args.variant} is not run on {args.condition} (protocol 1.2, Section 4).")
+    limits = limits_for(args.variant, budget, args.smoke, args.condition)
     seeds = SPEC.MAIN_SEEDS[:1] if args.smoke else SPEC.MAIN_SEEDS
-    jobs = [(f, s) for f in R.pick_folds("main", args.smoke) for s in seeds]
+    jobs = [(f, s) for f in R.pick_folds(args.condition, args.smoke) for s in seeds]
     for i, (f, seed) in enumerate(jobs, 1):
-        cell = os.path.join(out, "variants", args.variant, f["fold"], f"s{seed}")
+        cell = cell_path(out, args.condition, args.variant, f["fold"], seed)
         if os.path.exists(os.path.join(cell, "result.json")):
             continue
-        print(f"  [{i}/{len(jobs)}] {args.variant} {f['fold']} s{seed}", flush=True)
+        print(f"  [{i}/{len(jobs)}] {args.condition} {args.variant} {f['fold']} s{seed}", flush=True)
         d = data.fold_data(f)
         res, model = V.train_variant(args.variant, data.W, seed, d["train"], d["val"],
                                      limits["shared_update_budget"], device=device, checkpoint_dir=cell,
@@ -105,7 +114,8 @@ def stage_train(args, out, device):
         th = Mx.select_threshold(Mx._sigmoid(lo_va), Yva)
         lo_te = T.predict(model, *d["test_inputs"], device)
         R.write_json(os.path.join(cell, "result.json"), {
-            "variant": args.variant, "family": f["family"], "fold": f["fold"], "seed": seed, "window": data.W,
+            "condition": args.condition, "variant": args.variant, "family": f["family"], "fold": f["fold"],
+            "seed": seed, "window": data.W,
             "labels": NT, "threshold": th, "validation": Mx.evaluate(lo_va, Yva, d["val_owners"], th),
             "val": save_logits(cell, "val_logits.npy", lo_va), "val_source_rows": d["val_source_rows"],
             "updates_completed": res.updates_completed, "best_update": res.best_update,
@@ -121,6 +131,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--stage", required=True, choices=("baseline_val", "train", "all"))
     ap.add_argument("--variant", choices=CANDIDATES)
+    ap.add_argument("--condition", default="main", choices=data.CONDITIONS)
     ap.add_argument("--device", default="auto", choices=("auto", "cpu", "cuda"))
     ap.add_argument("--threads", type=int, default=4)
     ap.add_argument("--smoke", action="store_true")
@@ -131,7 +142,7 @@ def main():
     out = os.path.join(HERE, "out_smoke" if args.smoke else "out")
     torch.set_num_threads(args.threads)
     device = T.device_of(args.device)
-    print(f"run_variants | stage {args.stage} | variant {args.variant} | device {device}"
+    print(f"run_variants | stage {args.stage} | condition {args.condition} | variant {args.variant} | device {device}"
           f"{' | SMOKE: not a result' if args.smoke else ''}")
     with R.Lock(out):
         if args.stage in ("baseline_val", "all"):
