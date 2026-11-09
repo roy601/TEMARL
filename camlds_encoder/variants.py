@@ -36,6 +36,7 @@ rules. Validation BCE and predictions always use the LAST position, i.e. the rea
             of asl's 320 trainings used the whole budget. A second chance decided after seeing
             the first result; declared as such in SELECTION_RULE.md. The only change is the
             budget, set in run_variants.py.
+            REJECTED 2026-11-09 (SELECTION_RULE.md). ASL is closed.
   gru_allpos, lstm_allpos
             SECONDARY encoders, not candidates: they never replace the Transformer. The frozen
             GRU and LSTM (same cells, capacity, weights and prediction path), trained with the

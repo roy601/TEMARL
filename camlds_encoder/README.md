@@ -116,6 +116,8 @@ python camlds_encoder/run_variants.py --stage train --variant asl_long --device 
 Then commit and push `camlds_encoder/out/`. The comparison is
 `compare_validation.py --candidate asl_long --current allpos`.
 
+**Result (2026-11-09): `asl_long` rejected.** ASL is closed. The final design is `allpos`.
+
 ## Secondary encoders (validation only): GRU and LSTM
 
 The frozen GRU and LSTM, trained the same way as `allpos`. They are reported beside the Transformer

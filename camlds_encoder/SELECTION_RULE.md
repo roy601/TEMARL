@@ -49,6 +49,7 @@ result is opened.
 | 2026-11-08 | 1 `allpos` | baseline | **Kept** (novel +0.044, 10 of 10 seeds; all points +0.038) | `out/VALIDATION_COMPARISON_allpos.txt` |
 | 2026-11-08 | 2 `repeat` | `allpos` | **Rejected** (novel −0.068, 0 of 10 seeds; all points −0.058) | `out/VALIDATION_COMPARISON_repeat.txt` |
 | 2026-11-08 | 3 `asl` | `allpos` | **Rejected** (novel −0.017, 1 of 10 seeds; all points −0.034) | `out/VALIDATION_COMPARISON_asl.txt` |
+| 2026-11-09 | 3 `asl_long` (second run) | `allpos` | **Rejected** (novel −0.009, 2 of 10 seeds; all points −0.029) | `out/VALIDATION_COMPARISON_asl_long.txt` |
 
 `repeat` failed on the labels it was built for: on already-seen labels its false positives rose
 from 362 to 1,302 (precision 0.942 → 0.816), i.e. it predicts that seen techniques come back.
@@ -63,6 +64,12 @@ that stopped on their own were also behind `allpos` on novel points (0.764 vs 0.
 not a random subset. The top threshold, 0.5, was chosen by 159 of 320 trainings, just under the
 "most" declared above. Because of the budget, the result is written as **"no benefit shown under
 the frozen training budget and threshold grid"**, not "ASL is worse".
+
+**The second run closes ASL.** With 18,304 updates, only 2 of 320 trainings reached the limit, so
+the budget no longer explains the result. The gap narrowed (novel −0.017 → −0.009), but all three
+conditions still failed and it still over-predicted (false positives on all points 1,375 → 3,023).
+The top threshold was chosen by 124 of 320 trainings, the same as `allpos`. Result: no benefit shown
+on validation at the authors' settings. Details: `out/DIAGNOSIS_asl_long.txt`.
 
 The current design is now `allpos`. Its S1 group fell on novel points (−0.033, the same 8 steps of
 one validation run); S1 will be reported on its own when the test results are opened.
@@ -117,6 +124,21 @@ above is not applied to them. They are reported in full beside it and enter the 
   under this limit. We will report how many GRU and LSTM trainings reach it.
 - **Validation report, no decision:**
   `compare_validation.py --candidate gru_allpos --current allpos --control lstm_allpos --report-only`.
+
+**Validation report, 2026-11-09 (no decision).** The three encoders are effectively tied on
+validation. None of the 640 GRU and LSTM trainings reached the limit. Reports:
+`out/VALIDATION_COMPARISON_gru_allpos.txt`, `out/VALIDATION_COMPARISON_lstm_allpos.txt`.
+
+| Micro-F1 | Transformer `allpos` | GRU | LSTM |
+|---|---|---|---|
+| Novel points | 0.774 | 0.772 | 0.775 |
+| All points | 0.852 | 0.848 | 0.849 |
+| Novel, S1 variants | 0.866 | 0.906 | 0.916 |
+| Novel, S3 variants | 0.775 | 0.778 | 0.779 |
+| Novel, S6 variants | 0.705 | 0.636 | 0.624 |
+| Novel, scenario held out | 0.749 | 0.768 | 0.781 |
+| Seeds better than `allpos` on novel points | | 4 of 10 | 6 of 10 |
+| Trainings choosing the top threshold 0.5 | 124 of 320 | 157 of 320 | 175 of 320 |
 
 ## Candidate 3, second run (decided and declared 2026-11-08, after seeing the first result)
 

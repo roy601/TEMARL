@@ -1,0 +1,25 @@
+VALIDATION COMPARISON: candidate asl_long vs current allpos
+Validation only. Score = micro-F1 pooled within each group, groups weighted equally. Rule: SELECTION_RULE.md
+
+validation points per group (novel / all): S1 variants 144/486, S3 variants 134/180, S6 variants 78/108, scenario held out 132/227
+
+score                   allpos      asl_long
+novel                   0.7736        0.7642
+all                     0.8522        0.8234
+copy                    0.9795        0.9607
+repeat labels           0.8955        0.8672
+new labels              0.8016        0.7808
+
+per group, novel points (mean over seeds):
+  S1 variants               0.8657        0.8931
+  S3 variants               0.7745        0.7499
+  S6 variants               0.7053        0.6521
+  scenario held out         0.7491        0.7617
+
+RULE
+  1 novel points improve        : mean difference -0.0094  -> no
+  2 in at least 8 of 10 seeds   : 2 of 10 seeds  -> no
+  3 all points fall <= 0.01     : mean difference -0.0288  -> no
+
+DECISION: KEEP allpos (candidate rejected)
+  per-seed novel differences: +0.008 -0.004 -0.013 -0.017 -0.019 -0.006 +0.004 -0.007 -0.022 -0.019

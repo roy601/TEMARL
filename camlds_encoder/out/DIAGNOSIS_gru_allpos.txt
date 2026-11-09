@@ -1,0 +1,18 @@
+DIAGNOSIS: gru_allpos vs allpos. Validation only; explains the decision, does not make it.
+
+ERRORS, summed over all 320 cells
+                arm        precision  recall  false pos  false neg
+  all points    allpos         0.901   0.894       1375       1482
+  all points    gru_allpos     0.924   0.884       1014       1623
+  novel points  allpos         0.780   0.786       1315       1271
+  novel points  gru_allpos     0.818   0.765       1011       1395
+  repeat labels allpos         0.942   0.928        362        451
+  repeat labels gru_allpos     0.961   0.923        233        483
+  new labels    allpos         0.869   0.867       1013       1031
+  new labels    gru_allpos     0.894   0.853        781       1140
+  labels predicted per step, allpos: 1.39
+  labels predicted per step, gru_allpos: 1.35
+
+TRAINING LENGTH AND THRESHOLDS
+  allpos     hit the update budget 0/320 | median best update 4512 | median best validation BCE 0.00412 | threshold 0.5 chosen 124/320
+  gru_allpos hit the update budget 0/320 | median best update 2880 | median best validation BCE 0.00404 | threshold 0.5 chosen 157/320
