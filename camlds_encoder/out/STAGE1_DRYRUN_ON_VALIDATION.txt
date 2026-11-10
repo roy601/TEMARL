@@ -42,6 +42,47 @@ Micro-F1 unless stated. Mean over the 10 seeds, then over the folds.
     S3    Transformer 0.861  GRU 0.863  LSTM 0.875  ceiling 0.686
     S6    Transformer 0.855  GRU 0.873  LSTM 0.881  ceiling 0.412
 
+== collapse_repeats: variant held out, 29 folds ==  (beside the main result, never instead of it)
+                                Transformer          GRU         LSTM
+  Micro-F1, all                       0.893        0.894        0.893
+  Micro-F1, novel                     0.815        0.830        0.829
+  Micro-F1, copy                      0.976        0.990        0.990
+  Micro-F1, repeated labels           0.931        0.935        0.931
+  Micro-F1, new labels                0.852        0.846        0.848
+  Micro-F1, S1, all                   0.959        0.969        0.970
+  Micro-F1, S3, all                   0.797        0.793        0.795
+  Micro-F1, S6, all                   0.771        0.744        0.732
+  Micro-F1, S1, novel                 0.869        0.914        0.917
+  Micro-F1, S3, novel                 0.761        0.743        0.746
+  Micro-F1, S6, novel                 0.685        0.631        0.612
+  Exact-set accuracy, all             0.870        0.861        0.861
+  Exact-set accuracy, novel           0.817        0.795        0.793
+  Exact-set accuracy, copy            0.936        0.965        0.965
+  Macro-F1, all                       0.856        0.841        0.842
+  Macro-F1, novel                     0.772        0.749        0.751
+  Macro-F1, copy                      0.978        0.988        0.988
+  Precision@1, all                    0.907        0.900        0.899
+  Precision@1, novel                  0.910        0.891        0.890
+  Precision@1, copy                   0.947        0.965        0.965
+  Recall@3, all                       0.907        0.898        0.900
+  Recall@3, novel                     0.906        0.892        0.896
+  Recall@3, copy                      0.940        0.942        0.940
+  Recall@5, all                       0.950        0.947        0.945
+  Recall@5, novel                     0.953        0.948        0.945
+  Recall@5, copy                      0.978        0.978        0.978
+  Recall ceiling, mean of folds        0.973   (labels unseen in training)
+
+  Transformer minus GRU / LSTM (sensitivity check, no claim)
+    vs GRU   mean -0.0011  95% CI [-0.0070, +0.0053]  p 0.5538  Holm p 1.0000  folds Transformer ahead 8/29  S1 -0.010  S3 +0.004  S6 +0.026
+    -> sensitivity check, no claim
+    vs LSTM  mean +0.0003  95% CI [-0.0070, +0.0083]  p 0.5971  Holm p 1.0000  folds Transformer ahead 8/29  S1 -0.011  S3 +0.002  S6 +0.039
+    -> sensitivity check, no claim
+
+  Scenario held out, 3 folds, descriptive only (all points, recall ceiling beside each)
+    S2    Transformer 0.839  GRU 0.845  LSTM 0.859  ceiling 0.781
+    S3    Transformer 0.862  GRU 0.863  LSTM 0.874  ceiling 0.688
+    S6    Transformer 0.835  GRU 0.856  LSTM 0.857  ceiling 0.443
+
 == Does the improvement hold? Transformer against the old Transformer, main condition, descriptive only ==
   The score that chose it (4 groups, equal weight, as SELECTION_RULE.md):
     all    points: old 0.8138 -> new 0.8522
