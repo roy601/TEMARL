@@ -1,0 +1,93 @@
+STAGE 1 RESULTS, protocol 1.2. TEST SPLIT, opened once.
+Micro-F1 unless stated. Mean over the 10 seeds, then over the folds.
+
+== main: variant held out, 29 folds ==  (the primary result)
+                                Transformer          GRU         LSTM
+  Micro-F1, all                       0.861        0.866        0.863
+  Micro-F1, novel                     0.798        0.808        0.806
+  Micro-F1, copy                      0.948        0.956        0.959
+  Micro-F1, repeated labels           0.897        0.902        0.898
+  Micro-F1, new labels                0.817        0.825        0.824
+  Micro-F1, S1, all                   0.950        0.961        0.962
+  Micro-F1, S3, all                   0.795        0.795        0.785
+  Micro-F1, S6, all                   0.618        0.606        0.604
+  Micro-F1, S1, novel                 0.878        0.901        0.902
+  Micro-F1, S3, novel                 0.763        0.755        0.739
+  Micro-F1, S6, novel                 0.548        0.539        0.538
+  Exact-set accuracy, all             0.832        0.834        0.833
+  Exact-set accuracy, novel           0.796        0.788        0.785
+  Exact-set accuracy, copy            0.906        0.923        0.928
+  Macro-F1, all                       0.839        0.839        0.839
+  Macro-F1, novel                     0.793        0.784        0.785
+  Macro-F1, copy                      0.931        0.949        0.951
+  Precision@1, all                    0.887        0.889        0.882
+  Precision@1, novel                  0.894        0.895        0.887
+  Precision@1, copy                   0.938        0.943        0.942
+  Recall@3, all                       0.883        0.879        0.876
+  Recall@3, novel                     0.887        0.881        0.879
+  Recall@3, copy                      0.934        0.932        0.931
+  Recall@5, all                       0.921        0.921        0.918
+  Recall@5, novel                     0.927        0.923        0.921
+  Recall@5, copy                      0.967        0.971        0.970
+  Recall ceiling, mean of folds        0.973   (labels unseen in training)
+
+  Transformer minus GRU / LSTM (family of two, Holm)
+    vs GRU   mean -0.0049  95% CI [-0.0128, +0.0033]  p 0.0461  Holm p 0.0823  folds Transformer ahead 5/29  S1 -0.011  S3 -0.000  S6 +0.012
+    -> no difference shown
+    vs LSTM  mean -0.0026  95% CI [-0.0131, +0.0090]  p 0.0411  Holm p 0.0823  folds Transformer ahead 7/29  S1 -0.011  S3 +0.010  S6 +0.014
+    -> no difference shown
+
+  Scenario held out, 3 folds, descriptive only (all points, recall ceiling beside each)
+    S2    Transformer 0.000  GRU 0.002  LSTM 0.005  ceiling 0.781
+    S3    Transformer 0.135  GRU 0.139  LSTM 0.164  ceiling 0.686
+    S6    Transformer 0.209  GRU 0.180  LSTM 0.181  ceiling 0.412
+
+== collapse_repeats: variant held out, 29 folds ==  (beside the main result, never instead of it)
+                                Transformer          GRU         LSTM
+  Micro-F1, all                       0.859        0.865        0.862
+  Micro-F1, novel                     0.794        0.807        0.804
+  Micro-F1, copy                      0.944        0.960        0.960
+  Micro-F1, repeated labels           0.895        0.902        0.896
+  Micro-F1, new labels                0.817        0.824        0.825
+  Micro-F1, S1, all                   0.951        0.962        0.963
+  Micro-F1, S3, all                   0.793        0.788        0.777
+  Micro-F1, S6, all                   0.610        0.611        0.599
+  Micro-F1, S1, novel                 0.872        0.900        0.904
+  Micro-F1, S3, novel                 0.765        0.744        0.732
+  Micro-F1, S6, novel                 0.545        0.550        0.529
+  Exact-set accuracy, all             0.829        0.832        0.828
+  Exact-set accuracy, novel           0.792        0.783        0.778
+  Exact-set accuracy, copy            0.900        0.931        0.930
+  Macro-F1, all                       0.835        0.836        0.837
+  Macro-F1, novel                     0.791        0.782        0.786
+  Macro-F1, copy                      0.926        0.954        0.954
+  Precision@1, all                    0.886        0.889        0.885
+  Precision@1, novel                  0.897        0.896        0.891
+  Precision@1, copy                   0.932        0.946        0.946
+  Recall@3, all                       0.883        0.877        0.875
+  Recall@3, novel                     0.889        0.880        0.877
+  Recall@3, copy                      0.933        0.930        0.931
+  Recall@5, all                       0.923        0.919        0.918
+  Recall@5, novel                     0.929        0.922        0.921
+  Recall@5, copy                      0.970        0.971        0.970
+  Recall ceiling, mean of folds        0.973   (labels unseen in training)
+
+  Transformer minus GRU / LSTM (sensitivity check, no claim)
+    vs GRU   mean -0.0062  95% CI [-0.0139, +0.0015]  p 0.0366  Holm p 0.0732  folds Transformer ahead 5/29  S1 -0.011  S3 +0.004  S6 -0.001
+    -> sensitivity check, no claim
+    vs LSTM  mean -0.0026  95% CI [-0.0138, +0.0103]  p 0.0461  Holm p 0.0732  folds Transformer ahead 5/29  S1 -0.012  S3 +0.015  S6 +0.011
+    -> sensitivity check, no claim
+
+  Scenario held out, 3 folds, descriptive only (all points, recall ceiling beside each)
+    S2    Transformer 0.009  GRU 0.005  LSTM 0.006  ceiling 0.781
+    S3    Transformer 0.121  GRU 0.144  LSTM 0.173  ceiling 0.688
+    S6    Transformer 0.220  GRU 0.191  LSTM 0.199  ceiling 0.443
+
+== Does the improvement hold? Transformer against the old Transformer, main condition, descriptive only ==
+  The score that chose it (4 groups, equal weight, as SELECTION_RULE.md):
+    all    points: old 0.6232 -> new 0.6453
+    novel  points: old 0.5658 -> new 0.5795
+  Mean over the variant-held-out folds (18 of the 29 are S1):
+    all    points: old 0.842 -> new 0.861  folds better 14/29  S1 -0.006  S3 +0.035  S6 +0.091
+    novel  points: old 0.789 -> new 0.798  folds better 14/29  S1 -0.014  S3 +0.037  S6 +0.057
+
