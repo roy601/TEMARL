@@ -1,0 +1,363 @@
+{
+ "condition": "collapse_repeats",
+ "variant": "lstm_allpos",
+ "family": "variant_held_out",
+ "fold": "3_ssh_apt",
+ "seed": 0,
+ "window": 16,
+ "labels": 81,
+ "threshold": 0.1,
+ "validation": {
+  "n": 25,
+  "bce": 0.022154179263684397,
+  "threshold": 0.1,
+  "micro_precision": 0.8,
+  "micro_recall": 0.8888888888888888,
+  "micro_f1": 0.8421052631578948,
+  "macro_f1": 0.8564814814814814,
+  "macro_f1_label_count": 18,
+  "exact_set_accuracy": 0.84,
+  "mean_predicted_labels": 1.2,
+  "mean_true_labels": 1.08,
+  "empty_prediction_pct": 0.0,
+  "precision_at_1": 0.84,
+  "recall_at_3": 0.88,
+  "recall_at_5": 0.88,
+  "per_run": {
+   "3_ssh_healthcheck": {
+    "n": 25,
+    "bce": 0.022154179263684397,
+    "micro_f1": 0.8421052631578948,
+    "exact_set_accuracy": 0.84,
+    "precision_at_1": 0.84
+   }
+  },
+  "run_macro_micro_f1": 0.8421052631578948,
+  "run_macro_bce": 0.022154179263684397
+ },
+ "val": {
+  "file": "val_logits.npy",
+  "sha256": "c66b0b2047d056328d683fa21c54f5ee7df6888af868cb9a2457db7b81fcb388",
+  "points": 25
+ },
+ "val_source_rows": [
+  602,
+  603,
+  604,
+  605,
+  606,
+  607,
+  608,
+  609,
+  610,
+  611,
+  612,
+  613,
+  614,
+  615,
+  616,
+  617,
+  618,
+  619,
+  620,
+  621,
+  622,
+  623,
+  624,
+  625,
+  626
+ ],
+ "updates_completed": 2176,
+ "best_update": 1152,
+ "best_validation_bce": 0.022154177442009065,
+ "cap_reached": false,
+ "seconds": 25.68575096130371,
+ "parameters": {
+  "variant": "lstm_allpos",
+  "window": 16,
+  "trunk_trainable": 67152,
+  "total_trainable": 77793
+ },
+ "curve": [
+  {
+   "update": 64,
+   "train_loss_running": 0.36254043877124786,
+   "validation_bce": 0.17198860074266975,
+   "epoch_equivalents": 21.333333333333332
+  },
+  {
+   "update": 128,
+   "train_loss_running": 0.11897846881765872,
+   "validation_bce": 0.08652972186053241,
+   "epoch_equivalents": 42.666666666666664
+  },
+  {
+   "update": 192,
+   "train_loss_running": 0.07191315427189693,
+   "validation_bce": 0.06524371865354939,
+   "epoch_equivalents": 64.0
+  },
+  {
+   "update": 256,
+   "train_loss_running": 0.05438300652895123,
+   "validation_bce": 0.05421757450810185,
+   "epoch_equivalents": 85.33333333333333
+  },
+  {
+   "update": 320,
+   "train_loss_running": 0.043192399258259684,
+   "validation_bce": 0.04571704629026813,
+   "epoch_equivalents": 106.66666666666667
+  },
+  {
+   "update": 384,
+   "train_loss_running": 0.03462934514391236,
+   "validation_bce": 0.039424841610001926,
+   "epoch_equivalents": 128.0
+  },
+  {
+   "update": 448,
+   "train_loss_running": 0.028007463872199878,
+   "validation_bce": 0.03496250482253086,
+   "epoch_equivalents": 149.33333333333334
+  },
+  {
+   "update": 512,
+   "train_loss_running": 0.022963185445405543,
+   "validation_bce": 0.031343376253858024,
+   "epoch_equivalents": 170.66666666666666
+  },
+  {
+   "update": 576,
+   "train_loss_running": 0.019112620590021834,
+   "validation_bce": 0.029041842236930942,
+   "epoch_equivalents": 192.0
+  },
+  {
+   "update": 640,
+   "train_loss_running": 0.016171646493603475,
+   "validation_bce": 0.027171288007571372,
+   "epoch_equivalents": 213.33333333333334
+  },
+  {
+   "update": 704,
+   "train_loss_running": 0.013824326902977191,
+   "validation_bce": 0.025565174244068286,
+   "epoch_equivalents": 234.66666666666666
+  },
+  {
+   "update": 768,
+   "train_loss_running": 0.01200755093304906,
+   "validation_bce": 0.02416887824918017,
+   "epoch_equivalents": 256.0
+  },
+  {
+   "update": 832,
+   "train_loss_running": 0.01056082991999574,
+   "validation_bce": 0.02336303334177276,
+   "epoch_equivalents": 277.3333333333333
+  },
+  {
+   "update": 896,
+   "train_loss_running": 0.009395342625794001,
+   "validation_bce": 0.022771376621576002,
+   "epoch_equivalents": 298.6666666666667
+  },
+  {
+   "update": 960,
+   "train_loss_running": 0.008502268698066473,
+   "validation_bce": 0.022561521176938656,
+   "epoch_equivalents": 320.0
+  },
+  {
+   "update": 1024,
+   "train_loss_running": 0.0077633586843148805,
+   "validation_bce": 0.022427665804639275,
+   "epoch_equivalents": 341.3333333333333
+  },
+  {
+   "update": 1088,
+   "train_loss_running": 0.007143723436456639,
+   "validation_bce": 0.022356849952980325,
+   "epoch_equivalents": 362.6666666666667
+  },
+  {
+   "update": 1152,
+   "train_loss_running": 0.006636319652898237,
+   "validation_bce": 0.022154177442009065,
+   "epoch_equivalents": 384.0
+  },
+  {
+   "update": 1216,
+   "train_loss_running": 0.006241905743081588,
+   "validation_bce": 0.022682966067467208,
+   "epoch_equivalents": 405.3333333333333
+  },
+  {
+   "update": 1280,
+   "train_loss_running": 0.005850070345331915,
+   "validation_bce": 0.022388121051552856,
+   "epoch_equivalents": 426.6666666666667
+  },
+  {
+   "update": 1344,
+   "train_loss_running": 0.005575822586251888,
+   "validation_bce": 0.022568074921031057,
+   "epoch_equivalents": 448.0
+  },
+  {
+   "update": 1408,
+   "train_loss_running": 0.005299109710904304,
+   "validation_bce": 0.022531374707634066,
+   "epoch_equivalents": 469.3333333333333
+  },
+  {
+   "update": 1472,
+   "train_loss_running": 0.005112298225867562,
+   "validation_bce": 0.02275065857687114,
+   "epoch_equivalents": 490.6666666666667
+  },
+  {
+   "update": 1536,
+   "train_loss_running": 0.004878659638052341,
+   "validation_bce": 0.02301517062717014,
+   "epoch_equivalents": 512.0
+  },
+  {
+   "update": 1600,
+   "train_loss_running": 0.004697277548984857,
+   "validation_bce": 0.023897793616777584,
+   "epoch_equivalents": 533.3333333333334
+  },
+  {
+   "update": 1664,
+   "train_loss_running": 0.004578221349220257,
+   "validation_bce": 0.02366605782214506,
+   "epoch_equivalents": 554.6666666666666
+  },
+  {
+   "update": 1728,
+   "train_loss_running": 0.004424754173669498,
+   "validation_bce": 0.02380430245105131,
+   "epoch_equivalents": 576.0
+  },
+  {
+   "update": 1792,
+   "train_loss_running": 0.0043063990015070885,
+   "validation_bce": 0.024368870111159336,
+   "epoch_equivalents": 597.3333333333334
+  },
+  {
+   "update": 1856,
+   "train_loss_running": 0.004210664992569946,
+   "validation_bce": 0.024271741325472607,
+   "epoch_equivalents": 618.6666666666666
+  },
+  {
+   "update": 1920,
+   "train_loss_running": 0.004097461554920301,
+   "validation_bce": 0.024190879162446954,
+   "epoch_equivalents": 640.0
+  },
+  {
+   "update": 1984,
+   "train_loss_running": 0.004017563995148521,
+   "validation_bce": 0.024716118706597224,
+   "epoch_equivalents": 661.3333333333334
+  },
+  {
+   "update": 2048,
+   "train_loss_running": 0.003968979395722272,
+   "validation_bce": 0.02458144011320891,
+   "epoch_equivalents": 682.6666666666666
+  },
+  {
+   "update": 2112,
+   "train_loss_running": 0.0038707106541551184,
+   "validation_bce": 0.02504521876205633,
+   "epoch_equivalents": 704.0
+  },
+  {
+   "update": 2176,
+   "train_loss_running": 0.0038265940711426083,
+   "validation_bce": 0.024914946379484954,
+   "epoch_equivalents": 725.3333333333334
+  }
+ ],
+ "budget": {
+  "shared_patience": 16,
+  "shared_update_budget": 18304
+ },
+ "sealed_test": {
+  "file": "test_logits.npy",
+  "sha256": "938e9465e32f935f47512b780a8e377481a46511a7ed0d06d162998f64b9ffe1",
+  "points": 31,
+  "source_rows": [
+   570,
+   571,
+   572,
+   573,
+   574,
+   575,
+   576,
+   577,
+   578,
+   579,
+   580,
+   581,
+   582,
+   583,
+   584,
+   585,
+   586,
+   587,
+   588,
+   589,
+   590,
+   591,
+   592,
+   593,
+   594,
+   595,
+   596,
+   597,
+   598,
+   599,
+   600
+  ],
+  "owners": [
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt"
+  ]
+ },
+ "smoke": false
+}

@@ -1,0 +1,375 @@
+{
+ "condition": "collapse_repeats",
+ "variant": "gru_allpos",
+ "family": "variant_held_out",
+ "fold": "3_ssh_apt",
+ "seed": 8,
+ "window": 16,
+ "labels": 81,
+ "threshold": 0.5,
+ "validation": {
+  "n": 25,
+  "bce": 0.02620726455028345,
+  "threshold": 0.5,
+  "micro_precision": 0.8214285714285714,
+  "micro_recall": 0.8518518518518519,
+  "micro_f1": 0.8363636363636364,
+  "macro_f1": 0.8037037037037036,
+  "macro_f1_label_count": 18,
+  "exact_set_accuracy": 0.84,
+  "mean_predicted_labels": 1.12,
+  "mean_true_labels": 1.08,
+  "empty_prediction_pct": 4.0,
+  "precision_at_1": 0.84,
+  "recall_at_3": 0.84,
+  "recall_at_5": 0.88,
+  "per_run": {
+   "3_ssh_healthcheck": {
+    "n": 25,
+    "bce": 0.02620726455028345,
+    "micro_f1": 0.8363636363636364,
+    "exact_set_accuracy": 0.84,
+    "precision_at_1": 0.84
+   }
+  },
+  "run_macro_micro_f1": 0.8363636363636364,
+  "run_macro_bce": 0.02620726455028345
+ },
+ "val": {
+  "file": "val_logits.npy",
+  "sha256": "522939515be077a4742f0b9e08e304a5d5561409dbea7e04d660809548cb894b",
+  "points": 25
+ },
+ "val_source_rows": [
+  602,
+  603,
+  604,
+  605,
+  606,
+  607,
+  608,
+  609,
+  610,
+  611,
+  612,
+  613,
+  614,
+  615,
+  616,
+  617,
+  618,
+  619,
+  620,
+  621,
+  622,
+  623,
+  624,
+  625,
+  626
+ ],
+ "updates_completed": 2304,
+ "best_update": 1280,
+ "best_validation_bce": 0.02620726408781829,
+ "cap_reached": false,
+ "seconds": 58.732996225357056,
+ "parameters": {
+  "variant": "gru_allpos",
+  "window": 16,
+  "trunk_trainable": 67279,
+  "total_trainable": 77920
+ },
+ "curve": [
+  {
+   "update": 64,
+   "train_loss_running": 0.3454409632831812,
+   "validation_bce": 0.16119154188368057,
+   "epoch_equivalents": 21.333333333333332
+  },
+  {
+   "update": 128,
+   "train_loss_running": 0.11416866339277476,
+   "validation_bce": 0.0840013744212963,
+   "epoch_equivalents": 42.666666666666664
+  },
+  {
+   "update": 192,
+   "train_loss_running": 0.07154377124970779,
+   "validation_bce": 0.06513471438560957,
+   "epoch_equivalents": 64.0
+  },
+  {
+   "update": 256,
+   "train_loss_running": 0.055323718523141,
+   "validation_bce": 0.05591688368055556,
+   "epoch_equivalents": 85.33333333333333
+  },
+  {
+   "update": 320,
+   "train_loss_running": 0.04421891999663785,
+   "validation_bce": 0.04771656554422261,
+   "epoch_equivalents": 106.66666666666667
+  },
+  {
+   "update": 384,
+   "train_loss_running": 0.0352273874450475,
+   "validation_bce": 0.042071510597511574,
+   "epoch_equivalents": 128.0
+  },
+  {
+   "update": 448,
+   "train_loss_running": 0.028028948610881343,
+   "validation_bce": 0.037981910234616126,
+   "epoch_equivalents": 149.33333333333334
+  },
+  {
+   "update": 512,
+   "train_loss_running": 0.022568617045180872,
+   "validation_bce": 0.034795298635223765,
+   "epoch_equivalents": 170.66666666666666
+  },
+  {
+   "update": 576,
+   "train_loss_running": 0.01846351905260235,
+   "validation_bce": 0.03267200611255787,
+   "epoch_equivalents": 192.0
+  },
+  {
+   "update": 640,
+   "train_loss_running": 0.01530499686487019,
+   "validation_bce": 0.030838875476224922,
+   "epoch_equivalents": 213.33333333333334
+  },
+  {
+   "update": 704,
+   "train_loss_running": 0.012896636864752509,
+   "validation_bce": 0.0292848280918451,
+   "epoch_equivalents": 234.66666666666666
+  },
+  {
+   "update": 768,
+   "train_loss_running": 0.011109936604043469,
+   "validation_bce": 0.02810821156442901,
+   "epoch_equivalents": 256.0
+  },
+  {
+   "update": 832,
+   "train_loss_running": 0.009721031703520566,
+   "validation_bce": 0.02739193951642072,
+   "epoch_equivalents": 277.3333333333333
+  },
+  {
+   "update": 896,
+   "train_loss_running": 0.008673491101944819,
+   "validation_bce": 0.027114578058690202,
+   "epoch_equivalents": 298.6666666666667
+  },
+  {
+   "update": 960,
+   "train_loss_running": 0.007835378215531819,
+   "validation_bce": 0.026859663975091628,
+   "epoch_equivalents": 320.0
+  },
+  {
+   "update": 1024,
+   "train_loss_running": 0.007118966481357347,
+   "validation_bce": 0.02635830349392361,
+   "epoch_equivalents": 341.3333333333333
+  },
+  {
+   "update": 1088,
+   "train_loss_running": 0.006599997956072912,
+   "validation_bce": 0.026664487108772183,
+   "epoch_equivalents": 362.6666666666667
+  },
+  {
+   "update": 1152,
+   "train_loss_running": 0.006146805819298606,
+   "validation_bce": 0.02647482224452643,
+   "epoch_equivalents": 384.0
+  },
+  {
+   "update": 1216,
+   "train_loss_running": 0.005770588766608853,
+   "validation_bce": 0.026613066873432678,
+   "epoch_equivalents": 405.3333333333333
+  },
+  {
+   "update": 1280,
+   "train_loss_running": 0.005459224521473516,
+   "validation_bce": 0.02620726408781829,
+   "epoch_equivalents": 426.6666666666667
+  },
+  {
+   "update": 1344,
+   "train_loss_running": 0.00520148438954493,
+   "validation_bce": 0.026585512514467592,
+   "epoch_equivalents": 448.0
+  },
+  {
+   "update": 1408,
+   "train_loss_running": 0.004966041167790536,
+   "validation_bce": 0.027162513261959877,
+   "epoch_equivalents": 469.3333333333333
+  },
+  {
+   "update": 1472,
+   "train_loss_running": 0.004804013209650293,
+   "validation_bce": 0.026974185896508487,
+   "epoch_equivalents": 490.6666666666667
+  },
+  {
+   "update": 1536,
+   "train_loss_running": 0.00462058360062656,
+   "validation_bce": 0.027261409053096066,
+   "epoch_equivalents": 512.0
+  },
+  {
+   "update": 1600,
+   "train_loss_running": 0.004450559223187156,
+   "validation_bce": 0.02728551228841146,
+   "epoch_equivalents": 533.3333333333334
+  },
+  {
+   "update": 1664,
+   "train_loss_running": 0.004335551340773236,
+   "validation_bce": 0.027183427221981096,
+   "epoch_equivalents": 554.6666666666666
+  },
+  {
+   "update": 1728,
+   "train_loss_running": 0.00422049419285031,
+   "validation_bce": 0.028114038161289545,
+   "epoch_equivalents": 576.0
+  },
+  {
+   "update": 1792,
+   "train_loss_running": 0.004118463373742998,
+   "validation_bce": 0.027912618378062307,
+   "epoch_equivalents": 597.3333333333334
+  },
+  {
+   "update": 1856,
+   "train_loss_running": 0.004032124670629855,
+   "validation_bce": 0.028147443606529706,
+   "epoch_equivalents": 618.6666666666666
+  },
+  {
+   "update": 1920,
+   "train_loss_running": 0.003946497676224681,
+   "validation_bce": 0.028915303548177083,
+   "epoch_equivalents": 640.0
+  },
+  {
+   "update": 1984,
+   "train_loss_running": 0.0038842314752400853,
+   "validation_bce": 0.02932469309112172,
+   "epoch_equivalents": 661.3333333333334
+  },
+  {
+   "update": 2048,
+   "train_loss_running": 0.0038294464720820542,
+   "validation_bce": 0.029547254774305556,
+   "epoch_equivalents": 682.6666666666666
+  },
+  {
+   "update": 2112,
+   "train_loss_running": 0.0037654989246220794,
+   "validation_bce": 0.02944017951871142,
+   "epoch_equivalents": 704.0
+  },
+  {
+   "update": 2176,
+   "train_loss_running": 0.003711220921104541,
+   "validation_bce": 0.030007365662374615,
+   "epoch_equivalents": 725.3333333333334
+  },
+  {
+   "update": 2240,
+   "train_loss_running": 0.0036381639729370363,
+   "validation_bce": 0.03015112606095679,
+   "epoch_equivalents": 746.6666666666666
+  },
+  {
+   "update": 2304,
+   "train_loss_running": 0.003611110478232149,
+   "validation_bce": 0.030573434711974344,
+   "epoch_equivalents": 768.0
+  }
+ ],
+ "budget": {
+  "shared_patience": 16,
+  "shared_update_budget": 18304
+ },
+ "sealed_test": {
+  "file": "test_logits.npy",
+  "sha256": "5e98261a21d562a3e231ee8c337d390f313c5068dbd443cea8bb4fe4f3999195",
+  "points": 31,
+  "source_rows": [
+   570,
+   571,
+   572,
+   573,
+   574,
+   575,
+   576,
+   577,
+   578,
+   579,
+   580,
+   581,
+   582,
+   583,
+   584,
+   585,
+   586,
+   587,
+   588,
+   589,
+   590,
+   591,
+   592,
+   593,
+   594,
+   595,
+   596,
+   597,
+   598,
+   599,
+   600
+  ],
+  "owners": [
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt",
+   "3_ssh_apt"
+  ]
+ },
+ "smoke": false
+}

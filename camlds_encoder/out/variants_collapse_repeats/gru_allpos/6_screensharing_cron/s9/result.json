@@ -1,0 +1,352 @@
+{
+ "condition": "collapse_repeats",
+ "variant": "gru_allpos",
+ "family": "variant_held_out",
+ "fold": "6_screensharing_cron",
+ "seed": 9,
+ "window": 16,
+ "labels": 81,
+ "threshold": 0.5,
+ "validation": {
+  "n": 22,
+  "bce": 0.023284684177628814,
+  "threshold": 0.5,
+  "micro_precision": 0.8421052631578947,
+  "micro_recall": 0.6956521739130435,
+  "micro_f1": 0.761904761904762,
+  "macro_f1": 0.526984126984127,
+  "macro_f1_label_count": 12,
+  "exact_set_accuracy": 0.7272727272727273,
+  "mean_predicted_labels": 0.8636363636363636,
+  "mean_true_labels": 1.0454545454545454,
+  "empty_prediction_pct": 13.636363636363635,
+  "precision_at_1": 0.7727272727272727,
+  "recall_at_3": 0.8636363636363636,
+  "recall_at_5": 0.9090909090909091,
+  "per_run": {
+   "6_macro_binary": {
+    "n": 22,
+    "bce": 0.023284684177628814,
+    "micro_f1": 0.761904761904762,
+    "exact_set_accuracy": 0.7272727272727273,
+    "precision_at_1": 0.7727272727272727
+   }
+  },
+  "run_macro_micro_f1": 0.761904761904762,
+  "run_macro_bce": 0.023284684177628814
+ },
+ "val": {
+  "file": "val_logits.npy",
+  "sha256": "5fe81b1f7415fdcf8765ae209df7bd3b3fa52ba54bebdddada6d47c2866eaca6",
+  "points": 22
+ },
+ "val_source_rows": [
+  755,
+  756,
+  757,
+  758,
+  759,
+  760,
+  761,
+  762,
+  763,
+  764,
+  765,
+  766,
+  767,
+  768,
+  769,
+  770,
+  771,
+  772,
+  773,
+  774,
+  776,
+  775
+ ],
+ "updates_completed": 2048,
+ "best_update": 1024,
+ "best_validation_bce": 0.023284683056284415,
+ "cap_reached": false,
+ "seconds": 52.27607297897339,
+ "parameters": {
+  "variant": "gru_allpos",
+  "window": 16,
+  "trunk_trainable": 67279,
+  "total_trainable": 77920
+ },
+ "curve": [
+  {
+   "update": 64,
+   "train_loss_running": 0.3441730795227259,
+   "validation_bce": 0.16238992436298752,
+   "epoch_equivalents": 29.257142857142856
+  },
+  {
+   "update": 128,
+   "train_loss_running": 0.11519138182646108,
+   "validation_bce": 0.08379275817528585,
+   "epoch_equivalents": 58.51428571428571
+  },
+  {
+   "update": 192,
+   "train_loss_running": 0.06941531761107729,
+   "validation_bce": 0.061371457563372436,
+   "epoch_equivalents": 87.77142857142857
+  },
+  {
+   "update": 256,
+   "train_loss_running": 0.05130734057543916,
+   "validation_bce": 0.04962580345830264,
+   "epoch_equivalents": 117.02857142857142
+  },
+  {
+   "update": 320,
+   "train_loss_running": 0.04028468268034303,
+   "validation_bce": 0.04163757050211315,
+   "epoch_equivalents": 146.28571428571428
+  },
+  {
+   "update": 384,
+   "train_loss_running": 0.032340594095387434,
+   "validation_bce": 0.035449268841984294,
+   "epoch_equivalents": 175.54285714285714
+  },
+  {
+   "update": 448,
+   "train_loss_running": 0.025843721170836536,
+   "validation_bce": 0.032382310038865214,
+   "epoch_equivalents": 204.8
+  },
+  {
+   "update": 512,
+   "train_loss_running": 0.02046275011619699,
+   "validation_bce": 0.029635111490885418,
+   "epoch_equivalents": 234.05714285714285
+  },
+  {
+   "update": 576,
+   "train_loss_running": 0.016389265463392182,
+   "validation_bce": 0.027719197985031523,
+   "epoch_equivalents": 263.3142857142857
+  },
+  {
+   "update": 640,
+   "train_loss_running": 0.013302544381137139,
+   "validation_bce": 0.026331433811037898,
+   "epoch_equivalents": 292.57142857142856
+  },
+  {
+   "update": 704,
+   "train_loss_running": 0.01093709175059505,
+   "validation_bce": 0.025162456011531328,
+   "epoch_equivalents": 321.8285714285714
+  },
+  {
+   "update": 768,
+   "train_loss_running": 0.009221585904725077,
+   "validation_bce": 0.02467124202569861,
+   "epoch_equivalents": 351.0857142857143
+  },
+  {
+   "update": 832,
+   "train_loss_running": 0.007858818232611357,
+   "validation_bce": 0.023848500449783205,
+   "epoch_equivalents": 380.34285714285716
+  },
+  {
+   "update": 896,
+   "train_loss_running": 0.006832832695616188,
+   "validation_bce": 0.023726684878570863,
+   "epoch_equivalents": 409.6
+  },
+  {
+   "update": 960,
+   "train_loss_running": 0.005978607558102668,
+   "validation_bce": 0.023454205890831054,
+   "epoch_equivalents": 438.85714285714283
+  },
+  {
+   "update": 1024,
+   "train_loss_running": 0.005311129603549818,
+   "validation_bce": 0.023284683056284415,
+   "epoch_equivalents": 468.1142857142857
+  },
+  {
+   "update": 1088,
+   "train_loss_running": 0.004695070253935619,
+   "validation_bce": 0.02364875117001175,
+   "epoch_equivalents": 497.37142857142857
+  },
+  {
+   "update": 1152,
+   "train_loss_running": 0.004236541348345437,
+   "validation_bce": 0.024171341147888388,
+   "epoch_equivalents": 526.6285714285714
+  },
+  {
+   "update": 1216,
+   "train_loss_running": 0.003837117332823763,
+   "validation_bce": 0.02486560962818287,
+   "epoch_equivalents": 555.8857142857142
+  },
+  {
+   "update": 1280,
+   "train_loss_running": 0.003500368080899298,
+   "validation_bce": 0.0253704576246131,
+   "epoch_equivalents": 585.1428571428571
+  },
+  {
+   "update": 1344,
+   "train_loss_running": 0.0031829463405696153,
+   "validation_bce": 0.025270134511620107,
+   "epoch_equivalents": 614.4
+  },
+  {
+   "update": 1408,
+   "train_loss_running": 0.00293306238297001,
+   "validation_bce": 0.025608062744140625,
+   "epoch_equivalents": 643.6571428571428
+  },
+  {
+   "update": 1472,
+   "train_loss_running": 0.0027614486507312476,
+   "validation_bce": 0.026547445860240864,
+   "epoch_equivalents": 672.9142857142857
+  },
+  {
+   "update": 1536,
+   "train_loss_running": 0.0025624343500722474,
+   "validation_bce": 0.027327031265070408,
+   "epoch_equivalents": 702.1714285714286
+  },
+  {
+   "update": 1600,
+   "train_loss_running": 0.0023768605027575983,
+   "validation_bce": 0.02747623687641388,
+   "epoch_equivalents": 731.4285714285714
+  },
+  {
+   "update": 1664,
+   "train_loss_running": 0.002258021442297742,
+   "validation_bce": 0.026918811562620562,
+   "epoch_equivalents": 760.6857142857143
+  },
+  {
+   "update": 1728,
+   "train_loss_running": 0.002166732315820841,
+   "validation_bce": 0.029013131737842836,
+   "epoch_equivalents": 789.9428571428572
+  },
+  {
+   "update": 1792,
+   "train_loss_running": 0.0020453218366335655,
+   "validation_bce": 0.028209215329017167,
+   "epoch_equivalents": 819.2
+  },
+  {
+   "update": 1856,
+   "train_loss_running": 0.001915870044478395,
+   "validation_bce": 0.02900942835609787,
+   "epoch_equivalents": 848.4571428571429
+  },
+  {
+   "update": 1920,
+   "train_loss_running": 0.001835333157537712,
+   "validation_bce": 0.03039793534712358,
+   "epoch_equivalents": 877.7142857142857
+  },
+  {
+   "update": 1984,
+   "train_loss_running": 0.0017388477458304833,
+   "validation_bce": 0.03027182128426737,
+   "epoch_equivalents": 906.9714285714285
+  },
+  {
+   "update": 2048,
+   "train_loss_running": 0.0016784210163559245,
+   "validation_bce": 0.031190403382786194,
+   "epoch_equivalents": 936.2285714285714
+  }
+ ],
+ "budget": {
+  "shared_patience": 16,
+  "shared_update_budget": 18304
+ },
+ "sealed_test": {
+  "file": "test_logits.npy",
+  "sha256": "c46aa09bf8cd29293dd0f71f4c4d357fe40f50926b01755be6001195826e8485",
+  "points": 33,
+  "source_rows": [
+   856,
+   857,
+   858,
+   859,
+   860,
+   861,
+   863,
+   864,
+   865,
+   867,
+   868,
+   869,
+   870,
+   871,
+   872,
+   873,
+   874,
+   875,
+   876,
+   877,
+   878,
+   879,
+   880,
+   881,
+   882,
+   883,
+   884,
+   885,
+   886,
+   887,
+   888,
+   890,
+   889
+  ],
+  "owners": [
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron",
+   "6_screensharing_cron"
+  ]
+ },
+ "smoke": false
+}
