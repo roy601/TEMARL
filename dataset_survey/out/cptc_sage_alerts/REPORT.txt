@@ -1,0 +1,105 @@
+DATASET REPORT: CPTC and CCDC alerts, from the SAGE repository
+Made by dataset_survey/survey.py on 2026-11-12 13:31 in 38 s. The dataset was not changed.
+Source: GitHub tudelft-cda-lab/SAGE, branch main, commit 707a190e7ace8ebbe0800c68f3bd934e58006b50
+
+1. DOWNLOADED FILES
+   SAGE-main.zip                                                             86.6 MB  none published; sha256 f19fa99183c92a803c66c25d884b87f98f103c55230754852882ff7fc26e1d99
+
+2. TOTALS (every byte read)
+   archives opened 18 | files read 17 | size 1.5 GB | lines 1,100,170
+   binary files 0 | empty files 0 | lines that are not UTF-8 0 | read errors 0 | files outside the part of interest, skipped 24
+
+3. MITRE ATT&CK TECHNIQUE IDS FOUND IN THE TEXT
+   CAUTION: an ID written in the data is not automatically a label of the attack. It can be the ground
+   truth, or only the technique a detector's rule is tagged with (for example every Wazuh alert carries
+   one). Use 3a and 3b to see where the IDs sit and which files say they are labels.
+   mentions 0 | distinct IDs 0 | distinct parent techniques 0
+   3a. structured fields whose values contain IDs (values parsed, field name, file group):
+       none found in parsed fields
+   3b. file groups whose name suggests labels or ground truth:
+       none
+   none. This dataset has no technique IDs written in it.
+
+4. FILE TYPES
+   .json        files        16  size     1.4 GB  lines       1,095,896
+   .json__      files         1  size    13.4 MB  lines           4,274
+
+5. FILE GROUPS (4 in total; numbers in a path are shown as #). Largest first.
+   SAGE-main.zip::SAGE-main/alerts/ccdc/wrcddc-#.json
+      files 1 | size 800.3 MB | lines 1,052,281 | type text
+   SAGE-main.zip::SAGE-main/alerts/cptc-#/suricata_alert_t#.json
+      files 6 | size 562.2 MB | lines 13 | type json
+   SAGE-main.zip::SAGE-main/alerts/cptc-#/NationalTeam#.json
+      files 9 | size 112.9 MB | lines 43,602 | type json
+   SAGE-main.zip::SAGE-main/alerts/cptc-#/NationalTeam#.json__
+      files 1 | size 13.4 MB | lines 4,274 | type text
+
+6. FIELDS OF THE STRUCTURED FILE GROUPS (CSV and JSON)
+   SAGE-main.zip::SAGE-main/alerts/cptc-#/suricata_alert_t#.json
+      records 331,554 | parsed into fields 331,554 | records that did not fit 0
+      _bkt                                   filled 100.0%  distinct 18              e.g. ids~21~<token:36> (68127), ids~19~<token:36> (50131), ids~11~<token:36> (44386)
+      _cd                                    filled 100.0%  distinct more than 300   e.g. 21:63905046 (1), 21:63904549 (1), 20:12422475 (1)
+      _indextime                             filled 100.0%  distinct more than 300   e.g. 1541287762 (5), 1541287657 (5), 1541287628 (5)
+      _raw                                   filled 100.0%  distinct more than 300   e.g. {"timestamp":"2018-11-03T23:... (1), {"timestamp":"2018-11-03T23:... (1), {"timestamp":"2018-11-03T23:... (1)
+      _serial                                filled 100.0%  distinct more than 300   e.g. 0 (2), 1 (2), 2 (2)
+      _si[]                                  filled 100.0%  distinct 2               e.g. ["index01", "ids"] (169910), ["index02", "ids"] (161644)
+      _subsecond                             filled 100.0%  distinct more than 300   e.g. .391761 (1), .863966 (1), .747162 (1)
+      _time                                  filled 100.0%  distinct more than 300   e.g. 2018-11-03 23:29:59.391 UTC (1), 2018-11-03 23:29:58.863 UTC (1), 2018-11-03 23:29:57.747 UTC (1)
+      host                                   filled 100.0%  distinct 158             e.g. t1-corp-security-00 (14454), t1-corp-mail-00 (10033), t1-corp-onramp-00 (7975)
+      index                                  filled 100.0%  distinct 1               e.g. ids (331554)
+      linecount                              filled 100.0%  distinct 1               e.g. 1 (331554)
+      source                                 filled 100.0%  distinct 1               e.g. <token:28>.log (331554)
+      sourcetype                             filled 100.0%  distinct 1               e.g. suricata:alert (331554)
+      splunk_server                          filled 100.0%  distinct 2               e.g. index01 (169910), index02 (161644)
+   SAGE-main.zip::SAGE-main/alerts/cptc-#/NationalTeam#.json
+      records 43,602 | parsed into fields 43,602 | records that did not fit 0
+      preview                                filled 100.0%  distinct 1               e.g. False (43602)
+      offset                                 filled 100.0%  distinct more than 300   e.g. 7300 (1), 7299 (1), 7294 (1)
+      result._raw                            filled 100.0%  distinct more than 300   e.g. {"timestamp":"2017-11-04T13:... (2), {"timestamp":"2017-11-04T13:... (2), {"timestamp":"2017-11-04T13:... (2)
+      result._time                           filled 100.0%  distinct more than 300   e.g. 2017-11-04T09:25:24.425-0400 (4), 2017-11-04T09:25:24.429-0400 (4), 2017-11-04T09:25:24.431-0400 (4)
+      result.alert.action                    filled 100.0%  distinct 1               e.g. allowed (43602)
+      result.alert.category                  filled 100.0%  distinct 20              e.g. Web Application Attack (14928), Potentially Bad Traffic (9893), Misc activity (6289)
+      result.alert.gid                       filled 100.0%  distinct 1               e.g. 1 (43602)
+      result.alert.rev                       filled 100.0%  distinct 20              e.g. 2 (10661), 8 (8121), 3 (7443)
+      result.alert.severity                  filled 100.0%  distinct 3               e.g. 2 (20770), 1 (15908), 3 (6924)
+      result.alert.signature                 filled 100.0%  distinct 167             e.g. ET SCAN Nmap Scripting Engin... (6572), ET SCAN Possible Nmap User-A... (6570), GPL ICMP_INFO PING *NIX (4820)
+      result.alert.signature_id              filled 100.0%  distinct 168             e.g. 2009358 (6572), 2024364 (6570), 2100366 (4820)
+      result.date_hour                       filled 100.0%  distinct 12              e.g. 13 (10184), 14 (7790), 16 (4838)
+      result.date_mday                       filled 100.0%  distinct 1               e.g. 4 (43602)
+      result.date_minute                     filled 100.0%  distinct 60              e.g. 9 (1835), 40 (1790), 4 (1767)
+      result.date_month                      filled 100.0%  distinct 1               e.g. november (43602)
+      result.date_second                     filled 100.0%  distinct 60              e.g. 0 (1145), 49 (1105), 33 (1077)
+      result.date_wday                       filled 100.0%  distinct 1               e.g. saturday (43602)
+      result.date_year                       filled 100.0%  distinct 1               e.g. 2017 (43602)
+      result.date_zone                       filled 100.0%  distinct 1               e.g. 0 (43602)
+      result.dest_ip                         filled 100.0%  distinct more than 300   e.g. 10.0.0.27 (736), 10.0.0.71 (595), 10.0.0.100 (498)
+      result.dest_port                       filled  88.9%  distinct more than 300   e.g. 80 (4523), 3306 (1672), 3389 (1338)
+      result.event_type                      filled 100.0%  distinct 1               e.g. alert (43602)
+      result.eventtype                       filled  93.2%  distinct 1               e.g. nix-all-logs (40649)
+      result.flow_id                         filled  88.9%  distinct more than 300   e.g. 1996853772317458 (2), 1308434939278221 (2), 937895225748950 (2)
+      result.host                            filled 100.0%  distinct 54              e.g. kalivdi01-n4.nationals.vdi.g... (6301), kalivdi03-n8.nationals.vdi.g... (3010), kalivdi03-n10.nationals.vdi.... (2544)
+      result.in_iface                        filled  99.3%  distinct 2               e.g. eth0 (43291), ens3 (4)
+      result.index                           filled 100.0%  distinct 1               e.g. ids (43602)
+      result.linecount                       filled 100.0%  distinct 1               e.g. 1 (43602)
+      result.packet                          filled 100.0%  distinct more than 300   e.g. <token:80> (2), <token:80> (2), <token:80> (2)
+      result.packet_info.linktype            filled 100.0%  distinct 2               e.g. 1 (43295), 12 (307)
+      result.payload                         filled  61.4%  distinct more than 300   e.g. <token:80> (36), <token:80> (24), <token:80> (24)
+      result.proto                           filled 100.0%  distinct 3               e.g. TCP (36609), ICMP (4822), UDP (2171)
+      result.punct                           filled 100.0%  distinct 3               e.g. {"":"--::.+","":,"":"","":""... (38473), {"":"--::.+","":"","":"","":... (4822), {"":"--::.+","":,"":"","":".... (307)
+      result.region                          filled 100.0%  distinct 1               e.g. National (43602)
+      result.school                          filled 100.0%  distinct 9               e.g. City College of San Francisc... (8413), California State Polytechnic... (7801), University of Central Florid... (7150)
+      result.source                          filled 100.0%  distinct 1               e.g. <token:28>.log (43602)
+      result.sourcetype                      filled 100.0%  distinct 1               e.g. suricata:alert (43602)
+      result.splunk_server                   filled 100.0%  distinct 2               e.g. splidx1 (22210), splidx2 (21392)
+      result.src_ip                          filled 100.0%  distinct 29              e.g. 10.0.254.31 (13026), 10.0.254.33 (8627), 10.0.254.30 (7902)
+      result.src_port                        filled  88.9%  distinct more than 300   e.g. 63194 (16), 62033 (12), 55157 (10)
+      ... and 33 more fields (see report.json)
+
+7. FIRST LINES OF THE LARGEST TEXT FILE GROUPS (long tokens are masked)
+   SAGE-main.zip::SAGE-main/alerts/cptc-#/NationalTeam#.json__   (example file: SAGE-main.zip::SAGE-main/alerts/cptc-2017/NationalTeam1.json__)
+      > ﻿[{"preview": false, "offset": 22559, "result": {"_raw": "{\"timestamp\":\"2017-11-04T12:48:35.198583+0000\",\"flow_id\":1039376568223671,\"in_iface\":\"eth0\",\"event_type\":\"alert\",\"src_ip\":\"10.0.254.30\",\"src_po...
+      > {"preview": false, "offset": 22557, "result": {"_raw": "{\"timestamp\":\"2017-11-04T12:48:36.300352+0000\",\"flow_id\":533858917585764,\"in_iface\":\"eth0\",\"event_type\":\"alert\",\"src_ip\":\"10.0.254.30\",\"src_port\...
+      > ,{"preview": false, "offset": 22556, "result": {"_raw": "{\"timestamp\":\"2017-11-04T12:48:36.323106+0000\",\"flow_id\":161313454353954,\"in_iface\":\"eth0\",\"event_type\":\"alert\",\"src_ip\":\"10.0.254.30\",\"src_port...
+
+8. PROBLEMS
+   none
