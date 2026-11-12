@@ -19,6 +19,7 @@ from __future__ import annotations
 import csv
 import io
 import os
+import re
 import subprocess
 import sys
 import time
@@ -95,13 +96,17 @@ def source_values(text):
     return out
 
 
-def report_verdicts(text):
-    """id -> verdict, from the table rows of REPORT.md."""
+def report_verdicts(text, ids):
+    """id -> verdict, from the REPORT.md table rows whose first cell is a target id. Cells are split
+    on unescaped pipes, so a command written as `a \\| b` stays in one cell; the verdict is the last cell."""
     out = {}
     for line in text.splitlines():
-        cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) >= 6 and cells[0] and set(cells[0]) != {"-"} and cells[0] != "id":
-            out[cells[0]] = cells[5]
+        line = line.strip()
+        if not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in re.split(r"(?<!\\)\|", line.strip("|"))]
+        if cells and cells[0] in ids and len(cells) >= 6:
+            out[cells[0]] = cells[-1]
     return out
 
 
@@ -154,7 +159,7 @@ def audit_folder(folder, repo):
                 f"ORDER: targets added, removed or changed after the first result: {', '.join(changed)}" if changed
                 else "ORDER: no target changed after the first result")
         if present["REPORT.md"] and rows:
-            v = report_verdicts(read("REPORT.md"))
+            v = report_verdicts(read("REPORT.md"), {r["id"].strip() for r in rows})
             missing = [r["id"] for r in rows if r["id"].strip() not in v]
             bad = [k for k, x in v.items() if x not in VERDICTS]
             if missing:

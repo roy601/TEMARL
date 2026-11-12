@@ -124,6 +124,11 @@ class Audit(unittest.TestCase):
         _, text = self.run_audit()
         self.assertNotIn("TEMPLATE", text)
 
+    def test_report_rows_only_for_targets_and_escaped_pipes_stay_in_one_cell(self):
+        text = ("| | targets | MATCH |\n|---|---|---|\n| all | 116 | 14 |\n"
+                "| T1 | most frequent command | uname | cat x \\| grep y \\| wc -l | - | NO MATCH |\n")
+        self.assertEqual(A.report_verdicts(text, {"T1"}), {"T1": "NO MATCH"})
+
     def test_source_values_ignores_the_colon_inside_the_hint(self):
         v = A.source_values("- Type (a: b; c): Replicated\n- Paper (x):\n")
         self.assertEqual(v, {"Type": "Replicated", "Paper": ""})
