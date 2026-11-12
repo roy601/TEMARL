@@ -61,4 +61,14 @@ this, but it lowers protection, so it is your decision.
 
 ## Tests
 
-`python -m unittest discover -s dataset_survey/tests` (13 tests, on small made-up archives).
+`python -m unittest discover -s dataset_survey/tests` (19 tests, on small made-up data).
+
+## CasinoLimit: the attack steps in time order
+
+`python dataset_survey/casinolimit_steps.py` (after the survey has downloaded CasinoLimit; about 9 minutes)
+
+Each CasinoLimit label points to auditd events on one machine. The script finds every one of those events in
+the raw `audit.log` files, takes its time and command line, and puts each attacker's labels in time order.
+Output in `dataset_survey/out/casinolimit_steps/`: `REPORT.txt` (summary), `steps.csv` (one row per label:
+instance, order, time, machine, technique, command, who labelled it), `instances.csv` (one row per attacker).
+The committed output was made on 2026-11-12 from files whose md5 matched the Zenodo record.
