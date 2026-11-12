@@ -54,3 +54,28 @@ paper would change the verdict. No alternate may replace a primary after the run
 3. Table VIII is headed "2020–2021"; the data are 2021–2022.
 4. The paper says it uses the ATT&CK Enterprise matrix, but T1424 (Process Discovery) and T1655 are Mobile-matrix IDs; Table VIII uses T1036 for Masquerading where Table VII uses T1655.
 5. The technique-frequency definition differs between the paper (one occurrence per session) and the scripts ("command-weighted", or weighted by the number of sessions per pattern).
+
+## Route B (stage 2): decisions 18–29
+
+Written 2026-11-13, **after the route A results were known** (report 499dc50) and **before any
+route B code or result existed**. They add no target and change no route A decision; route B is
+scored against the same `TARGETS.csv`, with the route A primary definitions.
+
+What I had seen before writing these: the route A results; the layout of the raw logs in the
+release (236 files, 1.7 GB, for 2024; two short source notes for 2021–2022); the code of the
+2024 scripts. No raw log had been parsed.
+
+| # | gap | choice | why | decided on |
+|---|---|---|---|---|
+| 18 | 2021–2022 raw logs | **NOT ATTEMPTED.** The release holds only two notes naming third-party sources: the 2021 logs (Başer et al.) now on Kaggle behind a login, and the 2022 logs (Priya et al.) on a personal OneDrive link that returns HTTP 404 (checked 2026-11-13). One of the two parts cannot be obtained, so the period cannot be rebuilt. | the README's "full raw capture preserved" does not hold for 2021–2022; this is recorded as a finding | 2026-11-13 |
+| 19 | 2024 code | the authors' `analysis/period_2024/` scripts at commit d5f7fe1, copied unchanged into a work folder and run in their order: the read-raw-logs block of `01_extract_sessions.py` (commented out in the release; run as written with only the leading `# ` removed), then 01, 02, 03, 04, 05, 07a, 07b | their own pipeline; 06* (response replay) and 08 (plots) produce no target | 2026-11-13 |
+| 20 | Allowed changes | **none to any logic.** Only: the environment variable `MPLBACKEND=Agg`, so `plt.show()` does not wait for a window. If a step fails for any other reason, it is recorded as failed with its error, later steps are NOT ATTEMPTED, and nothing is patched | a patched pipeline would no longer be the authors' | 2026-11-13 |
+| 21 | Number of Attacks (Table I, 2024) | primary: the number of records their read-raw-logs block loads (`len(merged_df)`, which the block prints as "the number of commands in the dataset") | that is the count their code produces | 2026-11-13 |
+| 22 | Sessions | primary: entries of the rebuilt `session_dict.json`; average length = mean list length | as route A, decision 3 and 5 | 2026-11-13 |
+| 23 | Session kinds and patterns | kinds: distinct command lists in `session_dict.json`; patterns: keys of the rebuilt `5-session归类.json` | as route A, decisions 6–7 | 2026-11-13 |
+| 24 | Techniques per session | the rebuilt `7-session_tech_no_dup.json` (techniques of a session pattern, consecutive repeats removed), given to every session of that pattern; then the route A primary definitions (decisions 10–14) | the same definitions on rebuilt labels | 2026-11-13 |
+| 25 | The authors' own technique count | alternate: shares from the weighted counts that `07b_technique_frequency.py` prints | their code's own answer, next to the primary | 2026-11-13 |
+| 26 | Most frequent command | primary: top of the rebuilt `2-sorted_cmd_counter.json` | as route A, decision 15 | 2026-11-13 |
+| 27 | Ubuntu share (Sec. IV.B.2) | **NOT ATTEMPTED** for both periods: `03_2_system_commands.py` only prints word lists; no list of standard Ubuntu commands and no share computation exist in the release | nothing to run | 2026-11-13 |
+| 28 | Do the released data follow from the raw logs? | compare rebuilt and released 2024 sessions by attacker IP: same IPs, identical command lists, identical technique sequences; report each as a count and share. Not a target, a finding | tests the release itself | 2026-11-13 |
+| 29 | Per-command labels (Idea 02, Q3) | label each command of each rebuilt session with the authors' own tables, exactly as the loop in `07a_map_attack_techniques.py` does (complex command → `compound_pattern_mapped_attck`, simple command → first matching entry of `simple_commands_attck`), with the tables taken from running their 07a unchanged. Report: share of commands with at least one technique. Q3 passes if the procedure is deterministic (identical on two machines) | answers whether their released code gives per-command labels | 2026-11-13 |
