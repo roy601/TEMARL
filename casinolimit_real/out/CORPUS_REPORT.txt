@@ -1,0 +1,38 @@
+CASINOLIMIT IN THE CAM-LDS STEP FORMAT
+Made by casinolimit_real/build_steps.py on 2026-11-12 15:07.
+Input  steps.csv  sha256 642ff211960709744c4028cd3691763ed721ed8914f46003b8d7853aa3f402c1  (9,243 label rows)
+Output steps.jsonl sha256 399ef563db0223a5fe85d8668ed6fce925fbd43240f79ef7c9b0bc9cbe823c2d
+
+1. SIDE BY SIDE (same code for both; W = 16; no split, no model)
+   measure                                                                                CasinoLimit                                 CAM-LDS
+   runs                                                                                           114                                      34
+   steps                                                                                         8201                                     904
+   labels                                                                                          66                                      81
+   steps per run                                               min 1, median 41.5, mean 71.9, max 482     min 3, median 27, mean 26.6, max 42
+   runs with 1 step (no prediction point)                                                           1                                       0
+   runs with 30+ steps                                                                             67                                       9
+   prediction points (every step except a run's first)                                           8087                                     870
+   labels per step (1/2/3+)                                                          7174 / 1012 / 15                          703 / 148 / 53
+   target labels already in the 16-step window ('repeat')                        6583 of 9125 (72.1%)                     600 of 1270 (47.2%)
+   points with a label never seen before in the run                              1420 of 8087 (17.6%)                      379 of 870 (43.6%)
+   labels used by only 1 run                                                                       13                                      15
+   labels used by 10+ runs                                                                         35                                      26
+   steps if repeats are collapsed (occurrence 1 only)                                            4990                                     883
+
+2. MACHINES (CasinoLimit only; zones in CAM-LDS were hand-typed per run)
+   steps per machine: start 3,978, bastion 2,463, meet 1,748, intranet 12
+   first machine of each run: start 113, bastion 1
+   runs touching 1/2/3/4 machines: 48 / 28 / 35 / 3
+
+3. LABEL QUALITY (CasinoLimit only)
+   steps with at least one 'doubt' label: 690 of 8,201
+   steps by labeller: auto-triggers 4,242, validation1 3,063, validation2 627, validation1+validation2 120, auto-triggers+validation2 108, auto-triggers+validation1 41
+
+4. CHECKS
+   every label row used once: True
+   exec_index is 0..n-1 in every run: True
+   time never goes backwards inside a run: True
+   every label is in the vocabulary: True
+
+Not done here, on purpose: no split, no training, no test scores. The split must be fixed
+and written down before any model sees this corpus.
