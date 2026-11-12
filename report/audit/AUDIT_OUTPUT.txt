@@ -1,0 +1,65 @@
+
+== 1. Source file and sequences ==
+  attack_times.csv sha256 e300f508c5611e11a835d2dea575b152e85c9eed08ac3e945ec7f42cc0433d81
+  [PASS] 904 data rows, 8 columns  904 rows
+  [PASS] every row has valid technique IDs  0 bad
+  [PASS] no empty field, no duplicate row
+  [PASS] 34 runs in 7 scenarios
+  [PASS] no two steps of a run start at the same time
+  [PASS] 81 parent techniques from 97 sub-techniques
+  [PASS] 21 repeated executions, 883 steps without them
+
+== 2. Compared with the project's stored corpus ==
+  [PASS] vocab.json equals the 81 labels rebuilt here, same order
+  [PASS] steps.jsonl: same runs, same order, same labels, same row links, same repeat marks
+
+== 3. Folds ==
+  [PASS] 29 variant folds + 3 scenario folds  single-run scenarios ['4', '5', '7']
+  [PASS] train, validation and test runs never overlap, in every fold
+  [PASS] every fold has training and validation runs
+  [PASS] a variant fold trains only on other runs of the same scenario
+  [PASS] a scenario fold never trains on the tested scenario
+
+== 4. Prediction points, copies and repeats (labels only, no model output) ==
+  [PASS] 870 prediction points, 1,270 target labels, 600 of them already in the window
+  [PASS] variant family: 790 test points, 425 copies (53.8%)  790, 425
+  [PASS] scenario family: 331 test points, 0 copies
+  [PASS] the project's side file agrees on every point: rows, targets, copy and repeat marks (2,212 points)  2212 points
+
+== 5. Every training (2,240): threshold from validation only, stopping rule, seeds ==
+  [PASS] all trainings present and readable  2240
+  [PASS] each output lines up with the points rebuilt here; no NaN
+  [PASS] each threshold is exactly the validation-best one by the frozen rule  0 differ
+  [PASS] each training stopped exactly where the patience rule says, and kept its validation-best update  0 differ
+  [PASS] the 10 seeds of a fold give 10 different outputs (no seed reused)  0 repeated
+
+== 6. Stage 1 test scores, recomputed with this file's own metric code ==
+  main, variant held out:   allpos all 0.861 novel 0.798   gru_allpos all 0.866 novel 0.808   lstm_allpos all 0.863 novel 0.806   baseline all 0.842 novel 0.789
+  collapse_repeats:         allpos all 0.859 novel 0.794   gru_allpos all 0.865 novel 0.807   lstm_allpos all 0.862 novel 0.804
+  [PASS] micro-F1 on all, novel and copy points equals the published Stage 1 file (18 numbers)  largest difference 1.1e-16
+  [PASS] old Transformer: fold means equal the published ones
+  scenario held out (all points):
+    S2: allpos 0.000  gru_allpos 0.002  lstm_allpos 0.005  | Transformer recall@5 0.107 | ceiling 0.774
+    S3: allpos 0.135  gru_allpos 0.139  lstm_allpos 0.164  | Transformer recall@5 0.245 | ceiling 0.661
+    S6: allpos 0.209  gru_allpos 0.180  lstm_allpos 0.181  | Transformer recall@5 0.315 | ceiling 0.419
+
+== 7. Transformer against GRU and LSTM, statistics recomputed ==
+  vs gru_allpos: mean -0.0049  CI [-0.0128, +0.0033]  (other seed, 200,000 resamples: [-0.0126, +0.0032])  exact p 0.0463 (published, approximate: 0.0461)  Transformer ahead in 5/29 folds
+  [PASS] vs gru_allpos: mean and interval equal the published ones; the interval includes 0 under both bootstraps
+  vs lstm_allpos: mean -0.0026  CI [-0.0131, +0.0090]  (other seed, 200,000 resamples: [-0.0130, +0.0090])  exact p 0.0410 (published, approximate: 0.0411)  Transformer ahead in 7/29 folds
+  [PASS] vs lstm_allpos: mean and interval equal the published ones; the interval includes 0 under both bootstraps
+  Holm-corrected exact p: 0.0820 and 0.0820
+  [PASS] verdict "no difference shown" follows from the frozen rule with the exact test too
+
+== 7b. Why unseen scenarios fail (labels only) ==
+    1_autostart_localaccount     test steps whose (previous step -> next step) pair occurs in training: 100.0%
+    3_ssh_apt                    test steps whose (previous step -> next step) pair occurs in training:  93.5%
+    6_macro_binary               test steps whose (previous step -> next step) pair occurs in training:  68.2%
+    S2                           test steps whose (previous step -> next step) pair occurs in training:   8.9%
+    S3                           test steps whose (previous step -> next step) pair occurs in training:  22.1%
+    S6                           test steps whose (previous step -> next step) pair occurs in training:  22.7%
+
+== 8. Model inputs: the project's arrays against the ones rebuilt here ==
+  [PASS] same folds, same runs, and bit-identical inputs, masks and targets in all 64 fold-conditions  26,206 windows
+
+AUDIT: 29 of 29 checks passed

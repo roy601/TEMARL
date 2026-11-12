@@ -1,0 +1,17 @@
+VALIDATION ONLY. Micro-F1, mean over folds (models: mean over 10 seeds first). Exploratory.
+
+                                    previous-step lookup  longest-match lookup           Transformer                   GRU                  LSTM
+variant folds (29), all points                     0.584                 0.878                 0.898                 0.897                 0.898
+variant folds (29), novel points                   0.505                 0.802                 0.819                 0.830                 0.835
+scenario folds (3), all points                     0.574                 0.847                 0.856                 0.868                 0.876
+scenario folds (3), novel points                   0.512                 0.736                 0.747                 0.764                 0.777
+
+variant folds, novel points: folds where the Transformer beats the longest-match lookup: 10 of 29
+
+RECALL CEILING ON THE TEST RUNS (labels only): share of target labels the model has seen
+                published: all test steps,     predicted steps only,     predicted steps only,
+                  seen in train+validation  seen in train+validation     seen in training only
+S2                                   0.781                     0.774                     0.774
+S3                                   0.686                     0.661                     0.661
+S6                                   0.412                     0.419                     0.419
+variant mean                         0.973                     0.973                     0.966
