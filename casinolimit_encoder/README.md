@@ -3,10 +3,10 @@
 TEMARL's encoders (the CAM-LDS final design) on CasinoLimit, a second dataset of 114 real human
 attackers. Everything for this study runs from this folder and saves into `out/`.
 
-The rules are in [PROTOCOL_CL_1.0.md](PROTOCOL_CL_1.0.md). Until it is approved, only checks and
-smoke runs are allowed.
+The rules are in [PROTOCOL_CL_1.0.md](PROTOCOL_CL_1.0.md): approved and frozen on 2026-11-12, before
+any training. `spec_cl.py` pins every file it depends on; nothing runs if one changes.
 
-## Run (GPU PC, after approval)
+## Step 1: train (GPU PC)
 
 ```
 python casinolimit_encoder/run.py --stage all --device cuda
@@ -15,6 +15,13 @@ python casinolimit_encoder/run.py --stage all --device cuda
 One command does everything: check → pilot → 400 trainings → lookup baseline → validation summary
 (about 10 hours). If it stops, run the same command again: finished trainings are kept.
 Then commit and push `casinolimit_encoder/out`.
+
+## Step 2: score (this PC, after pulling)
+
+```
+python casinolimit_encoder/evaluate.py --validation-dry-run    # validation only; must PASS
+python casinolimit_encoder/evaluate.py --open-test             # once; results in out_test/
+```
 
 | Other commands | |
 |---|---|
@@ -30,7 +37,9 @@ Then commit and push `casinolimit_encoder/out`.
 | `cl_split.py` | the 5 folds (no randomness) |
 | `cl_data.py` | windows (frozen window code), copy/novel marks |
 | `lookup.py` | the lookup-table baseline |
-| `run.py` | all stages |
+| `run.py` | all training stages |
+| `evaluate.py` | dry run on validation, then the one-time test scoring |
+| `spec_cl.py` | the frozen file hashes (PASS / FAIL) |
 
 No file of `camlds_encoder/`, `camlds_real/` or `Temarl_Test_v1_L1/` is changed.
 
@@ -43,6 +52,8 @@ No file of `camlds_encoder/`, `camlds_real/` or `Temarl_Test_v1_L1/` is changed.
 | `budget.json` | chosen patience and update budget | yes |
 | `train/<condition>/<model>/<fold>/s<seed>/result.json` | validation scores, threshold, hashes | yes |
 | `train/.../test_logits.npy` | sealed test outputs | yes |
-| `train/.../val_logits.npy`, `encoder.pt` | validation outputs, checkpoint | no: stay on the GPU PC |
+| `train/.../val_logits.npy` | validation outputs (for the dry run) | yes |
+| `train/.../encoder.pt` | checkpoint | no: stays on the GPU PC |
 | `lookup/<condition>/<fold>/` | lookup predictions (test sealed) | yes |
 | `VALIDATION_SUMMARY.txt` | validation scores, descriptive | yes |
+| `../out_test/CL_RESULTS.*` | the test results (Step 2) | yes |

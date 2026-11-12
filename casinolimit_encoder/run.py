@@ -226,18 +226,20 @@ def stage_lookup(args, out, condition):
         rec = {"condition": condition, "fold": f["fold"], "smoke": args.smoke, "val_source_rows": rows_va,
                "validation_micro_f1": {}}
         os.makedirs(cell, exist_ok=True)
-        for name, longest in (("longest", True), ("previous", False)):
-            pv = LK.predictions(tab, val_seqs, LABEL_ID, longest)
-            pt = LK.predictions(tab, test_seqs, LABEL_ID, longest)
+        for name in LK.RULES:
+            pv = LK.predictions(tab, val_seqs, LABEL_ID, name)
+            pt = LK.predictions(tab, test_seqs, LABEL_ID, name)
             if pv.shape != Yva.shape or len(pt) != len(rows_te):
                 raise SystemExit(f"lookup {f['fold']}: predictions do not line up with the windows")
             rec["validation_micro_f1"][name] = micro_f1(pv, Yva)
             rec[f"val_{name}"] = save_array(cell, f"val_{name}.npy", pv)
             rec[f"sealed_test_{name}"] = {**save_array(cell, f"test_{name}.npy", pt),
                                           "source_rows": rows_te, "owners": own_te}
+        best = max(LK.RULES, key=lambda r: (rec["validation_micro_f1"][r], -LK.RULES.index(r)))
+        rec["comparator"] = best                    # Section 4: highest validation micro-F1; ties: RULES order
         write_json(os.path.join(cell, "result.json"), rec)
-        print(f"  lookup {condition} {f['fold']}: validation micro-F1 longest "
-              f"{rec['validation_micro_f1']['longest']:.3f}, previous {rec['validation_micro_f1']['previous']:.3f}")
+        print(f"  simple baselines {condition} {f['fold']}: validation micro-F1 " + ", ".join(
+            f"{r} {rec['validation_micro_f1'][r]:.3f}" for r in LK.RULES) + f" -> comparator {best}")
 
 
 def stage_summary(args, out):
@@ -258,11 +260,13 @@ def stage_summary(args, out):
         if os.path.isdir(base):
             recs = [read_json(os.path.join(base, d, "result.json")) for d in sorted(os.listdir(base))
                     if os.path.exists(os.path.join(base, d, "result.json"))]
-            for name in ("longest", "previous"):
+            for name in LK.RULES:
                 f1 = [r["validation_micro_f1"][name] for r in recs]
                 if f1:
-                    lines.append(f"{cond:<18}{'lookup ' + name:<17}{len(recs):>10}{st.mean(f1):>19.3f}"
+                    lines.append(f"{cond:<18}{name:<17}{len(recs):>10}{st.mean(f1):>19.3f}"
                                  f"{min(f1):>8.3f}{max(f1):>8.3f}{'-':>12}")
+            if recs:
+                lines.append(f"{'':<18}comparator per fold: " + ", ".join(f"{r['fold']} {r['comparator']}" for r in recs))
     text = "\n".join(lines) + "\n"
     with open(os.path.join(out, "VALIDATION_SUMMARY.txt"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
@@ -279,9 +283,13 @@ def main():
     ap.add_argument("--smoke", action="store_true", help="tiny budgets, 2 folds, 1 seed; NOT a result")
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
-    if args.stage not in ("check", "summary") and not args.smoke and not S.APPROVED_ON:
-        raise SystemExit("PROTOCOL_CL_1.0.md is not approved yet (cl_split.APPROVED_ON). Only --smoke runs "
-                         "and --stage check are allowed.")
+    if args.stage not in ("check", "summary") and not args.smoke:
+        if not S.APPROVED_ON:
+            raise SystemExit("PROTOCOL_CL_1.0.md is not approved yet (cl_split.APPROVED_ON). Only --smoke runs "
+                             "and --stage check are allowed.")
+        import spec_cl
+        if spec_cl.check() != 0:
+            raise SystemExit("A frozen file changed (spec_cl.py). Stop: restore it, do not bypass.")
     out = os.path.join(HERE, "out_smoke" if args.smoke else "out")
     torch.set_num_threads(args.threads)
     device = T.device_of(args.device)

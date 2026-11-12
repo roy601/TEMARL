@@ -7,7 +7,10 @@ are measured the same way:
                   occurs as a context in the TRAINING runs, and predict the label set that most
                   often followed it there. Unseen context: the most frequent next label set in
                   training. Ties: the smallest label set in sorted order.
-  previous step   the same with only the last step as context (reported, not compared).
+  previous step   the same with only the last step as context.
+  repeat last     predict the label set of the last step again (no table at all).
+The three rules are the "simple baselines". For each fold, the one with the highest validation
+micro-F1 is the comparator (PROTOCOL_CL_1.0.md, Section 4).
 """
 from __future__ import annotations
 
@@ -35,12 +38,25 @@ def predict(tab: dict, win: tuple, longest: bool = True) -> tuple:
     return tab[()]
 
 
-def predictions(tab: dict, seqs: dict, label_id: dict, longest: bool = True, w: int = W) -> np.ndarray:
+RULES = ("longest", "previous", "repeat_last")
+
+
+def predict_rule(rule: str, tab: dict, win: tuple) -> tuple:
+    if rule == "longest":
+        return predict(tab, win, True)
+    if rule == "previous":
+        return predict(tab, win, False)
+    if rule == "repeat_last":
+        return win[-1]
+    raise ValueError(rule)
+
+
+def predictions(tab: dict, seqs: dict, label_id: dict, rule: str = "longest", w: int = W) -> np.ndarray:
     """(n_points, n_labels) 0/1, points in the same order as cl_data.windows."""
     rows = []
     for q in seqs.values():
         for _, win, _ in points(q, w):
             y = np.zeros(len(label_id), np.float32)
-            y[[label_id[t] for t in predict(tab, win, longest)]] = 1.0
+            y[[label_id[t] for t in predict_rule(rule, tab, win)]] = 1.0
             rows.append(y)
     return np.asarray(rows, np.float32).reshape(-1, len(label_id))

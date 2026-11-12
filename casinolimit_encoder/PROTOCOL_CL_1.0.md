@@ -1,33 +1,36 @@
 # Protocol CL 1.0: TEMARL's encoders on CasinoLimit
 
-**Status: DRAFT, 2026-11-12. Not approved.** Until it is approved, `run.py` allows only `--stage check`
-and `--smoke` runs. Approval = the user says so; then `cl_split.APPROVED_ON` is set in a commit.
-
-Part A (Sections 1–6) must be approved **before any real training**.
-Part B (Section 7) must be frozen, with the evaluation code and file hashes, **before any test score**.
+**Status: APPROVED by the user and FROZEN on 2026-11-12, before any real training.**
+Both the training plan (Sections 1–6) and the evaluation (Section 7) are fixed now, before any model
+is trained on CasinoLimit. `spec_cl.py` records the SHA-256 of every file this depends on; `run.py`
+and `evaluate.py` refuse to run if one changes. A change means a new protocol version (CL 1.1),
+never an edit of this one.
 
 ## 1. Questions
 
-1. **Main:** do the encoders predict the next step of an *unseen human attacker* better than a lookup table?
+1. **Main:** do the encoders predict the next step of an *unseen human attacker* better than the best
+   simple baseline?
 2. Is the Transformer different from the GRU and the LSTM? (as in CAM-LDS protocol 1.2)
 
 Nothing is designed or tuned on CasinoLimit. Every model choice was fixed on CAM-LDS before
-CasinoLimit was used. CasinoLimit only tests whether those results hold on a second, independent
-dataset.
+CasinoLimit was used. CasinoLimit tests whether those results hold on a second, independent dataset
+of real human attackers.
 
 ## 2. Data and split
 
+- Source: CasinoLimit (Kilian et al., RAID 2025), Zenodo 10.5281/zenodo.17256954, CC BY 4.0; files
+  checked against the published md5. Each label is placed in time by finding its auditd events in
+  the raw logs (`dataset_survey/casinolimit_steps.py`: 9,243 of 9,243 labels placed).
 - Corpus: `casinolimit_real/out/steps.jsonl` (SHA-256 after CRLF→LF
   `399ef563db0223a5fe85d8668ed6fce925fbd43240f79ef7c9b0bc9cbe823c2d`): 114 attackers, 8,201
-  commands, 66 techniques. `cl_port.py` refuses to run if the file changes.
-- Conditions: **main** (all commands), and **collapse_repeats** (only the first run of each
-  repeated command with the same labels: 4,990 commands), as in CAM-LDS.
+  commands, 66 techniques. A command = the labels on one auditd event (multi-label, as in CAM-LDS).
+- Conditions: **main** (all commands; primary), and **collapse_repeats** (a re-run of the same command
+  with the same labels is dropped: 4,990 commands), as in CAM-LDS.
 - Unit: one attacker. An attacker is never split across training, validation and test.
-- 5 folds, no randomness (`cl_split.py`): attackers are sorted by length (longest first, ties by
-  name) and dealt to F1–F5 in snake order, so every fold gets long and short attacks.
-- For test fold Fi: validation = the next fold (F5 → F1), training = the other 3 folds.
-  Every attacker is tested exactly once.
-- Window W = 16, the frozen window code. Every command except an attacker's first is a prediction point.
+- 5 folds, no randomness (`cl_split.py`): attackers sorted by length (longest first, ties by name),
+  dealt to F1–F5 in snake order. For test fold Fi: validation = the next fold (F5 → F1), training =
+  the other 3. Every attacker is tested exactly once.
+- Window W = 16 (frozen window code). Every command except an attacker's first is a prediction point.
 
 | fold | attackers test/val/train | points test/val/train (main) |
 |---|---|---|
@@ -41,51 +44,80 @@ dataset.
 
 | name | what it is | role |
 |---|---|---|
-| `allpos` | frozen Transformer + all-position loss (final CAM-LDS design) | main encoder |
+| `allpos` (Transformer) | frozen Transformer + all-position loss (final CAM-LDS design) | main encoder |
 | `gru_allpos`, `lstm_allpos` | frozen GRU / LSTM + all-position loss | compared with the Transformer |
-| `baseline` | frozen Transformer, last-position loss | descriptive only |
+| `baseline` (Old Transformer) | frozen Transformer, last-position loss | descriptive only |
 
-## 4. Lookup baseline (no training)
+The encoder code is loaded through `camlds_encoder/port.py`, which checks the SHA-256 of TEMARL's
+frozen modules; `cl_port.py` only sets the label count to 66.
 
-From the 2026-11-11 audit (`lookup.py`), built from the training attackers only:
-- **longest match:** the label set that most often followed the longest matching run of recent steps;
-- **previous step:** the same with only the last step.
+## 4. Simple baselines (no training)
 
-For each fold, the **lookup baseline is whichever of the two has the higher validation micro-F1**,
-so the encoders are compared with the stronger rule. *Disclosure:* this rule was written after the
-smoke run had shown validation micro-F1 for folds F1–F2: longest 0.237 / 0.243, previous 0.278 /
-0.303 (main). No encoder result had been seen.
+Built from the fold's training attackers only (`lookup.py`):
+- **lookup, longest match:** the label set that most often followed the longest matching run of
+  recent steps (the rule of the 2026-11-11 audit);
+- **lookup, previous step:** the same with only the last step;
+- **repeat last step:** predict the last step's labels again.
+
+For each fold, the **best simple baseline** is the rule with the highest validation micro-F1 (ties:
+the order above). It is the comparator of question 1, so the encoders face the strongest simple rule.
+
+*Disclosure (order of events):* the two lookup rules were in the first draft. A smoke run then showed
+their validation micro-F1 on folds F1–F2 (main: longest 0.237 / 0.243, previous 0.278 / 0.303).
+"Repeat last step" and the "best of the rules on validation" choice were then added, before
+repeat last's numbers were seen; the next smoke run showed them (0.288 / 0.369). No encoder result
+(other than meaningless 128-update smoke trainings) had been seen at any point.
 
 ## 5. Training (the frozen rules of `Temarl_Test_v1_L1/study_spec.py`, as for CAM-LDS)
 
-- Pilot: seeds 101–103 × 5 folds × the 4 models, main condition, to a cap of
-  max(8,192, 300 epochs) updates with full validation curves. One shared patience (grid 16/32/64
-  checks) and one shared update budget (1.25 × the largest median best update) are chosen by the
-  frozen functions, from validation curves only. Both conditions use them.
-- Main: seeds 0–9 × 5 folds × 4 models × 2 conditions = 400 trainings. Batch 32, learning rate
-  5e-4, validation every 64 updates, validation-best checkpoint, threshold from {0.1 … 0.5}
-  maximising validation micro-F1.
-- Expected time on the RTX 4080 SUPER: about 10 hours. The run can be stopped and continued.
+- Pilot: seeds 101–103 × 5 folds × the 4 encoders, main condition, to a cap of max(8,192, 300
+  epochs) updates with full validation curves. One shared patience (grid 16/32/64 checks) and one
+  shared update budget (1.25 × the largest median best update) are chosen by the frozen functions,
+  from validation curves only. Both conditions use them.
+- Main: seeds 0–9 × 5 folds × 4 encoders × 2 conditions = 400 trainings. Batch 32, learning rate
+  5e-4, weight decay 0.01, validation every 64 updates, validation-best checkpoint, threshold from
+  {0.1, 0.2, 0.3, 0.4, 0.5} maximising validation micro-F1 (ties: the smallest).
+- One command on the GPU PC (`run.py --stage all`), about 10–12 hours, resumable.
 
 ## 6. Sealing
 
-Test outputs (`test_logits.npy`, lookup `test_*.npy`) are saved with their SHA-256 in `result.json`
-and are **not scored** until Part B is frozen. Validation scores are descriptive only
-(`out/VALIDATION_SUMMARY.txt`); nothing is selected on them except the threshold, the checkpoint
-and the lookup rule above.
+Test outputs are saved with their SHA-256 in `result.json` and are not scored until Section 7 runs.
+Validation scores are descriptive (`out/VALIDATION_SUMMARY.txt`). Nothing is chosen on validation
+except the checkpoint, the threshold, and the best simple baseline (Section 4).
 
-## 7. Part B, evaluation (DRAFT: to be frozen before the test is opened)
+## 7. Evaluation (`evaluate.py`, frozen now)
 
-- **Unit of comparison: the attacker.** Five folds are too few for a test (a Wilcoxon test on 5 pairs
-  cannot reach p < 0.05). Per attacker: micro-F1 over that attacker's test points, averaged over the
-  10 seeds. Attackers with no prediction point are left out (1 attacker).
-- **Primary metric:** micro-F1. Reported on all points, novel points and copy points (a copy point =
-  the same window and target occur in the fold's training or validation attackers; as CAM-LDS).
-  Secondary: macro-F1, BCE.
-- **Family 1, main question:** `allpos`, `gru_allpos` and `lstm_allpos` each vs the lookup baseline
-  (3 comparisons). **Family 2:** Transformer vs GRU, Transformer vs LSTM (2 comparisons).
+1. **Dry run first** (`--validation-dry-run`): the scorer is run on the validation outputs and must
+   reproduce every validation micro-F1 recorded at training time. No test file is read.
+2. **Open the test once** (`--open-test`): refuses unless the frozen files are unchanged, the dry run
+   passed, all 400 trainings and all baseline outputs exist, and the test was never opened. Every test
+   file's SHA-256 and point order are checked before scoring. Results: `out_test/`.
+
+- **Unit of comparison: the attacker.** Five folds are too few for a test (a Wilcoxon test on 5
+  pairs cannot reach p < 0.05). Per attacker: micro-F1 over that attacker's test points, averaged
+  over the 10 seeds. Attackers without points in a subset are left out of that subset.
+- **Primary result:** main condition, all points, family 1. **Metric:** micro-F1.
+- **Subsets:** all points; novel and copy points (copy = the same window and target occur in the
+  fold's training or validation attackers; as CAM-LDS); **reviewed points** (every label of the
+  target command was labelled by a CasinoLimit reviewer, none automatic, none marked "doubt"),
+  to show the result does not depend on the automatic labels.
+- **Secondary metrics:** pooled micro-F1 (mean over seeds), macro-F1, exact-set accuracy, BCE
+  (encoders only), with TEMARL's frozen metric code; the recall ceiling (label slots whose label
+  occurs in the fold's training attackers).
+- **Family 1:** Transformer, GRU, LSTM each vs the best simple baseline (3 comparisons).
+  **Family 2:** Transformer vs GRU, Transformer vs LSTM (2 comparisons).
 - Per comparison: mean difference over attackers, 95% bootstrap CI (10,000 resamples of attackers,
-  seed 20261103), two-sided Wilcoxon signed-rank (scipy), Holm correction within each family.
-  "Better" needs Holm p < 0.05 and a CI above 0. Otherwise: "no difference shown".
-- Both conditions are reported. Main is primary.
-- The test is opened once. No model is changed after.
+  seed 20261103), two-sided Wilcoxon signed-rank (scipy, zero differences dropped), Holm correction
+  within each family and each (condition, subset) table. "X outperforms Y" only if Holm p < 0.05 and
+  the CI excludes 0; otherwise "no difference shown". The Old Transformer is descriptive only.
+- Every result is reported, whatever its direction. The test is opened once; no model or rule changes
+  after.
+
+## 8. Known limits (stated in any write-up)
+
+- One CTF challenge: every attacker faces the same network, so this is generalisation to new
+  attackers, not to new networks.
+- 5,060 of 9,243 labels come from CasinoLimit's automatic rules (the reviewed subset addresses this).
+- Repeats for `collapse_repeats` are judged on the masked command text (long tokens such as URLs
+  become `<token:N>`), so two different long commands of equal length can count as one.
+- Only 12 labels are on the intranet machine; 48 of 114 attackers stay on one machine.

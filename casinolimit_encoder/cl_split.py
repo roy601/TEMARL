@@ -16,8 +16,8 @@ import collections
 K = 5
 FOLD_NAMES = tuple(f"F{i + 1}" for i in range(K))
 CONDITIONS = ("main", "collapse_repeats")
-# Set to the approval date when the user approves PROTOCOL_CL_1.0.md. Until then only --smoke runs.
-APPROVED_ON = None
+# The user approved PROTOCOL_CL_1.0.md on this date (before any real training).
+APPROVED_ON = "2026-11-12"
 
 
 def run_lengths(steps):
