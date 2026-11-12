@@ -3,16 +3,27 @@
 Reproduce the comparator papers **one by one**, then compare them with TEMARL under Idea 01, 02 and 03.
 GPU PC 1 keeps running our own studies (CasinoLimit) at the same time.
 
-## The rule for every reproduction (as `kuwano_repro/`, which matched 48/48 rows)
+## The standard
 
-1. **Targets first.** Before running anything, copy every number the paper publishes that we will try to
-   match into `TARGETS.csv`, with its table or figure. Never add a target after seeing our result.
-2. **Sources.** `SOURCES.md`: exact paper version, code commit, data DOI and checksum, licence.
-3. **Every gap is a written decision.** Where the paper is silent, `DECISIONS.md` records the choice
-   and why, *before* the run. No searching for settings that make the numbers match.
-4. **Report every number.** `REPORT.md`: published vs ours for every target, MATCH / CLOSE / NO MATCH,
-   with the tolerance stated in advance. A failed reproduction is reported as failed.
-5. Each paper has its own folder `reproductions/<paper>/`. Start from `TEMPLATE/`.
+Every reproduction must meet [STANDARD.md](STANDARD.md): ten requirements at the level a Q1 journal
+expects of a reproducibility study. In short:
+
+1. **Targets first.** The paper's numbers are written into `TARGETS.csv` and committed before any
+   result exists. `audit.py` proves the order from the git history and fails the reproduction if a
+   target was added or changed afterwards.
+2. **Gaps decided first**, in writing, and **the authors are asked** about each one.
+3. **Every number is reported**, with a fixed verdict: MATCH, CLOSE, NO MATCH or NOT ATTEMPTED.
+   A failed reproduction is reported as failed.
+4. **Variance:** deterministic methods must give identical outputs on two machines; stochastic
+   methods need at least 10 training seeds and a 95% CI.
+5. **The right word:** *reproduced* = with the authors' own code or data; *replicated* = rebuilt
+   from the paper (ACM terms). A method enters an Idea 01/02/03 comparison only after this.
+
+Each paper gets `reproductions/<paper>/`, started from `TEMPLATE/`. Check all of them with
+`python reproductions/audit.py` (writes `AUDIT.txt`).
+
+Kuwano (`kuwano_repro/`) was done before this standard was written. It will be checked against it,
+and any gap listed, before it enters a comparison.
 
 ## Two GPU PCs at the same time
 
