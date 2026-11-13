@@ -9,6 +9,9 @@ Run on GPU PC 2 (commit e24406f) and on a second PC: `results.json` and `REPORT_
 **byte-identical** (SHA-256 0e1fafab… and a5fbf3b3…). Targets and decisions were committed before
 any code existed (36e4575); `run.py` before any result (653f6a6).
 
+**Route B** (the authors' own pipeline on the raw logs) is in [REPORT_ROUTE_B.md](REPORT_ROUTE_B.md):
+it stops at the ATT&CK-mapping step on two machines and two pandas versions.
+
 ## Summary
 
 | | targets | MATCH | CLOSE | NO MATCH | NOT ATTEMPTED |

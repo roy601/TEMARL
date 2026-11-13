@@ -6,7 +6,7 @@ https://github.com/zyw-286/shell-attack-evolution-dataset, sent by the user (not
 
 | date | to | question (decision #) | reply or "no reply after N days" |
 |---|---|---|---|
-| (not sent yet) | repository issue | Q1–Q6 below | — |
+| (not sent yet) | repository issue | Q1–Q7 below | — |
 
 ## Draft (for the user to send)
 
@@ -25,3 +25,8 @@ https://github.com/zyw-286/shell-attack-evolution-dataset, sent by the user (not
 > 5. Table VIII is headed "2020–2021". Is this the 2021–2022 data? (inconsistency 3)
 > 6. T1424 and T1655 are Mobile ATT&CK IDs, while Table VIII uses T1036. Were Enterprise T1057 and
 >    T1036 intended? (inconsistency 4)
+> 7. Running `analysis/period_2024/` on the released `2024/cowrie/` logs (commit d5f7fe1), step 07a
+>    stops with `KeyError` for the pattern `('-o', ';', '>', '&&', 'cd', ';', '(', '/bin/busybox',
+>    'echo', '-e', '||', 'echo', '-e', ')')`, and the read step loads 5,598,628 records against
+>    3,914,173 in Table I. Which preprocessing happens before 07a, and could it be released? The
+>    2021–2022 raw logs are also not in the repository. (REPORT_ROUTE_B.md)
