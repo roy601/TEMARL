@@ -1,0 +1,145 @@
+MORDOR: METADATA TECHNIQUE COVERAGE
+
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total captures:                            9   |
+|  Average length:                          7.3   |
+|  Median length:                           8.0   |
+|  Min length:                                2   |
+|  Max length:                               10   |
+|  Std-dev length:                          2.3   |
+|  Captures > 16 techniques:           0 (0.0%)   |
+|  Technique vocabulary:                     20   |
++-------------------------------------------------+
+Length means distinct technique IDs per capture; metadata list order is not chronology.
+
+DECLARED-ORDER METADATA AUDIT
+No explicit ordered simulation steps found in metadata. Technique inventories are reported separately.
+
+RAW TELEMETRY RECONSTRUCTION: see the raw-telemetry section below.
+Zero declared-order sequences does not establish that the raw dataset lacks attack sequences.
+
+
+RAW TELEMETRY COVERAGE
+records_parsed: 1385297
+records_with_host_and_time: 1361308
+unlabelled_records: 1385297
+rule_annotated_records: 1809
+eligible_annotated_events: 1809
+inferred_behavior_events: 172
+unsupported_archive_members: 25
+unparsed_lines: 10900
+files_scanned: 153
+referenced_files_missing: 0
+Host/time coverage includes unlabelled events; these are not assigned ATT&CK techniques.
+Files explicitly referenced by one metadata capture share that capture; others remain isolated.
+Explicit-label B1/B2 contain no inferred labels or capture-level label propagation.
+
+EXPLICIT-LABEL REFERENCE
+Label provenance: explicit_event_field
+Timestamp order is not campaign validation. Benign activity can match annotation rules.
+
+B1: STRICT RECONSTRUCTION
+No supported evidence for this representation. Empty results retained in JSON.
+Annotation source: explicit_event_field
+
+B2: UNCERTAINTY-AWARE RECONSTRUCTION
+No supported evidence for this representation. Empty results retained in JSON.
+Annotation source: explicit_event_field
+
+
+MORDOR: EVENT-ANNOTATED RECONSTRUCTION
+Label provenance: explicit fields or versioned rule annotations; inspect each event label_source
+Timestamp order is not campaign validation. Benign activity can match annotation rules.
+
+B1: STRICT RECONSTRUCTION
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total sequences:                          11   |
+|  Average length:                          6.6   |
+|  Median length:                           4.0   |
+|  Min length:                                1   |
+|  Max length:                               17   |
+|  Std-dev length:                          5.2   |
+|  Sequences > 16 techniques:          1 (9.1%)   |
+|  Technique vocabulary:                     12   |
++-------------------------------------------------+
+Annotation source: explicit fields or versioned rule annotations; inspect each event label_source
+
+B2: UNCERTAINTY-AWARE RECONSTRUCTION
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total sequences:                          12   |
+|  Average length:                          8.1   |
+|  Median length:                           5.0   |
+|  Min length:                                1   |
+|  Max length:                               24   |
+|  Std-dev length:                          6.9   |
+|  Sessions > 16 set-steps:           2 (16.7%)   |
+|  Technique vocabulary:                     13   |
++-------------------------------------------------+
+Length counts label-set steps. No order is asserted inside a label set. B2 includes B1.
+Annotation source: explicit fields or versioned rule annotations; inspect each event label_source
+
+
+EXPERIMENT B3: INFERRED BEHAVIOR HYPOTHESES - NOT GROUND TRUTH
+Limited rule coverage: systeminfo, whoami, tasklist, cmd /c or /k in Sysmon process creation.
+Benign activity may match. These are not validated attack chains.
+Review events.json rule_matches before using these inferred labels.
+
+B3 SINGLE-LABEL HYPOTHESIS CHAINS
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total sequences:                           9   |
+|  Average length:                          3.6   |
+|  Median length:                           2.0   |
+|  Min length:                                1   |
+|  Max length:                                9   |
+|  Std-dev length:                          2.6   |
+|  Sequences > 16 techniques:          0 (0.0%)   |
+|  Technique vocabulary:                      4   |
++-------------------------------------------------+
+Single-label steps in timestamp order; attack execution is not independently validated.
+
+B3 TIME-ORDERED HYPOTHESIS SETS
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total sessions:                            9   |
+|  Average length:                          3.6   |
+|  Median length:                           2.0   |
+|  Min length:                                1   |
+|  Max length:                                9   |
+|  Std-dev length:                          2.6   |
+|  Sessions > 16 set-steps:            0 (0.0%)   |
+|  Technique vocabulary:                      4   |
++-------------------------------------------------+
+Length counts label-set steps, not individually ordered techniques.
+Multiple labels within a step have no established internal order.
+B2 includes B1 sessions: these are overlapping representations, not independent datasets.
+
+dataset: Mordor B3: inferred behavior hypotheses
+total_candidate_sessions: 9
+total_sequences: 9
+ambiguous_sessions: 0
+max_length: 9
+sequences_gt_16: 0
+sequences_gt_30: 0
+verdict: REQUIRES VALIDATION
+label_set_sessions: 9
+max_label_set_length: 9
+label_set_sessions_gt_16: 0
+ambiguity_reason_session_counts: {}
+ordered_technique_vocabulary_size: 4
+all_candidate_technique_vocabulary_size: 4
+events_in_ambiguous_sessions: 0
+Full label lists are retained in statistics.json.
+
+
+Inferred behavior annotations and host/time proximity produce candidates, not validated campaigns.
+Files share a capture only through a unique explicit metadata reference; other files are isolated.
+Naive timestamps are interpreted as UTC. Check audit.json for excluded input coverage.

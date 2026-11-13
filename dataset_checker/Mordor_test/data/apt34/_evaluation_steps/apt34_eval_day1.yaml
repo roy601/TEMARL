@@ -1,0 +1,51 @@
+title: APT34 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (APT34)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.002
+    tactic: initial-access
+    description: Spearphishing Link
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1053.005
+    tactic: persistence
+    description: Scheduled Task
+  - step_id: 3.A
+    technique: T1071.004
+    tactic: command-and-control
+    description: DNS Tunneling
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfiltration
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1053
+  tactics:
+  - persistence
+  sub_technique: '005'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '004'
+- technique: T1041
+  tactics:
+  - exfiltration

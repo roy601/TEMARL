@@ -1,0 +1,127 @@
+title: WIZARD_SPIDER Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (WIZARD_SPIDER)
+simulation:
+  steps:
+  - step_id: 1.A.1
+    technique: T1566.002
+    tactic: initial-access
+    description: Spearphishing Link
+  - step_id: 1.A.2
+    technique: T1204.001
+    tactic: execution
+    description: User Execution
+  - step_id: 1.B.1
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell Execution
+  - step_id: 2.A.1
+    technique: T1055
+    tactic: defense-evasion
+    description: Process Injection
+  - step_id: 2.B.1
+    technique: T1087
+    tactic: discovery
+    description: Account Discovery
+  - step_id: 3.A.1
+    technique: T1482
+    tactic: discovery
+    description: Domain Trust Discovery
+  - step_id: 3.B.1
+    technique: T1018
+    tactic: discovery
+    description: Remote System Discovery
+  - step_id: 4.A.1
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Memory Dumping
+  - step_id: 4.B.1
+    technique: T1558.003
+    tactic: credential-access
+    description: Kerberoasting
+  - step_id: 5.A.1
+    technique: T1550.002
+    tactic: defense-evasion
+    description: Pass the Hash
+  - step_id: 5.B.1
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Shares
+  - step_id: 6.A.1
+    technique: T1569.002
+    tactic: execution
+    description: Service Execution
+  - step_id: 6.B.1
+    technique: T1543.003
+    tactic: persistence
+    description: Windows Service Persistence
+  - step_id: 7.A.1
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web Protocols C2
+  - step_id: 8.A.1
+    technique: T1490
+    tactic: impact
+    description: Inhibit System Recovery
+  - step_id: 8.B.1
+    technique: T1486
+    tactic: impact
+    description: Data Encrypted for Impact
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1055
+  tactics:
+  - defense-evasion
+- technique: T1087
+  tactics:
+  - discovery
+- technique: T1482
+  tactics:
+  - discovery
+- technique: T1018
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1558
+  tactics:
+  - credential-access
+  sub_technique: '003'
+- technique: T1550
+  tactics:
+  - defense-evasion
+  sub_technique: '002'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1569
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1543
+  tactics:
+  - persistence
+  sub_technique: '003'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1490
+  tactics:
+  - impact
+- technique: T1486
+  tactics:
+  - impact

@@ -1,0 +1,36 @@
+title: FIN13 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (FIN13)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing Attachment
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

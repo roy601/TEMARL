@@ -1,0 +1,49 @@
+title: RYUK Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (RYUK)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1078
+    tactic: initial-access
+    description: TrickBot/Cobalt Strike Access
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1018
+    tactic: discovery
+    description: Remote System Discovery
+  - step_id: 2.B
+    technique: T1021.002
+    tactic: lateral-movement
+    description: PsExec / SMB Shares
+  - step_id: 3.A
+    technique: T1490
+    tactic: impact
+    description: Inhibit System Recovery
+  - step_id: 3.B
+    technique: T1486
+    tactic: impact
+    description: Ryuk Ransomware Encryption
+attack_mappings:
+- technique: T1078
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1018
+  tactics:
+  - discovery
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1490
+  tactics:
+  - impact
+- technique: T1486
+  tactics:
+  - impact

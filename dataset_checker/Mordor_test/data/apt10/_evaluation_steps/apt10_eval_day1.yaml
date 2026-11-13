@@ -1,0 +1,67 @@
+title: APT10 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (APT10)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1195.002
+    tactic: initial-access
+    description: Supply Chain
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1083
+    tactic: discovery
+    description: File Discovery
+  - step_id: 2.B
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS
+  - step_id: 3.A
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Shares
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: HTTP C2
+  - step_id: 4.A
+    technique: T1560.001
+    tactic: collection
+    description: Archive Utility
+  - step_id: 4.B
+    technique: T1041
+    tactic: exfiltration
+    description: Exfil C2
+attack_mappings:
+- technique: T1195
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1083
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1560
+  tactics:
+  - collection
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration

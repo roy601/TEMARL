@@ -1,0 +1,57 @@
+title: APT17 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (APT17)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1190
+    tactic: initial-access
+    description: Web Exploit
+  - step_id: 1.B
+    technique: T1059.003
+    tactic: execution
+    description: Cmd Shell
+  - step_id: 2.A
+    technique: T1057
+    tactic: discovery
+    description: Process List
+  - step_id: 2.B
+    technique: T1003
+    tactic: credential-access
+    description: Cred Dump
+  - step_id: 3.A
+    technique: T1021.001
+    tactic: lateral-movement
+    description: RDP
+  - step_id: 3.B
+    technique: T1071.004
+    tactic: command-and-control
+    description: DNS C2
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfiltration
+attack_mappings:
+- technique: T1190
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '003'
+- technique: T1057
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '004'
+- technique: T1041
+  tactics:
+  - exfiltration

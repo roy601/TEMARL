@@ -1,0 +1,35 @@
+title: DATA_STAGING Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (DATA_STAGING)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1083
+    tactic: discovery
+    description: File Discovery
+  - step_id: '2'
+    technique: T1005
+    tactic: collection
+    description: Local Data
+  - step_id: '3'
+    technique: T1074.001
+    tactic: collection
+    description: Local Staging
+  - step_id: '4'
+    technique: T1560.001
+    tactic: collection
+    description: Archive Utility
+attack_mappings:
+- technique: T1083
+  tactics:
+  - discovery
+- technique: T1005
+  tactics:
+  - collection
+- technique: T1074
+  tactics:
+  - collection
+  sub_technique: '001'
+- technique: T1560
+  tactics:
+  - collection
+  sub_technique: '001'

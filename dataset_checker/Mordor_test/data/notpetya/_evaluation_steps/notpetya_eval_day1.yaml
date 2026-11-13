@@ -1,0 +1,44 @@
+title: NOTPETYA Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (NOTPETYA)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1195.002
+    tactic: initial-access
+    description: M.E.Doc Supply Chain
+  - step_id: 1.B
+    technique: T1059.003
+    tactic: execution
+    description: Cmd Execution
+  - step_id: 2.A
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Dumping
+  - step_id: 2.B
+    technique: T1021.002
+    tactic: lateral-movement
+    description: PsExec / EternalBlue
+  - step_id: 3.A
+    technique: T1486
+    tactic: impact
+    description: Disk Wiper / Encryption
+attack_mappings:
+- technique: T1195
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '003'
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1486
+  tactics:
+  - impact

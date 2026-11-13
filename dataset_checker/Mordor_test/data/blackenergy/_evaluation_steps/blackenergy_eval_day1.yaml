@@ -1,0 +1,43 @@
+title: BLACKENERGY Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (BLACKENERGY)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Phishing Word Doc
+  - step_id: 1.B
+    technique: T1204.002
+    tactic: execution
+    description: User Execution
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1543.003
+    tactic: persistence
+    description: Windows Service
+  - step_id: 3.A
+    technique: T1489
+    tactic: impact
+    description: Service Stop / Power Grid Wiper
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1543
+  tactics:
+  - persistence
+  sub_technique: '003'
+- technique: T1489
+  tactics:
+  - impact

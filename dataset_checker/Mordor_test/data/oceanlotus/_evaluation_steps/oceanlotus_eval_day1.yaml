@@ -1,0 +1,59 @@
+title: OCEANLOTUS Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (OCEANLOTUS)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Phishing Doc
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Info
+  - step_id: 2.B
+    technique: T1055.001
+    tactic: defense-evasion
+    description: DLL Injection
+  - step_id: 3.A
+    technique: T1543.003
+    tactic: persistence
+    description: Windows Service
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfil
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1055
+  tactics:
+  - defense-evasion
+  sub_technique: '001'
+- technique: T1543
+  tactics:
+  - persistence
+  sub_technique: '003'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration

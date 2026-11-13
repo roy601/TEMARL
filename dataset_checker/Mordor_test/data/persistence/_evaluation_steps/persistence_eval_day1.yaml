@@ -1,0 +1,37 @@
+title: PERSISTENCE Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (PERSISTENCE)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: '2'
+    technique: T1547.001
+    tactic: persistence
+    description: Registry Run Keys
+  - step_id: '3'
+    technique: T1053.005
+    tactic: persistence
+    description: Scheduled Task
+  - step_id: '4'
+    technique: T1543.003
+    tactic: persistence
+    description: Windows Service
+attack_mappings:
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1547
+  tactics:
+  - persistence
+  sub_technique: '001'
+- technique: T1053
+  tactics:
+  - persistence
+  sub_technique: '005'
+- technique: T1543
+  tactics:
+  - persistence
+  sub_technique: '003'

@@ -1,0 +1,57 @@
+title: APT20 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (APT20)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1190
+    tactic: initial-access
+    description: Exploit App
+  - step_id: 1.B
+    technique: T1059.004
+    tactic: execution
+    description: Unix Shell
+  - step_id: 2.A
+    technique: T1087
+    tactic: discovery
+    description: Account Discovery
+  - step_id: 2.B
+    technique: T1078
+    tactic: defense-evasion
+    description: Valid Accounts
+  - step_id: 3.A
+    technique: T1021.004
+    tactic: lateral-movement
+    description: SSH
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+  - step_id: 4.A
+    technique: T1560
+    tactic: collection
+    description: Archive
+attack_mappings:
+- technique: T1190
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '004'
+- technique: T1087
+  tactics:
+  - discovery
+- technique: T1078
+  tactics:
+  - defense-evasion
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '004'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1560
+  tactics:
+  - collection

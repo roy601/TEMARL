@@ -1,0 +1,52 @@
+title: WINNTI_GROUP Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (WINNTI_GROUP)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1195.002
+    tactic: initial-access
+    description: Supply Chain
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1055.001
+    tactic: defense-evasion
+    description: DLL Injection
+  - step_id: 3.A
+    technique: T1543.003
+    tactic: persistence
+    description: Windows Service
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1195
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1055
+  tactics:
+  - defense-evasion
+  sub_technique: '001'
+- technique: T1543
+  tactics:
+  - persistence
+  sub_technique: '003'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

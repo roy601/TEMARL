@@ -1,0 +1,43 @@
+title: FIN5 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (FIN5)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1078
+    tactic: initial-access
+    description: Valid Accounts
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Dumping
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1078
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

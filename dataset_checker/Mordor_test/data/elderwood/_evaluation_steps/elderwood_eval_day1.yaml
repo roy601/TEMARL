@@ -1,0 +1,43 @@
+title: ELDERWOOD Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (ELDERWOOD)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1189
+    tactic: initial-access
+    description: Drive-by Compromise
+  - step_id: 1.B
+    technique: T1204.001
+    tactic: execution
+    description: Malicious Link
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1055.001
+    tactic: defense-evasion
+    description: DLL Injection
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1189
+  tactics:
+  - initial-access
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1055
+  tactics:
+  - defense-evasion
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

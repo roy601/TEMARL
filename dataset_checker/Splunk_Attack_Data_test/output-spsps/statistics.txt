@@ -1,0 +1,5042 @@
+================================================================
+  SPLUNK ATTACK DATA -> ATT&CK SEQUENCE FEASIBILITY REPORT
+================================================================
+
++-------------------------------------------------+
+|              SUMMARY METRICS                    |
++-------------------------------------------------+
+|  Total sequences:               1253             |
+|  Average length:                 10.7             |
+|  Median  length:                  1.0             |
+|  Min     length:                  1             |
+|  Max     length:               6143             |
+|  Std-dev length:                182.8             |
+|  Sequences = 1 technique:       1197  (95.5%)   |
+|  Sequences > 1 technique:         56  ( 4.5%)   |
+|  Sequences > 16 techniques:       31  ( 2.5%)   |
+|  Sequences > 30 techniques:       25  ( 2.0%)   |
+|  Technique vocabulary:           380             |
++-------------------------------------------------+
+
+PER-SEQUENCE DETAIL
+----------------------------------------------------------------
+  [01] datasets_apt_simulations_ActiveMQ_exploit_Lockbit_Ransomware
+       Length: 1618 (raw events: 63314)
+       Chain:  T1059.001 -> T1059.003 -> T1059.001 -> T1082 -> T1118 -> T1059.001 -> T1059.003 -> T1059.001 -> T1118 -> T1059.001 -> T1059.003 -> T1059.001 -> T1559 -> T1059.001 -> T1117 ...
+
+  [02] datasets_attack_techniques_T1001_snapattack
+       Length: 2 (raw events: 2)
+       Chain:  T1001 -> T1059.001
+
+  [03] datasets_attack_techniques_T1003_credential_extraction
+       Length: 48 (raw events: 67)
+       Chain:  T1003 -> T1059.003 -> T1059.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 ...
+
+  [04] datasets_attack_techniques_T1003_snapattack
+       Length: 2 (raw events: 2)
+       Chain:  T1003 -> T1059.003
+
+  [05] datasets_attack_techniques_T1003_wdigest_enable
+       Length: 50 (raw events: 334)
+       Chain:  T1003 -> T1059.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [06] datasets_attack_techniques_T1003.001_atomic_red_team
+       Length: 438 (raw events: 25599)
+       Chain:  T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [07] datasets_attack_techniques_T1003.001_snapattack
+       Length: 10 (raw events: 33)
+       Chain:  T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001
+
+  [08] datasets_attack_techniques_T1003.002_atomic_red_team
+       Length: 462 (raw events: 26264)
+       Chain:  T1003.002 -> T1059.001 -> T1082 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 ...
+
+  [09] datasets_attack_techniques_T1003.002_detect_copy_of_shadowcopy_with_script_block_logging
+       Length: 2 (raw events: 8)
+       Chain:  T1003.002 -> T1059.001
+
+  [10] datasets_attack_techniques_T1003.002_serioussam
+       Length: 131 (raw events: 703)
+       Chain:  T1003.002 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [11] datasets_attack_techniques_T1003.002_snapattack
+       Length: 2 (raw events: 6)
+       Chain:  T1003.002 -> T1059.001
+
+  [12] datasets_attack_techniques_T1003.003_atomic_red_team
+       Length: 702 (raw events: 25825)
+       Chain:  T1003.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 ...
+
+  [13] datasets_attack_techniques_T1003.003_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1003.003
+
+  [14] datasets_attack_techniques_T1003.004_NoLMHash
+       Length: 1 (raw events: 2)
+       Chain:  T1003.004
+
+  [15] datasets_attack_techniques_T1003.004_snapattack
+       Length: 2 (raw events: 4)
+       Chain:  T1003.004 -> T1059.001
+
+  [16] datasets_attack_techniques_T1003.005_snapattack
+       Length: 2 (raw events: 2)
+       Chain:  T1003.005 -> T1059.001
+
+  [17] datasets_attack_techniques_T1003.006_impacket
+       Length: 1 (raw events: 5)
+       Chain:  T1003.006
+
+  [18] datasets_attack_techniques_T1003.006_mimikatz
+       Length: 1 (raw events: 5)
+       Chain:  T1003.006
+
+  [19] datasets_attack_techniques_T1003.006_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1003.006
+
+  [20] datasets_attack_techniques_T1003.008_copy_file_stdoutpipe
+       Length: 1 (raw events: 2)
+       Chain:  T1003.008
+
+  [21] datasets_attack_techniques_T1003.008_esxi_sensitive_files
+       Length: 1 (raw events: 2)
+       Chain:  T1003.008
+
+  [22] datasets_attack_techniques_T1003.008_linux_auditd_access_credential
+       Length: 1 (raw events: 3)
+       Chain:  T1003.008
+
+  [23] datasets_attack_techniques_T1005_esxi_vm_download
+       Length: 1 (raw events: 2)
+       Chain:  T1005
+
+  [24] datasets_attack_techniques_T1006_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1006
+
+  [25] datasets_attack_techniques_T1011_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1011
+
+  [26] datasets_attack_techniques_T1012_backup_product_key_registry
+       Length: 2 (raw events: 2)
+       Chain:  T1012 -> T1059.001
+
+  [27] datasets_attack_techniques_T1012_host_file_accessed
+       Length: 2 (raw events: 9)
+       Chain:  T1012 -> T1059.003
+
+  [28] datasets_attack_techniques_T1012_snapattack
+       Length: 2 (raw events: 2)
+       Chain:  T1012 -> T1059.001
+
+  [29] datasets_attack_techniques_T1014
+       Length: 2 (raw events: 11)
+       Chain:  T1014 -> T1003.001
+
+  [30] datasets_attack_techniques_T1014_medusa_rootkit
+       Length: 1 (raw events: 2)
+       Chain:  T1014
+
+  [31] datasets_attack_techniques_T1014_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1014
+
+  [32] datasets_attack_techniques_T1016_atomic_red_team_linux_net_discovery
+       Length: 1 (raw events: 2)
+       Chain:  T1016
+
+  [33] datasets_attack_techniques_T1016_atomic_red_team_macos_net_discovery
+       Length: 2 (raw events: 9)
+       Chain:  T1016 -> T1059.001
+
+  [34] datasets_attack_techniques_T1016_discovery_commands
+       Length: 176 (raw events: 24526)
+       Chain:  T1016 -> T1059.001 -> T1082 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1059.003 ...
+
+  [35] datasets_attack_techniques_T1016_linux_auditd_net_tool
+       Length: 1 (raw events: 2)
+       Chain:  T1016
+
+  [36] datasets_attack_techniques_T1016_linux_auditd_net_tool_new
+       Length: 1 (raw events: 2)
+       Chain:  T1016
+
+  [37] datasets_attack_techniques_T1016.001_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1016.001
+
+  [38] datasets_attack_techniques_T1018_AD_discovery
+       Length: 83 (raw events: 20457)
+       Chain:  T1018 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1082 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [39] datasets_attack_techniques_T1018_atomic_red_team
+       Length: 6143 (raw events: 46461)
+       Chain:  T1018 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 ...
+
+  [40] datasets_attack_techniques_T1018_constrained
+       Length: 2 (raw events: 1097)
+       Chain:  T1018 -> T1059.001
+
+  [41] datasets_attack_techniques_T1018_unconstrained
+       Length: 2 (raw events: 1449)
+       Chain:  T1018 -> T1059.001
+
+  [42] datasets_attack_techniques_T1018_unconstrained2
+       Length: 2 (raw events: 49)
+       Chain:  T1018 -> T1059.001
+
+  [43] datasets_attack_techniques_T1018_windows_get_adcomputer_unconstrained_delegation_discovery
+       Length: 2 (raw events: 2)
+       Chain:  T1018 -> T1059.001
+
+  [44] datasets_attack_techniques_T1018_windows_powerview_constrained_delegation_discovery
+       Length: 2 (raw events: 3)
+       Chain:  T1018 -> T1059.001
+
+  [45] datasets_attack_techniques_T1020
+       Length: 50 (raw events: 438)
+       Chain:  T1020 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [46] datasets_attack_techniques_T1020_snapattack
+       Length: 1 (raw events: 2)
+       Chain:  T1020
+
+  [47] datasets_attack_techniques_T1021_allow_inbound_traffic_in_firewall_rule
+       Length: 1 (raw events: 1)
+       Chain:  T1021
+
+  [48] datasets_attack_techniques_T1021_esxi_shell_enabled
+       Length: 1 (raw events: 1)
+       Chain:  T1021
+
+  [49] datasets_attack_techniques_T1021_illegal_access_to_content
+       Length: 7 (raw events: 11)
+       Chain:  T1021 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001
+
+  [50] datasets_attack_techniques_T1021_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1021
+
+  [51] datasets_attack_techniques_T1021.001_bmc_creation
+       Length: 1 (raw events: 2)
+       Chain:  T1021.001
+
+  [52] datasets_attack_techniques_T1021.001_execution_from_rdp_share
+       Length: 2 (raw events: 4)
+       Chain:  T1021.001 -> T1059.001
+
+  [53] datasets_attack_techniques_T1021.001_mstsc_admini
+       Length: 2 (raw events: 11)
+       Chain:  T1021.001 -> T1059.003
+
+  [54] datasets_attack_techniques_T1021.001_mstsc_rdp_cmd
+       Length: 1 (raw events: 2)
+       Chain:  T1021.001
+
+  [55] datasets_attack_techniques_T1021.001_rdp_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1021.001
+
+  [56] datasets_attack_techniques_T1021.001_rdp_session_established
+       Length: 1 (raw events: 2)
+       Chain:  T1021.001
+
+  [57] datasets_attack_techniques_T1021.001_remote_desktop_connection
+       Length: 1 (raw events: 1)
+       Chain:  T1021.001
+
+  [58] datasets_attack_techniques_T1021.001_susp_default_rdp_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1021.001
+
+  [59] datasets_attack_techniques_T1021.001_terminal_server_reg_created
+       Length: 1 (raw events: 1)
+       Chain:  T1021.001
+
+  [60] datasets_attack_techniques_T1021.001_unhide_file
+       Length: 1 (raw events: 1)
+       Chain:  T1021.001
+
+  [61] datasets_attack_techniques_T1021.002_atomic_red_team
+       Length: 60 (raw events: 23983)
+       Chain:  T1021.002 -> T1059.001 -> T1082 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 ...
+
+  [62] datasets_attack_techniques_T1021.002_executable_in_share
+       Length: 1 (raw events: 1)
+       Chain:  T1021.002
+
+  [63] datasets_attack_techniques_T1021.002_impacket_smbexec
+       Length: 1 (raw events: 1)
+       Chain:  T1021.002
+
+  [64] datasets_attack_techniques_T1021.002_impacket_wmiexec
+       Length: 1 (raw events: 1)
+       Chain:  T1021.002
+
+  [65] datasets_attack_techniques_T1021.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1021.002
+
+  [66] datasets_attack_techniques_T1021.003_excel_activemicrosoftapp
+       Length: 1 (raw events: 1)
+       Chain:  T1021.003
+
+  [67] datasets_attack_techniques_T1021.003_impacket
+       Length: 23 (raw events: 115)
+       Chain:  T1021.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1082 -> T1059.003 -> T1082 -> T1059.003 -> T1003.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 ...
+
+  [68] datasets_attack_techniques_T1021.003_lateral_movement
+       Length: 39 (raw events: 839)
+       Chain:  T1021.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [69] datasets_attack_techniques_T1021.003_lateral_movement_lolbas
+       Length: 21 (raw events: 82)
+       Chain:  T1021.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [70] datasets_attack_techniques_T1021.003_lateral_movement_speechruntime
+       Length: 1 (raw events: 1)
+       Chain:  T1021.003
+
+  [71] datasets_attack_techniques_T1021.004_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1021.004
+
+  [72] datasets_attack_techniques_T1021.004_esxi_ssh_enabled
+       Length: 1 (raw events: 1)
+       Chain:  T1021.004
+
+  [73] datasets_attack_techniques_T1021.004_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1021.004
+
+  [74] datasets_attack_techniques_T1021.006_compmgtm_access
+       Length: 1 (raw events: 1)
+       Chain:  T1021.006
+
+  [75] datasets_attack_techniques_T1021.006_lateral_movement
+       Length: 27 (raw events: 276)
+       Chain:  T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 ...
+
+  [76] datasets_attack_techniques_T1021.006_lateral_movement_lolbas
+       Length: 57 (raw events: 751)
+       Chain:  T1021.006 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 ...
+
+  [77] datasets_attack_techniques_T1021.006_lateral_movement_psh
+       Length: 48 (raw events: 790)
+       Chain:  T1021.006 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [78] datasets_attack_techniques_T1021.006_lateral_movement_pssession
+       Length: 2 (raw events: 281)
+       Chain:  T1021.006 -> T1059.001
+
+  [79] datasets_attack_techniques_T1021.006_wirm_execute_shell
+       Length: 4 (raw events: 240)
+       Chain:  T1021.006 -> T1059.001 -> T1059.003 -> T1059.001
+
+  [80] datasets_attack_techniques_T1021.006_wsman_trustedhost
+       Length: 1 (raw events: 1)
+       Chain:  T1021.006
+
+  [81] datasets_attack_techniques_T1022_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1022
+
+  [82] datasets_attack_techniques_T1027_atomic_red_team
+       Length: 495 (raw events: 70651)
+       Chain:  T1027 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1059.003 ...
+
+  [83] datasets_attack_techniques_T1027_FuckThatPacker
+       Length: 25 (raw events: 97)
+       Chain:  T1027 -> T1059.001 -> T2017 -> T1003.001 -> T1059.001 -> T1053.005 -> T1059.001 -> T1070.006 -> T1552.001 -> T1059.001 -> T1003.001 -> T2017 -> T1553.004 -> T1053.005 -> T1003.001 ...
+
+  [84] datasets_attack_techniques_T1027_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1027
+
+  [85] datasets_attack_techniques_T1027_trickbot_drop
+       Length: 1 (raw events: 1)
+       Chain:  T1027
+
+  [86] datasets_attack_techniques_T1027_url_encoded_curl
+       Length: 1 (raw events: 1)
+       Chain:  T1027
+
+  [87] datasets_attack_techniques_T1027.009_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1027.009
+
+  [88] datasets_attack_techniques_T1027.010_manual_b64_decode_pwsh
+       Length: 1 (raw events: 1)
+       Chain:  T1027.010
+
+  [89] datasets_attack_techniques_T1027.010_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1027.010
+
+  [90] datasets_attack_techniques_T1027.011_njrat_fileless_registry_entry
+       Length: 48 (raw events: 1521)
+       Chain:  T1027.011 -> T1059.003 -> T1060 -> T1484 -> T1060 -> T1484 -> T1060 -> T1484 -> T1060 -> T1484 -> T1060 -> T1484 -> T1060 -> T1484 -> T1060 ...
+
+  [91] datasets_attack_techniques_T1027.013_rar_sfx_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1027.013
+
+  [92] datasets_attack_techniques_T1030_linux_auditd_split_b_exec
+       Length: 1 (raw events: 1)
+       Chain:  T1030
+
+  [93] datasets_attack_techniques_T1030_linux_auditd_split_syscall
+       Length: 1 (raw events: 1)
+       Chain:  T1030
+
+  [94] datasets_attack_techniques_T1030_linux_auditd_split_syscall_new
+       Length: 1 (raw events: 1)
+       Chain:  T1030
+
+  [95] datasets_attack_techniques_T1030_osquery_data_chunking
+       Length: 1 (raw events: 1)
+       Chain:  T1030
+
+  [96] datasets_attack_techniques_T1030_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1030
+
+  [97] datasets_attack_techniques_T1033_AD_discovery
+       Length: 34 (raw events: 4110)
+       Chain:  T1033 -> T1059.001 -> T1082 -> T1059.001 -> T1082 -> T1059.001 -> T1082 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 ...
+
+  [98] datasets_attack_techniques_T1033_atomic_red_team
+       Length: 420 (raw events: 65167)
+       Chain:  T1033 -> T1059.001 -> T1082 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [99] datasets_attack_techniques_T1033_linux_auditd_whoami
+       Length: 1 (raw events: 1)
+       Chain:  T1033
+
+  [100] datasets_attack_techniques_T1033_linux_auditd_whoami_new
+       Length: 1 (raw events: 1)
+       Chain:  T1033
+
+  [101] datasets_attack_techniques_T1033_linux_root_execution_of_id
+       Length: 1 (raw events: 1)
+       Chain:  T1033
+
+  [102] datasets_attack_techniques_T1033_qakbot_discovery_cmdline
+       Length: 205 (raw events: 933)
+       Chain:  T1033 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 ...
+
+  [103] datasets_attack_techniques_T1033_query_remote_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1033
+
+  [104] datasets_attack_techniques_T1033_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1033
+
+  [105] datasets_attack_techniques_T1033_whoami_priv
+       Length: 1 (raw events: 1)
+       Chain:  T1033
+
+  [106] datasets_attack_techniques_T1035.009_suspicious_spawn_svchost
+       Length: 1 (raw events: 1)
+       Chain:  T1035.009
+
+  [107] datasets_attack_techniques_T1036_cmd_lolbas_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1036.003
+
+  [108] datasets_attack_techniques_T1036_debugger_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [109] datasets_attack_techniques_T1036_executables_suspicious_file_path
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [110] datasets_attack_techniques_T1036_linux_possible_system_binary_backdoor
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [111] datasets_attack_techniques_T1036_linux_suspicious_staging_of_alternate_system_files
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [112] datasets_attack_techniques_T1036_msdtc_process_param
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [113] datasets_attack_techniques_T1036_netsupport_modules
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [114] datasets_attack_techniques_T1036_process_temp_path
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [115] datasets_attack_techniques_T1036_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [116] datasets_attack_techniques_T1036_suspicious_process_path
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [117] datasets_attack_techniques_T1036_system_process_running_unexpected_location
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [118] datasets_attack_techniques_T1036_write_to_recycle_bin
+       Length: 1 (raw events: 1)
+       Chain:  T1036
+
+  [119] datasets_attack_techniques_T1036.002_outlook_attachment
+       Length: 1 (raw events: 1)
+       Chain:  T1036.002
+
+  [120] datasets_attack_techniques_T1036.003_atomic_red_team
+       Length: 464 (raw events: 73999)
+       Chain:  T1036.003 -> T1036 -> T1059.001 -> T1082 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 ...
+
+  [121] datasets_attack_techniques_T1036.003_copy_sysmon
+       Length: 94 (raw events: 806)
+       Chain:  T1036.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 -> T1059.001 -> T1003.001 ...
+
+  [122] datasets_attack_techniques_T1036.003_mpcmdrun
+       Length: 1 (raw events: 1)
+       Chain:  T1036.003
+
+  [123] datasets_attack_techniques_T1036.003_renamed_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1036.003
+
+  [124] datasets_attack_techniques_T1036.003_samsam_extension
+       Length: 18 (raw events: 36506)
+       Chain:  T1036.003 -> T1059.001 -> T1082 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1082 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.001 -> T1082 ...
+
+  [125] datasets_attack_techniques_T1036.004_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1036.004
+
+  [126] datasets_attack_techniques_T1036.005_process_in_programdata
+       Length: 1 (raw events: 1)
+       Chain:  T1036.005
+
+  [127] datasets_attack_techniques_T1036.005_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1036.005
+
+  [128] datasets_attack_techniques_T1036.008_masquerading_executable_as_non_exec_file_type
+       Length: 1 (raw events: 1)
+       Chain:  T1036.008
+
+  [129] datasets_attack_techniques_T1036.009_32bit_process_execute_64bit
+       Length: 1 (raw events: 1)
+       Chain:  T1036.009
+
+  [130] datasets_attack_techniques_T1037.001_logonscript_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1037.001
+
+  [131] datasets_attack_techniques_T1037.002_osquery_logon_scripts
+       Length: 1 (raw events: 1)
+       Chain:  T1037.002
+
+  [132] datasets_attack_techniques_T1037.005_linux_persistence_via_system_generator
+       Length: 1 (raw events: 1)
+       Chain:  T1037.005
+
+  [133] datasets_attack_techniques_T1037.005_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1037.005
+
+  [134] datasets_attack_techniques_T1040_ssltls
+       Length: 1 (raw events: 1)
+       Chain:  T1040
+
+  [135] datasets_attack_techniques_T1040_windows_network_sniffing_tools
+       Length: 1 (raw events: 1)
+       Chain:  T1040
+
+  [136] datasets_attack_techniques_T1041_zeek_ssl
+       Length: 1 (raw events: 1)
+       Chain:  T1041
+
+  [137] datasets_attack_techniques_T1046_advanced_ip_port_scanner
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [138] datasets_attack_techniques_T1046_kubernetes_scanning
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [139] datasets_attack_techniques_T1046_nmap
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [140] datasets_attack_techniques_T1046_open_dns_port
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [141] datasets_attack_techniques_T1046_open_ports_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [142] datasets_attack_techniques_T1047_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [143] datasets_attack_techniques_T1047_execution_scrcons
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [144] datasets_attack_techniques_T1047_lateral_movement
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [145] datasets_attack_techniques_T1047_lateral_movement_lolbas
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [146] datasets_attack_techniques_T1047_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [147] datasets_attack_techniques_T1047_susp_winrar
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [148] datasets_attack_techniques_T1047_wmic_classes
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [149] datasets_attack_techniques_T1047_wmi_impersonate
+       Length: 1 (raw events: 1)
+       Chain:  T1047
+
+  [150] datasets_attack_techniques_T1048_ftp_connection
+       Length: 1 (raw events: 1)
+       Chain:  T1048
+
+  [151] datasets_attack_techniques_T1048.003_cve-2023-23397
+       Length: 1 (raw events: 1)
+       Chain:  T1048.003
+
+  [152] datasets_attack_techniques_T1048.003_long_dns_queries
+       Length: 1 (raw events: 1)
+       Chain:  T1048.003
+
+  [153] datasets_attack_techniques_T1048.003_mass_file_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1048.003
+
+  [154] datasets_attack_techniques_T1048.003_nslookup_exfil
+       Length: 1 (raw events: 1)
+       Chain:  T1048.003
+
+  [155] datasets_attack_techniques_T1049_AD_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1049
+
+  [156] datasets_attack_techniques_T1053_hidden_schedule_task
+       Length: 1 (raw events: 1)
+       Chain:  T1053
+
+  [157] datasets_attack_techniques_T1053_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1053
+
+  [158] datasets_attack_techniques_T1053_taskschd_dll
+       Length: 1 (raw events: 1)
+       Chain:  T1053
+
+  [159] datasets_attack_techniques_T1053_valleyrat_schedtask
+       Length: 1 (raw events: 1)
+       Chain:  T1053
+
+  [160] datasets_attack_techniques_T1053.002_at_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1053.002
+
+  [161] datasets_attack_techniques_T1053.002_lateral_movement
+       Length: 1 (raw events: 1)
+       Chain:  T1053.002
+
+  [162] datasets_attack_techniques_T1053.002_linux_auditd_at
+       Length: 1 (raw events: 1)
+       Chain:  T1053.002
+
+  [163] datasets_attack_techniques_T1053.002_linux_auditd_chown_root
+       Length: 1 (raw events: 1)
+       Chain:  T1053.002
+
+  [164] datasets_attack_techniques_T1053.002_linux_new_auditd_at
+       Length: 1 (raw events: 1)
+       Chain:  T1053.002
+
+  [165] datasets_attack_techniques_T1053.003_auditd_path_cron
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [166] datasets_attack_techniques_T1053.003_cronjobs_entry
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [167] datasets_attack_techniques_T1053.003_crontab_edit_parameter
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [168] datasets_attack_techniques_T1053.003_crontab_list_parameter
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [169] datasets_attack_techniques_T1053.003_linux_auditd_crontab_edit
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [170] datasets_attack_techniques_T1053.003_linux_auditd_crontab_edit_new
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [171] datasets_attack_techniques_T1053.003_linux_auditd_cron_file_audited
+       Length: 1 (raw events: 1)
+       Chain:  T1053.003
+
+  [172] datasets_attack_techniques_T1053.004_osquery_persistence
+       Length: 1 (raw events: 1)
+       Chain:  T1053.004
+
+  [173] datasets_attack_techniques_T1053.005_asyncrat_highest_priv_schtasks
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [174] datasets_attack_techniques_T1053.005_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [175] datasets_attack_techniques_T1053.005_lateral_movement
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [176] datasets_attack_techniques_T1053.005_lateral_movement_lolbas
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [177] datasets_attack_techniques_T1053.005_schtasks
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [178] datasets_attack_techniques_T1053.005_schtask_shutdown
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [179] datasets_attack_techniques_T1053.005_schtask_system
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [180] datasets_attack_techniques_T1053.005_svchost_lolbas_execution_process_spawn
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [181] datasets_attack_techniques_T1053.005_taskschedule
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [182] datasets_attack_techniques_T1053.005_windows_taskschedule
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [183] datasets_attack_techniques_T1053.005_winevent_scheduled_task_created_to_spawn_shell
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [184] datasets_attack_techniques_T1053.005_winevent_scheduled_task_with_suspect_name
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [185] datasets_attack_techniques_T1053.005_winevent_windows_task_scheduler_event_action_started
+       Length: 1 (raw events: 1)
+       Chain:  T1053.005
+
+  [186] datasets_attack_techniques_T1053.006_linux_services_restart
+       Length: 1 (raw events: 1)
+       Chain:  T1053.006
+
+  [187] datasets_attack_techniques_T1053.006_service_systemd
+       Length: 1 (raw events: 1)
+       Chain:  T1053.006
+
+  [188] datasets_attack_techniques_T1053.007_kubernetes_audit_cron_job_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1053.007
+
+  [189] datasets_attack_techniques_T1055_cobalt_strike
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [190] datasets_attack_techniques_T1055_msra
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [191] datasets_attack_techniques_T1055_named_pipes
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [192] datasets_attack_techniques_T1055_non-service-searchindexer
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [193] datasets_attack_techniques_T1055_sliver
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [194] datasets_attack_techniques_T1055_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [195] datasets_attack_techniques_T1055_splunk_ds
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [196] datasets_attack_techniques_T1055_trickbot_inf
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [197] datasets_attack_techniques_T1055.001_rasautou
+       Length: 1 (raw events: 1)
+       Chain:  T1055.001
+
+  [198] datasets_attack_techniques_T1057_process_commandline_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1057
+
+  [199] datasets_attack_techniques_T1057_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1057
+
+  [200] datasets_attack_techniques_T1059_autoit
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [201] datasets_attack_techniques_T1059_defender
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [202] datasets_attack_techniques_T1059_esxi_reverse_shell
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [203] datasets_attack_techniques_T1059_excessive_distinct_processes_from_windows_temp
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [204] datasets_attack_techniques_T1059_linux_bash_reverse_shell
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [205] datasets_attack_techniques_T1059_linux_binary_executed_from_shared_memory_directory
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [206] datasets_attack_techniques_T1059_log4shell_ldap_traffic
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [207] datasets_attack_techniques_T1059_macos_browser_spawned_script_external_network_connection
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [208] datasets_attack_techniques_T1059_metasploit
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [209] datasets_attack_techniques_T1059_meterpreter_taskhost_processes
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [210] datasets_attack_techniques_T1059_meterpreter_windows_temp_processes
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [211] datasets_attack_techniques_T1059_path_traversal
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [212] datasets_attack_techniques_T1059_protocol_handlers
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [213] datasets_attack_techniques_T1059_risk_behavior_abused_commandline
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [214] datasets_attack_techniques_T1059_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [215] datasets_attack_techniques_T1059_suspiciously_named_executables
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [216] datasets_attack_techniques_T1059_utility_socat_listener_binding_executable
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [217] datasets_attack_techniques_T1059_utility_socat_remote_tcp_connection_with_echo_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [218] datasets_attack_techniques_T1059_vmtoolsd
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [219] datasets_attack_techniques_T1059.001_asyncrat_crypto_pwh_namespace
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [220] datasets_attack_techniques_T1059.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [221] datasets_attack_techniques_T1059.001_encoded_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [222] datasets_attack_techniques_T1059.001_exchange
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [223] datasets_attack_techniques_T1059.001_hidden_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [224] datasets_attack_techniques_T1059.001_import_applocker_policy
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [225] datasets_attack_techniques_T1059.001_malicious_cmd_line_samples
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [226] datasets_attack_techniques_T1059.001_msix_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [227] datasets_attack_techniques_T1059.001_obfuscated_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [228] datasets_attack_techniques_T1059.001_powershell_execution_policy
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [229] datasets_attack_techniques_T1059.001_powershell_remotesigned
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [230] datasets_attack_techniques_T1059.001_powershell_script_block_logging
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [231] datasets_attack_techniques_T1059.001_powershell_testing
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [232] datasets_attack_techniques_T1059.001_powershell_xml_requests
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [233] datasets_attack_techniques_T1059.001_sharphound
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [234] datasets_attack_techniques_T1059.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [235] datasets_attack_techniques_T1059.001_soaphound
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [236] datasets_attack_techniques_T1059.001_threat_allow_switch
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [237] datasets_attack_techniques_T1059.001_trickbot_cmd_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [238] datasets_attack_techniques_T1059.001_unmanaged_powershell_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [239] datasets_attack_techniques_T1059.001_vip_env_var_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [240] datasets_attack_techniques_T1059.001_vip_injection_pwh
+       Length: 1 (raw events: 1)
+       Chain:  T1059.001
+
+  [241] datasets_attack_techniques_T1059.002_amos_stealer
+       Length: 1 (raw events: 1)
+       Chain:  T1059.002
+
+  [242] datasets_attack_techniques_T1059.002_osascript
+       Length: 1 (raw events: 1)
+       Chain:  T1059.002
+
+  [243] datasets_attack_techniques_T1059.002_osascript_do_shell_script
+       Length: 1 (raw events: 1)
+       Chain:  T1059.002
+
+  [244] datasets_attack_techniques_T1059.002_osascript_JavaScript_command_execution_Objective_C
+       Length: 1 (raw events: 1)
+       Chain:  T1059.002
+
+  [245] datasets_attack_techniques_T1059.002_osascript_long_lived_connection_to_remote_host
+       Length: 1 (raw events: 1)
+       Chain:  T1059.002
+
+  [246] datasets_attack_techniques_T1059.002_osascript_spawns_shell_process
+       Length: 1 (raw events: 1)
+       Chain:  T1059.002
+
+  [247] datasets_attack_techniques_T1059.003_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [248] datasets_attack_techniques_T1059.003_cmd_arguments
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [249] datasets_attack_techniques_T1059.003_cmd_for_loop
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [250] datasets_attack_techniques_T1059.003_cmd_spawns_cscript
+       Length: 1 (raw events: 3)
+       Chain:  T1059.003
+
+  [251] datasets_attack_techniques_T1059.003_delete_pwh_history
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [252] datasets_attack_techniques_T1059.003_powershell_spawn_cmd
+       Length: 1 (raw events: 2)
+       Chain:  T1059.003
+
+  [253] datasets_attack_techniques_T1059.003_ryuk
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [254] datasets_attack_techniques_T1059.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [255] datasets_attack_techniques_T1059.003_ssa_validation_browsers
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [256] datasets_attack_techniques_T1059.003_ssa_validation_office
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [257] datasets_attack_techniques_T1059.003_unusally_cmd_line
+       Length: 1 (raw events: 1)
+       Chain:  T1059.003
+
+  [258] datasets_attack_techniques_T1059.004_linux_discovery_tools
+       Length: 1 (raw events: 1)
+       Chain:  T1059.004
+
+  [259] datasets_attack_techniques_T1059.004_linux_netcat_outbound_connection
+       Length: 1 (raw events: 1)
+       Chain:  T1059.004
+
+  [260] datasets_attack_techniques_T1059.004_macos_lolbin
+       Length: 1 (raw events: 1)
+       Chain:  T1059.004
+
+  [261] datasets_attack_techniques_T1059.004_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059.004
+
+  [262] datasets_attack_techniques_T1059.005_discord_dnsquery
+       Length: 1 (raw events: 1)
+       Chain:  T1059.005
+
+  [263] datasets_attack_techniques_T1059.005_lotus_blossom_chrysalis
+       Length: 1 (raw events: 1)
+       Chain:  T1059.005
+
+  [264] datasets_attack_techniques_T1059.005_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059.005
+
+  [265] datasets_attack_techniques_T1059.005_vbs_wscript
+       Length: 1 (raw events: 1)
+       Chain:  T1059.005
+
+  [266] datasets_attack_techniques_T1059.006_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059.006
+
+  [267] datasets_attack_techniques_T1059.007_node_execute_js_script
+       Length: 1 (raw events: 1)
+       Chain:  T1059.007
+
+  [268] datasets_attack_techniques_T1059.007_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1059.007
+
+  [269] datasets_attack_techniques_T1068_bluehammer
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [270] datasets_attack_techniques_T1068_drivers
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [271] datasets_attack_techniques_T1068_linux_auditd_copy_fail
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [272] datasets_attack_techniques_T1068_linux_dirtyfrag
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [273] datasets_attack_techniques_T1068_linux_pedit
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [274] datasets_attack_techniques_T1068_linux_possible_linux_gsm_privilege_escalation
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [275] datasets_attack_techniques_T1068_linux_possible_nimbuspwn_directory_traversal
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [276] datasets_attack_techniques_T1068_linux_possible_privilege_escalation_via_pythonpath
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [277] datasets_attack_techniques_T1068_osquery_system_startup
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [278] datasets_attack_techniques_T1068_pkexec
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [279] datasets_attack_techniques_T1068_redsun
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [280] datasets_attack_techniques_T1068_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [281] datasets_attack_techniques_T1068_windows_escalation_behavior
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [282] datasets_attack_techniques_T1068_windows_suspicious_child_of_consent_exe
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [283] datasets_attack_techniques_T1068_zoom_child_process
+       Length: 1 (raw events: 2)
+       Chain:  T1068
+
+  [284] datasets_attack_techniques_T1069_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1069
+
+  [285] datasets_attack_techniques_T1069.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1069.001
+
+  [286] datasets_attack_techniques_T1069.001_njrat_admin_check
+       Length: 1 (raw events: 1)
+       Chain:  T1069.001
+
+  [287] datasets_attack_techniques_T1069.002_AD_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1069.002
+
+  [288] datasets_attack_techniques_T1069.002_domain_group_discovery_with_adsisearcher
+       Length: 1 (raw events: 1)
+       Chain:  T1069.002
+
+  [289] datasets_attack_techniques_T1070_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1070
+
+  [290] datasets_attack_techniques_T1070_esxi_system_clock_manipulation
+       Length: 1 (raw events: 1)
+       Chain:  T1070
+
+  [291] datasets_attack_techniques_T1070_fsutil_file_zero
+       Length: 1 (raw events: 1)
+       Chain:  T1070
+
+  [292] datasets_attack_techniques_T1070_illegal_log_deletion
+       Length: 22 (raw events: 31)
+       Chain:  T1070 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.003 ...
+
+  [293] datasets_attack_techniques_T1070_osquery_log_removal
+       Length: 1 (raw events: 1)
+       Chain:  T1070
+
+  [294] datasets_attack_techniques_T1070_remove_windows_security_event_log
+       Length: 1 (raw events: 1)
+       Chain:  T1070
+
+  [295] datasets_attack_techniques_T1070_rmdir_delete_files_and_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1070
+
+  [296] datasets_attack_techniques_T1070.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1070.001
+
+  [297] datasets_attack_techniques_T1070.001_suspicious_event_log_service_behavior
+       Length: 1 (raw events: 1)
+       Chain:  T1070.001
+
+  [298] datasets_attack_techniques_T1070.001_suspicious_kerberos_service_ticket_request
+       Length: 1 (raw events: 1)
+       Chain:  T1070.001
+
+  [299] datasets_attack_techniques_T1070.001_windows_event_log_cleared
+       Length: 1 (raw events: 1)
+       Chain:  T1070.001
+
+  [300] datasets_attack_techniques_T1070.001_windows_pwh_log_cleared
+       Length: 1 (raw events: 1)
+       Chain:  T1070.001
+
+  [301] datasets_attack_techniques_T1070.003_ConsoleHost_History_deletion
+       Length: 1 (raw events: 1)
+       Chain:  T1070.003
+
+  [302] datasets_attack_techniques_T1070.004_automatic_file_deleted
+       Length: 1 (raw events: 1)
+       Chain:  T1070.004
+
+  [303] datasets_attack_techniques_T1070.004_bmc_file_deleted
+       Length: 1 (raw events: 1)
+       Chain:  T1070.004
+
+  [304] datasets_attack_techniques_T1070.004_cipher
+       Length: 1 (raw events: 1)
+       Chain:  T1070.004
+
+  [305] datasets_attack_techniques_T1070.004_rdp_deletion
+       Length: 1 (raw events: 1)
+       Chain:  T1070.004
+
+  [306] datasets_attack_techniques_T1070.004_terminal_server_reg_deleted
+       Length: 1 (raw events: 1)
+       Chain:  T1070.004
+
+  [307] datasets_attack_techniques_T1070.005_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1070.005
+
+  [308] datasets_attack_techniques_T1071_finger_remote_host
+       Length: 1 (raw events: 1)
+       Chain:  T1071
+
+  [309] datasets_attack_techniques_T1071.001_http_user_agents
+       Length: 1 (raw events: 1)
+       Chain:  T1071.001
+
+  [310] datasets_attack_techniques_T1071.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1071.001
+
+  [311] datasets_attack_techniques_T1071.002_outbound_smb_traffic
+       Length: 1 (raw events: 1)
+       Chain:  T1071.002
+
+  [312] datasets_attack_techniques_T1071.004_kerberos_coercion
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [313] datasets_attack_techniques_T1071.004_long_dns_query
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [314] datasets_attack_techniques_T1071.004_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [315] datasets_attack_techniques_T1071.004_upload_files_dns
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [316] datasets_attack_techniques_T1071.004_vbc_dnsquery
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [317] datasets_attack_techniques_T1071.004_windows_powershell_commands_from_dns_txt
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [318] datasets_attack_techniques_T1072_intune
+       Length: 1 (raw events: 1)
+       Chain:  T1072
+
+  [319] datasets_attack_techniques_T1074_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1074
+
+  [320] datasets_attack_techniques_T1078_assume_role_with_saml
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [321] datasets_attack_techniques_T1078_attach_role_trust_policy
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [322] datasets_attack_techniques_T1078_attach_user_to_role
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [323] datasets_attack_techniques_T1078_aws_createaccesskey
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [324] datasets_attack_techniques_T1078_aws_createloginprofile
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [325] datasets_attack_techniques_T1078_aws_create_policy_version
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [326] datasets_attack_techniques_T1078_aws_saml_access_by_provider_user_and_principal
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [327] datasets_attack_techniques_T1078_aws_saml_update_identity_provider
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [328] datasets_attack_techniques_T1078_aws_setdefaultpolicyversion
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [329] datasets_attack_techniques_T1078_aws_updateloginprofile
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [330] datasets_attack_techniques_T1078_azure_ad_multiple_appids_and_useragents_auth
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [331] datasets_attack_techniques_T1078_create_IAM_role
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [332] datasets_attack_techniques_T1078_defaultaccount
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [333] datasets_attack_techniques_T1078_esxi_external_root_login
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [334] datasets_attack_techniques_T1078_esxi_stolen_root_account
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [335] datasets_attack_techniques_T1078_gcploit_exploitation_framework
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [336] datasets_attack_techniques_T1078_high_risk_permission_by_resource
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [337] datasets_attack_techniques_T1078_high_risk_role_by_project
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [338] datasets_attack_techniques_T1078_o365_excessive_sso_logon_errors
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [339] datasets_attack_techniques_T1078_o365_multiple_appids_and_useragents_auth
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [340] datasets_attack_techniques_T1078_okta_suspicious_activity_reported_by_user
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [341] datasets_attack_techniques_T1078_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [342] datasets_attack_techniques_T1078_special_logon_on_mulitple_hosts
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [343] datasets_attack_techniques_T1078_splunkd_auth
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [344] datasets_attack_techniques_T1078_sts_assumerole_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [345] datasets_attack_techniques_T1078_update_saml_provider
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [346] datasets_attack_techniques_T1078.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1078.001
+
+  [347] datasets_attack_techniques_T1078.002_account_lockout
+       Length: 1 (raw events: 1)
+       Chain:  T1078.002
+
+  [348] datasets_attack_techniques_T1078.002_account_login
+       Length: 1 (raw events: 1)
+       Chain:  T1078.002
+
+  [349] datasets_attack_techniques_T1078.002_powerview_acl_enumeration
+       Length: 1 (raw events: 1)
+       Chain:  T1078.002
+
+  [350] datasets_attack_techniques_T1078.002_samaccountname_spoofing
+       Length: 1 (raw events: 1)
+       Chain:  T1078.002
+
+  [351] datasets_attack_techniques_T1078.002_suspicious_computer_account_name_change
+       Length: 1 (raw events: 1)
+       Chain:  T1078.002
+
+  [352] datasets_attack_techniques_T1078.002_suspicious_ticket_granting_ticket_request
+       Length: 1 (raw events: 1)
+       Chain:  T1078.002
+
+  [353] datasets_attack_techniques_T1078.003_builtin_account_rename
+       Length: 1 (raw events: 1)
+       Chain:  T1078.003
+
+  [354] datasets_attack_techniques_T1078.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1078.003
+
+  [355] datasets_attack_techniques_T1078.004_aws_login_sfa
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [356] datasets_attack_techniques_T1078.004_azuread
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [357] datasets_attack_techniques_T1078.004_azuread_pws
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [358] datasets_attack_techniques_T1078.004_azure_ad_service_principal_authentication
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [359] datasets_attack_techniques_T1078.004_azure_automation_runbook
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [360] datasets_attack_techniques_T1078.004_azure_runbook_webhook
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [361] datasets_attack_techniques_T1078.004_gcp_single_factor_auth
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [362] datasets_attack_techniques_T1078.004_o365_security_and_compliance_alert_triggered
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [363] datasets_attack_techniques_T1078.004_okta_single_factor_auth
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [364] datasets_attack_techniques_T1078.004_okta_threatinsight_threat_detected
+       Length: 1 (raw events: 1)
+       Chain:  T1078.004
+
+  [365] datasets_attack_techniques_T1082_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1082
+
+  [366] datasets_attack_techniques_T1082_esxi_system_information
+       Length: 1 (raw events: 1)
+       Chain:  T1082
+
+  [367] datasets_attack_techniques_T1082_linux_auditd_lsmod
+       Length: 1 (raw events: 1)
+       Chain:  T1082
+
+  [368] datasets_attack_techniques_T1082_linux_auditd_lsmod_new
+       Length: 1 (raw events: 1)
+       Chain:  T1082
+
+  [369] datasets_attack_techniques_T1082_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1082
+
+  [370] datasets_attack_techniques_T1082_sysinternals_pstools
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [371] datasets_attack_techniques_T1083_linux_auditd_find_db
+       Length: 1 (raw events: 1)
+       Chain:  T1083
+
+  [372] datasets_attack_techniques_T1083_linux_auditd_find_document
+       Length: 1 (raw events: 1)
+       Chain:  T1083
+
+  [373] datasets_attack_techniques_T1083_linux_auditd_find_virtual_disk
+       Length: 1 (raw events: 1)
+       Chain:  T1083
+
+  [374] datasets_attack_techniques_T1083_linux_auditd_hidden_file
+       Length: 1 (raw events: 1)
+       Chain:  T1083
+
+  [375] datasets_attack_techniques_T1087_enumerate_users_local_group_using_telegram
+       Length: 1 (raw events: 1)
+       Chain:  T1087
+
+  [376] datasets_attack_techniques_T1087_powerview_get_netuser_preauthnotrequire
+       Length: 1 (raw events: 1)
+       Chain:  T1087
+
+  [377] datasets_attack_techniques_T1087.001_AD_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1087.001
+
+  [378] datasets_attack_techniques_T1087.002_adsi_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1087.002
+
+  [379] datasets_attack_techniques_T1087.002_AD_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1087.002
+
+  [380] datasets_attack_techniques_T1087.002_blackmatter_schcache
+       Length: 1 (raw events: 1)
+       Chain:  T1087.002
+
+  [381] datasets_attack_techniques_T1087.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1087.002
+
+  [382] datasets_attack_techniques_T1087.004_aws_invoke_model_access_denied
+       Length: 1 (raw events: 1)
+       Chain:  T1087.004
+
+  [383] datasets_attack_techniques_T1087.004_azurehound
+       Length: 1 (raw events: 1)
+       Chain:  T1087.004
+
+  [384] datasets_attack_techniques_T1087.004_okta_unauth_access
+       Length: 1 (raw events: 1)
+       Chain:  T1087.004
+
+  [385] datasets_attack_techniques_T1090_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1090
+
+  [386] datasets_attack_techniques_T1090.001_netsh_portproxy
+       Length: 1 (raw events: 1)
+       Chain:  T1090.001
+
+  [387] datasets_attack_techniques_T1090.003_pan_tor_allowed
+       Length: 1 (raw events: 1)
+       Chain:  T1090.003
+
+  [388] datasets_attack_techniques_T1090.003_windows_tor_client_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1090.003
+
+  [389] datasets_attack_techniques_T1095_palologs
+       Length: 1 (raw events: 1)
+       Chain:  T1095
+
+  [390] datasets_attack_techniques_T1098_account_manipulation
+       Length: 38 (raw events: 44)
+       Chain:  T1098 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1003.001 ...
+
+  [391] datasets_attack_techniques_T1098_aws_iam_delete_policy
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [392] datasets_attack_techniques_T1098_aws_iam_failure_group_deletion
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [393] datasets_attack_techniques_T1098_aws_iam_successful_group_deletion
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [394] datasets_attack_techniques_T1098_azure_ad_add_serviceprincipal_owner
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [395] datasets_attack_techniques_T1098_azure_ad_enable_and_reset
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [396] datasets_attack_techniques_T1098_azure_ad_guest_user_type_changed_to_member
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [397] datasets_attack_techniques_T1098_azure_ad_set_immutableid
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [398] datasets_attack_techniques_T1098_dnsadmins_member_added
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [399] datasets_attack_techniques_T1098_dsrm_account
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [400] datasets_attack_techniques_T1098_esxi_account_modification
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [401] datasets_attack_techniques_T1098_esxi_admin_role
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [402] datasets_attack_techniques_T1098_linux_password_change
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [403] datasets_attack_techniques_T1098_linux_usermod_root_uid_set
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [404] datasets_attack_techniques_T1098_o365_add_app_registration_owner
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [405] datasets_attack_techniques_T1098_o365_azure_workload_events
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [406] datasets_attack_techniques_T1098_service_principal_name_added
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [407] datasets_attack_techniques_T1098_short_lived_service_principal_name
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [408] datasets_attack_techniques_T1098_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [409] datasets_attack_techniques_T1098_windows_multiple_accounts_deleted
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [410] datasets_attack_techniques_T1098_windows_multiple_accounts_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [411] datasets_attack_techniques_T1098_windows_multiple_passwords_changed
+       Length: 1 (raw events: 1)
+       Chain:  T1098
+
+  [412] datasets_attack_techniques_T1098.001_azure_ad_federated_identity_credential
+       Length: 1 (raw events: 1)
+       Chain:  T1098.001
+
+  [413] datasets_attack_techniques_T1098.001_azure_ad_service_principal_credentials
+       Length: 1 (raw events: 1)
+       Chain:  T1098.001
+
+  [414] datasets_attack_techniques_T1098.001_o365_service_principal_credentials
+       Length: 1 (raw events: 1)
+       Chain:  T1098.001
+
+  [415] datasets_attack_techniques_T1098.001_okta_new_api_token_created
+       Length: 1 (raw events: 1)
+       Chain:  T1098.001
+
+  [416] datasets_attack_techniques_T1098.002_application_impersonation_role_assigned
+       Length: 1 (raw events: 1)
+       Chain:  T1098.002
+
+  [417] datasets_attack_techniques_T1098.002_full_access_as_app_permission_assigned
+       Length: 1 (raw events: 1)
+       Chain:  T1098.002
+
+  [418] datasets_attack_techniques_T1098.002_o365_full_access_as_app_permission_assigned
+       Length: 1 (raw events: 1)
+       Chain:  T1098.002
+
+  [419] datasets_attack_techniques_T1098.002_o365_mailbox_folder_read_granted
+       Length: 1 (raw events: 1)
+       Chain:  T1098.002
+
+  [420] datasets_attack_techniques_T1098.003_azure_ad_admin_consent
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [421] datasets_attack_techniques_T1098.003_azure_ad_assign_global_administrator
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [422] datasets_attack_techniques_T1098.003_azure_ad_assign_privileged_role
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [423] datasets_attack_techniques_T1098.003_azure_ad_bypass_admin_consent
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [424] datasets_attack_techniques_T1098.003_azure_ad_pim_role_activated
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [425] datasets_attack_techniques_T1098.003_azure_ad_privileged_graph_perm_assigned
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [426] datasets_attack_techniques_T1098.003_azure_ad_privileged_role_serviceprincipal
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [427] datasets_attack_techniques_T1098.003_azure_ad_spn_privesc
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [428] datasets_attack_techniques_T1098.003_o365_admin_consent
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [429] datasets_attack_techniques_T1098.003_o365_bypass_admin_consent
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [430] datasets_attack_techniques_T1098.003_o365_grant_mail_read
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [431] datasets_attack_techniques_T1098.003_o365_high_priv_role_assigned
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [432] datasets_attack_techniques_T1098.003_o365_privileged_graph_perm_assigned
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [433] datasets_attack_techniques_T1098.003_o365_spn_privesc
+       Length: 1 (raw events: 1)
+       Chain:  T1098.003
+
+  [434] datasets_attack_techniques_T1098.004_auditd_path_ssh_config
+       Length: 1 (raw events: 1)
+       Chain:  T1098.004
+
+  [435] datasets_attack_techniques_T1098.004_linux_auditd_nopasswd
+       Length: 1 (raw events: 1)
+       Chain:  T1098.004
+
+  [436] datasets_attack_techniques_T1098.004_ssh_authorized_keys
+       Length: 1 (raw events: 1)
+       Chain:  T1098.004
+
+  [437] datasets_attack_techniques_T1098.005_azure_ad_register_new_mfa_method
+       Length: 1 (raw events: 1)
+       Chain:  T1098.005
+
+  [438] datasets_attack_techniques_T1098.005_o365_register_new_mfa_method
+       Length: 1 (raw events: 1)
+       Chain:  T1098.005
+
+  [439] datasets_attack_techniques_T1098.005_okta_new_device_enrolled
+       Length: 1 (raw events: 1)
+       Chain:  T1098.005
+
+  [440] datasets_attack_techniques_T1102_njrat_ngrok_connection
+       Length: 1 (raw events: 1)
+       Chain:  T1102
+
+  [441] datasets_attack_techniques_T1102_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1102
+
+  [442] datasets_attack_techniques_T1102.002_telegram_api_cli
+       Length: 1 (raw events: 1)
+       Chain:  T1102.002
+
+  [443] datasets_attack_techniques_T1102.002_telegram_api_dns
+       Length: 1 (raw events: 1)
+       Chain:  T1102.002
+
+  [444] datasets_attack_techniques_T1105_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1105
+
+  [445] datasets_attack_techniques_T1105_dll_loaded_in_temp
+       Length: 1 (raw events: 1)
+       Chain:  T1105
+
+  [446] datasets_attack_techniques_T1105_download_to_pipe_exec
+       Length: 1 (raw events: 1)
+       Chain:  T1105
+
+  [447] datasets_attack_techniques_T1105_ironlanguage_download
+       Length: 1 (raw events: 1)
+       Chain:  T1105
+
+  [448] datasets_attack_techniques_T1105_tinyurl_dns_query
+       Length: 1 (raw events: 1)
+       Chain:  T1105
+
+  [449] datasets_attack_techniques_T1110_azure_mfasweep_events
+       Length: 1 (raw events: 1)
+       Chain:  T1110
+
+  [450] datasets_attack_techniques_T1110_esxi_ssh_brute_force
+       Length: 1 (raw events: 1)
+       Chain:  T1110
+
+  [451] datasets_attack_techniques_T1110_o365_brute_force_login
+       Length: 1 (raw events: 1)
+       Chain:  T1110
+
+  [452] datasets_attack_techniques_T1110_okta_multiple_accounts_lockout
+       Length: 1 (raw events: 1)
+       Chain:  T1110
+
+  [453] datasets_attack_techniques_T1110.001_aws_login_failure
+       Length: 1 (raw events: 1)
+       Chain:  T1110.001
+
+  [454] datasets_attack_techniques_T1110.001_azure_ad_high_number_of_failed_authentications_for_user
+       Length: 1 (raw events: 1)
+       Chain:  T1110.001
+
+  [455] datasets_attack_techniques_T1110.001_azure_ad_successful_authentication_from_different_ips
+       Length: 1 (raw events: 1)
+       Chain:  T1110.001
+
+  [456] datasets_attack_techniques_T1110.001_high_number_of_login_failures_from_a_single_source
+       Length: 1 (raw events: 1)
+       Chain:  T1110.001
+
+  [457] datasets_attack_techniques_T1110.001_o365_high_number_authentications_for_user
+       Length: 1 (raw events: 1)
+       Chain:  T1110.001
+
+  [458] datasets_attack_techniques_T1110.001_rdp_brute_sysmon
+       Length: 1 (raw events: 1)
+       Chain:  T1110.001
+
+  [459] datasets_attack_techniques_T1110.002_aws_rds_password_reset
+       Length: 1 (raw events: 1)
+       Chain:  T1110.002
+
+  [460] datasets_attack_techniques_T1110.003_aws_mulitple_failed_console_login
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [461] datasets_attack_techniques_T1110.003_aws_multiple_login_fail_per_user
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [462] datasets_attack_techniques_T1110.003_azuread_highrisk
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [463] datasets_attack_techniques_T1110.003_azure_ad_distributed_spray
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [464] datasets_attack_techniques_T1110.003_gcp_gws_multiple_login_failure
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [465] datasets_attack_techniques_T1110.003_generic_password_spray
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [466] datasets_attack_techniques_T1110.003_ntlm_bruteforce
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [467] datasets_attack_techniques_T1110.003_o365_distributed_spray
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [468] datasets_attack_techniques_T1110.003_o365_multiple_users_from_ip
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [469] datasets_attack_techniques_T1110.003_okta_multiple_users_from_ip
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [470] datasets_attack_techniques_T1110.003_password_spraying_azuread
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [471] datasets_attack_techniques_T1110.003_purplesharp_disabled_users_kerberos
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [472] datasets_attack_techniques_T1110.003_purplesharp_disabled_users_kerberos_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [473] datasets_attack_techniques_T1110.003_purplesharp_explicit_credential_spray
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [474] datasets_attack_techniques_T1110.003_purplesharp_explicit_credential_spray_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [475] datasets_attack_techniques_T1110.003_purplesharp_invalid_users_kerberos
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [476] datasets_attack_techniques_T1110.003_purplesharp_invalid_users_kerberos_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [477] datasets_attack_techniques_T1110.003_purplesharp_invalid_users_ntlm
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [478] datasets_attack_techniques_T1110.003_purplesharp_invalid_users_ntlm_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [479] datasets_attack_techniques_T1110.003_purplesharp_multiple_users_from_process
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [480] datasets_attack_techniques_T1110.003_purplesharp_multiple_users_from_process_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [481] datasets_attack_techniques_T1110.003_purplesharp_remote_spray
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [482] datasets_attack_techniques_T1110.003_purplesharp_remote_spray_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [483] datasets_attack_techniques_T1110.003_purplesharp_valid_users_kerberos
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [484] datasets_attack_techniques_T1110.003_purplesharp_valid_users_kerberos_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [485] datasets_attack_techniques_T1110.003_purplesharp_valid_users_ntlm
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [486] datasets_attack_techniques_T1110.003_purplesharp_valid_users_ntlm_xml
+       Length: 1 (raw events: 1)
+       Chain:  T1110.003
+
+  [487] datasets_attack_techniques_T1110.004_local_administrator_cred_stuffing
+       Length: 1 (raw events: 1)
+       Chain:  T1110.004
+
+  [488] datasets_attack_techniques_T1112
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [489] datasets_attack_techniques_T1112_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [490] datasets_attack_techniques_T1112_AuthenticationLevelOverride
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [491] datasets_attack_techniques_T1112_bitlocker_registry_setting
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [492] datasets_attack_techniques_T1112_blackbyte_enablelinkedconnections
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [493] datasets_attack_techniques_T1112_blackbyte_longpathsenabled
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [494] datasets_attack_techniques_T1112_delete_runmru_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [495] datasets_attack_techniques_T1112_DisableRemoteDesktopAntiAlias
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [496] datasets_attack_techniques_T1112_disable_notif_center
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [497] datasets_attack_techniques_T1112_disable_rdp
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [498] datasets_attack_techniques_T1112_firewall_modify_delete
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [499] datasets_attack_techniques_T1112_kingsoft_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [500] datasets_attack_techniques_T1112_minint_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [501] datasets_attack_techniques_T1112_njrat_md5_registry_entry
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [502] datasets_attack_techniques_T1112_no_changing_wallpaper
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [503] datasets_attack_techniques_T1112_proxy_enable
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [504] datasets_attack_techniques_T1112_proxy_server
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [505] datasets_attack_techniques_T1112_pwn_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [506] datasets_attack_techniques_T1112_ransomware_disable_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [507] datasets_attack_techniques_T1112_reg_profiles_private
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [508] datasets_attack_techniques_T1112_reg_profiles_private2
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [509] datasets_attack_techniques_T1112_remote_access_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [510] datasets_attack_techniques_T1112_shimcache_flush
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [511] datasets_attack_techniques_T1112_smart_card_group_policy
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [512] datasets_attack_techniques_T1112_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [513] datasets_attack_techniques_T1112_test_registry
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [514] datasets_attack_techniques_T1112_valleyrat_c2_reg2
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [515] datasets_attack_techniques_T1112_vip_big_env_variable
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [516] datasets_attack_techniques_T1112_wer_dontshowui
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [517] datasets_attack_techniques_T1112_windows_mod_reg_risk_behavior
+       Length: 1 (raw events: 1)
+       Chain:  T1112
+
+  [518] datasets_attack_techniques_T1113_braodo_screenshot
+       Length: 1 (raw events: 1)
+       Chain:  T1113
+
+  [519] datasets_attack_techniques_T1114_o365_export_pst_file
+       Length: 1 (raw events: 1)
+       Chain:  T1114
+
+  [520] datasets_attack_techniques_T1114_o365_new_forwarding_mailflow_rule_created
+       Length: 1 (raw events: 1)
+       Chain:  T1114
+
+  [521] datasets_attack_techniques_T1114_o365_suspect_email_actions
+       Length: 1 (raw events: 1)
+       Chain:  T1114
+
+  [522] datasets_attack_techniques_T1114.001_windows_email_files_outside_email_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1114.001
+
+  [523] datasets_attack_techniques_T1114.002_o365_compliance_content_search_exported
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [524] datasets_attack_techniques_T1114.002_o365_compliance_content_search_started
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [525] datasets_attack_techniques_T1114.002_o365_inbox_shared_with_all_users
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [526] datasets_attack_techniques_T1114.002_o365_multiple_mailboxes_accessed_via_api
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [527] datasets_attack_techniques_T1114.002_o365_oauth_app_ews_mailbox_access
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [528] datasets_attack_techniques_T1114.002_o365_oauth_app_graph_mailbox_access
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [529] datasets_attack_techniques_T1114.002_suspicious_rights_delegation
+       Length: 1 (raw events: 1)
+       Chain:  T1114.002
+
+  [530] datasets_attack_techniques_T1114.003_o365_email_forwarding_rule_created
+       Length: 1 (raw events: 1)
+       Chain:  T1114.003
+
+  [531] datasets_attack_techniques_T1114.003_o365_mailbox_forwarding_enabled
+       Length: 1 (raw events: 1)
+       Chain:  T1114.003
+
+  [532] datasets_attack_techniques_T1114.003_transport_rule_change
+       Length: 1 (raw events: 1)
+       Chain:  T1114.003
+
+  [533] datasets_attack_techniques_T1115_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1115
+
+  [534] datasets_attack_techniques_T1115_linux_auditd_xclip
+       Length: 1 (raw events: 1)
+       Chain:  T1115
+
+  [535] datasets_attack_techniques_T1119_aws_exfil_datasync
+       Length: 1 (raw events: 1)
+       Chain:  T1119
+
+  [536] datasets_attack_techniques_T1119_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1119
+
+  [537] datasets_attack_techniques_T1119_windows_dir_piped_to_findstr_activity
+       Length: 1 (raw events: 1)
+       Chain:  T1119
+
+  [538] datasets_attack_techniques_T1125_salat_stealer_ffmpeg
+       Length: 1 (raw events: 1)
+       Chain:  T1125
+
+  [539] datasets_attack_techniques_T1127_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1127
+
+  [540] datasets_attack_techniques_T1127_etw_disable
+       Length: 1 (raw events: 1)
+       Chain:  T1127
+
+  [541] datasets_attack_techniques_T1127.001
+       Length: 1 (raw events: 1)
+       Chain:  T1127.001
+
+  [542] datasets_attack_techniques_T1127.001_regsvr32_silent
+       Length: 1 (raw events: 1)
+       Chain:  T1127.001
+
+  [543] datasets_attack_techniques_T1128_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1128
+
+  [544] datasets_attack_techniques_T1129_executable_shared_modules
+       Length: 1 (raw events: 1)
+       Chain:  T1129
+
+  [545] datasets_attack_techniques_T1129_linux_suspicious_gcc_invocation_building_init_shared_object
+       Length: 1 (raw events: 1)
+       Chain:  T1129
+
+  [546] datasets_attack_techniques_T1129_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1129
+
+  [547] datasets_attack_techniques_T1133_rdp
+       Length: 1 (raw events: 1)
+       Chain:  T1133
+
+  [548] datasets_attack_techniques_T1133_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1133
+
+  [549] datasets_attack_techniques_T1134_explorer_root_proc_cmdline
+       Length: 1 (raw events: 1)
+       Chain:  T1134
+
+  [550] datasets_attack_techniques_T1134.001_uac_process_handle_dup
+       Length: 1 (raw events: 1)
+       Chain:  T1134.001
+
+  [551] datasets_attack_techniques_T1134.005_mimikatz
+       Length: 1 (raw events: 1)
+       Chain:  T1134.005
+
+  [552] datasets_attack_techniques_T1134.005_sid_history2
+       Length: 1 (raw events: 1)
+       Chain:  T1134.005
+
+  [553] datasets_attack_techniques_T1135_ipc_share_accessed
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [554] datasets_attack_techniques_T1135_large_number_computer_service_tickets
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [555] datasets_attack_techniques_T1135_net_share
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [556] datasets_attack_techniques_T1135_net_share_discovery_via_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [557] datasets_attack_techniques_T1135_osquery_share_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [558] datasets_attack_techniques_T1135_powerview_sharefinder
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [559] datasets_attack_techniques_T1135_rapid_authentication_multiple_hosts
+       Length: 1 (raw events: 1)
+       Chain:  T1135
+
+  [560] datasets_attack_techniques_T1136_linux_unix_new_user
+       Length: 1 (raw events: 1)
+       Chain:  T1136
+
+  [561] datasets_attack_techniques_T1136_osquery_account_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1136
+
+  [562] datasets_attack_techniques_T1136_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1136
+
+  [563] datasets_attack_techniques_T1136.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1136.001
+
+  [564] datasets_attack_techniques_T1136.001_linux_auditd_add_user
+       Length: 1 (raw events: 1)
+       Chain:  T1136.001
+
+  [565] datasets_attack_techniques_T1136.001_linux_auditd_add_user_type
+       Length: 1 (raw events: 1)
+       Chain:  T1136.001
+
+  [566] datasets_attack_techniques_T1136.001_net_create_user
+       Length: 1 (raw events: 1)
+       Chain:  T1136.001
+
+  [567] datasets_attack_techniques_T1136.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1136.002
+
+  [568] datasets_attack_techniques_T1136.003_azure_ad_add_service_principal
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [569] datasets_attack_techniques_T1136.003_azure_ad_external_guest_user_invited
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [570] datasets_attack_techniques_T1136.003_azure_ad_multiple_service_principals_created
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [571] datasets_attack_techniques_T1136.003_azure_automation_account
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [572] datasets_attack_techniques_T1136.003_o365_added_service_principal
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [573] datasets_attack_techniques_T1136.003_o365_add_app_role_assignment_grant_user
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [574] datasets_attack_techniques_T1136.003_o365_add_service_principal
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [575] datasets_attack_techniques_T1136.003_o365_multiple_service_principals_created
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [576] datasets_attack_techniques_T1136.003_o365_new_federated_domain
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [577] datasets_attack_techniques_T1136.003_o365_new_federated_domain_added
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [578] datasets_attack_techniques_T1136.003_o365_new_federation
+       Length: 1 (raw events: 1)
+       Chain:  T1136.003
+
+  [579] datasets_attack_techniques_T1137.006_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1137.006
+
+  [580] datasets_attack_techniques_T1140_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1140
+
+  [581] datasets_attack_techniques_T1140_linux_auditd_base64
+       Length: 1 (raw events: 1)
+       Chain:  T1140
+
+  [582] datasets_attack_techniques_T1140_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1140
+
+  [583] datasets_attack_techniques_T1176.001_disable_extension
+       Length: 1 (raw events: 1)
+       Chain:  T1176.001
+
+  [584] datasets_attack_techniques_T1185_aws_concurrent_sessions_from_different_ips
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [585] datasets_attack_techniques_T1185_azure_ad_concurrent_sessions_from_different_ips
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [586] datasets_attack_techniques_T1185_browser_unusual_flag
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [587] datasets_attack_techniques_T1185_chrome_allow_list
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [588] datasets_attack_techniques_T1185_chrome_load_extensions
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [589] datasets_attack_techniques_T1185_disable_chrome_update
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [590] datasets_attack_techniques_T1185_headlessbrowser
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [591] datasets_attack_techniques_T1185_o365_concurrent_sessions_from_different_ips
+       Length: 1 (raw events: 1)
+       Chain:  T1185
+
+  [592] datasets_attack_techniques_T1187_petitpotam
+       Length: 1 (raw events: 1)
+       Chain:  T1187
+
+  [593] datasets_attack_techniques_T1187_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1187
+
+  [594] datasets_attack_techniques_T1189_dyn_dns_site
+       Length: 1 (raw events: 1)
+       Chain:  T1189
+
+  [595] datasets_attack_techniques_T1190
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [596] datasets_attack_techniques_T1190_adobe
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [597] datasets_attack_techniques_T1190_cisco_cisco_smart_install
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [598] datasets_attack_techniques_T1190_cisco_CVE-2026-20127
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [599] datasets_attack_techniques_T1190_cisco_iosxe
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [600] datasets_attack_techniques_T1190_citrix
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [601] datasets_attack_techniques_T1190_confluence
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [602] datasets_attack_techniques_T1190_crushftp
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [603] datasets_attack_techniques_T1190_f5
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [604] datasets_attack_techniques_T1190_fortigate
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [605] datasets_attack_techniques_T1190_ivanti
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [606] datasets_attack_techniques_T1190_java
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [607] datasets_attack_techniques_T1190_jenkins
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [608] datasets_attack_techniques_T1190_jetbrains
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [609] datasets_attack_techniques_T1190_juniper
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [610] datasets_attack_techniques_T1190_linux_cve-2023-33246_rocketmq_exploitation
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [611] datasets_attack_techniques_T1190_linux_suspicious_child_of_postgresql
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [612] datasets_attack_techniques_T1190_log4j_network_logs
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [613] datasets_attack_techniques_T1190_log4j_proxy_logs
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [614] datasets_attack_techniques_T1190_moveit
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [615] datasets_attack_techniques_T1190_outbound_java
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [616] datasets_attack_techniques_T1190_outbound_ldap
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [617] datasets_attack_techniques_T1190_papercut
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [618] datasets_attack_techniques_T1190_proxyshell
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [619] datasets_attack_techniques_T1190_request_smuggling
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [620] datasets_attack_techniques_T1190_sap
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [621] datasets_attack_techniques_T1190_screenconnect
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [622] datasets_attack_techniques_T1190_sharepoint
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [623] datasets_attack_techniques_T1190_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [624] datasets_attack_techniques_T1190_spring4shell
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [625] datasets_attack_techniques_T1190_text4shell
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [626] datasets_attack_techniques_T1190_tomcat
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [627] datasets_attack_techniques_T1190_vmware
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [628] datasets_attack_techniques_T1190_wordpress
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [629] datasets_attack_techniques_T1190_ws_ftp
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [630] datasets_attack_techniques_T1195.001_github_pull_request
+       Length: 1 (raw events: 1)
+       Chain:  T1195.001
+
+  [631] datasets_attack_techniques_T1195.001_github_security_advisor_alert
+       Length: 1 (raw events: 1)
+       Chain:  T1195.001
+
+  [632] datasets_attack_techniques_T1195.001_npm
+       Length: 1 (raw events: 1)
+       Chain:  T1195.001
+
+  [633] datasets_attack_techniques_T1195.002_3CX
+       Length: 1 (raw events: 1)
+       Chain:  T1195.002
+
+  [634] datasets_attack_techniques_T1195.002_github_actions_disable_security_workflow
+       Length: 1 (raw events: 1)
+       Chain:  T1195.002
+
+  [635] datasets_attack_techniques_T1195.002_python_network_traffic
+       Length: 1 (raw events: 1)
+       Chain:  T1195.002
+
+  [636] datasets_attack_techniques_T1197_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1197
+
+  [637] datasets_attack_techniques_T1199_github_push_master
+       Length: 1 (raw events: 1)
+       Chain:  T1199
+
+  [638] datasets_attack_techniques_T1200_linux_auditd_swapoff
+       Length: 1 (raw events: 1)
+       Chain:  T1200
+
+  [639] datasets_attack_techniques_T1200_sysmon_usb_use_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1200
+
+  [640] datasets_attack_techniques_T1201_aws_password_policy
+       Length: 1 (raw events: 1)
+       Chain:  T1201
+
+  [641] datasets_attack_techniques_T1201_pwd_policy_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1201
+
+  [642] datasets_attack_techniques_T1202_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1202
+
+  [643] datasets_attack_techniques_T1202_windows_browser_copy_paste
+       Length: 1 (raw events: 1)
+       Chain:  T1202
+
+  [644] datasets_attack_techniques_T1203_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1203
+
+  [645] datasets_attack_techniques_T1204_aws_updatelambdafunctioncode
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [646] datasets_attack_techniques_T1204_failed_login_service_account_ad
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [647] datasets_attack_techniques_T1204_kubernetes_audit_daemonset_created
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [648] datasets_attack_techniques_T1204_kubernetes_falco_shell_spawned
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [649] datasets_attack_techniques_T1204_kubernetes_privileged_pod
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [650] datasets_attack_techniques_T1204_kubernetes_unauthorized_access
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [651] datasets_attack_techniques_T1204_kube_audit_create_node_port_service
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [652] datasets_attack_techniques_T1204_rare_executables
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [653] datasets_attack_techniques_T1204_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1204
+
+  [654] datasets_attack_techniques_T1204.002_appx
+       Length: 1 (raw events: 1)
+       Chain:  T1204.002
+
+  [655] datasets_attack_techniques_T1204.002_atomic_red_team
+       Length: 1 (raw events: 2)
+       Chain:  T1204.002
+
+  [656] datasets_attack_techniques_T1204.002_batch_file_in_system32
+       Length: 1 (raw events: 2)
+       Chain:  T1204.002
+
+  [657] datasets_attack_techniques_T1204.002_linux_ghostscript_exploitation
+       Length: 1 (raw events: 1)
+       Chain:  T1204.002
+
+  [658] datasets_attack_techniques_T1204.002_single_letter_exe
+       Length: 1 (raw events: 2)
+       Chain:  T1204.002
+
+  [659] datasets_attack_techniques_T1204.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1204.002
+
+  [660] datasets_attack_techniques_T1204.003_aws_ecr_container_upload
+       Length: 1 (raw events: 1)
+       Chain:  T1204.003
+
+  [661] datasets_attack_techniques_T1204.003_aws_ecr_image_scanning
+       Length: 1 (raw events: 1)
+       Chain:  T1204.003
+
+  [662] datasets_attack_techniques_T1204.003_risk_dataset
+       Length: 1 (raw events: 1)
+       Chain:  T1204.003
+
+  [663] datasets_attack_techniques_T1207_dc_promo
+       Length: 1 (raw events: 1)
+       Chain:  T1207
+
+  [664] datasets_attack_techniques_T1207_mimikatz
+       Length: 1 (raw events: 1)
+       Chain:  T1207
+
+  [665] datasets_attack_techniques_T1207_short_lived_server_object
+       Length: 1 (raw events: 1)
+       Chain:  T1207
+
+  [666] datasets_attack_techniques_T1207_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1207
+
+  [667] datasets_attack_techniques_T1210_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1210
+
+  [668] datasets_attack_techniques_T1210_splunk_SVD-2026-0603
+       Length: 1 (raw events: 1)
+       Chain:  T1210
+
+  [669] datasets_attack_techniques_T1212_kubernetes_nginx_lfi_attack
+       Length: 1 (raw events: 1)
+       Chain:  T1212
+
+  [670] datasets_attack_techniques_T1212_kuberntest_nginx_rfi_attack
+       Length: 1 (raw events: 1)
+       Chain:  T1212
+
+  [671] datasets_attack_techniques_T1212_zerologon
+       Length: 1 (raw events: 1)
+       Chain:  T1212
+
+  [672] datasets_attack_techniques_T1213_audittrail
+       Length: 1 (raw events: 1)
+       Chain:  T1213
+
+  [673] datasets_attack_techniques_T1213.002_o365_sus_sharepoint_search
+       Length: 1 (raw events: 1)
+       Chain:  T1213.002
+
+  [674] datasets_attack_techniques_T1216_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1216
+
+  [675] datasets_attack_techniques_T1217_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1217
+
+  [676] datasets_attack_techniques_T1218_bitlockertogo
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [677] datasets_attack_techniques_T1218_diskshadow
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [678] datasets_attack_techniques_T1218_eviltwin
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [679] datasets_attack_techniques_T1218_living_off_the_land
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [680] datasets_attack_techniques_T1218_lolbas_with_network_traffic
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [681] datasets_attack_techniques_T1218_msix_ai_stubs
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [682] datasets_attack_techniques_T1218_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [683] datasets_attack_techniques_T1218_vip_aspnet_process
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [684] datasets_attack_techniques_T1218.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.001
+
+  [685] datasets_attack_techniques_T1218.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.002
+
+  [686] datasets_attack_techniques_T1218.003_moz_lib_loaded
+       Length: 1 (raw events: 1)
+       Chain:  T1218.003
+
+  [687] datasets_attack_techniques_T1218.004_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.004
+
+  [688] datasets_attack_techniques_T1218.005_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.005
+
+  [689] datasets_attack_techniques_T1218.005_mshta_in_registry
+       Length: 1 (raw events: 1)
+       Chain:  T1218.005
+
+  [690] datasets_attack_techniques_T1218.007_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.007
+
+  [691] datasets_attack_techniques_T1218.007_msiexec-hidewindow-rundll32
+       Length: 1 (raw events: 1)
+       Chain:  T1218.007
+
+  [692] datasets_attack_techniques_T1218.007_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1218.007
+
+  [693] datasets_attack_techniques_T1218.008_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.008
+
+  [694] datasets_attack_techniques_T1218.009_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.009
+
+  [695] datasets_attack_techniques_T1218.010_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.010
+
+  [696] datasets_attack_techniques_T1218.010_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1218.010
+
+  [697] datasets_attack_techniques_T1218.011_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218.011
+
+  [698] datasets_attack_techniques_T1218.011_random_dll_extension
+       Length: 1 (raw events: 1)
+       Chain:  T1218.011
+
+  [699] datasets_attack_techniques_T1218.011_rundll32_dll_in_temp
+       Length: 1 (raw events: 1)
+       Chain:  T1218.011
+
+  [700] datasets_attack_techniques_T1218.011_rundll32_random_dll_ext
+       Length: 1 (raw events: 1)
+       Chain:  T1218.011
+
+  [701] datasets_attack_techniques_T1218.011_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1218.011
+
+  [702] datasets_attack_techniques_T1218.011_update_per_user_system
+       Length: 1 (raw events: 1)
+       Chain:  T1218.011
+
+  [703] datasets_attack_techniques_T1218.012_verclsid_exec
+       Length: 1 (raw events: 1)
+       Chain:  T1218.012
+
+  [704] datasets_attack_techniques_T1218.013_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1218
+
+  [705] datasets_attack_techniques_T1218.014_msc_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1218.014
+
+  [706] datasets_attack_techniques_T1218.014_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1218.014
+
+  [707] datasets_attack_techniques_T1219_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1219
+
+  [708] datasets_attack_techniques_T1219_screenconnect
+       Length: 1 (raw events: 1)
+       Chain:  T1219
+
+  [709] datasets_attack_techniques_T1219_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1219
+
+  [710] datasets_attack_techniques_T1219_teamviewer
+       Length: 1 (raw events: 1)
+       Chain:  T1219
+
+  [711] datasets_attack_techniques_T1220_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1220
+
+  [712] datasets_attack_techniques_T1222_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1222
+
+  [713] datasets_attack_techniques_T1222.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1222.001
+
+  [714] datasets_attack_techniques_T1222.001_attrib_hidden
+       Length: 1 (raw events: 1)
+       Chain:  T1222.001
+
+  [715] datasets_attack_techniques_T1222.001_dacl_abuse
+       Length: 1 (raw events: 1)
+       Chain:  T1222.001
+
+  [716] datasets_attack_techniques_T1222.001_fsutil_symlink_eval
+       Length: 1 (raw events: 1)
+       Chain:  T1222.001
+
+  [717] datasets_attack_techniques_T1222.001_icacls_inheritance
+       Length: 1 (raw events: 1)
+       Chain:  T1222.001
+
+  [718] datasets_attack_techniques_T1222.001_subinacl
+       Length: 1 (raw events: 1)
+       Chain:  T1222.001
+
+  [719] datasets_attack_techniques_T1222.002_linux_auditd_chattr_i
+       Length: 1 (raw events: 1)
+       Chain:  T1222.002
+
+  [720] datasets_attack_techniques_T1222.002_linux_auditd_chmod_exec_attrib
+       Length: 1 (raw events: 1)
+       Chain:  T1222.002
+
+  [721] datasets_attack_techniques_T1480_ai_cli_override
+       Length: 1 (raw events: 1)
+       Chain:  T1480
+
+  [722] datasets_attack_techniques_T1482_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1482
+
+  [723] datasets_attack_techniques_T1482_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1482
+
+  [724] datasets_attack_techniques_T1482_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1482
+
+  [725] datasets_attack_techniques_T1484
+       Length: 9 (raw events: 14)
+       Chain:  T1484 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001
+
+  [726] datasets_attack_techniques_T1484_aclmodification
+       Length: 1 (raw events: 1)
+       Chain:  T1484
+
+  [727] datasets_attack_techniques_T1484_DCShadowPermissions
+       Length: 1 (raw events: 1)
+       Chain:  T1484
+
+  [728] datasets_attack_techniques_T1484.001_default_domain_policy_modified
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [729] datasets_attack_techniques_T1484.001_gpo_modification
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [730] datasets_attack_techniques_T1484.001_group_policy_created
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [731] datasets_attack_techniques_T1484.001_group_policy_deleted
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [732] datasets_attack_techniques_T1484.001_group_policy_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [733] datasets_attack_techniques_T1484.001_group_policy_new_cse
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [734] datasets_attack_techniques_T1484.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1484.001
+
+  [735] datasets_attack_techniques_T1484.002_new_federated_domain
+       Length: 1 (raw events: 1)
+       Chain:  T1484.002
+
+  [736] datasets_attack_techniques_T1485_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [737] datasets_attack_techniques_T1485_aws_delete_knowledge_base
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [738] datasets_attack_techniques_T1485_decommissioned_buckets
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [739] datasets_attack_techniques_T1485_excessive_file_deletions
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [740] datasets_attack_techniques_T1485_excessive_file_del_in_windefender_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [741] datasets_attack_techniques_T1485_linux_auditd_dd_overwrite
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [742] datasets_attack_techniques_T1485_linux_auditd_no_preserve_root
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [743] datasets_attack_techniques_T1485_linux_auditd_shred
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [744] datasets_attack_techniques_T1485_linux_dd_file_overwrite
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [745] datasets_attack_techniques_T1485_ransomware_extensions
+       Length: 1 (raw events: 2)
+       Chain:  T1485
+
+  [746] datasets_attack_techniques_T1485_ransomware_notes
+       Length: 1 (raw events: 2)
+       Chain:  T1485
+
+  [747] datasets_attack_techniques_T1485_rm_boot_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [748] datasets_attack_techniques_T1485_rm_shred_critical_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [749] datasets_attack_techniques_T1485_sdelete
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [750] datasets_attack_techniques_T1485_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1485
+
+  [751] datasets_attack_techniques_T1486_aws_kms_key
+       Length: 1 (raw events: 1)
+       Chain:  T1486
+
+  [752] datasets_attack_techniques_T1486_bitlocker_sus_commands
+       Length: 1 (raw events: 1)
+       Chain:  T1486
+
+  [753] datasets_attack_techniques_T1486_dcrypt
+       Length: 1 (raw events: 1)
+       Chain:  T1486
+
+  [754] datasets_attack_techniques_T1486_s3_file_encryption
+       Length: 1 (raw events: 1)
+       Chain:  T1486
+
+  [755] datasets_attack_techniques_T1486_sam_sam_note
+       Length: 1 (raw events: 1)
+       Chain:  T1486
+
+  [756] datasets_attack_techniques_T1489_linux_auditd_auditd_service_stop
+       Length: 1 (raw events: 1)
+       Chain:  T1489
+
+  [757] datasets_attack_techniques_T1489_linux_auditd_osquerd_service_stop
+       Length: 1 (raw events: 1)
+       Chain:  T1489
+
+  [758] datasets_attack_techniques_T1489_linux_auditd_service_stop
+       Length: 1 (raw events: 1)
+       Chain:  T1489
+
+  [759] datasets_attack_techniques_T1489_linux_auditd_sysmon_service_stop
+       Length: 1 (raw events: 1)
+       Chain:  T1489
+
+  [760] datasets_attack_techniques_T1489_linux_service_stop_disable
+       Length: 1 (raw events: 1)
+       Chain:  T1489
+
+  [761] datasets_attack_techniques_T1489_splunk_kvstore_csrf
+       Length: 1 (raw events: 1)
+       Chain:  T1489
+
+  [762] datasets_attack_techniques_T1490_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1490
+
+  [763] datasets_attack_techniques_T1490_aws_bucket_version
+       Length: 1 (raw events: 1)
+       Chain:  T1490
+
+  [764] datasets_attack_techniques_T1490_known_services_killed_by_ransomware
+       Length: 1 (raw events: 1)
+       Chain:  T1490
+
+  [765] datasets_attack_techniques_T1490_ransomware_notes
+       Length: 1 (raw events: 1)
+       Chain:  T1490
+
+  [766] datasets_attack_techniques_T1490_shadowcopy_del
+       Length: 1 (raw events: 1)
+       Chain:  T1490
+
+  [767] datasets_attack_techniques_T1490_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1490
+
+  [768] datasets_attack_techniques_T1491_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1491
+
+  [769] datasets_attack_techniques_T1491.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1491.001
+
+  [770] datasets_attack_techniques_T1496_process_high_cpu_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1496
+
+  [771] datasets_attack_techniques_T1496_process_high_mem_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1496
+
+  [772] datasets_attack_techniques_T1497_browser_disable_extension
+       Length: 1 (raw events: 1)
+       Chain:  T1497
+
+  [773] datasets_attack_techniques_T1497_browser_disable_logs
+       Length: 1 (raw events: 1)
+       Chain:  T1497
+
+  [774] datasets_attack_techniques_T1497_chrome_disable_popup
+       Length: 1 (raw events: 1)
+       Chain:  T1497
+
+  [775] datasets_attack_techniques_T1497_chrom_no_sandbox
+       Length: 1 (raw events: 1)
+       Chain:  T1497
+
+  [776] datasets_attack_techniques_T1497_headless_browser
+       Length: 1 (raw events: 1)
+       Chain:  T1497
+
+  [777] datasets_attack_techniques_T1497_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1497
+
+  [778] datasets_attack_techniques_T1497.003_njrat_ping_delay_before_delete
+       Length: 1 (raw events: 1)
+       Chain:  T1497.003
+
+  [779] datasets_attack_techniques_T1497.003_ping_sleep
+       Length: 1 (raw events: 1)
+       Chain:  T1497.003
+
+  [780] datasets_attack_techniques_T1497.003_time_delay_using_choice_exe
+       Length: 1 (raw events: 1)
+       Chain:  T1497.003
+
+  [781] datasets_attack_techniques_T1498_splunk_indexer_dos
+       Length: 1 (raw events: 1)
+       Chain:  T1498
+
+  [782] datasets_attack_techniques_T1499_splunk
+       Length: 1 (raw events: 2)
+       Chain:  T1499
+
+  [783] datasets_attack_techniques_T1505_linux_suspicious_redis_activity
+       Length: 1 (raw events: 1)
+       Chain:  T1505
+
+  [784] datasets_attack_techniques_T1505_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1505
+
+  [785] datasets_attack_techniques_T1505.001_simulation
+       Length: 1 (raw events: 1)
+       Chain:  T1505.001
+
+  [786] datasets_attack_techniques_T1505.003
+       Length: 1 (raw events: 1)
+       Chain:  T1505.003
+
+  [787] datasets_attack_techniques_T1505.003_generic_webshell_exploit
+       Length: 1 (raw events: 1)
+       Chain:  T1505.003
+
+  [788] datasets_attack_techniques_T1505.003_sharepoint_webshell
+       Length: 1 (raw events: 1)
+       Chain:  T1505.003
+
+  [789] datasets_attack_techniques_T1505.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1505.003
+
+  [790] datasets_attack_techniques_T1505.004
+       Length: 1 (raw events: 1)
+       Chain:  T1505.004
+
+  [791] datasets_attack_techniques_T1505.006_esxi_malicious_vib
+       Length: 1 (raw events: 1)
+       Chain:  T1505.006
+
+  [792] datasets_attack_techniques_T1518_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1518
+
+  [793] datasets_attack_techniques_T1525_container_implant
+       Length: 1 (raw events: 1)
+       Chain:  T1525
+
+  [794] datasets_attack_techniques_T1526_aws_security_scanner
+       Length: 1 (raw events: 1)
+       Chain:  T1526
+
+  [795] datasets_attack_techniques_T1526_kubernetes_audit_pull_image
+       Length: 1 (raw events: 1)
+       Chain:  T1526
+
+  [796] datasets_attack_techniques_T1526_kubernetes_kube_hunter
+       Length: 1 (raw events: 1)
+       Chain:  T1526
+
+  [797] datasets_attack_techniques_T1526_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1526
+
+  [798] datasets_attack_techniques_T1528_azure_ad_user_consent_blocked
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [799] datasets_attack_techniques_T1528_azure_ad_user_consent_declined
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [800] datasets_attack_techniques_T1528_azure_ad_user_consent_granted
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [801] datasets_attack_techniques_T1528_device_code_authentication
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [802] datasets_attack_techniques_T1528_o365_user_consent_blocked
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [803] datasets_attack_techniques_T1528_o365_user_consent_declined
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [804] datasets_attack_techniques_T1528_o365_user_consent_file_permissions
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [805] datasets_attack_techniques_T1528_o365_user_consent_mail_permissions
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [806] datasets_attack_techniques_T1528_vidar_azure_file_access
+       Length: 1 (raw events: 1)
+       Chain:  T1528
+
+  [807] datasets_attack_techniques_T1529_auditd_path_sysrq
+       Length: 1 (raw events: 1)
+       Chain:  T1529
+
+  [808] datasets_attack_techniques_T1529_esxi_bulk_vm_termination
+       Length: 1 (raw events: 1)
+       Chain:  T1529
+
+  [809] datasets_attack_techniques_T1529_linux_sysrq_abuse
+       Length: 1 (raw events: 1)
+       Chain:  T1529
+
+  [810] datasets_attack_techniques_T1530_aws_exfil_high_no_getobject
+       Length: 1 (raw events: 1)
+       Chain:  T1530
+
+  [811] datasets_attack_techniques_T1530_aws_s3_public_bucket
+       Length: 1 (raw events: 1)
+       Chain:  T1530
+
+  [812] datasets_attack_techniques_T1531_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1531
+
+  [813] datasets_attack_techniques_T1531_linux_unix_delete_user
+       Length: 1 (raw events: 1)
+       Chain:  T1531
+
+  [814] datasets_attack_techniques_T1531_log_off_user
+       Length: 1 (raw events: 1)
+       Chain:  T1531
+
+  [815] datasets_attack_techniques_T1531_powershell_log_process_tree
+       Length: 1 (raw events: 1)
+       Chain:  T1531
+
+  [816] datasets_attack_techniques_T1537_aws_ami_shared_public
+       Length: 1 (raw events: 1)
+       Chain:  T1537
+
+  [817] datasets_attack_techniques_T1537_aws_exfil_risk_events
+       Length: 1 (raw events: 1)
+       Chain:  T1537
+
+  [818] datasets_attack_techniques_T1537_aws_snapshot_exfil
+       Length: 1 (raw events: 1)
+       Chain:  T1537
+
+  [819] datasets_attack_techniques_T1537_high_copy_files_in_net_share
+       Length: 1 (raw events: 1)
+       Chain:  T1537
+
+  [820] datasets_attack_techniques_T1537_high_frequency_copy_of_files_in_network_share
+       Length: 1 (raw events: 1)
+       Chain:  T1537
+
+  [821] datasets_attack_techniques_T1539_okta_web_session_multiple_ip
+       Length: 1 (raw events: 1)
+       Chain:  T1539
+
+  [822] datasets_attack_techniques_T1542_linux_efi_bootloader_file_deletion
+       Length: 1 (raw events: 1)
+       Chain:  T1542
+
+  [823] datasets_attack_techniques_T1542_linux_possible_bootloader_modifications
+       Length: 1 (raw events: 1)
+       Chain:  T1542
+
+  [824] datasets_attack_techniques_T1542_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1542
+
+  [825] datasets_attack_techniques_T1542.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1542.001
+
+  [826] datasets_attack_techniques_T1542.003_bootkits
+       Length: 1 (raw events: 1)
+       Chain:  T1542.003
+
+  [827] datasets_attack_techniques_T1542.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1542.003
+
+  [828] datasets_attack_techniques_T1543_osquery_ketxload
+       Length: 1 (raw events: 1)
+       Chain:  T1543
+
+  [829] datasets_attack_techniques_T1543.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1543.002
+
+  [830] datasets_attack_techniques_T1543.003_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [831] datasets_attack_techniques_T1543.003_krbrelayup
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [832] datasets_attack_techniques_T1543.003_lateral_movement
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [833] datasets_attack_techniques_T1543.003_lateral_movement_lolbas
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [834] datasets_attack_techniques_T1543.003_lateral_movement_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [835] datasets_attack_techniques_T1543.003_lateral_movement_suspicious_path
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [836] datasets_attack_techniques_T1543.003_lotus_blossom_chrysalis
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [837] datasets_attack_techniques_T1543.003_services_lolbas_execution
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [838] datasets_attack_techniques_T1543.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [839] datasets_attack_techniques_T1543.003_windows_krbrelayup_service_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1543.003
+
+  [840] datasets_attack_techniques_T1546_adminsdholder_modified
+       Length: 1 (raw events: 1)
+       Chain:  T1546
+
+  [841] datasets_attack_techniques_T1546_compattelrunner_abuse
+       Length: 1 (raw events: 1)
+       Chain:  T1546
+
+  [842] datasets_attack_techniques_T1546_python_pth_file_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1546
+
+  [843] datasets_attack_techniques_T1546_python_site_hooks_creation
+       Length: 1 (raw events: 1)
+       Chain:  T1546
+
+  [844] datasets_attack_techniques_T1546.001_txtfile_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1546.001
+
+  [845] datasets_attack_techniques_T1546.002_scrnsave_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1546.002
+
+  [846] datasets_attack_techniques_T1546.003_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1546.003
+
+  [847] datasets_attack_techniques_T1546.003_wmi_event_subscription
+       Length: 1 (raw events: 1)
+       Chain:  T1546.003
+
+  [848] datasets_attack_techniques_T1546.004_linux_auditd_unix_shell_mod_config
+       Length: 1 (raw events: 1)
+       Chain:  T1546.004
+
+  [849] datasets_attack_techniques_T1546.004_linux_init_profile
+       Length: 1 (raw events: 1)
+       Chain:  T1546.004
+
+  [850] datasets_attack_techniques_T1546.008_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1546.008
+
+  [851] datasets_attack_techniques_T1546.008_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1546.008
+
+  [852] datasets_attack_techniques_T1546.009_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1546.009
+
+  [853] datasets_attack_techniques_T1546.011_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1546.011
+
+  [854] datasets_attack_techniques_T1546.012_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1546.012
+
+  [855] datasets_attack_techniques_T1546.015_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1546.015
+
+  [856] datasets_attack_techniques_T1546.015_bitlocker_com_hijacking
+       Length: 1 (raw events: 1)
+       Chain:  T1574.015
+
+  [857] datasets_attack_techniques_T1546.015_pwh_com_object
+       Length: 1 (raw events: 1)
+       Chain:  T1546.015
+
+  [858] datasets_attack_techniques_T1546.015_uac_colorui
+       Length: 1 (raw events: 1)
+       Chain:  T1546.015
+
+  [859] datasets_attack_techniques_T1547_linux_motd_script_added
+       Length: 1 (raw events: 1)
+       Chain:  T1547
+
+  [860] datasets_attack_techniques_T1547_linux_suspicious_xdg_autostart
+       Length: 1 (raw events: 1)
+       Chain:  T1547
+
+  [861] datasets_attack_techniques_T1547_linux_udev_rule_created
+       Length: 1 (raw events: 1)
+       Chain:  T1547
+
+  [862] datasets_attack_techniques_T1547_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1547
+
+  [863] datasets_attack_techniques_T1547.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1547.001
+
+  [864] datasets_attack_techniques_T1547.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1547.001
+
+  [865] datasets_attack_techniques_T1547.003_timeprovider_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1547.003
+
+  [866] datasets_attack_techniques_T1547.005_malicious_ssp
+       Length: 1 (raw events: 1)
+       Chain:  T1547.005
+
+  [867] datasets_attack_techniques_T1547.006_linux_auditd_insmod
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [868] datasets_attack_techniques_T1547.006_linux_auditd_insmod_new
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [869] datasets_attack_techniques_T1547.006_linux_auditd_modprobe
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [870] datasets_attack_techniques_T1547.006_linux_auditd_modprobe_new
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [871] datasets_attack_techniques_T1547.006_linux_auditd_modprobe_unload_module
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [872] datasets_attack_techniques_T1547.006_linux_auditd_rmmod
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [873] datasets_attack_techniques_T1547.006_linux_auditd_rmmod_new
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [874] datasets_attack_techniques_T1547.006_loading_linux_kernel_module
+       Length: 1 (raw events: 1)
+       Chain:  T1547.006
+
+  [875] datasets_attack_techniques_T1547.008_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1547.008
+
+  [876] datasets_attack_techniques_T1547.009_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1547.009
+
+  [877] datasets_attack_techniques_T1547.010_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1547.010
+
+  [878] datasets_attack_techniques_T1547.011_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1547.011
+
+  [879] datasets_attack_techniques_T1547.012_printnightmare
+       Length: 1 (raw events: 1)
+       Chain:  T1547.012
+
+  [880] datasets_attack_techniques_T1547.012_print_reg
+       Length: 1 (raw events: 1)
+       Chain:  T1547.012
+
+  [881] datasets_attack_techniques_T1547.012_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1547.012
+
+  [882] datasets_attack_techniques_t1547.014_active_setup_stubpath
+       Length: 1 (raw events: 1)
+       Chain:  T1547.014
+
+  [883] datasets_attack_techniques_T1548
+       Length: 34 (raw events: 41)
+       Chain:  T1548 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1003.001 ...
+
+  [884] datasets_attack_techniques_T1548_apt
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [885] datasets_attack_techniques_T1548_apt_get
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [886] datasets_attack_techniques_T1548_awk
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [887] datasets_attack_techniques_T1548_busybox
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [888] datasets_attack_techniques_T1548_c89
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [889] datasets_attack_techniques_T1548_c99
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [890] datasets_attack_techniques_T1548_composer
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [891] datasets_attack_techniques_T1548_cpulimit
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [892] datasets_attack_techniques_T1548_csvtool
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [893] datasets_attack_techniques_T1548_darkside_cmstp_com
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [894] datasets_attack_techniques_T1548_docker
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [895] datasets_attack_techniques_T1548_emacs
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [896] datasets_attack_techniques_T1548_find
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [897] datasets_attack_techniques_T1548_gawk
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [898] datasets_attack_techniques_T1548_gdb
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [899] datasets_attack_techniques_T1548_gem
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [900] datasets_attack_techniques_T1548_linux_risk
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [901] datasets_attack_techniques_T1548_make
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [902] datasets_attack_techniques_T1548_mysql
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [903] datasets_attack_techniques_T1548_node
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [904] datasets_attack_techniques_T1548_octave
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [905] datasets_attack_techniques_T1548_openvpn
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [906] datasets_attack_techniques_T1548_php
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [907] datasets_attack_techniques_T1548_puppet
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [908] datasets_attack_techniques_T1548_rpm
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [909] datasets_attack_techniques_T1548_ruby
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [910] datasets_attack_techniques_T1548_splunk
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [911] datasets_attack_techniques_T1548_sqlite3
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [912] datasets_attack_techniques_T1548_telnet
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [913] datasets_attack_techniques_T1548_uac_bypass
+       Length: 1 (raw events: 1)
+       Chain:  T1548
+
+  [914] datasets_attack_techniques_T1548.001_chmod_uid
+       Length: 1 (raw events: 1)
+       Chain:  T1548.001
+
+  [915] datasets_attack_techniques_T1548.001_linux_auditd_setuid
+       Length: 1 (raw events: 1)
+       Chain:  T1548.001
+
+  [916] datasets_attack_techniques_T1548.001_linux_setcap
+       Length: 1 (raw events: 1)
+       Chain:  T1548.001
+
+  [917] datasets_attack_techniques_T1548.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1548.002
+
+  [918] datasets_attack_techniques_T1548.002_computerdefaults_spawn_proc
+       Length: 1 (raw events: 1)
+       Chain:  T1548.002
+
+  [919] datasets_attack_techniques_T1548.002_LocalAccountTokenFilterPolicy
+       Length: 1 (raw events: 1)
+       Chain:  T1548.002
+
+  [920] datasets_attack_techniques_T1548.002_slui
+       Length: 1 (raw events: 1)
+       Chain:  T1548.002
+
+  [921] datasets_attack_techniques_T1548.002_ssa_eventvwr
+       Length: 1 (raw events: 1)
+       Chain:  T1548.002
+
+  [922] datasets_attack_techniques_T1548.002_uac_behavior
+       Length: 1 (raw events: 1)
+       Chain:  T1548.002
+
+  [923] datasets_attack_techniques_T1548.003_auditd_path_cwd_doas_conf
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [924] datasets_attack_techniques_T1548.003_auditd_path_sudoers
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [925] datasets_attack_techniques_T1548.003_doas
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [926] datasets_attack_techniques_T1548.003_doas_exec
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [927] datasets_attack_techniques_T1548.003_linux_adduser
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [928] datasets_attack_techniques_T1548.003_linux_auditd_doas
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [929] datasets_attack_techniques_T1548.003_linux_auditd_doas_new
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [930] datasets_attack_techniques_T1548.003_linux_auditd_nopasswd
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [931] datasets_attack_techniques_T1548.003_linux_auditd_sudoers_access
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [932] datasets_attack_techniques_T1548.003_linux_auditd_sudo_su
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [933] datasets_attack_techniques_T1548.003_linux_audited_doas_conf
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [934] datasets_attack_techniques_T1548.003_linux_suspicious_sudo_parameter
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [935] datasets_attack_techniques_T1548.003_nopasswd_sudoers
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [936] datasets_attack_techniques_T1548.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [937] datasets_attack_techniques_T1548.003_sudoers_temp
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [938] datasets_attack_techniques_T1548.003_sudo_su
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [939] datasets_attack_techniques_T1548.003_visudo
+       Length: 1 (raw events: 1)
+       Chain:  T1548.003
+
+  [940] datasets_attack_techniques_T1550_impacket
+       Length: 1 (raw events: 1)
+       Chain:  T1550
+
+  [941] datasets_attack_techniques_T1550_kerberos_tgt_request_using_rc4_encryption
+       Length: 1 (raw events: 1)
+       Chain:  T1550
+
+  [942] datasets_attack_techniques_T1550_netexec_toolkit_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1550
+
+  [943] datasets_attack_techniques_T1550_rubeus
+       Length: 1 (raw events: 1)
+       Chain:  T1550
+
+  [944] datasets_attack_techniques_T1550.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1550.002
+
+  [945] datasets_attack_techniques_T1550.002_extracts_from_real_data
+       Length: 1 (raw events: 1)
+       Chain:  T1550.002
+
+  [946] datasets_attack_techniques_T1550.003_mimikatz
+       Length: 1 (raw events: 1)
+       Chain:  T1550.003
+
+  [947] datasets_attack_techniques_T1550.003_rubeus
+       Length: 1 (raw events: 1)
+       Chain:  T1550.003
+
+  [948] datasets_attack_techniques_T1552_aws_getpassworddata
+       Length: 1 (raw events: 1)
+       Chain:  T1552
+
+  [949] datasets_attack_techniques_T1552_snakey_keylogger_outlook_reg_access
+       Length: 1 (raw events: 1)
+       Chain:  T1552
+
+  [950] datasets_attack_techniques_T1552_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1552
+
+  [951] datasets_attack_techniques_T1552_windows_post_exploitation
+       Length: 1 (raw events: 1)
+       Chain:  T1552
+
+  [952] datasets_attack_techniques_T1552.001_file_xml_config
+       Length: 1 (raw events: 1)
+       Chain:  T1552.001
+
+  [953] datasets_attack_techniques_T1552.001_ie_intelliform_storage
+       Length: 1 (raw events: 1)
+       Chain:  T1552.001
+
+  [954] datasets_attack_techniques_T1552.001_password_in_username
+       Length: 1 (raw events: 1)
+       Chain:  T1552.001
+
+  [955] datasets_attack_techniques_T1552.001_winscp_access
+       Length: 1 (raw events: 1)
+       Chain:  T1552.001
+
+  [956] datasets_attack_techniques_T1552.002_autoadminlogon
+       Length: 1 (raw events: 1)
+       Chain:  T1552.002
+
+  [957] datasets_attack_techniques_T1552.003_linux_bash_history_access
+       Length: 1 (raw events: 1)
+       Chain:  T1552.003
+
+  [958] datasets_attack_techniques_T1552.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1552.003
+
+  [959] datasets_attack_techniques_T1552.004_certutil_exe_certificate_extraction
+       Length: 1 (raw events: 1)
+       Chain:  T1552
+
+  [960] datasets_attack_techniques_T1552.004_linux_auditd_find_gpg
+       Length: 1 (raw events: 1)
+       Chain:  T1552.004
+
+  [961] datasets_attack_techniques_T1552.004_linux_auditd_find_ssh_files
+       Length: 1 (raw events: 1)
+       Chain:  T1552.004
+
+  [962] datasets_attack_techniques_T1552.005_isovalent_cloud_metadata
+       Length: 1 (raw events: 1)
+       Chain:  T1552.005
+
+  [963] datasets_attack_techniques_T1552.006_findstr_gpp_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1552.006
+
+  [964] datasets_attack_techniques_T1552.006_powershell_gpp_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1552.006
+
+  [965] datasets_attack_techniques_T1552.007_kube_audit_get_secret
+       Length: 1 (raw events: 1)
+       Chain:  T1552.007
+
+  [966] datasets_attack_techniques_T1553.001_atomic_red_team_macos_gatekeeper_bypass_xattr
+       Length: 1 (raw events: 1)
+       Chain:  T1553.001
+
+  [967] datasets_attack_techniques_T1553.001_macos_gatekeeper_bypass_LSFileQuarantineEnabled
+       Length: 1 (raw events: 1)
+       Chain:  T1553.001
+
+  [968] datasets_attack_techniques_T1553.001_osquery_gatekeeper
+       Length: 1 (raw events: 1)
+       Chain:  T1553.001
+
+  [969] datasets_attack_techniques_T1553.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1553.002
+
+  [970] datasets_attack_techniques_T1553.003_sip
+       Length: 1 (raw events: 1)
+       Chain:  T1553.003
+
+  [971] datasets_attack_techniques_T1553.004_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1553.004
+
+  [972] datasets_attack_techniques_T1553.005_mark_of_the_web_bypass
+       Length: 1 (raw events: 1)
+       Chain:  T1553.005
+
+  [973] datasets_attack_techniques_T1553.005_msix_unsigned
+       Length: 1 (raw events: 1)
+       Chain:  T1553.005
+
+  [974] datasets_attack_techniques_T1554_circle_ci_disable_security_job
+       Length: 1 (raw events: 1)
+       Chain:  T1554
+
+  [975] datasets_attack_techniques_T1554_circle_ci_disable_security_step
+       Length: 1 (raw events: 1)
+       Chain:  T1554
+
+  [976] datasets_attack_techniques_T1555_applying_stolen_credentials
+       Length: 34 (raw events: 41)
+       Chain:  T1555 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1059.001 -> T1003.001 -> T1059.003 -> T1003.001 -> T1059.001 -> T1059.003 -> T1003.001 ...
+
+  [977] datasets_attack_techniques_T1555_cmdkey_create_credential_store
+       Length: 1 (raw events: 1)
+       Chain:  T1555
+
+  [978] datasets_attack_techniques_T1555_cmdkey_delete_credentials_store
+       Length: 1 (raw events: 1)
+       Chain:  T1555
+
+  [979] datasets_attack_techniques_T1555_non_chrome_process_accessing_chrome_default_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1555
+
+  [980] datasets_attack_techniques_T1555_web_browser_pass_view
+       Length: 1 (raw events: 1)
+       Chain:  T1555
+
+  [981] datasets_attack_techniques_T1555.001_osquery_keychains
+       Length: 1 (raw events: 1)
+       Chain:  T1555.001
+
+  [982] datasets_attack_techniques_T1555.003_browser_credential_info_temp
+       Length: 1 (raw events: 1)
+       Chain:  T1555.003
+
+  [983] datasets_attack_techniques_T1555.003_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1555.003
+
+  [984] datasets_attack_techniques_T1555.004_vaultcli_creds
+       Length: 1 (raw events: 1)
+       Chain:  T1555.004
+
+  [985] datasets_attack_techniques_T1555.005_linux_auditd_find_credentials
+       Length: 1 (raw events: 1)
+       Chain:  T1555.005
+
+  [986] datasets_attack_techniques_T1555.005_linux_auditd_find_password_db
+       Length: 1 (raw events: 1)
+       Chain:  T1555.005
+
+  [987] datasets_attack_techniques_T1556_azuread
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [988] datasets_attack_techniques_T1556_cisco_duo_bulk_policy_deletion
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [989] datasets_attack_techniques_T1556_cisco_duo_bypass_2FA
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [990] datasets_attack_techniques_T1556_cisco_duo_bypass_code
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [991] datasets_attack_techniques_T1556_cisco_duo_policy_allow_devices_without_screen_lock
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [992] datasets_attack_techniques_T1556_cisco_duo_policy_allow_network_bypass_2fa
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [993] datasets_attack_techniques_T1556_cisco_duo_policy_allow_old_flash_and_java
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [994] datasets_attack_techniques_T1556_cisco_duo_policy_allow_tampered_devices
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [995] datasets_attack_techniques_T1556_cisco_duo_policy_bypass_2FA
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [996] datasets_attack_techniques_T1556_cisco_duo_policy_bypass_2FA_other_countries
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [997] datasets_attack_techniques_T1556_cisco_duo_policy_deny_access
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [998] datasets_attack_techniques_T1556_cisco_duo_unusual_admin_login
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [999] datasets_attack_techniques_T1556_disable_credential_guard
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1000] datasets_attack_techniques_T1556_disable_lsa_protection
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1001] datasets_attack_techniques_T1556_disable_lsa_protection_new
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1002] datasets_attack_techniques_T1556_gcp_disable_mfa
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1003] datasets_attack_techniques_T1556_o365_disable_mfa
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1004] datasets_attack_techniques_T1556_o365_sso_logon_errors
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1005] datasets_attack_techniques_T1556_okta_idp
+       Length: 1 (raw events: 1)
+       Chain:  T1556
+
+  [1006] datasets_attack_techniques_T1556.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1553.005
+
+  [1007] datasets_attack_techniques_T1556.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1556.002
+
+  [1008] datasets_attack_techniques_T1556.006_aws_new_mfa_method_registered_for_user
+       Length: 1 (raw events: 1)
+       Chain:  T1556.006
+
+  [1009] datasets_attack_techniques_T1556.006_azure_ad_new_mfa_method_registered_for_user
+       Length: 1 (raw events: 1)
+       Chain:  T1556.006
+
+  [1010] datasets_attack_techniques_T1556.006_azure_ad_temporary_access_pass
+       Length: 1 (raw events: 1)
+       Chain:  T1556.006
+
+  [1011] datasets_attack_techniques_T1556.006_okta_mfa_method_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1556.006
+
+  [1012] datasets_attack_techniques_T1557.002_cisco_ios
+       Length: 1 (raw events: 1)
+       Chain:  T1557.002
+
+  [1013] datasets_attack_techniques_T1558_diamond_ticket
+       Length: 1 (raw events: 1)
+       Chain:  T1558
+
+  [1014] datasets_attack_techniques_T1558_krbrelayup
+       Length: 1 (raw events: 1)
+       Chain:  T1558
+
+  [1015] datasets_attack_techniques_T1558_windows_computer_account_created_by_computer_account
+       Length: 1 (raw events: 1)
+       Chain:  T1558
+
+  [1016] datasets_attack_techniques_T1558_windows_computer_account_requesting_kerberos_ticket
+       Length: 1 (raw events: 1)
+       Chain:  T1558
+
+  [1017] datasets_attack_techniques_T1558_windows_computer_account_with_spn
+       Length: 1 (raw events: 1)
+       Chain:  T1558
+
+  [1018] datasets_attack_techniques_T1558_windows_kerberos_local_successful_logon
+       Length: 1 (raw events: 1)
+       Chain:  T1558
+
+  [1019] datasets_attack_techniques_T1558.001_impacket
+       Length: 1 (raw events: 1)
+       Chain:  T1558.001
+
+  [1020] datasets_attack_techniques_T1558.001_kerberos_service_ticket_request_using_rc4_encryption
+       Length: 1 (raw events: 1)
+       Chain:  T1558.001
+
+  [1021] datasets_attack_techniques_T1558.002_impacket
+       Length: 1 (raw events: 1)
+       Chain:  T1558.002
+
+  [1022] datasets_attack_techniques_T1558.003_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1558.003
+
+  [1023] datasets_attack_techniques_T1558.003_kerberoasting_spn_request_with_rc4_encryption
+       Length: 1 (raw events: 1)
+       Chain:  T1558.003
+
+  [1024] datasets_attack_techniques_T1558.003_powerview
+       Length: 1 (raw events: 1)
+       Chain:  T1558.003
+
+  [1025] datasets_attack_techniques_T1558.003_powerview-2
+       Length: 1 (raw events: 1)
+       Chain:  T1558.003
+
+  [1026] datasets_attack_techniques_T1558.003_rubeus
+       Length: 1 (raw events: 1)
+       Chain:  T1558.003
+
+  [1027] datasets_attack_techniques_T1558.003_unusual_number_of_kerberos_service_tickets_requested
+       Length: 1 (raw events: 1)
+       Chain:  T1558.003
+
+  [1028] datasets_attack_techniques_T1558.004_getaduser
+       Length: 1 (raw events: 1)
+       Chain:  T1558.004
+
+  [1029] datasets_attack_techniques_T1558.004_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1558.004
+
+  [1030] datasets_attack_techniques_T1558.004_powerview
+       Length: 1 (raw events: 1)
+       Chain:  T1558.004
+
+  [1031] datasets_attack_techniques_T1559_anonymous_pipe
+       Length: 1 (raw events: 1)
+       Chain:  T1559
+
+  [1032] datasets_attack_techniques_T1560_archived_in_temp_dir
+       Length: 1 (raw events: 1)
+       Chain:  T1560
+
+  [1033] datasets_attack_techniques_T1560_powershell_archive
+       Length: 1 (raw events: 1)
+       Chain:  T1560
+
+  [1034] datasets_attack_techniques_T1560.001_archive_tools
+       Length: 1 (raw events: 1)
+       Chain:  T1560.001
+
+  [1035] datasets_attack_techniques_T1560.001_archive_utility
+       Length: 1 (raw events: 1)
+       Chain:  T1560.001
+
+  [1036] datasets_attack_techniques_T1560.001_archive_utility_darkgate
+       Length: 1 (raw events: 1)
+       Chain:  T1560.001
+
+  [1037] datasets_attack_techniques_T1560.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1560.002
+
+  [1038] datasets_attack_techniques_T1561.001_microsoft_intune_bulk_wipe
+       Length: 1 (raw events: 1)
+       Chain:  T1561.001
+
+  [1039] datasets_attack_techniques_T1561.002_mbr_raw_access
+       Length: 1 (raw events: 1)
+       Chain:  T1561.002
+
+  [1040] datasets_attack_techniques_T1562_applocker
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1041] datasets_attack_techniques_T1562_azuread_disable_blockconsent_for_riskapps
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1042] datasets_attack_techniques_T1562_disable_linux_firewall
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1043] datasets_attack_techniques_T1562_esxi_encryption_modified
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1044] datasets_attack_techniques_T1562_esxi_lockdown_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1045] datasets_attack_techniques_T1562_esxi_vib_acceptance_level_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1046] datasets_attack_techniques_T1562_o365_disable_blockconsent_for_riskapps
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1047] datasets_attack_techniques_T1562_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1048] datasets_attack_techniques_T1562.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1049] datasets_attack_techniques_T1562.001_cisco_secure_endpoint_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1050] datasets_attack_techniques_T1562.001_defender_exclusion_defender_operational_wineventlog
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1051] datasets_attack_techniques_T1562.001_defender_exclusion_powershell
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1052] datasets_attack_techniques_T1562.001_defender_exclusion_sysmon
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1053] datasets_attack_techniques_T1562.001_delete_win_defender_context_menu
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1054] datasets_attack_techniques_T1562.001_disable-windows-security-defender-features
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1055] datasets_attack_techniques_T1562.001_disable_defender_asr_or_threats
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1056] datasets_attack_techniques_T1562.001_disable_defender_logging
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1057] datasets_attack_techniques_T1562.001_disable_defender_operational_wineventlog
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1058] datasets_attack_techniques_T1562.001_disable_gpo
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1059] datasets_attack_techniques_T1562.001_hotkey_disabled_hidden_user
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1060] datasets_attack_techniques_T1562.001_mpcmdrun_remove
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1061] datasets_attack_techniques_T1562.001_powershell_windows_defender_exclusion_commands
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1062] datasets_attack_techniques_T1562.001_pwh_defender_disabling
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1063] datasets_attack_techniques_T1562.001_rmdir_defender_pwsh
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1064] datasets_attack_techniques_T1562.001_sc_service_start_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1065] datasets_attack_techniques_T1562.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1066] datasets_attack_techniques_T1562.001_taskkill
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1067] datasets_attack_techniques_T1562.001_taskkill_browser
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1068] datasets_attack_techniques_T1562.001_unload_sysmon
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1069] datasets_attack_techniques_T1562.001_windows_excessive_disabled_services_event
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1070] datasets_attack_techniques_T1562.001_win_app_defender_disabling
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1071] datasets_attack_techniques_T1562.001_win_defend_service_stop
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1072] datasets_attack_techniques_T1562.002_auditpol_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1562.002
+
+  [1073] datasets_attack_techniques_T1562.002_eventlog_sddl_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1562.002
+
+  [1074] datasets_attack_techniques_T1562.003_esxi_audit_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1562.003
+
+  [1075] datasets_attack_techniques_T1562.003_esxi_loghost_config_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1562.003
+
+  [1076] datasets_attack_techniques_T1562.003_esxi_syslog_config
+       Length: 1 (raw events: 1)
+       Chain:  T1562.003
+
+  [1077] datasets_attack_techniques_T1562.004_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1078] datasets_attack_techniques_T1562.004_esxi_firewall_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1079] datasets_attack_techniques_T1562.004_firewall_win_event
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1080] datasets_attack_techniques_T1562.004_firewall_win_event_added_rule
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1081] datasets_attack_techniques_T1562.004_firewall_win_event_delete_rule
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1082] datasets_attack_techniques_T1562.004_firewall_win_event_modify_rule
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1083] datasets_attack_techniques_T1562.004_linux_auditd_disable_firewall
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1084] datasets_attack_techniques_T1562.004_njrat_add_firewall_rule
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1085] datasets_attack_techniques_T1562.004_njrat_delete_firewall
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1086] datasets_attack_techniques_T1562.004_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1562.004
+
+  [1087] datasets_attack_techniques_T1562.006_dotnet_etw_bypass
+       Length: 1 (raw events: 1)
+       Chain:  T1562.006
+
+  [1088] datasets_attack_techniques_T1562.007_aws_create_acl
+       Length: 1 (raw events: 1)
+       Chain:  T1562.007
+
+  [1089] datasets_attack_techniques_T1562.007_aws_delete_acl
+       Length: 1 (raw events: 1)
+       Chain:  T1562.007
+
+  [1090] datasets_attack_techniques_T1562.007_o365_bypass_mfa_via_trusted_ip
+       Length: 1 (raw events: 1)
+       Chain:  T1562.007
+
+  [1091] datasets_attack_techniques_T1562.008_aws_bedrock_delete_guardrails
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1092] datasets_attack_techniques_T1562.008_aws_bedrock_delete_model_invocation_logging
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1093] datasets_attack_techniques_T1562.008_aws_delete_security_services
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1094] datasets_attack_techniques_T1562.008_delete_cloudwatch_log_group
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1095] datasets_attack_techniques_T1562.008_o365_advanced_audit_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1096] datasets_attack_techniques_T1562.008_put_bucketlifecycle
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1097] datasets_attack_techniques_T1562.008_stop_delete_cloudtrail
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1098] datasets_attack_techniques_T1562.008_update_cloudtrail
+       Length: 1 (raw events: 1)
+       Chain:  T1562.008
+
+  [1099] datasets_attack_techniques_T1562.009_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1562.009
+
+  [1100] datasets_attack_techniques_T1562.012_auditd_daemon_end
+       Length: 1 (raw events: 1)
+       Chain:  T1562.012
+
+  [1101] datasets_attack_techniques_T1562.012_auditd_daemon_type
+       Length: 1 (raw events: 1)
+       Chain:  T1562.012
+
+  [1102] datasets_attack_techniques_T1563.002_rdphijack
+       Length: 1 (raw events: 1)
+       Chain:  T1563.002
+
+  [1103] datasets_attack_techniques_T1563.002_windows_rdp_connection_successful
+       Length: 1 (raw events: 1)
+       Chain:  T1563.002
+
+  [1104] datasets_attack_techniques_T1564_sc_sdset_tampering
+       Length: 1 (raw events: 1)
+       Chain:  T1564
+
+  [1105] datasets_attack_techniques_T1564_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1564
+
+  [1106] datasets_attack_techniques_T1564.001_linux_auditd_hidden_file
+       Length: 1 (raw events: 1)
+       Chain:  T1564.001
+
+  [1107] datasets_attack_techniques_T1564.001_osquery_hidden_files
+       Length: 1 (raw events: 1)
+       Chain:  T1564.001
+
+  [1108] datasets_attack_techniques_T1564.003_headless
+       Length: 1 (raw events: 1)
+       Chain:  T1564.003
+
+  [1109] datasets_attack_techniques_T1564.004_ads_abuse
+       Length: 1 (raw events: 1)
+       Chain:  T1564.004
+
+  [1110] datasets_attack_techniques_T1564.004_rogueplanet
+       Length: 1 (raw events: 1)
+       Chain:  T1564.004
+
+  [1111] datasets_attack_techniques_T1564.008_o365
+       Length: 1 (raw events: 1)
+       Chain:  T1564.008
+
+  [1112] datasets_attack_techniques_T1565.001_wbadmin_recovery
+       Length: 1 (raw events: 1)
+       Chain:  T1046
+
+  [1113] datasets_attack_techniques_T1566_cve-2024-21378
+       Length: 1 (raw events: 1)
+       Chain:  T1566
+
+  [1114] datasets_attack_techniques_T1566_o365_various_alerts
+       Length: 1 (raw events: 1)
+       Chain:  T1566
+
+  [1115] datasets_attack_techniques_T1566_outlook_dropped_dll
+       Length: 1 (raw events: 1)
+       Chain:  T1566
+
+  [1116] datasets_attack_techniques_T1566_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1566
+
+  [1117] datasets_attack_techniques_T1566_zscalar_web_proxy
+       Length: 1 (raw events: 1)
+       Chain:  T1566
+
+  [1118] datasets_attack_techniques_T1566.001
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1119] datasets_attack_techniques_T1566.001_datasets
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1120] datasets_attack_techniques_T1566.001_datasets2
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1121] datasets_attack_techniques_T1566.001_gdrive_susp_file_share
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1122] datasets_attack_techniques_T1566.001_gsuite_outbound_email_to_external
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1123] datasets_attack_techniques_T1566.001_gsuite_susp_attachment_ext
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1124] datasets_attack_techniques_T1566.001_gsuite_susp_subj
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1125] datasets_attack_techniques_T1566.001_gsuite_susp_url
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1126] datasets_attack_techniques_T1566.001_macro
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1127] datasets_attack_techniques_T1566.001_office_doc_abuses_rels
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1128] datasets_attack_techniques_T1566.001_onenote_spear_phishing
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1129] datasets_attack_techniques_T1566.001_outlook_writing_zip
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1130] datasets_attack_techniques_T1566.001_phishing_pdf_uri
+       Length: 1 (raw events: 1)
+       Chain:  T1566.001
+
+  [1131] datasets_attack_techniques_T1566.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1566.002
+
+  [1132] datasets_attack_techniques_T1566.002_lnk_file_temp_folder
+       Length: 1 (raw events: 1)
+       Chain:  T1566.002
+
+  [1133] datasets_attack_techniques_T1567_gdrive
+       Length: 1 (raw events: 1)
+       Chain:  T1567
+
+  [1134] datasets_attack_techniques_T1567_o365_sus_file_activity
+       Length: 1 (raw events: 1)
+       Chain:  T1567
+
+  [1135] datasets_attack_techniques_T1567_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1567
+
+  [1136] datasets_attack_techniques_T1567_web_upload_nginx
+       Length: 1 (raw events: 1)
+       Chain:  T1567
+
+  [1137] datasets_attack_techniques_T1567.002_gsuite_share_drive
+       Length: 1 (raw events: 1)
+       Chain:  T1567.002
+
+  [1138] datasets_attack_techniques_T1567.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1567.002
+
+  [1139] datasets_attack_techniques_T1569_illegal_service_control
+       Length: 1 (raw events: 1)
+       Chain:  T1569
+
+  [1140] datasets_attack_techniques_T1569_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1569
+
+  [1141] datasets_attack_techniques_T1569.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1569.002
+
+  [1142] datasets_attack_techniques_T1569.002_linux_service_start
+       Length: 1 (raw events: 1)
+       Chain:  T1569.002
+
+  [1143] datasets_attack_techniques_T1569.002_malicious_powershell_executed_as_a_service
+       Length: 1 (raw events: 1)
+       Chain:  T1569.002
+
+  [1144] datasets_attack_techniques_T1569.002_remcom
+       Length: 1 (raw events: 1)
+       Chain:  T1569.002
+
+  [1145] datasets_attack_techniques_T1569.002_scmanager_sddl_tamper
+       Length: 1 (raw events: 1)
+       Chain:  T1569.002
+
+  [1146] datasets_attack_techniques_T1569.002_windows_service_created_with_suspicious_service_path
+       Length: 1 (raw events: 1)
+       Chain:  T1569.002
+
+  [1147] datasets_attack_techniques_T1570_remcom
+       Length: 1 (raw events: 1)
+       Chain:  T1570
+
+  [1148] datasets_attack_techniques_T1570_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1570
+
+  [1149] datasets_attack_techniques_T1572_cobalt_strike
+       Length: 1 (raw events: 1)
+       Chain:  T1572
+
+  [1150] datasets_attack_techniques_T1572_ngrok
+       Length: 1 (raw events: 1)
+       Chain:  T1572
+
+  [1151] datasets_attack_techniques_T1572_plink
+       Length: 1 (raw events: 1)
+       Chain:  T1572
+
+  [1152] datasets_attack_techniques_T1572_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1572
+
+  [1153] datasets_attack_techniques_T1572_ssh_proxy_command
+       Length: 1 (raw events: 1)
+       Chain:  T1572
+
+  [1154] datasets_attack_techniques_T1574_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1574
+
+  [1155] datasets_attack_techniques_T1574.001_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1574.001
+
+  [1156] datasets_attack_techniques_T1574.001_firewall_api_path
+       Length: 1 (raw events: 1)
+       Chain:  T1574.001
+
+  [1157] datasets_attack_techniques_T1574.001_iscsicpl
+       Length: 1 (raw events: 1)
+       Chain:  T1574.001
+
+  [1158] datasets_attack_techniques_T1574.002_hijacklibs
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1159] datasets_attack_techniques_T1574.002_lotus_blossom_chrysalis
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1160] datasets_attack_techniques_T1574.002_msi_module_load
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1161] datasets_attack_techniques_T1574.002_sccm_adsource_dll
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1162] datasets_attack_techniques_T1574.002_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1163] datasets_attack_techniques_T1574.002_svr_loaded_modules
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1164] datasets_attack_techniques_T1574.002_unsigned_dll_load
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1165] datasets_attack_techniques_T1574.002_unsigned_dll_loaded_same_process_path
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1166] datasets_attack_techniques_T1574.002_wineloader
+       Length: 1 (raw events: 1)
+       Chain:  T1574.002
+
+  [1167] datasets_attack_techniques_T1574.006_auditd_path_preload_file
+       Length: 1 (raw events: 1)
+       Chain:  T1574.006
+
+  [1168] datasets_attack_techniques_T1574.006_lib_hijack
+       Length: 1 (raw events: 1)
+       Chain:  T1574.006
+
+  [1169] datasets_attack_techniques_T1574.006_linux_auditd_ldpreload
+       Length: 1 (raw events: 1)
+       Chain:  T1574.006
+
+  [1170] datasets_attack_techniques_T1574.006_linux_auditd_preload_file
+       Length: 1 (raw events: 1)
+       Chain:  T1574.006
+
+  [1171] datasets_attack_techniques_T1574.007_python_pythonpath_modification
+       Length: 1 (raw events: 1)
+       Chain:  T1574.007
+
+  [1172] datasets_attack_techniques_T1574.008_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1574.008
+
+  [1173] datasets_attack_techniques_T1574.009_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1574.009
+
+  [1174] datasets_attack_techniques_T1574.011_change_registry_path_service
+       Length: 1 (raw events: 1)
+       Chain:  T1574.011
+
+  [1175] datasets_attack_techniques_T1574.014_appdomain_hijack_artifacts
+       Length: 1 (raw events: 1)
+       Chain:  T1574.014
+
+  [1176] datasets_attack_techniques_T1578.005_aws_authorize_security_group
+       Length: 1 (raw events: 1)
+       Chain:  T1578.005
+
+  [1177] datasets_attack_techniques_T1580
+       Length: 1 (raw events: 1)
+       Chain:  T1580
+
+  [1178] datasets_attack_techniques_T1580_aws_bedrock_list_foundation_model_failures
+       Length: 1 (raw events: 1)
+       Chain:  T1580
+
+  [1179] datasets_attack_techniques_T1580_aws_iam_accessdenied_discovery_events
+       Length: 1 (raw events: 1)
+       Chain:  T1580
+
+  [1180] datasets_attack_techniques_T1580_aws_iam_assume_role_policy_brute_force
+       Length: 1 (raw events: 1)
+       Chain:  T1580
+
+  [1181] datasets_attack_techniques_T1580_aws_iam_excessive_list_command_usage
+       Length: 1 (raw events: 1)
+       Chain:  T1580
+
+  [1182] datasets_attack_techniques_T1584_esxi_dormant_vm_started
+       Length: 1 (raw events: 1)
+       Chain:  T1584
+
+  [1183] datasets_attack_techniques_T1585_illegal_account_creation
+       Length: 7 (raw events: 11)
+       Chain:  T1585 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001 -> T1059.003 -> T1059.001
+
+  [1184] datasets_attack_techniques_T1586.003_aws_console_login_multiple_ips
+       Length: 1 (raw events: 1)
+       Chain:  T1586.003
+
+  [1185] datasets_attack_techniques_T1586.003_okta_multiple_city
+       Length: 1 (raw events: 1)
+       Chain:  T1586.003
+
+  [1186] datasets_attack_techniques_T1587.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1587.002
+
+  [1187] datasets_attack_techniques_T1587.003_add_store_cert
+       Length: 1 (raw events: 1)
+       Chain:  T1587.003
+
+  [1188] datasets_attack_techniques_T1587.003_splunk_fwder
+       Length: 1 (raw events: 1)
+       Chain:  T1587
+
+  [1189] datasets_attack_techniques_T1588.002_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1588.002
+
+  [1190] datasets_attack_techniques_T1588.002_nirsoft_tooling
+       Length: 1 (raw events: 1)
+       Chain:  T1588.002
+
+  [1191] datasets_attack_techniques_T1589.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1589.001
+
+  [1192] datasets_attack_techniques_T1589.002_kerberos_user_enumeration
+       Length: 1 (raw events: 1)
+       Chain:  T1589.002
+
+  [1193] datasets_attack_techniques_T1589.002_kerbrute
+       Length: 1 (raw events: 1)
+       Chain:  T1589.002
+
+  [1194] datasets_attack_techniques_T1590_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1590
+
+  [1195] datasets_attack_techniques_T1590.002_enum_dns_record
+       Length: 1 (raw events: 1)
+       Chain:  T1590.002
+
+  [1196] datasets_attack_techniques_T1590.005
+       Length: 1 (raw events: 1)
+       Chain:  T1590.005
+
+  [1197] datasets_attack_techniques_t1592_host_info_dxdiag
+       Length: 1 (raw events: 1)
+       Chain:  T1592
+
+  [1198] datasets_attack_techniques_t1592_pwh_av_recon
+       Length: 1 (raw events: 1)
+       Chain:  T1592
+
+  [1199] datasets_attack_techniques_T1595_attacker_scan_tools
+       Length: 1 (raw events: 1)
+       Chain:  T1595
+
+  [1200] datasets_attack_techniques_T1595_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1595
+
+  [1201] datasets_attack_techniques_T1595_sysmon_scanning_events
+       Length: 1 (raw events: 1)
+       Chain:  T1595
+
+  [1202] datasets_attack_techniques_T1595.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1595.001
+
+  [1203] datasets_attack_techniques_T1598.002_rdp
+       Length: 1 (raw events: 1)
+       Chain:  T1598.002
+
+  [1204] datasets_attack_techniques_T1601.001_esxi_download_errors
+       Length: 1 (raw events: 1)
+       Chain:  T1601.001
+
+  [1205] datasets_attack_techniques_T1608_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1608
+
+  [1206] datasets_attack_techniques_T1608.001_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1608.001
+
+  [1207] datasets_attack_techniques_T1610_linux_suspicious_docker_build
+       Length: 1 (raw events: 1)
+       Chain:  T1610
+
+  [1208] datasets_attack_techniques_T1610_linux_suspicious_privileged_container
+       Length: 1 (raw events: 1)
+       Chain:  T1610
+
+  [1209] datasets_attack_techniques_T1610_snapattack
+       Length: 1 (raw events: 1)
+       Chain:  T1610
+
+  [1210] datasets_attack_techniques_T1611_cisco_isovalent_k8_escape
+       Length: 1 (raw events: 1)
+       Chain:  T1611
+
+  [1211] datasets_attack_techniques_T1620_common_language_runtim_loaded
+       Length: 1 (raw events: 1)
+       Chain:  T1620
+
+  [1212] datasets_attack_techniques_T1620_mmc_script_modules
+       Length: 1 (raw events: 1)
+       Chain:  T1620
+
+  [1213] datasets_attack_techniques_T1621_aws_failed_mfa
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1214] datasets_attack_techniques_T1621_aws_mfa_disabled
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1215] datasets_attack_techniques_T1621_azuread
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1216] datasets_attack_techniques_T1621_azure_ad_multiple_denied_mfa_requests
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1217] datasets_attack_techniques_T1621_gcp_failed_mfa
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1218] datasets_attack_techniques_T1621_multiple_failed_mfa_gws
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1219] datasets_attack_techniques_T1621_multiple_failed_mfa_requests
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1220] datasets_attack_techniques_T1621_o365_multiple_failed_mfa_requests
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1221] datasets_attack_techniques_T1621_okta_mfa_login_failed
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1222] datasets_attack_techniques_T1621_okta_mismatch
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1223] datasets_attack_techniques_T1621_okta_multiple_failed_mfa_pushes
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1224] datasets_attack_techniques_T1621_okta_multiple_failed_mfa_requests
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1225] datasets_attack_techniques_T1621_pingid
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1226] datasets_attack_techniques_T1647_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1547.011
+
+  [1227] datasets_attack_techniques_T1649_atomic_red_team
+       Length: 1 (raw events: 1)
+       Chain:  T1649
+
+  [1228] datasets_attack_techniques_T1649_certify_abuse
+       Length: 1 (raw events: 1)
+       Chain:  T1649
+
+  [1229] datasets_attack_techniques_T1654_eventlog_enumeration
+       Length: 1 (raw events: 1)
+       Chain:  T1621
+
+  [1230] datasets_attack_techniques_T1673_esxi_vm_discovery
+       Length: 1 (raw events: 1)
+       Chain:  T1673
+
+  [1231] datasets_attack_techniques_T1685_edr_silencer
+       Length: 1 (raw events: 1)
+       Chain:  T1685
+
+  [1232] datasets_aws_bedrock_claude
+       Length: 1 (raw events: 1)
+       Chain:  T1055
+
+  [1233] datasets_cisco_asa_arcane_door
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1234] datasets_cisco_asa_generic
+       Length: 1 (raw events: 1)
+       Chain:  T1562
+
+  [1235] datasets_cisco_sd_wan_service_proxy_access
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [1236] datasets_cisco_sd_wan_vsyslog
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [1237] datasets_cisco_secure_access_dns
+       Length: 1 (raw events: 1)
+       Chain:  T1562.001
+
+  [1238] datasets_cisco_secure_access_proxy
+       Length: 1 (raw events: 1)
+       Chain:  T1595
+
+  [1239] datasets_cisco_secure_access_ravpn
+       Length: 1 (raw events: 1)
+       Chain:  T1110
+
+  [1240] datasets_cisco_secure_firewall_threat_defense_oracle_e_business_suite
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [1241] datasets_cisco_secure_firewall_threat_defense_react2shell
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [1242] datasets_cisco_secure_firewall_threat_defense_static_tundra
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [1243] datasets_emerging_threats_react2shell
+       Length: 1 (raw events: 1)
+       Chain:  T1059
+
+  [1244] datasets_emerging_threats_SaltTyphoon
+       Length: 1 (raw events: 1)
+       Chain:  T1021.004
+
+  [1245] datasets_emerging_threats_ShieldBreak
+       Length: 1 (raw events: 1)
+       Chain:  T1068
+
+  [1246] datasets_emerging_threats_windchill
+       Length: 1 (raw events: 1)
+       Chain:  T1190
+
+  [1247] datasets_malware_lamehug_T1007_net_start
+       Length: 1 (raw events: 1)
+       Chain:  T1007
+
+  [1248] datasets_malware_lamehug_T1071.004_hugging_face
+       Length: 1 (raw events: 1)
+       Chain:  T1071.004
+
+  [1249] datasets_malware_lamehug_T1082_wmic_cmd
+       Length: 1 (raw events: 1)
+       Chain:  T1082
+
+  [1250] datasets_malware_lamehug_T1119_doc_collection
+       Length: 1 (raw events: 1)
+       Chain:  T1119
+
+  [1251] datasets_suspicious_behaviour_abnormally_high_cloud_instances_launched
+       Length: 1 (raw events: 1)
+       Chain:  T1078
+
+  [1252] datasets_suspicious_behaviour_first_time_windows_service
+       Length: 1 (raw events: 1)
+       Chain:  T1543
+
+  [1253] total_replay_test
+       Length: 3 (raw events: 3)
+       Chain:  T1036.005 -> T1014 -> T1047
+
+================================================================
+  FEASIBILITY VERDICT
+================================================================
+  Verdict: YES - PROMISING
+  Question: Can Splunk Attack Data produce long ATT&CK attack sequences?
+  Answer: YES - PROMISING. Splunk Attack Data dataset contains
+  attack sequences with maximum length 6143.
+================================================================

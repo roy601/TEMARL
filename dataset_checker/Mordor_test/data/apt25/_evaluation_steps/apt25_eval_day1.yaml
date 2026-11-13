@@ -1,0 +1,50 @@
+title: APT25 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (APT25)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing
+  - step_id: 1.B
+    technique: T1059.003
+    tactic: execution
+    description: Cmd Shell
+  - step_id: 2.A
+    technique: T1083
+    tactic: discovery
+    description: File Discovery
+  - step_id: 2.B
+    technique: T1055
+    tactic: defense-evasion
+    description: Injection
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: HTTP C2
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfiltration
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '003'
+- technique: T1083
+  tactics:
+  - discovery
+- technique: T1055
+  tactics:
+  - defense-evasion
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration

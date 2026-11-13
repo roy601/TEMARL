@@ -1,0 +1,59 @@
+title: COBALT_GROUP Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (COBALT_GROUP)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing Attachment
+  - step_id: 1.B
+    technique: T1059.003
+    tactic: execution
+    description: Windows Command Shell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Dumping
+  - step_id: 3.A
+    technique: T1021.001
+    tactic: lateral-movement
+    description: Remote Desktop Protocol
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web Protocols
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfiltration
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '003'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration

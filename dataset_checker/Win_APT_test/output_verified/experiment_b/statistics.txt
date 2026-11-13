@@ -1,0 +1,53 @@
+EXPERIMENT B1: STRICT RECONSTRUCTION
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total sequences:                         123   |
+|  Average length:                          1.7   |
+|  Median length:                           1.0   |
+|  Min length:                                1   |
+|  Max length:                               16   |
+|  Std-dev length:                          1.9   |
+|  Sequences > 16 techniques:          0 (0.0%)   |
+|  Technique vocabulary:                     15   |
++-------------------------------------------------+
+Single-label steps in timestamp order; attack execution is not independently validated.
+
+EXPERIMENT B2: UNCERTAINTY-AWARE RECONSTRUCTION
++-------------------------------------------------+
+|                 SUMMARY METRICS                 |
++-------------------------------------------------+
+|  Total sessions:                          356   |
+|  Average length:                         87.5   |
+|  Median length:                           3.0   |
+|  Min length:                                1   |
+|  Max length:                             1591   |
+|  Std-dev length:                        218.9   |
+|  Sessions > 16 set-steps:         126 (35.4%)   |
+|  Technique vocabulary:                    132   |
++-------------------------------------------------+
+Length counts label-set steps, not individually ordered techniques.
+Multiple labels within a step have no established internal order.
+B2 includes B1 sessions: these are overlapping representations, not independent datasets.
+
+dataset: Windows APT - Experiment B
+total_candidate_sessions: 356
+total_sequences: 123
+ambiguous_sessions: 233
+max_length: 16
+sequences_gt_16: 0
+sequences_gt_30: 0
+verdict: REQUIRES VALIDATION
+label_set_sessions: 356
+max_label_set_length: 1591
+label_set_sessions_gt_16: 126
+ambiguity_reason_session_counts: {'multi_label_event': 217, 'multiple_events_same_timestamp': 148}
+ordered_technique_vocabulary_size: 15
+all_candidate_technique_vocabulary_size: 132
+events_in_ambiguous_sessions: 62333
+Full label lists are retained in statistics.json.
+
+
+Explicit event annotations and host/time proximity produce candidates, not validated campaigns.
+Input files are isolated. Cross-file campaigns require a verified capture mapping.
+Naive timestamps are interpreted as UTC. Check audit.json for excluded input coverage.

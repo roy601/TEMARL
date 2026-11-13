@@ -1,0 +1,35 @@
+title: REMOTE_ACCESS_CAMPAIGNS Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (REMOTE_ACCESS_CAMPAIGNS)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1133
+    tactic: initial-access
+    description: External Remote Services
+  - step_id: '2'
+    technique: T1078
+    tactic: initial-access
+    description: Valid Accounts
+  - step_id: '3'
+    technique: T1021.001
+    tactic: lateral-movement
+    description: RDP Session
+  - step_id: '4'
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1133
+  tactics:
+  - initial-access
+- technique: T1078
+  tactics:
+  - initial-access
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

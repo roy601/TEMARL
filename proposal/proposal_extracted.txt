@@ -1,0 +1,82 @@
+Transformer-Enhanced Multi-Agent Reinforcement Learning for Adaptive
+Honeypot Deception
+1. Introduction and Problem Statement
+Modern cyber attackers increasingly use automated tools to fingerprint and evade static
+defensive measures. Deception technologies, like honeypots, are crucial for proactive defense,
+but their current static nature—presenting the same predetermined vulnerabilities and
+responses—makes them detectable by sophisticated adversaries. While deploying honeypots
+in swarms improves coverage, it exacerbates the management problem without addressing the
+fundamental lack of adaptability.
+This thesis proposes a novel solution by creating an adaptive honeypot swarm that uses
+Artificial Intelligence to dynamically tailor its deceptive responses to an attacker's behavior in
+real-time. The core innovation is the integration of a Transformer model for understanding
+attacker intent with Multi-Agent Reinforcement Learning (MARL) for coordinating deceptive
+actions across the swarm. This enables the system to learn complex engagement strategies,
+prolonging attacker interaction and maximizing intelligence gathering.
+2. Research Objectives and Methodology
+The primary goal is to develop and evaluate an AI-driven honeypot framework that
+outperforms static deception systems by intelligently modeling attacker behavior and adapting
+accordingly.
+1. Develop a Simulation Environment for Honeypot-Attacker Interaction.
+• Methodology: Create a configurable network simulation in Python. The environment
+will feature a swarm of 3-5 honeypot agents and a scripted "red team" attacker based
+on the MITRE ATT&CK framework. The attacker will perform multi-stage attacks
+(reconnaissance, exploitation, lateral movement).
+• Outcome: A reproducible testbed for training and evaluating AI-based deception
+policies.\n\n2. Design and Pre-train a Transformer-based Attacker Behavior Encoder.
+• Methodology: Implement a Transformer encoder model. It will be pre-trained on
+synthetic sequences of attacker actions in a self-supervised manner (e.g., masked token
+prediction) to learn the underlying patterns of offensive workflows.
+• Integration: During MARL training, this Transformer will process the recent history
+of attacker actions and produce a contextualized embedding vector. This embedding
+becomes a critical part of the state representation for each RL agent, providing temporal
+context and intent inference.
+• Novelty: This moves beyond simple state representations, allowing the system to
+reason about the sequence and context of an attack.
+3. Implement a Centralized-Training-Decentralized-Execution (CTDE) MARL
+Framework.
+• Methodology: Use a proven MARL algorithm (e.g., MADDPG or QMIX). The central
+critic will be trained using experiences from all honeypots, incorporating the
+Transformer's context embeddings. Each honeypot will then execute its own policy
+based on its local observations and the shared context.
+• Action Space: Honeypot actions will include dynamic deceptions: changing service
+banners, altering filesystem structures, and controlling the pace of fake data "leaks."
+• Reward Function: The reward will incentivize sustained attacker engagement
+(positive reward per step), deeper penetration into deceptive scenarios (bonus rewards),
+and penalize attacker disconnection.
+4. Conduct a Comparative Evaluation Against Strong Baselines.
+• Methodology: Run extensive experiments in the simulation environment, comparing
+the proposed Transformer-MARL framework against:
+o Baseline 1: Static honeypots (conventional approach).
+o Baseline 2: MARL honeypots without the Transformer (using a simple LSTM
+or sliding-window state).
+• Primary Metrics:
+o Attacker Dwell Time: The total number of interaction steps.\n\no Interaction Depth: The number of unique MITRE ATT&CK techniques
+performed.
+o Generalization: Performance against a novel, unseen attack script after
+training.
+3. Expected Contribution and Novelty
+This thesis will deliver a novel, practical integration of Transformers and MARL for
+cybersecurity deception. The key contributions are:
+1. A Novel Architecture: The proposed Transformer-MARL framework is a new
+approach to adaptive cyber defense, demonstrating how sequence modeling can
+enhance decision-making in dynamic environments.
+2. A Public Benchmark: The simulation environment and baseline results will be
+released publicly, providing a valuable benchmark for future research in AI-driven
+security.
+3. Empirical Evidence: The work will provide rigorous evidence that modeling attacker
+behavior sequences leads to more effective and robust deception policies compared to
+static or non-sequential AI approaches.
+4. Technical Skills and Feasibility
+Skill set needed:
+• Core ML/DL: Python, PyTorch/TensorFlow, neural network training.
+• Reinforcement Learning: Understanding of RL concepts and libraries (e.g., Stable-
+Baselines3).
+• Software Engineering: Git, object-oriented programming, and building simulations.
+The student will deepen their expertise in cutting-edge Transformers and Multi-Agent
+Systems, making this thesis an excellent portfolio piece.
+5. Project Timeline
+• Months 1-2: Literature Review & Development of Simulation Environment.
+• Months 3-4: Implementation and Pre-training of the Transformer Encoder.
+• Months 5-6: Integration of Transformer with MARL Framework and Initial Training.
+• Months 7-8: Comprehensive Evaluation, Ablation Studies, and Thesis Writing.

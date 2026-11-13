@@ -1,0 +1,37 @@
+title: SPEAR_PHISHING_CAMPAIGNS Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (SPEAR_PHISHING_CAMPAIGNS)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing Attachment
+  - step_id: '2'
+    technique: T1204.002
+    tactic: execution
+    description: User Execution
+  - step_id: '3'
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: '4'
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

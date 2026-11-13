@@ -1,0 +1,44 @@
+title: FIN2 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (FIN2)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Phishing
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Info
+  - step_id: 2.B
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Shares
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

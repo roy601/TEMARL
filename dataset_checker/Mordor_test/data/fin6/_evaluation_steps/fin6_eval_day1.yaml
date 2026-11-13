@@ -1,0 +1,121 @@
+title: FIN6 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (FIN6)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1078.002
+    tactic: initial-access
+    description: Valid Domain Accounts
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell Execution
+  - step_id: 2.A
+    technique: T1087.002
+    tactic: discovery
+    description: Domain Account Discovery
+  - step_id: 2.B
+    technique: T1069.002
+    tactic: discovery
+    description: Domain Group Discovery
+  - step_id: 3.A
+    technique: T1018
+    tactic: discovery
+    description: Remote System Discovery
+  - step_id: 4.A
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Memory Dumping
+  - step_id: 4.B
+    technique: T1558.003
+    tactic: credential-access
+    description: Kerberoasting
+  - step_id: 5.A
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Admin Shares
+  - step_id: 5.B
+    technique: T1569.002
+    tactic: execution
+    description: Service Execution
+  - step_id: 6.A
+    technique: T1055.001
+    tactic: defense-evasion
+    description: Process Injection
+  - step_id: 6.B
+    technique: T1105
+    tactic: command-and-control
+    description: Ingress Tool Transfer
+  - step_id: 7.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web Protocols
+  - step_id: 8.A
+    technique: T1560.001
+    tactic: collection
+    description: Archive via Utility
+  - step_id: 8.B
+    technique: T1048
+    tactic: exfiltration
+    description: Exfiltration Over Alternative Protocol
+  - step_id: 9.A
+    technique: T1486
+    tactic: impact
+    description: Data Encrypted for Impact
+attack_mappings:
+- technique: T1078
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1087
+  tactics:
+  - discovery
+  sub_technique: '002'
+- technique: T1069
+  tactics:
+  - discovery
+  sub_technique: '002'
+- technique: T1018
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1558
+  tactics:
+  - credential-access
+  sub_technique: '003'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1569
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1055
+  tactics:
+  - defense-evasion
+  sub_technique: '001'
+- technique: T1105
+  tactics:
+  - command-and-control
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1560
+  tactics:
+  - collection
+  sub_technique: '001'
+- technique: T1048
+  tactics:
+  - exfiltration
+- technique: T1486
+  tactics:
+  - impact

@@ -1,0 +1,42 @@
+title: LINUX_ENTERPRISE_ATTACK Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (LINUX_ENTERPRISE_ATTACK)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1190
+    tactic: initial-access
+    description: Public App Exploit
+  - step_id: '2'
+    technique: T1059.004
+    tactic: execution
+    description: Unix Shell
+  - step_id: '3'
+    technique: T1082
+    tactic: discovery
+    description: System Info
+  - step_id: '4'
+    technique: T1003
+    tactic: credential-access
+    description: Shadow File Dump
+  - step_id: '5'
+    technique: T1021.004
+    tactic: lateral-movement
+    description: SSH
+attack_mappings:
+- technique: T1190
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '004'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '004'

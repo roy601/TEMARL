@@ -1,0 +1,44 @@
+title: POWERSHELL_BASED_CHAINS Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (POWERSHELL_BASED_CHAINS)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell Execution
+  - step_id: '2'
+    technique: T1027.001
+    tactic: defense-evasion
+    description: PowerShell Obfuscation
+  - step_id: '3'
+    technique: T1082
+    tactic: discovery
+    description: System Information Discovery
+  - step_id: '4'
+    technique: T1003.001
+    tactic: credential-access
+    description: Invoke-Mimikatz LSASS Dump
+  - step_id: '5'
+    technique: T1021.002
+    tactic: lateral-movement
+    description: Invoke-PsExec
+attack_mappings:
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1027
+  tactics:
+  - defense-evasion
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'

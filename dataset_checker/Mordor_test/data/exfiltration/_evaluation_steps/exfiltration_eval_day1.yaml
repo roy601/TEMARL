@@ -1,0 +1,27 @@
+title: EXFILTRATION Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (EXFILTRATION)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1560.001
+    tactic: collection
+    description: Archive Utility
+  - step_id: '2'
+    technique: T1041
+    tactic: exfiltration
+    description: Exfiltration Over C2
+  - step_id: '3'
+    technique: T1048
+    tactic: exfiltration
+    description: Exfil Over Alt Protocol
+attack_mappings:
+- technique: T1560
+  tactics:
+  - collection
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration
+- technique: T1048
+  tactics:
+  - exfiltration

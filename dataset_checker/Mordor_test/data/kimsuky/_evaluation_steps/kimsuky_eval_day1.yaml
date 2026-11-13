@@ -1,0 +1,51 @@
+title: KIMSUKY Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (KIMSUKY)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing Attachment
+  - step_id: 1.B
+    technique: T1204.002
+    tactic: execution
+    description: User Execution
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Discovery
+  - step_id: 2.B
+    technique: T1056.001
+    tactic: collection
+    description: Keylogging
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfil
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1056
+  tactics:
+  - collection
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration

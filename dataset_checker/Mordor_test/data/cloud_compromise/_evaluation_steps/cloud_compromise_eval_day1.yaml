@@ -1,0 +1,34 @@
+title: CLOUD_COMPROMISE Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (CLOUD_COMPROMISE)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1078.004
+    tactic: initial-access
+    description: Cloud Accounts
+  - step_id: '2'
+    technique: T1526
+    tactic: discovery
+    description: Cloud Service Discovery
+  - step_id: '3'
+    technique: T1552
+    tactic: credential-access
+    description: Unsecured Credentials
+  - step_id: '4'
+    technique: T1530
+    tactic: collection
+    description: Data from Cloud Storage
+attack_mappings:
+- technique: T1078
+  tactics:
+  - initial-access
+  sub_technique: '004'
+- technique: T1526
+  tactics:
+  - discovery
+- technique: T1552
+  tactics:
+  - credential-access
+- technique: T1530
+  tactics:
+  - collection

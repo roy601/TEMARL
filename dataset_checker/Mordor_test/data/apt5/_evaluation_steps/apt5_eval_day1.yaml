@@ -1,0 +1,65 @@
+title: APT5 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (APT5)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1190
+    tactic: initial-access
+    description: Exploit Public Application
+  - step_id: 1.B
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: 2.A
+    technique: T1082
+    tactic: discovery
+    description: System Info
+  - step_id: 2.B
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Dumping
+  - step_id: 3.A
+    technique: T1021.001
+    tactic: lateral-movement
+    description: RDP
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+  - step_id: 4.A
+    technique: T1560
+    tactic: collection
+    description: Archive
+  - step_id: 4.B
+    technique: T1041
+    tactic: exfiltration
+    description: Exfil C2
+attack_mappings:
+- technique: T1190
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1560
+  tactics:
+  - collection
+- technique: T1041
+  tactics:
+  - exfiltration

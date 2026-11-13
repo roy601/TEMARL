@@ -1,0 +1,51 @@
+title: NIGHT_DRAGON Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (NIGHT_DRAGON)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1190
+    tactic: initial-access
+    description: Exploit Web Server
+  - step_id: 1.B
+    technique: T1059.003
+    tactic: execution
+    description: Cmd Shell
+  - step_id: 2.A
+    technique: T1087
+    tactic: discovery
+    description: Account Discovery
+  - step_id: 2.B
+    technique: T1003.001
+    tactic: credential-access
+    description: LSASS Dumping
+  - step_id: 3.A
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Shares
+  - step_id: 3.B
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+attack_mappings:
+- technique: T1190
+  tactics:
+  - initial-access
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '003'
+- technique: T1087
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'

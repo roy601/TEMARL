@@ -1,0 +1,36 @@
+title: OFFICE_365_COMPROMISE Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (OFFICE_365_COMPROMISE)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1566.002
+    tactic: initial-access
+    description: Spearphishing Link
+  - step_id: '2'
+    technique: T1078.004
+    tactic: initial-access
+    description: O365 Valid Account
+  - step_id: '3'
+    technique: T1114.002
+    tactic: collection
+    description: Remote Email Collection
+  - step_id: '4'
+    technique: T1020
+    tactic: exfiltration
+    description: Automated Exfiltration
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '002'
+- technique: T1078
+  tactics:
+  - initial-access
+  sub_technique: '004'
+- technique: T1114
+  tactics:
+  - collection
+  sub_technique: '002'
+- technique: T1020
+  tactics:
+  - exfiltration

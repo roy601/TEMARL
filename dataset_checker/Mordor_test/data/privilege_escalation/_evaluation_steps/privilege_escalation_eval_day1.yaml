@@ -1,0 +1,35 @@
+title: PRIVILEGE_ESCALATION Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (PRIVILEGE_ESCALATION)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: '2'
+    technique: T1068
+    tactic: privilege-escalation
+    description: Exploit Vulnerability
+  - step_id: '3'
+    technique: T1055.001
+    tactic: privilege-escalation
+    description: DLL Injection
+  - step_id: '4'
+    technique: T1078
+    tactic: privilege-escalation
+    description: Valid Accounts
+attack_mappings:
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1068
+  tactics:
+  - privilege-escalation
+- technique: T1055
+  tactics:
+  - privilege-escalation
+  sub_technique: '001'
+- technique: T1078
+  tactics:
+  - privilege-escalation

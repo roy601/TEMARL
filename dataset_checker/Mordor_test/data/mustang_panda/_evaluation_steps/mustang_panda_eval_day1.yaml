@@ -1,0 +1,50 @@
+title: MUSTANG_PANDA Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (MUSTANG_PANDA)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing Shortcut
+  - step_id: 1.B
+    technique: T1204.002
+    tactic: execution
+    description: User Execution
+  - step_id: 2.A
+    technique: T1083
+    tactic: discovery
+    description: File Discovery
+  - step_id: 2.B
+    technique: T1055
+    tactic: defense-evasion
+    description: Process Injection
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web C2
+  - step_id: 4.A
+    technique: T1041
+    tactic: exfiltration
+    description: Exfil
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1083
+  tactics:
+  - discovery
+- technique: T1055
+  tactics:
+  - defense-evasion
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1041
+  tactics:
+  - exfiltration

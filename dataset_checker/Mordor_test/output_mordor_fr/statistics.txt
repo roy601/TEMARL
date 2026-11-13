@@ -1,0 +1,126 @@
+================================================================
+  MORDOR → ATT&CK SEQUENCE FEASIBILITY REPORT
+================================================================
+
+┌─────────────────────────────────────────────────┐
+│              SUMMARY METRICS                    │
+├─────────────────────────────────────────────────┤
+│  Total sequences:                 9             │
+│  Average length:                7.3             │
+│  Median  length:                8.0             │
+│  Min     length:                  2             │
+│  Max     length:                 10             │
+│  Std‑dev length:                2.5             │
+│  Sequences > 16 techniques:      0  (0%)        │
+│  Technique vocabulary:           20             │
+│  Tactic coverage:         11 / 14             │
+└─────────────────────────────────────────────────┘
+
+TACTIC COVERAGE
+────────────────────────────────────────────────────────────────
+  ·  reconnaissance
+  ·  resource-development
+  ·  initial-access
+  ·  execution
+  ·  persistence
+  ·  privilege-escalation
+  ·  defense-evasion
+  ·  credential-access
+  ·  discovery
+  ·  lateral-movement
+  ·  collection
+  ·  command-and-control
+  ·  exfiltration
+  ·  impact
+
+TOP TECHNIQUES (by frequency across sequences)
+────────────────────────────────────────────────────────────────
+  T1587.001         appears in 7 sequence(s)
+  T1608.001         appears in 7 sequence(s)
+  T1204.002         appears in 7 sequence(s)
+  T1082             appears in 7 sequence(s)
+  T1033             appears in 7 sequence(s)
+  T1003.001         appears in 7 sequence(s)
+  T1041             appears in 6 sequence(s)
+  T1105             appears in 4 sequence(s)
+  T1057             appears in 2 sequence(s)
+  T1055.002         appears in 2 sequence(s)
+  T1552.004         appears in 1 sequence(s)
+  T1606.002         appears in 1 sequence(s)
+  T1078.004         appears in 1 sequence(s)
+  T1098.002         appears in 1 sequence(s)
+  T1114             appears in 1 sequence(s)
+
+PER‑SEQUENCE DETAIL
+────────────────────────────────────────────────────────────────
+
+  [1] Golden SAML AD FS Mail Access
+      Source:  attack_mappings
+      Length:  5  (raw with repeats: 5)
+      Chain:   T1552.004 → T1606.002 → T1078.004 → T1098.002 → T1114
+
+  [2] LSASS Memory - logonpasswords (Mimikatz)
+      Source:  attack_mappings
+      Length:  9  (raw with repeats: 9)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1057 →
+               T1134.001 → T1055.002 → T1003.001
+
+  [3] LSASS Memory - Procdump
+      Source:  attack_mappings
+      Length:  8  (raw with repeats: 8)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1105 →
+               T1003.001 → T1041
+
+  [4] LSASS Memory - comsvcs.dll
+      Source:  attack_mappings
+      Length:  10  (raw with repeats: 10)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1057 →
+               T1543.003 → T1055.002 → T1003.001 → T1041
+
+  [5] LSASS Memory - Out-Minidump.ps1
+      Source:  attack_mappings
+      Length:  7  (raw with repeats: 7)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1003.001 →
+               T1041
+
+  [6] LSASS Memory - SharpDump
+      Source:  attack_mappings
+      Length:  9  (raw with repeats: 9)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1012 →
+               T1105 → T1003.001 → T1041
+
+  [7] LSASS Memory - Outflank Dumpert
+      Source:  attack_mappings
+      Length:  8  (raw with repeats: 8)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1105 →
+               T1003.001 → T1041
+
+  [8] LSASS Memory - Nanodump
+      Source:  attack_mappings
+      Length:  8  (raw with repeats: 8)
+      Chain:   T1587.001 → T1608.001 → T1204.002 → T1082 → T1033 → T1105 →
+               T1003.001 → T1041
+
+  [9] Log4Shell
+      Source:  attack_mappings
+      Length:  2  (raw with repeats: 2)
+      Chain:   T1190 → T1203
+
+================================================================
+  FEASIBILITY VERDICT
+================================================================
+
+  ✗  INSUFFICIENT ALONE
+  No sequence exceeds 16 techniques.  Mordor compound
+  scenarios alone are too short for TEMARL.  However,
+  they can still augment CAM‑LDS if concatenated or
+  combined with atomic datasets.
+
+  Recommendation:
+  • Use Mordor compound sequences as supplementary
+    high‑fidelity attack chains for TEMARL training.
+  • Combine with CAM‑LDS to maximise coverage.
+  • Consider Mordor atomic datasets for per‑technique
+    enrichment in a future step.
+
+================================================================

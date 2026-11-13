@@ -1,0 +1,52 @@
+title: EMOTET Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (EMOTET)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Phishing Word Doc
+  - step_id: 1.B
+    technique: T1059.005
+    tactic: execution
+    description: VBA Macro
+  - step_id: 2.A
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell Cradle
+  - step_id: 2.B
+    technique: T1547.001
+    tactic: persistence
+    description: Registry Run Key
+  - step_id: 3.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: HTTP C2
+  - step_id: 3.B
+    technique: T1114
+    tactic: collection
+    description: Email Harvester
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '005'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1547
+  tactics:
+  - persistence
+  sub_technique: '001'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1114
+  tactics:
+  - collection

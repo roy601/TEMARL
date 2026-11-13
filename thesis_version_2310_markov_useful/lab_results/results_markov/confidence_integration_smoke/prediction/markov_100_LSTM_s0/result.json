@@ -1,0 +1,615 @@
+{
+  "fingerprint": "355ade4d4a13ba728a64750c631b2c852a301017a10494f62dd3037c75fd6d81",
+  "condition": {
+    "name": "markov_100",
+    "fraction": 1.0,
+    "ratio": 1.0,
+    "kind": "markov"
+  },
+  "encoder": "LSTM",
+  "seed": 0,
+  "epochs_completed": 2,
+  "primary_epoch": 2,
+  "selected_epoch": 2,
+  "best_validation_nll": 2.752761622219705,
+  "optimizer_updates": 50,
+  "n_train_windows": 1537,
+  "seconds": 6.681113958358765,
+  "curve": [
+    {
+      "epoch": 1,
+      "updates": 25,
+      "online_train_nll": 4.0899652106931015,
+      "train": {
+        "n": 1537,
+        "top1": 0.24918672739102146,
+        "top3": 0.43331164606376055,
+        "top5": 0.5289525048796356,
+        "macro_f1": 0.055480568343425914,
+        "f1_label_count": 83,
+        "nll": 3.5138946249526692,
+        "log_likelihood": -5400.856038552252,
+        "perplexity": 33.57879024531582,
+        "run_macro_top1": 0.2082705452228299
+      },
+      "validation": {
+        "n": 265,
+        "top1": 0.30943396226415093,
+        "top3": 0.5207547169811321,
+        "top5": 0.5886792452830188,
+        "macro_f1": 0.1013043370858126,
+        "f1_label_count": 52,
+        "nll": 3.34738080453482,
+        "log_likelihood": -887.0559132017273,
+        "perplexity": 28.428177094772437,
+        "run_macro_top1": 0.2636892896693561
+      },
+      "seconds": 3.41113018989563
+    },
+    {
+      "epoch": 2,
+      "updates": 50,
+      "online_train_nll": 3.2603328327273267,
+      "train": {
+        "n": 1537,
+        "top1": 0.42745608327911516,
+        "top3": 0.6363044892648015,
+        "top5": 0.7033181522446325,
+        "macro_f1": 0.1700137467511592,
+        "f1_label_count": 83,
+        "nll": 2.897302979997205,
+        "log_likelihood": -4453.154680255704,
+        "perplexity": 18.12519537507645,
+        "run_macro_top1": 0.3702968157920045
+      },
+      "validation": {
+        "n": 265,
+        "top1": 0.4716981132075472,
+        "top3": 0.6792452830188679,
+        "top5": 0.7584905660377359,
+        "macro_f1": 0.2499308824279886,
+        "f1_label_count": 52,
+        "nll": 2.752761622219705,
+        "log_likelihood": -729.4818298882219,
+        "perplexity": 15.685890628636209,
+        "run_macro_top1": 0.4289184200812108
+      },
+      "seconds": 6.661645174026489
+    }
+  ],
+  "validation": {
+    "n": 265,
+    "top1": 0.4716981132075472,
+    "top3": 0.6792452830188679,
+    "top5": 0.7584905660377359,
+    "macro_f1": 0.2499308824279886,
+    "f1_label_count": 52,
+    "nll": 2.752761622219705,
+    "log_likelihood": -729.4818298882219,
+    "perplexity": 15.685890628636209,
+    "run_macro_top1": 0.4289184200812108,
+    "per_run": {
+      "scenario_1_c_a.j2": {
+        "n": 43,
+        "top1": 0.6046511627906976,
+        "nll": 2.364905654772621
+      },
+      "scenario_1_d_c.j2": {
+        "n": 50,
+        "top1": 0.62,
+        "nll": 2.206102731431021
+      },
+      "scenario_1_e_b.j2": {
+        "n": 45,
+        "top1": 0.5555555555555556,
+        "nll": 2.3865401656385123
+      },
+      "scenario_1_e_c.j2": {
+        "n": 45,
+        "top1": 0.5555555555555556,
+        "nll": 2.3951496932322556
+      },
+      "scenario_3_a_c.j2": {
+        "n": 36,
+        "top1": 0.19444444444444445,
+        "nll": 3.8118682762172114
+      },
+      "scenario_3_a_d.j2": {
+        "n": 28,
+        "top1": 0.25,
+        "nll": 3.582428172026798
+      },
+      "scenario_6_a_a.j2": {
+        "n": 18,
+        "top1": 0.2222222222222222,
+        "nll": 3.5985810973163117
+      }
+    }
+  },
+  "test": {
+    "n": 272,
+    "top1": 0.4411764705882353,
+    "top3": 0.6102941176470589,
+    "top5": 0.6544117647058824,
+    "macro_f1": 0.26102966611875084,
+    "f1_label_count": 51,
+    "nll": 3.1049165527264755,
+    "log_likelihood": -844.5373023416014,
+    "perplexity": 22.30735740945026,
+    "run_macro_top1": 0.4045069574847128,
+    "per_run": {
+      "scenario_1_b_c.j2": {
+        "n": 43,
+        "top1": 0.627906976744186,
+        "nll": 2.377931294252032
+      },
+      "scenario_1_c_c.j2": {
+        "n": 43,
+        "top1": 0.5813953488372093,
+        "nll": 2.3528936080219673
+      },
+      "scenario_1_d_a.j2": {
+        "n": 50,
+        "top1": 0.64,
+        "nll": 2.2139248315869007
+      },
+      "scenario_1_e_a.j2": {
+        "n": 45,
+        "top1": 0.6,
+        "nll": 2.4058920059329747
+      },
+      "scenario_3_a_b.j2": {
+        "n": 24,
+        "top1": 0.20833333333333334,
+        "nll": 3.9906810103093746
+      },
+      "scenario_3_b_b.j2": {
+        "n": 23,
+        "top1": 0.17391304347826086,
+        "nll": 3.831991423057919
+      },
+      "scenario_6_c.j2": {
+        "n": 44,
+        "top1": 0.0,
+        "nll": 5.41450687999394
+      }
+    }
+  },
+  "examples": [
+    {
+      "window": 0,
+      "run": "scenario_1_b_c.j2",
+      "history": [
+        "T1590"
+      ],
+      "actual": "T1591",
+      "actual_name": "Gather Victim Org Information",
+      "actual_probability": 0.05549076944589615,
+      "top3": [
+        {
+          "technique": "T1591",
+          "name": "Gather Victim Org Information",
+          "probability": 0.05549076944589615
+        },
+        {
+          "technique": "T1595",
+          "name": "Active Scanning",
+          "probability": 0.0553218349814415
+        },
+        {
+          "technique": "T1033",
+          "name": "System Owner/User Discovery",
+          "probability": 0.037391580641269684
+        }
+      ],
+      "correct": true
+    },
+    {
+      "window": 30,
+      "run": "scenario_1_b_c.j2",
+      "history": [
+        "T1007",
+        "T1615",
+        "T1033",
+        "T1548",
+        "T1548"
+      ],
+      "actual": "T1033",
+      "actual_name": "System Owner/User Discovery",
+      "actual_probability": 0.1503453105688095,
+      "top3": [
+        {
+          "technique": "T1033",
+          "name": "System Owner/User Discovery",
+          "probability": 0.1503453105688095
+        },
+        {
+          "technique": "T1049",
+          "name": "System Network Connections Discovery",
+          "probability": 0.03223138302564621
+        },
+        {
+          "technique": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "probability": 0.028691736981272697
+        }
+      ],
+      "correct": true
+    },
+    {
+      "window": 60,
+      "run": "scenario_1_c_c.j2",
+      "history": [
+        "T1059",
+        "T1059",
+        "T1087",
+        "T1083",
+        "T1201"
+      ],
+      "actual": "T1069",
+      "actual_name": "Permission Groups Discovery",
+      "actual_probability": 0.1326303333044052,
+      "top3": [
+        {
+          "technique": "T1069",
+          "name": "Permission Groups Discovery",
+          "probability": 0.1326303333044052
+        },
+        {
+          "technique": "T1201",
+          "name": "Password Policy Discovery",
+          "probability": 0.06558448076248169
+        },
+        {
+          "technique": "T1057",
+          "name": "Process Discovery",
+          "probability": 0.04871252551674843
+        }
+      ],
+      "correct": true
+    },
+    {
+      "window": 90,
+      "run": "scenario_1_d_a.j2",
+      "history": [
+        "T1590",
+        "T1591",
+        "T1595",
+        "T1592",
+        "T1595"
+      ],
+      "actual": "T1595",
+      "actual_name": "Active Scanning",
+      "actual_probability": 0.27395522594451904,
+      "top3": [
+        {
+          "technique": "T1595",
+          "name": "Active Scanning",
+          "probability": 0.27395522594451904
+        },
+        {
+          "technique": "T1592",
+          "name": "Gather Victim Host Information",
+          "probability": 0.04420739412307739
+        },
+        {
+          "technique": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "probability": 0.042732130736112595
+        }
+      ],
+      "correct": true
+    },
+    {
+      "window": 120,
+      "run": "scenario_1_d_a.j2",
+      "history": [
+        "T1033",
+        "T1546",
+        "T1546",
+        "T1546",
+        "T1546"
+      ],
+      "actual": "T1546",
+      "actual_name": "Event Triggered Execution",
+      "actual_probability": 0.38484272360801697,
+      "top3": [
+        {
+          "technique": "T1546",
+          "name": "Event Triggered Execution",
+          "probability": 0.38484272360801697
+        },
+        {
+          "technique": "T1219",
+          "name": "Remote Access Tools",
+          "probability": 0.024868927896022797
+        },
+        {
+          "technique": "T1120",
+          "name": "Peripheral Device Discovery",
+          "probability": 0.024448558688163757
+        }
+      ],
+      "correct": true
+    },
+    {
+      "window": 150,
+      "run": "scenario_1_e_a.j2",
+      "history": [
+        "T1059",
+        "T1059",
+        "T1059",
+        "T1059",
+        "T1059"
+      ],
+      "actual": "T1087",
+      "actual_name": "Account Discovery",
+      "actual_probability": 0.0441184937953949,
+      "top3": [
+        {
+          "technique": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "probability": 0.571128249168396
+        },
+        {
+          "technique": "T1087",
+          "name": "Account Discovery",
+          "probability": 0.0441184937953949
+        },
+        {
+          "technique": "T1486",
+          "name": "Data Encrypted for Impact",
+          "probability": 0.015831029042601585
+        }
+      ],
+      "correct": false
+    },
+    {
+      "window": 180,
+      "run": "scenario_1_e_a.j2",
+      "history": [
+        "T1033",
+        "T1003",
+        "T1120",
+        "T1120",
+        "T1124"
+      ],
+      "actual": "T1497",
+      "actual_name": "Virtualization/Sandbox Evasion",
+      "actual_probability": 0.14643315970897675,
+      "top3": [
+        {
+          "technique": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "probability": 0.14643315970897675
+        },
+        {
+          "technique": "T1595",
+          "name": "Active Scanning",
+          "probability": 0.03495414927601814
+        },
+        {
+          "technique": "T1124",
+          "name": "System Time Discovery",
+          "probability": 0.0325767882168293
+        }
+      ],
+      "correct": true
+    },
+    {
+      "window": 210,
+      "run": "scenario_3_b_b.j2",
+      "history": [
+        "T1021",
+        "T1021",
+        "T1021",
+        "T1021",
+        "T1003"
+      ],
+      "actual": "T1213",
+      "actual_name": "Data from Information Repositories",
+      "actual_probability": 0.019861605018377304,
+      "top3": [
+        {
+          "technique": "T1021",
+          "name": "Remote Services",
+          "probability": 0.06714536249637604
+        },
+        {
+          "technique": "T1105",
+          "name": "Ingress Tool Transfer",
+          "probability": 0.045060932636260986
+        },
+        {
+          "technique": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "probability": 0.04237385094165802
+        }
+      ],
+      "correct": false
+    },
+    {
+      "window": 240,
+      "run": "scenario_6_c.j2",
+      "history": [
+        "T1176",
+        "T1056",
+        "T1056",
+        "T1115",
+        "T1176"
+      ],
+      "actual": "T1056",
+      "actual_name": "Input Capture",
+      "actual_probability": 0.004084548447281122,
+      "top3": [
+        {
+          "technique": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "probability": 0.06448480486869812
+        },
+        {
+          "technique": "T1033",
+          "name": "System Owner/User Discovery",
+          "probability": 0.06099167838692665
+        },
+        {
+          "technique": "T1219",
+          "name": "Remote Access Tools",
+          "probability": 0.05231091380119324
+        }
+      ],
+      "correct": false
+    },
+    {
+      "window": 271,
+      "run": "scenario_6_c.j2",
+      "history": [
+        "T1056",
+        "T1056",
+        "T1056",
+        "T1056",
+        "T1115"
+      ],
+      "actual": "T1115",
+      "actual_name": "Clipboard Data",
+      "actual_probability": 0.004607726354151964,
+      "top3": [
+        {
+          "technique": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "probability": 0.06051135063171387
+        },
+        {
+          "technique": "T1033",
+          "name": "System Owner/User Discovery",
+          "probability": 0.04769226163625717
+        },
+        {
+          "technique": "T1219",
+          "name": "Remote Access Tools",
+          "probability": 0.03500780463218689
+        }
+      ],
+      "correct": false
+    }
+  ],
+  "validation_best": {
+    "n": 265,
+    "top1": 0.4716981132075472,
+    "top3": 0.6792452830188679,
+    "top5": 0.7584905660377359,
+    "macro_f1": 0.2499308824279886,
+    "f1_label_count": 52,
+    "nll": 2.752761622219705,
+    "log_likelihood": -729.4818298882219,
+    "perplexity": 15.685890628636209,
+    "run_macro_top1": 0.4289184200812108,
+    "per_run": {
+      "scenario_1_c_a.j2": {
+        "n": 43,
+        "top1": 0.6046511627906976,
+        "nll": 2.364905654772621
+      },
+      "scenario_1_d_c.j2": {
+        "n": 50,
+        "top1": 0.62,
+        "nll": 2.206102731431021
+      },
+      "scenario_1_e_b.j2": {
+        "n": 45,
+        "top1": 0.5555555555555556,
+        "nll": 2.3865401656385123
+      },
+      "scenario_1_e_c.j2": {
+        "n": 45,
+        "top1": 0.5555555555555556,
+        "nll": 2.3951496932322556
+      },
+      "scenario_3_a_c.j2": {
+        "n": 36,
+        "top1": 0.19444444444444445,
+        "nll": 3.8118682762172114
+      },
+      "scenario_3_a_d.j2": {
+        "n": 28,
+        "top1": 0.25,
+        "nll": 3.582428172026798
+      },
+      "scenario_6_a_a.j2": {
+        "n": 18,
+        "top1": 0.2222222222222222,
+        "nll": 3.5985810973163117
+      }
+    }
+  },
+  "test_best": {
+    "n": 272,
+    "top1": 0.4411764705882353,
+    "top3": 0.6102941176470589,
+    "top5": 0.6544117647058824,
+    "macro_f1": 0.26102966611875084,
+    "f1_label_count": 51,
+    "nll": 3.1049165527264755,
+    "log_likelihood": -844.5373023416014,
+    "perplexity": 22.30735740945026,
+    "run_macro_top1": 0.4045069574847128,
+    "per_run": {
+      "scenario_1_b_c.j2": {
+        "n": 43,
+        "top1": 0.627906976744186,
+        "nll": 2.377931294252032
+      },
+      "scenario_1_c_c.j2": {
+        "n": 43,
+        "top1": 0.5813953488372093,
+        "nll": 2.3528936080219673
+      },
+      "scenario_1_d_a.j2": {
+        "n": 50,
+        "top1": 0.64,
+        "nll": 2.2139248315869007
+      },
+      "scenario_1_e_a.j2": {
+        "n": 45,
+        "top1": 0.6,
+        "nll": 2.4058920059329747
+      },
+      "scenario_3_a_b.j2": {
+        "n": 24,
+        "top1": 0.20833333333333334,
+        "nll": 3.9906810103093746
+      },
+      "scenario_3_b_b.j2": {
+        "n": 23,
+        "top1": 0.17391304347826086,
+        "nll": 3.831991423057919
+      },
+      "scenario_6_c.j2": {
+        "n": 44,
+        "top1": 0.0,
+        "nll": 5.41450687999394
+      }
+    }
+  },
+  "best_checkpoint_sha256": "bda64d10d826f40342b7f5e8a0914536dd9d119114c371aa2c026658ad20b6d0",
+  "n_training_runs": 22,
+  "n_original_groups": 22,
+  "n_synthetic": 22,
+  "quality": {
+    "n_sequences": 22,
+    "unique_sequences": 22,
+    "duplicate_pct": 0.0,
+    "training_copy_pct": 0.0,
+    "mean_length": 35.68181818181818,
+    "min_length": 5,
+    "max_length": 48,
+    "known_token_pct": 100.0,
+    "train_observed_bigram_pct": 82.17562254259502,
+    "bigram_js_divergence_nats": 0.14861732960878224,
+    "unique_techniques": 81,
+    "aep_valid_pct": null,
+    "operational_validity": "Not evaluated; observed adjacency is not causal validity"
+  },
+  "checkpoint": "encoder.pt",
+  "checkpoint_sha256": "82fc1461f216de8ab694276fa26f5a246458d97671cb900ac5d4276264352f3d"
+}

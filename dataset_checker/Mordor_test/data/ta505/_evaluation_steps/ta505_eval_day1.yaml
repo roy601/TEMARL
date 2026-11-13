@@ -1,0 +1,67 @@
+title: TA505 Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (TA505)
+simulation:
+  steps:
+  - step_id: 1.A
+    technique: T1566.001
+    tactic: initial-access
+    description: Spearphishing Attachment
+  - step_id: 1.B
+    technique: T1204.002
+    tactic: execution
+    description: Malicious File
+  - step_id: 2.A
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell Execution
+  - step_id: 2.B
+    technique: T1082
+    tactic: discovery
+    description: System Information Discovery
+  - step_id: 3.A
+    technique: T1055.001
+    tactic: defense-evasion
+    description: DLL Injection
+  - step_id: 3.B
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Shares
+  - step_id: 4.A
+    technique: T1071.001
+    tactic: command-and-control
+    description: Web Protocols C2
+  - step_id: 4.B
+    technique: T1486
+    tactic: impact
+    description: Ransomware Encryption
+attack_mappings:
+- technique: T1566
+  tactics:
+  - initial-access
+  sub_technique: '001'
+- technique: T1204
+  tactics:
+  - execution
+  sub_technique: '002'
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1082
+  tactics:
+  - discovery
+- technique: T1055
+  tactics:
+  - defense-evasion
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1071
+  tactics:
+  - command-and-control
+  sub_technique: '001'
+- technique: T1486
+  tactics:
+  - impact

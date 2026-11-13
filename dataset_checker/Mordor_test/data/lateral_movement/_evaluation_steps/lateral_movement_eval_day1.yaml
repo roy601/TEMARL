@@ -1,0 +1,43 @@
+title: LATERAL_MOVEMENT Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (LATERAL_MOVEMENT)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: '2'
+    technique: T1018
+    tactic: discovery
+    description: Remote System Discovery
+  - step_id: '3'
+    technique: T1021.001
+    tactic: lateral-movement
+    description: RDP
+  - step_id: '4'
+    technique: T1021.002
+    tactic: lateral-movement
+    description: SMB Shares
+  - step_id: '5'
+    technique: T1047
+    tactic: execution
+    description: WMI
+attack_mappings:
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1018
+  tactics:
+  - discovery
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '001'
+- technique: T1021
+  tactics:
+  - lateral-movement
+  sub_technique: '002'
+- technique: T1047
+  tactics:
+  - execution

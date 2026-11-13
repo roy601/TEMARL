@@ -1,0 +1,44 @@
+title: DOMAIN_COMPROMISE Evaluation - DAY1
+source: MITRE ATT&CK Evaluation (DOMAIN_COMPROMISE)
+simulation:
+  steps:
+  - step_id: '1'
+    technique: T1059.001
+    tactic: execution
+    description: PowerShell
+  - step_id: '2'
+    technique: T1087.002
+    tactic: discovery
+    description: Domain Accounts
+  - step_id: '3'
+    technique: T1482
+    tactic: discovery
+    description: Domain Trust Discovery
+  - step_id: '4'
+    technique: T1003.003
+    tactic: credential-access
+    description: NTDS Dumping
+  - step_id: '5'
+    technique: T1550.002
+    tactic: defense-evasion
+    description: Pass the Hash
+attack_mappings:
+- technique: T1059
+  tactics:
+  - execution
+  sub_technique: '001'
+- technique: T1087
+  tactics:
+  - discovery
+  sub_technique: '002'
+- technique: T1482
+  tactics:
+  - discovery
+- technique: T1003
+  tactics:
+  - credential-access
+  sub_technique: '003'
+- technique: T1550
+  tactics:
+  - defense-evasion
+  sub_technique: '002'
