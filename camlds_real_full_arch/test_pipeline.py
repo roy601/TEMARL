@@ -24,7 +24,9 @@ class IntegrationTests(unittest.TestCase):
     def test_replay_every_supported_run(self):
         all_steps = p.ordered_folds('execution')[0]['_steps']
         f = {'_steps':all_steps,'train_runs':sorted({s['run'] for s in all_steps})}
-        for spec in p.specs(p.runs(f,'train'),3,1):
+        replay_runs = p.runs(f, 'train')
+        self.assertIn('S4', {r['scenario'] for r in replay_runs})
+        for spec in p.specs(replay_runs,3,1):
             e = p.env.CommandEngagementEnv().reset(spec)
             self.assertEqual(e.local_obs().shape, (4,p.env.LOCAL_DIM))
             self.assertEqual(e.global_state().shape, (p.env.GLOBAL_DIM,))

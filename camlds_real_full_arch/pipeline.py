@@ -53,8 +53,7 @@ def runs(fold, split):
     scenario = {s['run']: 'S' + str(s['base_scenario']) for s in fold['_steps']}
     for r in out:
         r['scenario'] = scenario[r['id']]
-    # Firewall is not represented by the inherited topology. Never silently relocate it.
-    return [r for r in out if r['scenario'] != 'S4']
+    return out
 
 def specs(rs, seed, repeats):
     rng = np.random.default_rng(seed)
@@ -75,7 +74,7 @@ def audit():
     return {'source': 'CAM-LDS v1 recorded testbed execution metadata, DOI 10.5281/zenodo.18390561',
             'steps': len(steps), 'runs': len({s['run'] for s in steps}),
             'labels': port.NT, 'folds': len(fs),
-            'excluded_from_RL': 'S4: firewall target absent from inherited topology; retained in encoder training',
+            's4_rl_replay': 'included; inherited topology maps its unavailable target zone to the scenario entry zone',
             'order': 'Frozen exec_index (CSV adjusted-time order); 4 known S6 adjacent swaps versus execution rank. Not corrected silently.',
             'payoff_mapping': {t: env.TECHNIQUES[t]['id'] for t in port.LABELS},
             'scenario_metadata': {k: {n: v for n, v in m.items() if n != 'goal_mask'} for k, m in meta.items()},
