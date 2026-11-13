@@ -11,7 +11,7 @@ https://github.com/zyw-286/shell-attack-evolution-dataset, sent by the user (not
 ## Draft (for the user to send)
 
 > Thank you for releasing the data and code of "Unveiling Evolving Threats" (SRDS 2025). We are
-> reproducing the paper's numbers from the released `dataset/` and would be grateful for six
+> reproducing the paper's numbers from the released `dataset/` and would be grateful for seven
 > clarifications:
 >
 > 1. Table V, "Average Session Length" (12.65 / 5.00): the mean number of commands over all sessions,
