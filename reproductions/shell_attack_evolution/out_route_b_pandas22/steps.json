@@ -1,0 +1,52 @@
+[
+ {
+  "step": "_step00_read_raw_logs.py",
+  "status": "ok",
+  "seconds": 56.3,
+  "error_tail": null
+ },
+ {
+  "step": "01_extract_sessions.py",
+  "status": "ok",
+  "seconds": 10.5,
+  "error_tail": null
+ },
+ {
+  "step": "02_command_frequency.py",
+  "status": "ok",
+  "seconds": 0.4,
+  "error_tail": null
+ },
+ {
+  "step": "03_classify_commands.py",
+  "status": "ok",
+  "seconds": 0.4,
+  "error_tail": null
+ },
+ {
+  "step": "04_complex_command_patterns.py",
+  "status": "ok",
+  "seconds": 0.7,
+  "error_tail": null
+ },
+ {
+  "step": "05_cluster_sessions.py",
+  "status": "ok",
+  "seconds": 3.9,
+  "error_tail": null
+ },
+ {
+  "step": "07a_map_attack_techniques.py",
+  "status": "FAILED",
+  "seconds": 0.1,
+  "error_tail": [
+   "    attck_value = compound_commands_attck[comd_patt_dict[key]]",
+   "                                          ~~~~~~~~~~~~~~^^^^^",
+   "KeyError: \"('-o', ';', '>', '&&', 'cd', ';', '(', '/bin/busybox', 'echo', '-e', '||', 'echo', '-e', ')')\""
+  ]
+ },
+ {
+  "step": "07b_technique_frequency.py",
+  "status": "NOT ATTEMPTED (an earlier step failed)"
+ }
+]
