@@ -1,0 +1,58 @@
+{
+ "commit": "d5f7fe120ebd921e04026b6348c3ec5d399c5df6",
+ "raw_files": 236,
+ "records_loaded": 5598628,
+ "smoke": false,
+ "steps": [
+  {
+   "error_tail": null,
+   "seconds": 47.8,
+   "status": "ok",
+   "step": "_step00_read_raw_logs.py"
+  },
+  {
+   "error_tail": null,
+   "seconds": 9.6,
+   "status": "ok",
+   "step": "01_extract_sessions.py"
+  },
+  {
+   "error_tail": null,
+   "seconds": 0.4,
+   "status": "ok",
+   "step": "02_command_frequency.py"
+  },
+  {
+   "error_tail": null,
+   "seconds": 0.4,
+   "status": "ok",
+   "step": "03_classify_commands.py"
+  },
+  {
+   "error_tail": null,
+   "seconds": 0.7,
+   "status": "ok",
+   "step": "04_complex_command_patterns.py"
+  },
+  {
+   "error_tail": null,
+   "seconds": 3.9,
+   "status": "ok",
+   "step": "05_cluster_sessions.py"
+  },
+  {
+   "error_tail": [
+    "    attck_value = compound_commands_attck[comd_patt_dict[key]]",
+    "                                          ~~~~~~~~~~~~~~^^^^^",
+    "KeyError: \"('-o', ';', '>', '&&', 'cd', ';', '(', '/bin/busybox', 'echo', '-e', '||', 'echo', '-e', ')')\""
+   ],
+   "seconds": 0.1,
+   "status": "FAILED",
+   "step": "07a_map_attack_techniques.py"
+  },
+  {
+   "status": "NOT ATTEMPTED (an earlier step failed)",
+   "step": "07b_technique_frequency.py"
+  }
+ ]
+}
