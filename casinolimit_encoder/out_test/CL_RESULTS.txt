@@ -1,0 +1,138 @@
+CASINOLIMIT: TEST RESULTS (PROTOCOL_CL_1.0.md)
+made 2026-11-13 10:19 | scipy 1.17.1 | labels 66
+
+== main | all points (8,087 points)  <- PRIMARY
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.328         0.287     0.059      0.188   0.061
+   GRU                          0.337         0.287     0.053      0.202   0.061
+   LSTM                         0.333         0.285     0.053      0.200   0.061
+   Old Transformer              0.330         0.294     0.064      0.195   0.060
+   Best simple baseline         0.281         0.268     0.106      0.248       -
+   Lookup, longest match        0.223         0.204     0.058      0.199       -
+   Lookup, previous step        0.275         0.256     0.067      0.245       -
+   Repeat last step             0.295         0.284     0.163      0.260       -
+   Transformer - Best simple baseline: +0.018 [-0.006, +0.036]  p 0.0000  Holm 0.0000  better in 75/113 attackers -> no difference shown
+   GRU - Best simple baseline: +0.019 [-0.006, +0.038]  p 0.0000  Holm 0.0001  better in 73/113 attackers -> no difference shown
+   LSTM - Best simple baseline: +0.016 [-0.008, +0.035]  p 0.0002  Holm 0.0002  better in 71/113 attackers -> no difference shown
+   Transformer - GRU: -0.001 [-0.008, +0.007]  p 0.7150  Holm 0.7774  better in 49/113 attackers -> no difference shown
+   Transformer - LSTM: +0.002 [-0.006, +0.009]  p 0.3887  Holm 0.7774  better in 62/113 attackers -> no difference shown
+
+== main | novel points (7,919 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.327         0.299     0.059      0.187   0.061
+   GRU                          0.337         0.300     0.053      0.203   0.061
+   LSTM                         0.333         0.297     0.053      0.201   0.061
+   Old Transformer              0.330         0.307     0.063      0.194   0.061
+   Best simple baseline         0.280         0.268     0.106      0.248       -
+   Lookup, longest match        0.223         0.208     0.058      0.199       -
+   Lookup, previous step        0.275         0.271     0.066      0.246       -
+   Repeat last step             0.294         0.279     0.162      0.259       -
+   Transformer - Best simple baseline: +0.031 [+0.017, +0.045]  p 0.0000  Holm 0.0000  better in 74/107 attackers -> Transformer outperforms Best simple baseline
+   GRU - Best simple baseline: +0.032 [+0.016, +0.048]  p 0.0000  Holm 0.0000  better in 69/107 attackers -> GRU outperforms Best simple baseline
+   LSTM - Best simple baseline: +0.029 [+0.013, +0.046]  p 0.0001  Holm 0.0001  better in 70/107 attackers -> LSTM outperforms Best simple baseline
+   Transformer - GRU: -0.000 [-0.009, +0.008]  p 0.8297  Holm 0.8297  better in 51/107 attackers -> no difference shown
+   Transformer - LSTM: +0.002 [-0.007, +0.011]  p 0.2005  Holm 0.4010  better in 61/107 attackers -> no difference shown
+
+== main | copy points (168 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.351         0.179     0.183      0.248   0.053
+   GRU                          0.325         0.124     0.170      0.157   0.053
+   LSTM                         0.323         0.126     0.171      0.158   0.053
+   Old Transformer              0.347         0.181     0.192      0.221   0.052
+   Best simple baseline         0.311         0.183     0.206      0.262       -
+   Lookup, longest match        0.238         0.139     0.161      0.196       -
+   Lookup, previous step        0.280         0.142     0.191      0.226       -
+   Repeat last step             0.340         0.213     0.222      0.298       -
+   Transformer - Best simple baseline: -0.005 [-0.051, +0.041]  p 0.9696  Holm 0.9696  better in 13/94 attackers -> no difference shown
+   GRU - Best simple baseline: -0.060 [-0.112, -0.012]  p 0.0388  Holm 0.1165  better in 13/94 attackers -> no difference shown
+   LSTM - Best simple baseline: -0.058 [-0.109, -0.012]  p 0.0569  Holm 0.1165  better in 13/94 attackers -> no difference shown
+   Transformer - GRU: +0.055 [+0.026, +0.088]  p 0.0024  Holm 0.0039  better in 18/94 attackers -> Transformer outperforms GRU
+   Transformer - LSTM: +0.053 [+0.024, +0.086]  p 0.0020  Holm 0.0039  better in 20/94 attackers -> Transformer outperforms LSTM
+
+== main | reviewed points (3,746 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.261         0.236     0.049      0.154   0.064
+   GRU                          0.254         0.224     0.042      0.158   0.064
+   LSTM                         0.251         0.222     0.042      0.155   0.064
+   Old Transformer              0.265         0.241     0.052      0.165   0.064
+   Best simple baseline         0.251         0.236     0.105      0.238       -
+   Lookup, longest match        0.180         0.176     0.051      0.171       -
+   Lookup, previous step        0.224         0.214     0.058      0.215       -
+   Repeat last step             0.272         0.254     0.146      0.258       -
+   Transformer - Best simple baseline: +0.000 [-0.025, +0.020]  p 0.1350  Holm 0.4050  better in 55/108 attackers -> no difference shown
+   GRU - Best simple baseline: -0.011 [-0.038, +0.009]  p 0.9388  Holm 1.0000  better in 54/108 attackers -> no difference shown
+   LSTM - Best simple baseline: -0.013 [-0.040, +0.008]  p 0.9871  Holm 1.0000  better in 55/108 attackers -> no difference shown
+   Transformer - GRU: +0.012 [+0.003, +0.021]  p 0.0106  Holm 0.0106  better in 61/108 attackers -> Transformer outperforms GRU
+   Transformer - LSTM: +0.014 [+0.005, +0.023]  p 0.0038  Holm 0.0077  better in 65/108 attackers -> Transformer outperforms LSTM
+
+   main: best simple baseline per fold: {'F1': 'repeat_last', 'F2': 'repeat_last', 'F3': 'previous', 'F4': 'previous', 'F5': 'previous'}
+   main: recall ceiling (test label slots whose label occurs in the fold's training): 0.991
+
+== collapse_repeats | all points (4,876 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.335         0.285     0.054      0.213   0.062
+   GRU                          0.326         0.274     0.046      0.198   0.063
+   LSTM                         0.328         0.276     0.043      0.204   0.063
+   Old Transformer              0.339         0.285     0.054      0.215   0.062
+   Best simple baseline         0.342         0.295     0.146      0.298       -
+   Lookup, longest match        0.241         0.220     0.063      0.200       -
+   Lookup, previous step        0.332         0.285     0.087      0.290       -
+   Repeat last step             0.341         0.300     0.181      0.297       -
+   Transformer - Best simple baseline: -0.010 [-0.034, +0.010]  p 0.4671  Holm 1.0000  better in 59/113 attackers -> no difference shown
+   GRU - Best simple baseline: -0.021 [-0.046, -0.001]  p 0.4062  Holm 1.0000  better in 53/113 attackers -> no difference shown
+   LSTM - Best simple baseline: -0.020 [-0.047, +0.002]  p 0.4948  Holm 1.0000  better in 48/113 attackers -> no difference shown
+   Transformer - GRU: +0.011 [+0.006, +0.018]  p 0.0001  Holm 0.0002  better in 69/113 attackers -> Transformer outperforms GRU
+   Transformer - LSTM: +0.010 [+0.003, +0.017]  p 0.0037  Holm 0.0037  better in 67/113 attackers -> Transformer outperforms LSTM
+
+== collapse_repeats | novel points (4,724 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.337         0.299     0.052      0.214   0.062
+   GRU                          0.327         0.286     0.044      0.200   0.063
+   LSTM                         0.330         0.289     0.042      0.206   0.063
+   Old Transformer              0.341         0.302     0.052      0.215   0.062
+   Best simple baseline         0.344         0.299     0.147      0.299       -
+   Lookup, longest match        0.239         0.221     0.061      0.198       -
+   Lookup, previous step        0.333         0.303     0.086      0.291       -
+   Repeat last step             0.343         0.299     0.182      0.297       -
+   Transformer - Best simple baseline: +0.000 [-0.015, +0.015]  p 0.3937  Holm 1.0000  better in 58/107 attackers -> no difference shown
+   GRU - Best simple baseline: -0.013 [-0.030, +0.003]  p 0.3833  Holm 1.0000  better in 49/107 attackers -> no difference shown
+   LSTM - Best simple baseline: -0.010 [-0.028, +0.007]  p 0.5117  Holm 1.0000  better in 47/107 attackers -> no difference shown
+   Transformer - GRU: +0.013 [+0.008, +0.020]  p 0.0000  Holm 0.0000  better in 68/107 attackers -> Transformer outperforms GRU
+   Transformer - LSTM: +0.010 [+0.004, +0.017]  p 0.0030  Holm 0.0030  better in 66/107 attackers -> Transformer outperforms LSTM
+
+== collapse_repeats | copy points (152 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.283         0.154     0.196      0.190   0.056
+   GRU                          0.264         0.139     0.177      0.136   0.055
+   LSTM                         0.250         0.128     0.173      0.141   0.056
+   Old Transformer              0.269         0.156     0.182      0.193   0.054
+   Best simple baseline         0.269         0.202     0.177      0.257       -
+   Lookup, longest match        0.306         0.214     0.224      0.276       -
+   Lookup, previous step        0.279         0.200     0.182      0.263       -
+   Repeat last step             0.280         0.213     0.206      0.270       -
+   Transformer - Best simple baseline: -0.048 [-0.102, +0.001]  p 0.2026  Holm 0.2105  better in 17/94 attackers -> no difference shown
+   GRU - Best simple baseline: -0.063 [-0.116, -0.016]  p 0.1052  Holm 0.2105  better in 22/94 attackers -> no difference shown
+   LSTM - Best simple baseline: -0.074 [-0.131, -0.024]  p 0.0380  Holm 0.1139  better in 17/94 attackers -> no difference shown
+   Transformer - GRU: +0.015 [-0.001, +0.034]  p 0.3424  Holm 0.3424  better in 21/94 attackers -> no difference shown
+   Transformer - LSTM: +0.027 [+0.010, +0.045]  p 0.0035  Holm 0.0070  better in 24/94 attackers -> Transformer outperforms LSTM
+
+== collapse_repeats | reviewed points (2,814 points)
+   model                     micro-F1  per-attacker  macro-F1  exact set     BCE
+   Transformer                  0.262         0.227     0.042      0.180   0.063
+   GRU                          0.250         0.220     0.035      0.166   0.063
+   LSTM                         0.251         0.217     0.033      0.170   0.064
+   Old Transformer              0.263         0.227     0.041      0.184   0.063
+   Best simple baseline         0.290         0.256     0.134      0.279       -
+   Lookup, longest match        0.191         0.184     0.053      0.182       -
+   Lookup, previous step        0.265         0.241     0.072      0.257       -
+   Repeat last step             0.293         0.260     0.163      0.278       -
+   Transformer - Best simple baseline: -0.029 [-0.053, -0.008]  p 0.0319  Holm 0.0319  better in 43/108 attackers -> Best simple baseline outperforms Transformer
+   GRU - Best simple baseline: -0.036 [-0.061, -0.015]  p 0.0031  Holm 0.0080  better in 40/108 attackers -> Best simple baseline outperforms GRU
+   LSTM - Best simple baseline: -0.038 [-0.066, -0.016]  p 0.0027  Holm 0.0080  better in 36/108 attackers -> Best simple baseline outperforms LSTM
+   Transformer - GRU: +0.008 [+0.001, +0.015]  p 0.0168  Holm 0.0168  better in 63/108 attackers -> Transformer outperforms GRU
+   Transformer - LSTM: +0.010 [+0.002, +0.018]  p 0.0055  Holm 0.0110  better in 59/108 attackers -> Transformer outperforms LSTM
+
+   collapse_repeats: best simple baseline per fold: {'F1': 'repeat_last', 'F2': 'repeat_last', 'F3': 'previous', 'F4': 'previous', 'F5': 'repeat_last'}
+   collapse_repeats: recall ceiling (test label slots whose label occurs in the fold's training): 0.991
+
+micro-F1 = pooled over all points of all folds, mean over seeds. per-attacker = mean over attackers (the unit of the tests). Differences are per-attacker micro-F1.
