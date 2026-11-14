@@ -1,0 +1,1057 @@
+{
+  "arguments": {
+    "device": "cuda",
+    "output": "C:\\Users\\user5\\TEMARL\\camlds_real_full_arch\\results\\main",
+    "encoder_root": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out",
+    "train_missing": true,
+    "order": "execution",
+    "audit_only": false,
+    "report_only": false,
+    "smoke": false,
+    "folds": null,
+    "arms": [
+      "allpos",
+      "baseline",
+      "gru_allpos",
+      "lstm_allpos",
+      "NoHistory"
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "learners": [
+      "IPPO",
+      "MAPPO"
+    ],
+    "env_steps": 2000000,
+    "eval_repeats": 20,
+    "threads": 4
+  },
+  "audit": {
+    "source": "CAM-LDS v1 recorded testbed execution metadata, DOI 10.5281/zenodo.18390561",
+    "steps": 904,
+    "runs": 34,
+    "labels": 81,
+    "folds": 32,
+    "s4_rl_replay": "included; inherited topology maps its unavailable target zone to the scenario entry zone",
+    "order": "Frozen exec_index (CSV adjusted-time order); 4 known S6 adjacent swaps versus execution rank. Not corrected silently.",
+    "payoff_mapping": {
+      "T1003": 23,
+      "T1005": 15,
+      "T1007": 24,
+      "T1010": 25,
+      "T1014": 26,
+      "T1016": 10,
+      "T1018": 27,
+      "T1021": 12,
+      "T1033": 28,
+      "T1036": 20,
+      "T1039": 29,
+      "T1040": 30,
+      "T1041": 17,
+      "T1046": 9,
+      "T1049": 31,
+      "T1053": 4,
+      "T1056": 32,
+      "T1057": 33,
+      "T1059": 2,
+      "T1068": 7,
+      "T1069": 78,
+      "T1070": 34,
+      "T1071": 35,
+      "T1072": 14,
+      "T1074": 36,
+      "T1078": 37,
+      "T1080": 38,
+      "T1082": 39,
+      "T1083": 11,
+      "T1087": 40,
+      "T1095": 41,
+      "T1098": 42,
+      "T1105": 43,
+      "T1110": 44,
+      "T1115": 45,
+      "T1120": 46,
+      "T1124": 47,
+      "T1133": 48,
+      "T1136": 49,
+      "T1176": 50,
+      "T1190": 0,
+      "T1201": 51,
+      "T1204": 3,
+      "T1205": 52,
+      "T1210": 53,
+      "T1213": 54,
+      "T1218": 79,
+      "T1219": 55,
+      "T1222": 56,
+      "T1485": 57,
+      "T1486": 18,
+      "T1489": 19,
+      "T1490": 58,
+      "T1497": 59,
+      "T1518": 80,
+      "T1525": 60,
+      "T1528": 61,
+      "T1531": 62,
+      "T1543": 5,
+      "T1546": 63,
+      "T1547": 6,
+      "T1548": 64,
+      "T1550": 13,
+      "T1556": 65,
+      "T1557": 66,
+      "T1560": 16,
+      "T1564": 67,
+      "T1565": 68,
+      "T1566": 1,
+      "T1569": 69,
+      "T1573": 70,
+      "T1574": 21,
+      "T1589": 71,
+      "T1590": 72,
+      "T1591": 73,
+      "T1592": 74,
+      "T1595": 75,
+      "T1599": 76,
+      "T1610": 77,
+      "T1614": 82,
+      "T1615": 83
+    },
+    "scenario_metadata": {
+      "S1": {
+        "entry": 0,
+        "target": 1,
+        "target_raw": "DMZ",
+        "goal_tactic": "Persistence",
+        "goal_declared": "Persistence",
+        "goal_label_count": 9
+      },
+      "S2": {
+        "entry": 1,
+        "target": 1,
+        "target_raw": "DMZ",
+        "goal_tactic": "Exfiltration",
+        "goal_declared": "Exfiltration",
+        "goal_label_count": 1
+      },
+      "S3": {
+        "entry": 0,
+        "target": 2,
+        "target_raw": "LAN",
+        "goal_tactic": "Impact",
+        "goal_declared": "Impact",
+        "goal_label_count": 6
+      },
+      "S4": {
+        "entry": 1,
+        "target": 1,
+        "target_raw": "Firewall",
+        "goal_tactic": "Defense Evasion",
+        "goal_declared": "Network Boundary Bridging (Defense Evasion)",
+        "goal_label_count": 9
+      },
+      "S5": {
+        "entry": 2,
+        "target": 1,
+        "target_raw": "DMZ",
+        "goal_tactic": "Credential Access",
+        "goal_declared": "Credential Access",
+        "goal_label_count": 6
+      },
+      "S6": {
+        "entry": 3,
+        "target": 3,
+        "target_raw": "User",
+        "goal_tactic": "Exfiltration",
+        "goal_declared": "Exfiltration",
+        "goal_label_count": 1
+      },
+      "S7": {
+        "entry": 0,
+        "target": 1,
+        "target_raw": "DMZ",
+        "goal_tactic": "Credential Access",
+        "goal_declared": "Credential Access / Exfiltration",
+        "goal_label_count": 6
+      }
+    },
+    "hashes": {
+      "camlds_real\\out\\steps.jsonl": "2d0886115d8082ef9dba5d2d001cd65f241ef5a84e4c0bf16d173e71fa0bff42",
+      "camlds_real\\out\\vocab.json": "04e134e5d9b9b2d23909535e787e19732b0e43164ad72d1b2d9d0e519428f64c",
+      "camlds_real\\split_spec.py": "ec8aeca5a5cd9fd652c3824c7f7ee9114b7877e437129a9aeb8e248389566970",
+      "camlds_encoder\\variants.py": "17cfa896377243ece5d261b83fae222863cc8f85f4544b25a0f55621c9e6c75f",
+      "camlds_real_full_arch\\pipeline.py": "6b807e3665689f9a4d9caebf388a93e4e8183f6d3d3e8a39db2fe2a799a73cb0",
+      "camlds_real_full_arch\\env_cmd.py": "27e89d9e33a1cfe06b5d79dd3e0579241fb04f9fafed8090286c69f2bec772f6",
+      "camlds_real_full_arch\\mappo_cmd.py": "ed553476c30664462139e60f052b142c93d8220255bf50ac217e17030a25c441",
+      "camlds_real/out/sidecar/steps_link.jsonl": "1353136bf41d6f02f77c012568f25988182ec3a9c36d8e9751823cc999f593fa"
+    },
+    "selected_order": "execution"
+  },
+  "folds": [
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_autostart_localaccount",
+      "train_runs": [
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_pam"
+      ],
+      "test_runs": [
+        "1_autostart_localaccount"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_autostart_pam",
+      "train_runs": [
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_autostart_pam"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_autostart_sshkey",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_autostart_sshkey"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_cron_localaccount",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_cron_localaccount"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_cron_pam",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_cron_pam"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_cron_sshkey",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_cron_sshkey"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_pwnkit_localaccount",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_pwnkit_localaccount"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_pwnkit_pam",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_pwnkit_pam"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_pwnkit_sshkey",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_pwnkit_sshkey"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_racecondition_localaccount",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_racecondition_localaccount"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_racecondition_pam",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_racecondition_pam"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_racecondition_sshkey",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_racecondition_sshkey"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_sudo_localaccount",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_sudo_localaccount"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_sudo_pam",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_sudo_pam"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_sudo_sshkey",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_sudo_sshkey"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_validaccount_localaccount",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_validaccount_localaccount"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_validaccount_pam",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_sshkey"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_validaccount_pam"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "1_validaccount_sshkey",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount"
+      ],
+      "test_runs": [
+        "1_validaccount_sshkey"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "3_ssh_apt",
+      "train_runs": [
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet"
+      ],
+      "val_runs": [
+        "3_ssh_healthcheck"
+      ],
+      "test_runs": [
+        "3_ssh_apt"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "3_ssh_healthcheck",
+      "train_runs": [
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet"
+      ],
+      "val_runs": [
+        "3_ssh_apt"
+      ],
+      "test_runs": [
+        "3_ssh_healthcheck"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "3_ssh_puppet",
+      "train_runs": [
+        "3_ssh_healthcheck",
+        "3_vnc_apt",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet"
+      ],
+      "val_runs": [
+        "3_ssh_apt"
+      ],
+      "test_runs": [
+        "3_ssh_puppet"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "3_vnc_apt",
+      "train_runs": [
+        "3_ssh_healthcheck",
+        "3_ssh_puppet",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet"
+      ],
+      "val_runs": [
+        "3_ssh_apt"
+      ],
+      "test_runs": [
+        "3_vnc_apt"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "3_vnc_healthcheck",
+      "train_runs": [
+        "3_ssh_healthcheck",
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_puppet"
+      ],
+      "val_runs": [
+        "3_ssh_apt"
+      ],
+      "test_runs": [
+        "3_vnc_healthcheck"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "3_vnc_puppet",
+      "train_runs": [
+        "3_ssh_healthcheck",
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_healthcheck"
+      ],
+      "val_runs": [
+        "3_ssh_apt"
+      ],
+      "test_runs": [
+        "3_vnc_puppet"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "6_macro_binary",
+      "train_runs": [
+        "6_plugin",
+        "6_screensharing_binary",
+        "6_screensharing_cron"
+      ],
+      "val_runs": [
+        "6_macro_cron"
+      ],
+      "test_runs": [
+        "6_macro_binary"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "6_macro_cron",
+      "train_runs": [
+        "6_plugin",
+        "6_screensharing_binary",
+        "6_screensharing_cron"
+      ],
+      "val_runs": [
+        "6_macro_binary"
+      ],
+      "test_runs": [
+        "6_macro_cron"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "6_plugin",
+      "train_runs": [
+        "6_macro_cron",
+        "6_screensharing_binary",
+        "6_screensharing_cron"
+      ],
+      "val_runs": [
+        "6_macro_binary"
+      ],
+      "test_runs": [
+        "6_plugin"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "6_screensharing_binary",
+      "train_runs": [
+        "6_macro_cron",
+        "6_plugin",
+        "6_screensharing_cron"
+      ],
+      "val_runs": [
+        "6_macro_binary"
+      ],
+      "test_runs": [
+        "6_screensharing_binary"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "variant_held_out",
+      "fold": "6_screensharing_cron",
+      "train_runs": [
+        "6_macro_cron",
+        "6_plugin",
+        "6_screensharing_binary"
+      ],
+      "val_runs": [
+        "6_macro_binary"
+      ],
+      "test_runs": [
+        "6_screensharing_cron"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "scenario_held_out",
+      "fold": "S2",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey",
+        "3_ssh_healthcheck",
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet",
+        "4",
+        "5",
+        "6_macro_cron",
+        "6_plugin",
+        "6_screensharing_binary",
+        "6_screensharing_cron",
+        "7"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount",
+        "3_ssh_apt",
+        "6_macro_binary"
+      ],
+      "test_runs": [
+        "2_cron",
+        "2_rootkit"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "scenario_held_out",
+      "fold": "S3",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey",
+        "2_rootkit",
+        "4",
+        "5",
+        "6_macro_cron",
+        "6_plugin",
+        "6_screensharing_binary",
+        "6_screensharing_cron",
+        "7"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount",
+        "2_cron",
+        "6_macro_binary"
+      ],
+      "test_runs": [
+        "3_ssh_apt",
+        "3_ssh_healthcheck",
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet"
+      ]
+    },
+    {
+      "condition": "main",
+      "family": "scenario_held_out",
+      "fold": "S6",
+      "train_runs": [
+        "1_autostart_pam",
+        "1_autostart_sshkey",
+        "1_cron_localaccount",
+        "1_cron_pam",
+        "1_cron_sshkey",
+        "1_pwnkit_localaccount",
+        "1_pwnkit_pam",
+        "1_pwnkit_sshkey",
+        "1_racecondition_localaccount",
+        "1_racecondition_pam",
+        "1_racecondition_sshkey",
+        "1_sudo_localaccount",
+        "1_sudo_pam",
+        "1_sudo_sshkey",
+        "1_validaccount_localaccount",
+        "1_validaccount_pam",
+        "1_validaccount_sshkey",
+        "2_rootkit",
+        "3_ssh_healthcheck",
+        "3_ssh_puppet",
+        "3_vnc_apt",
+        "3_vnc_healthcheck",
+        "3_vnc_puppet",
+        "4",
+        "5",
+        "7"
+      ],
+      "val_runs": [
+        "1_autostart_localaccount",
+        "2_cron",
+        "3_ssh_apt"
+      ],
+      "test_runs": [
+        "6_macro_binary",
+        "6_macro_cron",
+        "6_plugin",
+        "6_screensharing_binary",
+        "6_screensharing_cron"
+      ]
+    }
+  ],
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  }
+}
