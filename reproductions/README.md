@@ -64,3 +64,12 @@ git clone https://github.com/roy601/TEMARL.git; cd TEMARL; python -m venv .venv;
 
 `pc2_check.py` only reads: it reports Python, PyTorch + CUDA (with a short GPU test), Docker, MATLAB,
 disk and RAM, and which papers this PC can run.
+
+## Deception comparators (added 2026-11-16)
+
+| paper | area | status |
+|---|---|---|
+| **Hawkeyes 2025** (multi-agent RL honeypot allocation) | trapping / allocation, MARL | 6 targets pre-registered (`hawkeyes2025/`); no code, pure simulation: rebuild (replication) |
+| **Li et al. 2025** (DRD-PPO) | trapping / protection, single-agent RL | 11 targets pre-registered (`li2025_drdppo/`); no code, pure simulation: rebuild (replication) |
+| **CAGE Challenge 4** | independent multi-agent defence benchmark | 24 targets pre-registered (`cage4/`); only Team cybermonic's agent is released |
+| **D3O-IIoT 2025** | DSR per attack (IIoT) | screen only (same group as Co-ADAM); Table 3: DSR 5.63%, AMR 13.75%, 75 episodes |
