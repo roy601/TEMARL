@@ -10,6 +10,8 @@ Written 2026-11-16, after reading the three papers, before downloading the envir
 | 4 | Scenario variations | The five variations (constant network size, improved decoy detection, increased phishing, stealthy red, aggressive red) are run only if the repository provides them; otherwise NOT ATTEMPTED. Their exact settings are not given in the paper. | not stated in the paper | 2026-11-16 |
 | 5 | Our metrics inside CAGE 4 | Reported beside the CAGE 4 score, never instead of it: decoy events triggered by red (trapping), red actions spent on decoy hosts (engagement proxy), hosts reached with root (protection). Defined from the environment's own logs, before any run. | CAGE 4 scores a joint penalty, not dwell or depth | 2026-11-16 |
 
+| 6 | Which agents (after the availability check, before any run) | Reproduce Team cybermonic only (6 targets). Teams UC, lancer and punch: NOT ATTEMPTED (no code); their Table 3 numbers stay as published reference values for the Idea 03 comparison. | decision 3 | 2026-11-16 |
+
 ## Notes from reading
 
 - In Table 3 the best agents are heuristics (Team UC -113 +- 35); the only MARL agent scores -193 +- 84. A MARL claim must be measured against -113.
