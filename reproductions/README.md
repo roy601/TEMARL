@@ -47,7 +47,7 @@ Each PC only writes its own folders, so the two never conflict. Always pull befo
 | 5 | **Co-ADAM**, Sci Rep 2026 | harness exists (`COADAM_repro/`, Tushit), never executed; our audit found the paper's tables built from one frozen policy | MATLAB R2025b + Statistics toolbox | no | Idea 03: zones + per-step attacker |
 | 6 | **HoneyGPT**, Comput. Netw. 2026 | **PARTIAL**: their tables can be recomputed from released CSVs; the live LLM honeypot cannot be rerun as published | Python; (LLM API only for a live rerun, not planned) | no | citation for #2's data; fails all three ideas |
 | 7 | **HoneyFactory 2024**, Electronics | **REIMPLEMENT ONLY** (HMM over traffic stages; container honeynet, no package) | the PDF (MDPI blocks automatic download) | no | Idea 03 after rebuilding |
-| 8 | **DeepOP 2025**, Electronics | **UNKNOWN**: data release unknown | the PDF; author reply | yes, if possible | Idea 01 |
+| 8 | **DeepOP 2025**, Electronics | **NOT REPRODUCIBLE as published** (2026-11-16): no code, dataset by e-mail only; 41 targets pre-registered; Table 3 internally consistent; author request drafted (`deepop2025/`) | the authors' reply | maybe | Idea 01 |
 | 9 | **ASD-TGXAI 2026**, Ain Shams Eng. J. | **NO** with the materials found: no runnable package, no ordered per-step ATT&CK labels | — | — | closed unless the PDF shows code |
 | 10 | **Q-Cowrie 2026**, Int. J. Inf. Secur. | **BLOCKED**: 400,000 sessions available by email only | author reply | no | Idea 03 / 02 if data arrives |
 
