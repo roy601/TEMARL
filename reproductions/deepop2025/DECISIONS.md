@@ -8,7 +8,7 @@ Written 2026-11-16, after reading the paper in full, before any code, data reque
 |---|---|---|---|---|
 | 1 | Data | **No target is attempted.** Every result (Table 3, Figs. 6-7) is computed on the authors' own dataset, built by crawling about 2,200 threat reports and running an ontology reasoner (Sec. 3). The dataset is released only by e-mail; its size (number of sequences, vocabulary), length distribution and split are not stated. | A dataset we rebuild from public reports would differ in every respect, so any result would answer a different question. | 2026-11-16 |
 | 2 | Code | none released. A rebuild also needs the COASE ontology, the six SWRL rules (Sec. 3.3), a retrained rcATT model and the Extractor tool, none of which is released. | - | 2026-11-16 |
-| 3 | Pre-registration | The 41 targets are recorded anyway, before any data or code, so that a later replication with the authors' data is bound to them. | STANDARD.md requirement 1 | 2026-11-16 |
+| 3 | Pre-registration | The 37 targets are recorded anyway, before any data or code, so that a later replication with the authors' data is bound to them. | STANDARD.md requirement 1 | 2026-11-16 |
 
 ## Gaps to settle with the authors before any run (none decided)
 
