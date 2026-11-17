@@ -294,7 +294,7 @@ def main():
                             "got": got})
         P.write(dry, {"pass": not bad, "cells": len(cs), "mismatches": bad})
         print(f"dry run: {'PASS' if not bad else 'FAIL'} ({len(cs)} cells, {len(bad)} mismatches)")
-        return
+        raise SystemExit(0 if not bad else 1)            # a failed dry run stops any chained command
 
     # ── open the test, once ──
     if opened.exists():

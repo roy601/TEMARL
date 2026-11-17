@@ -214,6 +214,7 @@ def main():
     (a.output / "GATE_RESULT.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
     (a.output / "GATE_RESULT.txt").write_text(report(res), encoding="utf-8")
     print(report(res))
+    raise SystemExit(0 if res["pass"] else 1)          # a failed gate stops any chained command
 
 
 if __name__ == "__main__":

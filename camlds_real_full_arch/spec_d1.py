@@ -42,6 +42,7 @@ FILES = (
     "camlds_real_full_arch/pipeline.py",
     "camlds_real_full_arch/gate_d1.py",
     "camlds_real_full_arch/run_d1.py",
+    "camlds_real_full_arch/run_all_d1.py",
     "camlds_real_full_arch/evaluate_d1.py",
     "camlds_real_full_arch/test_d1.py",
     "camlds_real_full_arch/spec_d1.py",

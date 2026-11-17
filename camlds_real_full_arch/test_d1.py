@@ -591,5 +591,72 @@ class D1AuditFixes(unittest.TestCase):
             R.acquire_lock(Path(tmp))
 
 
+
+class D1StageDriver(unittest.TestCase):
+    """run_all_d1.py: one command per stage, stops at the first failure, opens a test only in `open`."""
+
+    def test_stages_open_a_test_only_in_open(self):
+        import run_all_d1 as D
+        for stage in ("diagnostics", "main", "sensitivity"):
+            cmds = [" ".join(c) for _, c, _ in D.plan(stage, "cuda") if c]
+            self.assertFalse(any("--open-test" in c for c in cmds), stage)
+        opens = [c for _, c, _ in D.plan("open", "cuda") if c]
+        self.assertEqual(len(opens), 7)
+        self.assertTrue(all("--open-test" in c for c in opens))
+
+    def test_main_stage_order_and_sensitivity_coverage(self):
+        import run_all_d1 as D
+        import run_d1 as R
+        labels = [l for l, _, _ in D.plan("main", "cuda")]
+        self.assertEqual(labels[0], "protocol frozen")
+        order = [next(i for i, l in enumerate(labels) if l.startswith(k)) for k in
+                 ("validity gate", "preflight", "timing", "main run", "validation dry run")]
+        self.assertEqual(order, sorted(order))
+        self.assertEqual(set(D.SENSITIVITIES), set(R.SENSITIVITIES))
+        sens = [" ".join(c) for _, c, _ in D.plan("sensitivity", "cuda") if c]
+        for s in D.SENSITIVITIES:
+            self.assertEqual(sum(f"--sensitivity {s} --preflight" in c for c in sens), 0 if s == "execution" else 1)
+            self.assertEqual(sum(c.endswith(f"--sensitivity {s}") for c in sens), 1)
+
+    def test_driver_stops_at_the_first_failure_and_logs_it(self):
+        import tempfile
+        import run_all_d1 as D
+        ok = [sys.executable, "-c", "print('step one ran')"]
+        fail = [sys.executable, "-c", "import sys; print('step two fails'); sys.exit(3)"]
+        never = [sys.executable, "-c", "print('STEP THREE MUST NOT RUN')"]
+        orig_plan, orig_out = D.plan, D.OUT
+        with tempfile.TemporaryDirectory() as tmp:
+            D.OUT = Path(tmp)
+            D.plan = lambda stage, device: [("one", ok, None), ("two", fail, None), ("three", never, None)]
+            argv = sys.argv
+            sys.argv = ["run_all_d1.py", "diagnostics", "--device", "cpu"]
+            try:
+                with self.assertRaises(SystemExit) as cm:
+                    D.main()
+            finally:
+                sys.argv, D.plan, D.OUT = argv, orig_plan, orig_out
+            self.assertEqual(cm.exception.code, 1)
+            text = next((Path(tmp) / "logs").glob("diagnostics_*.log")).read_text(encoding="utf-8")
+            self.assertIn("step one ran", text)
+            self.assertIn("STOPPED at [2/3] two: exit code 3", text)
+            self.assertNotIn("STEP THREE MUST NOT RUN", text)
+
+    def test_skips_a_gate_that_ran_and_stops_on_a_failed_one(self):
+        import tempfile
+        import run_all_d1 as D
+        orig = D.GATE
+        with tempfile.TemporaryDirectory() as tmp:
+            D.GATE = Path(tmp) / "GATE_RESULT.json"
+            try:
+                self.assertIsNone(D._gate_pre())
+                D.GATE.write_text(json.dumps({"pass": True}), encoding="utf-8")
+                self.assertEqual(D._gate_pre()[0], "skip")
+                D.GATE.write_text(json.dumps({"pass": False}), encoding="utf-8")
+                self.assertEqual(D._gate_pre()[0], "stop")
+                self.assertEqual(D._gate_passed()[0], "stop")
+            finally:
+                D.GATE = orig
+
+
 if __name__ == "__main__":
     unittest.main()

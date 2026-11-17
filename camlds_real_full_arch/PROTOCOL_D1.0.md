@@ -168,6 +168,11 @@ protocol D1.1 with the fix stated.
   (spec, settings, hyperparameters, steps, repeats, seeds, folds) and a log of every invocation; a start
   whose content-defining settings differ is refused. Machine, threads, output path and the choice of arms,
   folds or seeds may differ between starts. After a killed run, delete `RUNNING.lock` and start again.
+- **Procedure on the GPU PC (`run_all_d1.py`), one command per stage:** `diagnostics` (before the
+  freeze: preflight, timing), `main` (gate, preflight, timing, the 2,240 cells, validation dry run),
+  `sensitivity` (Section 8: preflight, cells and dry run per setting) and `open` (opens, once, each test
+  whose dry run passed). Each stage logs to `results_d1/logs/`, stops at the first failure (a failed
+  gate or dry run included) and can be restarted; only `open` opens a test.
 - **Diagnostics before the freeze (allowed):** `--preflight` and `--timing` use no test data and print no
   gate number, so they may be run on the GPU PC before the freeze to find a missing or non-reproducing
   checkpoint, or a dry-run mismatch on the GPU, while a fix is still possible. They are repeated after it.
@@ -292,8 +297,8 @@ with the same statistics; sensitivity results are reported as such and never rep
 
 ## 11. Reproducibility
 
-- `spec_d1.py --freeze` writes `SPEC_D1.json` (SHA-256 of 30 pinned files: protocol, checks (movement,
-  order, audit), pilot code and results, env, data, learner, gate, runner, scorer, tests, frozen reference
+- `spec_d1.py --freeze` writes `SPEC_D1.json` (SHA-256 of 31 pinned files: protocol, checks (movement,
+  order, audit), pilot code and results, env, data, learner, gate, runner, stage driver, scorer, tests, frozen reference
   policies, corpus and AttackMate records, encoder modules). The gate, the runner and the scorer refuse to run unless it passes. Each cell also records
   its encoder checkpoint's SHA-256.
 - Evaluation is deterministic given a saved actor: the dry run re-evaluates every cell and must match the
