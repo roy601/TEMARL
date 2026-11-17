@@ -164,8 +164,8 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 
 ## 12. Known limits (stated in any write-up)
 
-- Simulation: the attacker's commands are replayed and react to the defence only through the movement
-  Real attackers react (Dowling et al. 2018; Ferguson-Walter et al. 2021). No result is a claim
+- Simulation: the attacker's commands are replayed and react to the defence only through lures (one
+  redirected command at a time). Real attackers react (Dowling et al. 2018; Ferguson-Walter et al. 2021). No result is a claim
   about real attackers.
 - PAYOFF, capacity, exposure and movement are assumptions; the sensitivity analyses bound them.
 - 34 runs from 7 base scenarios on one testbed; scenario 1 has 18 variants.
