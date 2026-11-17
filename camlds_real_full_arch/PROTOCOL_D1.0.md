@@ -187,8 +187,10 @@ with the same statistics; sensitivity results are reported as such and never rep
   learner, gate, runner, scorer, tests, frozen reference policies, corpus and AttackMate records, encoder
   modules). The gate, the runner and the scorer refuse to run unless it passes. Each cell also records
   its encoder checkpoint's SHA-256.
-- Two of the 640 cells rerun on GPU PC 2; results must be identical (CPU evaluation) or within a declared
-  tolerance stated before the rerun.
+- Evaluation is deterministic given a saved actor: the dry run re-evaluates every cell and must match the
+  recorded validation E1 exactly (tolerance 1e-9). RL training on a GPU is not bit-reproducible across
+  machines; this is covered by 10 training seeds and confidence intervals, and no identical-retraining
+  claim is made.
 - Code, configuration, per-cell results and sealed test outputs are committed; checkpoints stay on the
   GPU PCs.
 
