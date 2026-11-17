@@ -26,6 +26,8 @@ Transformer".
 Q4 (D8), descriptive only, scored at the same single opening: GRU and old-Transformer history vs
 allpos; IPPO vs MAPPO for allpos and for NoHistory; allpos vs NoHistory under IPPO. Mean paired
 difference and 95% bootstrap CI only: no test, no correction, no verdict, no claim.
+Team activity (descriptive, every arm): share of steps with >= 2 decoys out, each agent's share of
+steps with a decoy out, engagements per agent's zone, lure chains (PROTOCOL_D1.0 Sections 4 and 12).
 Per comparison: mean paired difference, 95% bootstrap CI (10,000 resamples of runs, seed 20261103),
 two-sided Wilcoxon signed-rank (zero differences dropped), Holm within each family (the families answer
 different questions and are not corrected across). "X outperforms Y" only if Holm p < 0.05 and the CI
@@ -67,6 +69,31 @@ NAMES = {"allpos": "history agents (allpos)", "NoHistory": "agents without histo
 FIT_SEED, FIT_REPEATS = 400000, 5
 EVAL_REPEATS = 20
 OUTCOMES = ("E1", "P1")
+
+
+TEAM_ZONES = ("DMZ", "LAN", "User", "Admin")       # the 4 agents, in env_cmd.AGENT_ZONE order
+
+
+def team_activity(rows_by_seed) -> dict:
+    """Descriptive team activity: per run the mean over repeats, then over seeds; then the mean over
+    runs. Shares are per command step of the episode."""
+    def episode(r):
+        n = max(r["length"], 1.0)
+        out = {"multi_decoy_share": r["multi_decoy_steps"] / n, "lure_chains": r["lure_chains"]}
+        for z in TEAM_ZONES:
+            out[f"decoy_share_{z}"] = r[f"decoy_steps_{z}"] / n
+            out[f"engaged_{z}"] = r[f"engaged_{z}"]
+        return out
+    acc = defaultdict(lambda: defaultdict(list))
+    for rows in rows_by_seed.values():
+        by_run = defaultdict(list)
+        for r in rows:
+            by_run[r["run"]].append(episode(r))
+        for run, eps in by_run.items():
+            for k in eps[0]:
+                acc[run][k].append(float(np.mean([e[k] for e in eps])))
+    per_run = [{k: float(np.mean(v)) for k, v in d.items()} for d in acc.values()]
+    return {k: float(np.mean([pr[k] for pr in per_run])) for k in per_run[0]} if per_run else {}
 
 
 # Q4 (D8): described, never tested
@@ -237,6 +264,8 @@ def main():
     env, marl = P.env, P.marl
     if a.sensitivity and a.sensitivity not in R.SENSITIVITIES:
         raise SystemExit(f"unknown sensitivity {a.sensitivity}")
+    if list(TEAM_ZONES) != [env.POSITIONS[z] for z in env.AGENT_ZONE]:
+        raise SystemExit("evaluate_d1 and env_cmd disagree on the agents' zones")
     if (PRIMARY_ARMS, MAIN_ARMS, MAIN_CELLS, SENSITIVITY_CELLS) != \
             (R.PRIMARY_ARMS, R.MAIN_ARMS, R.MAIN_CELLS, R.SENSITIVITY_CELLS):
         raise SystemExit("evaluate_d1 and run_d1 disagree on the arms or cells")
@@ -259,12 +288,7 @@ def main():
             res = json.loads((d / "result.json").read_text(encoding="utf-8"))
             f = next(x for x in folds if x["fold"] == fold_id)
             model, _ = R.load_encoder(arm, f, seed, root, a.device, cell=d.parent, order=order)
-            actor = marl.Actor().to(a.device)
-            actor.load_state_dict(torch.load(d / "actor.pt", map_location=a.device))
-            va = R.specs(P.runs(f, "val"), R.VAL_SEED + seed, res["eval_repeats"], cfg)
-            bank = marl.HistoryBank(model, P.data.W, a.device, h_zero=(model is None))
-            rows = marl.evaluate_team(actor, cfg, va, bank, 64, a.device)
-            got = marl.mean_of(rows)
+            got, _ = R.revalidate(d, f, seed, model, a.device, cfg)
             if abs(got - res["best_validation_dwell"]) > 1e-9:
                 bad.append({"cell": [arm, learner, fold_id, seed], "recorded": res["best_validation_dwell"],
                             "got": got})
@@ -298,10 +322,14 @@ def main():
                     merged[m].update(pr[m])
             for m in OUTCOMES:
                 (values if group == "primary" else descriptive)[(name, m)] = merged[m]
+    team = {unit_name(arm, lr): team_activity({s: [row for f in primary_folds for row in sealed[(arm, lr, f["fold"], s)]]
+                                               for s in seeds})
+            for arm, lr in plan}
     pairs = family_pairs()
     f1 = family(values, pairs["family_1"])
     if a.sensitivity:
         res = {"setting": a.sensitivity, "env_config": cfg.to_dict(), "order": order, "family_1": f1,
+               "team_activity_descriptive": team,
                "means_primary": {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()},
                "n_units": {m: len(values[("allpos", m)]) for m in OUTCOMES}}
         dest = HERE / "out_test_d1"
@@ -341,6 +369,7 @@ def main():
     q4 = describe(values)
     means = {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()}
     res = {"family_1": f1, "family_2": f2, "family_3": f3, "q4_descriptive": q4, "means_primary": means,
+           "team_activity_descriptive": team,
            "unseen_scenarios_descriptive": {f"{n}|{m}": v for (n, m), v in descriptive.items()},
            "static_fixed_chosen_on_training": chosen, "env_config": cfg.to_dict(),
            "n_units": {m: len(values[("allpos", m)]) for m in OUTCOMES}}
@@ -360,6 +389,13 @@ def main():
     for c in q4:
         L.append(f"  {c['outcome']} {c['a']} - {c['b']}: {c['mean']:+.3f} [{c['ci'][0]:+.3f}, {c['ci'][1]:+.3f}] "
                  f"n={c['n_runs']}")
+    L.append("")
+    L.append("Team activity, descriptive (share of steps with >= 2 decoys; per agent: share of steps with a "
+             "decoy out / engagements per episode; lure chains)")
+    for n, v in team.items():
+        L.append(f"  {n}: >=2 decoys {v['multi_decoy_share']:.3f}; "
+                 + "; ".join(f"{z} {v['decoy_share_' + z]:.3f}/{v['engaged_' + z]:.2f}" for z in TEAM_ZONES)
+                 + f"; lure chains {v['lure_chains']:.2f}")
     L.append("")
     L.append("means (primary units): " + "; ".join(f"{k} {v:.3f}" for k, v in sorted(means.items())))
     (dest / "D1_RESULTS.txt").write_text("\n".join(L) + "\n", encoding="utf-8")

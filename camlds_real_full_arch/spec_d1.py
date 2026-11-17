@@ -29,6 +29,8 @@ FILES = (
     "camlds_real_full_arch/checks/MOVEMENT_CHECK.txt",
     "camlds_real_full_arch/checks/order_check.py",
     "camlds_real_full_arch/checks/ORDER_CHECK.txt",
+    "camlds_real_full_arch/checks/audit_d1.py",
+    "camlds_real_full_arch/checks/AUDIT_D1.txt",
     # pilot (decision D6 by rule R2)
     "camlds_real_full_arch/pilot_d1.py",
     "camlds_real_full_arch/results_d1/pilot/PILOT_RESULTS.json",

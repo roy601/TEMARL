@@ -2,7 +2,8 @@
 """Protocol D1.0 main study runner. Test outputs are SEALED.
 
     python camlds_real_full_arch/run_d1.py --device cuda                 # 2,240 main cells, resumable
-    python camlds_real_full_arch/run_d1.py --device cuda --timing        # one cell, no test episodes
+    python camlds_real_full_arch/run_d1.py --device cuda --preflight     # after the freeze: every checkpoint
+    python camlds_real_full_arch/run_d1.py --device cuda --timing        # one cell + dry-run check, no test
     python camlds_real_full_arch/run_d1.py --smoke                       # code check, tiny, no freeze needed
     python camlds_real_full_arch/run_d1.py --device cuda --sensitivity mean   # Section 8, seeds 0-4
 
@@ -20,7 +21,9 @@ What differs from pipeline.main (deliberately):
     validation BCE. The CAM-LDS PREDICTION test is NEVER scored again (pipeline.encoder rescored it);
   * each cell's test episodes are written to sealed_test.json and only its SHA-256 goes into result.json;
     nothing here prints, summarises or reports a test number. evaluate_d1.py --open-test opens them once;
-  * real runs refuse unless spec_d1 passes (protocol frozen, no pinned file changed).
+  * real runs refuse unless spec_d1 passes (protocol frozen, no pinned file changed) and, for the frozen
+    order, unless --preflight has loaded and checked every protocol 1.2 checkpoint the run needs under
+    this frozen spec.
 """
 from __future__ import annotations
 
@@ -160,6 +163,58 @@ def validation_summary(out: Path):
     (out / "VALIDATION_SUMMARY.md").write_text("\n".join(head + rows) + "\n", encoding="utf-8")
 
 
+def revalidate(dest: Path, fold, seed, model, device, cfg):
+    """The dry-run check of one cell (evaluate_d1 uses this too): reload actor.pt, re-evaluate the cell's
+    validation episodes, return (measured, recorded) best validation E1. Reads no test file."""
+    res = json.loads((dest / "result.json").read_text(encoding="utf-8"))
+    actor = marl.Actor().to(device)
+    actor.load_state_dict(torch.load(dest / "actor.pt", map_location=device))
+    va = specs(P.runs(fold, "val"), VAL_SEED + seed, res["eval_repeats"], cfg)
+    bank = marl.HistoryBank(model, data.W, device, h_zero=(model is None))
+    return marl.mean_of(marl.evaluate_team(actor, cfg, va, bank, 64, device)), res["best_validation_dwell"]
+
+
+def needed_checkpoints(a, folds, plan):
+    """(arm, fold, seed) of every protocol 1.2 checkpoint the requested cells load."""
+    arms = {arm for arm, lr in plan if arm != "NoHistory" and arm in a.arms and lr in a.learners}
+    return {(arm, f["fold"], s) for arm in arms for f in folds for s in a.seeds}
+
+
+def spec_sha():
+    return hashlib.sha256(spec_d1.SPEC.read_bytes()).hexdigest() if spec_d1.SPEC.exists() else None
+
+
+def preflight(a, folds, plan):
+    """Load every needed checkpoint and check that it reproduces its recorded validation BCE.
+    No training, no test data. Writes PREFLIGHT.json in the output directory."""
+    ok, bad = [], []
+    for arm, fold_id, seed in sorted(needed_checkpoints(a, folds, plan)):
+        f = next(x for x in folds if x["fold"] == fold_id)
+        try:
+            _, info = load_encoder(arm, f, seed, Path(a.encoder_root), a.device)
+            ok.append({**info, "fold": fold_id, "seed": seed})
+        except (FileNotFoundError, ValueError, RuntimeError, KeyError) as e:
+            bad.append({"arm": arm, "fold": fold_id, "seed": seed, "error": f"{type(e).__name__}: {e}"})
+    rep = {"pass": not bad and bool(ok), "spec_sha256": spec_sha(), "checked": len(ok) + len(bad),
+           "ok": [[r["arm"], r["fold"], r["seed"]] for r in ok], "failures": bad, "checkpoints": ok}
+    P.write(a.output / "PREFLIGHT.json", rep)
+    print(f"preflight: {'PASS' if rep['pass'] else 'FAIL'} ({len(ok)} checkpoints reproduce their validation "
+          f"BCE, {len(bad)} failures) -> {a.output / 'PREFLIGHT.json'}")
+    for b in bad[:10]:
+        print("  ", b)
+    return rep
+
+
+def require_preflight(out: Path, need):
+    pf = out / "PREFLIGHT.json"
+    rep = json.loads(pf.read_text(encoding="utf-8")) if pf.exists() else None
+    if rep is None or not rep["pass"] or rep["spec_sha256"] != spec_sha():
+        raise SystemExit("run --preflight first, after the freeze, with the same output directory")
+    missing = need - {tuple(x) for x in rep["ok"]}
+    if missing:
+        raise SystemExit(f"preflight did not check {len(missing)} needed checkpoints, e.g. {sorted(missing)[:3]}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"])
@@ -175,7 +230,10 @@ def main():
     ap.add_argument("--env-steps", type=int, default=2_000_000)
     ap.add_argument("--eval-repeats", type=int, default=20)
     ap.add_argument("--threads", type=int, default=4)
-    ap.add_argument("--timing", action="store_true", help="one cell (first fold, seed 0, allpos, MAPPO), no test")
+    ap.add_argument("--timing", action="store_true",
+                    help="one cell (first fold, seed 0, allpos, MAPPO) + its dry-run check, no test")
+    ap.add_argument("--preflight", action="store_true",
+                    help="load and check every protocol 1.2 checkpoint the run needs; no training, no test")
     ap.add_argument("--smoke", action="store_true", help="tiny code check; NoHistory only; no test")
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()
@@ -205,16 +263,30 @@ def main():
         run_cell("NoHistory", learner, folds[0], 0, a, dest, test=False)
         print("smoke OK:", dest)
         return
+    if a.preflight:
+        if setting(a.sensitivity)[1] != "frozen":
+            raise SystemExit("--preflight checks protocol 1.2 checkpoints; execution-order encoders are trained in the cell")
+        rep = preflight(a, folds, plan)
+        raise SystemExit(0 if rep["pass"] else 1)
     if a.timing:
         dest = a.output.parent / "timing" / "allpos" / folds[0]["fold"] / "s0" / "MAPPO"
         r = run_cell("allpos", "MAPPO", folds[0], 0, a, dest, test=False)
         n = len(P.ordered_folds("frozen")) * 10 * len(MAIN_CELLS)
         print(f"timing: one cell {r['wall_seconds']:.0f} s on {a.device} "
               f"-> {n} main cells about {n * r['wall_seconds'] / 3600:.1f} h (test episodes not included)")
-        return
+        model, _ = load_encoder("allpos", folds[0], 0, Path(a.encoder_root), a.device, cell=dest.parent)
+        got, rec = revalidate(dest, folds[0], 0, model, a.device, setting(a.sensitivity)[0])
+        same = abs(got - rec) <= 1e-9
+        P.write(dest.parent / "TIMING_DRY_RUN.json", {"device": a.device, "recorded": rec, "measured": got,
+                                                      "pass": same, "seconds": r["wall_seconds"]})
+        print(f"dry-run reproduction on {a.device}: recorded {rec!r}, re-evaluated {got!r} -> "
+              f"{'PASS' if same else 'FAIL: the dry run would fail on this device'}")
+        raise SystemExit(0 if same else 1)
 
     spec_d1.require()
     out = a.output
+    if setting(a.sensitivity)[1] == "frozen":
+        require_preflight(out, needed_checkpoints(a, folds, plan))
     out.mkdir(parents=True, exist_ok=True)
     manifest = {"protocol": "D1.0", "spec": json.loads(spec_d1.SPEC.read_text(encoding="utf-8")),
                 "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()},

@@ -6,6 +6,7 @@ from collections import Counter
 from pathlib import Path
 
 import numpy as np
+import torch
 
 import pipeline as p
 import d1_data
@@ -453,6 +454,93 @@ class D1Decisions(unittest.TestCase):
         text = (Path(__file__).resolve().parent / "checks" / "ORDER_CHECK.txt").read_text(encoding="utf-8")
         self.assertEqual(order_check.report(), text)
         self.assertIn("runs whose order differs: 4", text)
+
+
+
+class D1AuditFixes(unittest.TestCase):
+    """Audit 2026-11-17: team-activity counters, preflight of checkpoints, dry-run check in --timing."""
+
+    def test_team_counters_add_up_and_change_nothing(self):
+        for rid, acts in (("3_ssh_apt", [1, 2, 0, 3]), ("6_macro_cron", [0, 0, 4, 0]), ("1_cron_pam", [2, 0, 0, 0])):
+            e = env.CommandEngagementEnv().reset(spec_of(rid, 2))
+            while not e.done:
+                e.step(acts)
+            st = e.episode_stats()
+            zones = [env.POSITIONS[z] for z in env.AGENT_ZONE]
+            self.assertEqual(sum(st[f"engaged_{z}"] for z in zones), st["dwell"], rid)
+            n_active = sum(a != env.NULL for a in acts)
+            self.assertEqual(st["multi_decoy_steps"], st["length"] if n_active >= 2 else 0.0, rid)
+            for z, a in zip(zones, acts):
+                self.assertEqual(st[f"decoy_steps_{z}"], st["length"] if a != env.NULL else 0.0, rid)
+
+    def test_team_activity_summary(self):
+        import evaluate_d1 as E
+        base = {"length": 10.0, "multi_decoy_steps": 5.0, "lure_chains": 1.0,
+                **{f"decoy_steps_{z}": 0.0 for z in E.TEAM_ZONES}, **{f"engaged_{z}": 0.0 for z in E.TEAM_ZONES}}
+        rows = {0: [dict(base, run="a", decoy_steps_DMZ=10.0, engaged_DMZ=4.0), dict(base, run="b")],
+                1: [dict(base, run="a", decoy_steps_DMZ=0.0, engaged_DMZ=2.0), dict(base, run="b")]}
+        s = E.team_activity(rows)
+        self.assertAlmostEqual(s["multi_decoy_share"], 0.5)
+        self.assertAlmostEqual(s["decoy_share_DMZ"], 0.25)       # run a 0.5, run b 0 -> 0.25
+        self.assertAlmostEqual(s["engaged_DMZ"], 1.5)            # run a 3, run b 0
+        self.assertEqual(list(E.TEAM_ZONES), [env.POSITIONS[z] for z in env.AGENT_ZONE])
+
+    def test_preflight_checks_every_checkpoint_and_the_main_run_requires_it(self):
+        import subprocess, json, tempfile
+        import run_d1 as R
+        fold = p.ordered_folds("frozen")[0]
+        with tempfile.TemporaryDirectory() as tmp:
+            root, out = Path(tmp) / "enc", Path(tmp) / "main"
+            cell = root / "variants" / "allpos" / fold["fold"] / "s0"      # protocol 1.2 layout
+            d = p.data.fold_data(fold)
+            p.variants.train_variant("allpos", p.data.W, 0, d["train"], d["val"], 64, device=torch.device("cpu"),
+                                     checkpoint_dir=str(cell), patience_checks=16, progress=False)
+            run = lambda *extra: subprocess.run(
+                [sys.executable, "-W", "ignore", str(Path(__file__).with_name("run_d1.py")), "--preflight",
+                 "--encoder-root", str(root), "--output", str(out), "--folds", fold["fold"], "--seeds", "0",
+                 "--learners", "MAPPO", *extra], capture_output=True, text=True, timeout=600)
+            r = run("--arms", "allpos", "NoHistory")
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr[-1500:])
+            rep = json.loads((out / "PREFLIGHT.json").read_text(encoding="utf-8"))
+            self.assertTrue(rep["pass"])
+            self.assertEqual(rep["ok"], [["allpos", fold["fold"], 0]])
+            r = run("--arms", "allpos", "lstm_allpos")                     # the LSTM checkpoint is missing
+            self.assertEqual(r.returncode, 1)
+            rep = json.loads((out / "PREFLIGHT.json").read_text(encoding="utf-8"))
+            self.assertFalse(rep["pass"])
+            self.assertEqual([(b["arm"], b["error"].split(":")[0]) for b in rep["failures"]],
+                             [("lstm_allpos", "FileNotFoundError")])
+            need = {("allpos", fold["fold"], 0)}
+            with self.assertRaises(SystemExit):                            # last preflight failed
+                R.require_preflight(out, need)
+            (out / "PREFLIGHT.json").write_text(json.dumps(
+                {"pass": True, "spec_sha256": R.spec_sha(), "ok": [["allpos", fold["fold"], 0]]}), encoding="utf-8")
+            R.require_preflight(out, need)                                 # covered: no exception
+            with self.assertRaises(SystemExit):                            # a needed checkpoint not checked
+                R.require_preflight(out, need | {("lstm_allpos", fold["fold"], 0)})
+            (out / "PREFLIGHT.json").write_text(json.dumps(
+                {"pass": True, "spec_sha256": "another spec", "ok": [["allpos", fold["fold"], 0]]}), encoding="utf-8")
+            with self.assertRaises(SystemExit):                            # made under another spec
+                R.require_preflight(out, need)
+
+    def test_timing_also_checks_the_dry_run(self):
+        import subprocess, json, tempfile
+        fold = p.ordered_folds("frozen")[0]
+        with tempfile.TemporaryDirectory() as tmp:
+            root, out = Path(tmp) / "enc", Path(tmp) / "main"
+            d = p.data.fold_data(fold)
+            p.variants.train_variant("allpos", p.data.W, 0, d["train"], d["val"], 64, device=torch.device("cpu"),
+                                     checkpoint_dir=str(root / "variants" / "allpos" / fold["fold"] / "s0"),
+                                     patience_checks=16, progress=False)
+            r = subprocess.run([sys.executable, "-W", "ignore", str(Path(__file__).with_name("run_d1.py")),
+                                "--timing", "--encoder-root", str(root), "--output", str(out),
+                                "--folds", fold["fold"], "--env-steps", "4096", "--eval-repeats", "2"],
+                               capture_output=True, text=True, timeout=600)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr[-1500:])
+            self.assertIn("dry-run reproduction on cpu", r.stdout)
+            rep = json.loads(next(Path(tmp).rglob("TIMING_DRY_RUN.json")).read_text(encoding="utf-8"))
+            self.assertTrue(rep["pass"])
+            self.assertEqual(rep["recorded"], rep["measured"])
 
 
 if __name__ == "__main__":

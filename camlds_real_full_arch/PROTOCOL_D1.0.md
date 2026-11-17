@@ -62,6 +62,11 @@ the replications of decision D7 and is tested only in protocol D1.1; until then 
 - Common random numbers: every uniform is drawn into the episode spec in advance, so all policies are
   compared on identical randomness (paired comparisons).
 - Agents see only their own zone, two infrastructure signals, and the past-only history embedding h.
+- **Observation assumption (stated after the audit, 2026-11-17):** h is built from every past command
+  of the run, including the 132 commands (14.6%) executed on the attacker's own machine and the 12
+  (1.3%) on the firewall. A real defender sees those only through their effects (traffic, logs), so h
+  assumes complete technique-level observation of the attacker's past commands: an upper bound on what
+  a history-aware defender can know. The local observation is limited to the agent's own zone.
 
 ## 4. Outcomes (fixed now)
 
@@ -71,7 +76,7 @@ the replications of decision D7 and is tested only in protocol D1.1; until then 
 | P1 | **defense success probability (DSP)** | episodes in which the attacker never completes its goal / all episodes, as the ratio of Wang et al. 2020, Def. 9. The success criterion is adapted: Wang counts the attacker entering a decoy before the database; we count the goal command never succeeding un-engaged in the target zone. Goals as fixed in D3. S4 is excluded from P1 (its goal commands execute on the firewall, which no agent defends), so P1 uses 33 runs; this is stated with every P1 result. | **primary, protection** |
 | S1 | commands until goal | first-passage time to the goal (cf. Huang & Zhu 2019); censored at run length | secondary |
 | S2 | engaged fraction | E1 / run length | secondary |
-| S3 | exposure rate, distinct techniques engaged, lure chains, dead ends, capacity violations | as recorded by `episode_stats` | descriptive. Under the proposal reward (D6) distinct techniques and exposure are partly rewarded, so they are never claimed as a win |
+| S3 | exposure rate, distinct techniques engaged, lure chains, dead ends, capacity violations; **team activity**: share of steps with >= 2 decoys out, each agent's share of steps with a decoy out, engagements in each agent's zone | as recorded by `episode_stats`; team activity reported for every arm by `evaluate_d1.py` | descriptive. Under the proposal reward (D6) distinct techniques and exposure are partly rewarded, so they are never claimed as a win |
 
 The names "dwell" and "depth" are never used in the write-up as attacker time or attacker depth: they are
 counts of engaged commands and of distinct techniques on engaged commands.
@@ -159,6 +164,13 @@ protocol D1.1 with the fix stated.
 - Every cell's validation learning curve is reported (supplement), so convergence at 2,000,000 steps
   can be checked. All arms use the same MAPPO settings; none is tuned separately.
 - Test outputs are written with their SHA-256 and are not scored until Section 9 runs.
+- **Before the main run, on the GPU PC, after the freeze:** `run_d1.py --preflight` loads every
+  protocol 1.2 checkpoint the main run needs (1,280: allpos, lstm_allpos, gru_allpos and baseline x 32
+  folds x 10 seeds) and checks that each reproduces its recorded validation BCE; the main run refuses to
+  start unless a passing preflight under the frozen spec covers every checkpoint it needs. Then
+  `run_d1.py --timing` trains one cell and repeats its dry-run check on that device; if the
+  re-evaluation does not reproduce the recorded validation E1 exactly, the main run is not started
+  (the dry run would fail) and this is reported.
 - Runner: `run_d1.py` (command order always frozen; environment `EnvConfig(reward="proposal")`; a
   sensitivity analysis changes only the entries it names). Encoders are the
   protocol 1.2 checkpoints, loaded unchanged and accepted only if they reproduce their recorded
@@ -195,6 +207,16 @@ reward** (D6). These margins are small and within seed noise: the choice follows
 is not evidence that the proposal reward is better. Pilot policies were selected on the same validation
 runs they were scored on, so pilot numbers are optimistic. Pilot encoders and policies are not used in
 the main study.
+
+## 7b. Audit before the freeze (2026-11-17; `checks/audit_d1.py`, output `checks/AUDIT_D1.txt`)
+
+Validation runs only. Findings: learning works (all 54 pilot cells improved, mean validation E1 4.6 to
+13.0); the history reaches the agents (zeroing h changes 7-57% of a trained history agent's decisions,
+0% for NoHistory, as it must); the cell path with sealed test output, the dry-run reproduction (MAPPO
+and IPPO, difference 0) and the execution-order encoder retraining run correctly. Two design limits
+were found and are stated in Sections 3 and 12: the observation assumption behind h, and the small
+coordination demand of the recorded runs. A 200,000-step single-seed cell in which the history agent
+did worse than NoHistory (fold 3_vnc_puppet: 6.6 vs 14.0) is seed variance, not a fault.
 
 ## 8. Sensitivity analyses (declared now, all reported)
 
@@ -263,8 +285,8 @@ with the same statistics; sensitivity results are reported as such and never rep
 
 ## 11. Reproducibility
 
-- `spec_d1.py --freeze` writes `SPEC_D1.json` (SHA-256 of 28 pinned files: protocol, checks (movement,
-  order), pilot code and results, env, data, learner, gate, runner, scorer, tests, frozen reference
+- `spec_d1.py --freeze` writes `SPEC_D1.json` (SHA-256 of 30 pinned files: protocol, checks (movement,
+  order, audit), pilot code and results, env, data, learner, gate, runner, scorer, tests, frozen reference
   policies, corpus and AttackMate records, encoder modules). The gate, the runner and the scorer refuse to run unless it passes. Each cell also records
   its encoder checkpoint's SHA-256.
 - Evaluation is deterministic given a saved actor: the dry run re-evaluates every cell and must match the
@@ -280,6 +302,14 @@ with the same statistics; sensitivity results are reported as such and never rep
   redirected command at a time). Real attackers react (Dowling et al. 2018; Ferguson-Walter et al. 2021). No result is a claim
   about real attackers.
 - PAYOFF, capacity, exposure and movement are assumptions; the sensitivity analyses bound them.
+- **Little coordination is demanded by the recorded runs.** 27 of 34 runs touch a single defended zone
+  (on average 92% of a run's defended commands fall in its busiest zone), and the Admin zone is never
+  visited, so the Admin agent can matter only as a lure target. The agents interact through the shared
+  capacity (K = 2) and lures. In the audit, one agent acted alone in two of three trained teams. Team
+  activity is reported for every arm, and no claim about multi-agent coordination goes beyond it. The
+  random-walk sensitivity (9.3 zone changes per run) is the setting that demands the most coordination.
+- The history h assumes complete technique-level observation of the attacker's past commands,
+  including those on the attacker's own machine (Section 3).
 - The reward constants (+1 technique bonus, -5 exposure penalty) are our choice; the engagement-only
   sensitivity analysis bounds them, other values are not tried.
 - D1.0 makes no claim about published deception methods (D7); that comparison is protocol D1.1.

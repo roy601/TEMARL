@@ -84,6 +84,9 @@ N_POS = len(POSITIONS)
 N_AGENTS = len(DEFENDED_ZONES)
 AGENT_ZONE = list(DEFENDED_ZONES)
 ZONE_AGENT = {z: i for i, z in enumerate(AGENT_ZONE)}
+# D1.0 team-activity counters (descriptive; they count, they never change the dynamics)
+_DECOY_KEY = [f"decoy_steps_{POSITIONS[z]}" for z in AGENT_ZONE]     # steps agent i had a decoy out
+_ENGAGED_KEY = {z: f"engaged_{POSITIONS[z]}" for z in AGENT_ZONE}    # engagements in agent i's zone
 NULL = 0
 LURES = (ACTIONS.index("decoy_credential"), ACTIONS.index("decoy_file"))
 
@@ -350,7 +353,8 @@ class CommandEngagementEnv:
                    "lure_chains": 0, "dead_ends": 0, "decoys_deployed": 0,
                    "engaged_in_target": 0, "exposed_at": -1,
                    "labels_engaged": 0, "undefended_commands": 0,
-                   "objective_at": -1}
+                   "objective_at": -1, "multi_decoy_steps": 0,
+                   **{k: 0 for k in _DECOY_KEY}, **{k: 0 for k in _ENGAGED_KEY.values()}}
         return self
 
     def _move(self, u_move: float, u_lat: float) -> int:
@@ -444,6 +448,7 @@ class CommandEngagementEnv:
             # ONE command, ONE engagement step, ONE unit of reward -- however
             # many technique labels the command carries.
             self.dwell += 1
+            self.st[_ENGAGED_KEY[nz]] += 1
             self.depth_set.update(labels)
             self.st["labels_engaged"] += len(labels)
             if nz == self.target:
@@ -466,6 +471,11 @@ class CommandEngagementEnv:
         self.load = n_active
         self.cur_cmd = labels
         self.st["decoys_deployed"] += n_active
+        if n_active >= 2:
+            self.st["multi_decoy_steps"] += 1
+        for i in range(N_AGENTS):
+            if acts[i] != NULL:
+                self.st[_DECOY_KEY[i]] += 1
         if n_active > cfg.k_capacity:
             self.st["capacity_violations"] += 1
         self.t += 1
