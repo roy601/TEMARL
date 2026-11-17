@@ -123,6 +123,12 @@ protocol D1.1 with the fix stated.
 - Policy checkpoint chosen by validation E1 only. Nothing else is chosen on validation.
 - Primary cells: 2 arms x 32 folds x 10 seeds = 640. Secondary cells run afterwards, on either GPU PC.
 - Test outputs are written with their SHA-256 and are not scored until Section 9 runs.
+- Runner: `run_d1.py` (command order always frozen; environment `EnvConfig()`). Encoders are the
+  protocol 1.2 checkpoints, loaded unchanged and accepted only if they reproduce their recorded
+  validation BCE; the CAM-LDS **prediction** test is never scored again. Each cell writes its test
+  episodes to `sealed_test.json` and only that file's SHA-256 into `result.json`; the runner's summary
+  contains validation numbers only. `pipeline.py --stage main` is **not** the D1.0 runner (it rescored
+  the prediction test and printed test summaries).
 
 ## 8. Sensitivity analyses (declared now, all reported)
 
@@ -143,8 +149,14 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
   unit: the outcome averaged over 20 repeats, then over 10 seeds. The 3 unseen-scenario folds are reported
   separately and descriptively (n = 3 is too small to test).
 - **Family 1 (Q1):** allpos vs NoHistory on E1 and P1 (2 comparisons).
-  **Family 2 (Q2):** allpos vs each reference policy and each comparator that passed replication, on E1
-  and P1.
+  **Family 2 (Q2):** allpos vs none, random, fixed, greedy and planner on E1 and P1 (10 comparisons).
+  The reference policies are run at evaluation time on the same test episodes (seed 200000+seed,
+  20 repeats); fixed (per outcome) and planner are fitted on the fold's training runs only (fixed: seed
+  400000, 5 repeats). Clairvoyant is reported as the ceiling, not tested. Published comparators that
+  pass replication are added as a separate family in a later protocol version.
+- Scorer: `evaluate_d1.py` (`--validation-dry-run`, then `--open-test`). The open refuses unless the spec
+  passes, all 640 primary cells exist, the dry run passed and `TEST_OPENED.json` is absent; every sealed
+  file's SHA-256 is checked before it is read.
 - Per comparison: mean paired difference, 95% bootstrap CI (10,000 resamples of runs, seed 20261103),
   two-sided Wilcoxon signed-rank (scipy 1.17.1, zero differences dropped), Holm within each family.
   "X outperforms Y" only if Holm p < 0.05 and the CI excludes 0; otherwise "no difference shown".
@@ -165,8 +177,10 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 
 ## 11. Reproducibility
 
-- `spec` file with SHA-256 of every input (corpus, folds, checkpoints, PAYOFF, env and learner code);
-  every stage refuses to run if one changes.
+- `spec_d1.py --freeze` writes `SPEC_D1.json` (SHA-256 of 23 pinned files: protocol, checks, env, data,
+  learner, gate, runner, scorer, tests, frozen reference policies, corpus and AttackMate records, encoder
+  modules). The gate, the runner and the scorer refuse to run unless it passes. Each cell also records
+  its encoder checkpoint's SHA-256.
 - Two of the 640 cells rerun on GPU PC 2; results must be identical (CPU evaluation) or within a declared
   tolerance stated before the rerun.
 - Code, configuration, per-cell results and sealed test outputs are committed; checkpoints stay on the

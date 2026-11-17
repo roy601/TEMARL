@@ -176,5 +176,53 @@ class D1Gate(unittest.TestCase):
         self.assertEqual(res["n_runs"]["E1"], 3)
 
 
+
+class D1RunnerAndEvaluation(unittest.TestCase):
+    def test_spec_refuses_until_frozen(self):
+        import spec_d1
+        if not spec_d1.SPEC.exists():
+            with self.assertRaises(SystemExit):
+                spec_d1.require()
+        else:
+            self.assertTrue(spec_d1.check())
+
+    def test_statistics_follow_the_casinolimit_rules(self):
+        import evaluate_d1 as E
+        rng = np.random.default_rng(0)
+        runs = [f"r{i}" for i in range(29)]
+        a = {r: 5 + rng.normal() for r in runs}
+        b = {r: a[r] - 1.0 + 0.1 * rng.normal() for r in runs}
+        fam = E.family({("allpos", "E1"): a, ("NoHistory", "E1"): b, ("allpos", "P1"): a, ("NoHistory", "P1"): a},
+                       [("allpos", "NoHistory", "E1"), ("allpos", "NoHistory", "P1")])
+        self.assertEqual(fam[0]["verdict"], "history agents (allpos) outperforms agents without history")
+        self.assertEqual(fam[1]["verdict"], "no difference shown")       # identical values: p is None
+        self.assertEqual(E.holm([0.01, 0.04]), [0.02, 0.04])
+
+    def test_per_run_averages_repeats_then_seeds_and_skips_p1_runs(self):
+        import evaluate_d1 as E
+        rows = {0: [{"run": "x", "dwell": 2, "protected": 1, "p1": 1.0}, {"run": "x", "dwell": 4, "protected": 0, "p1": 1.0},
+                    {"run": "4", "dwell": 1, "protected": 0, "p1": 0.0}],
+                1: [{"run": "x", "dwell": 6, "protected": 1, "p1": 1.0}, {"run": "4", "dwell": 3, "protected": 0, "p1": 0.0}]}
+        pr = E.per_run(rows)
+        self.assertEqual(pr["E1"], {"x": 4.5, "4": 2.0})
+        self.assertEqual(pr["P1"], {"x": 0.75})
+
+    def test_runner_smoke_seals_nothing_and_needs_no_checkpoint(self):
+        import subprocess, sys, tempfile, json, pathlib
+        with tempfile.TemporaryDirectory() as tmp:
+            out = pathlib.Path(tmp) / "main"
+            r = subprocess.run([sys.executable, "-W", "ignore", str(pathlib.Path(__file__).with_name("run_d1.py")),
+                                "--smoke", "--output", str(out)], capture_output=True, text=True, timeout=600)
+            self.assertEqual(r.returncode, 0, r.stderr[-2000:])
+            res = list((pathlib.Path(tmp) / "smoke").rglob("result.json"))
+            self.assertEqual(len(res), 1)
+            d = json.loads(res[0].read_text(encoding="utf-8"))
+            self.assertIsNone(d["sealed_test_sha256"])
+            self.assertNotIn("test", d)
+            self.assertNotIn("test_summary", d)
+            self.assertEqual(d["order"], "frozen")
+            self.assertEqual(d["env_config"]["movement"], "recorded")
+
+
 if __name__ == "__main__":
     unittest.main()
