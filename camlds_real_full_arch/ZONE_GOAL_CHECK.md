@@ -57,10 +57,10 @@ is:
 
 With both fixes, **all 34 runs contain at least one goal command**; no run has to be dropped.
 
-Two things still to do before the protocol is frozen: (a) pin the ATT&CK release used for the tactic
-membership (a STIX file with its hash), because the full-membership mask can also add goal commands in
-other runs; the new counts are reported per run; (b) decide S4's target (LAN, where the attack ends,
-recommended; DMZ by the old rule as a sensitivity run).
+Resolved in code (2026-11-17, `d1_data.py`): instead of an external ATT&CK file, a goal command is a
+command whose own released tactic labels (`tactics_raw`) contain the goal tactic. The dataset labels
+T1556.003 as credential-access, defense-evasion and persistence, so the result above holds with the
+dataset's own labels. S4's target is settled by the D2 check below.
 
 ## D2. Movement: the environment's random-walk model does NOT match the recorded runs
 

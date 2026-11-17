@@ -30,8 +30,11 @@ deception methods.*
   runs). For these runs "protected" is always 1, whatever the agents do. See Section 4 and decision D3.
 - **Resolved from sources (2026-11-17, `ZONE_GOAL_CHECK.md`):** S6's hand-typed goal (Exfiltration) is
   not in AttackBed's scenario 6; its stated goal is persistence. T1556 (the pam backdoor) is Persistence in
-  ATT&CK but only Credential Access in our single-tactic vocabulary. With goal = Persistence for S6 and a
-  goal mask from ATT&CK's full tactic membership, all 34 runs contain goal commands.
+  ATT&CK but only Credential Access in our single-tactic vocabulary. With goal = Persistence for S6 and
+  goal commands read from each command's own released tactic labels (`tactics_raw`, the dataset authors'
+  AttackMate metadata, which label T1556.003 credential-access, defense-evasion and persistence), every
+  run contains goal commands, and every run counted in P1 has one in its target zone (`d1_data.py`,
+  `test_d1.py`). No external ATT&CK file is needed.
 
 ## 3. Environment (`env_cmd.py`, D1.0 settings)
 
@@ -147,7 +150,7 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 |---|---|---|---|
 | D1 | zones | **checked 2026-11-17 (`ZONE_GOAL_CHECK.md`):** hand-typed entry/target zones, which agree with AttackBed's scenario descriptions; with recorded positions (D2) two targets follow from where the goal commands execute: S5 = LAN (credential theft on the LAN Turtle), S4 = firewall (not defended, so S4 is excluded from P1). `derived_zones.json` is not used: its host order is where logs first show activity (DNS server and firewall see all traffic), not where the attacker is | source-verified; the earlier "data-derived" recommendation was wrong |
 | D2 | movement | **checked 2026-11-17 (`checks/MOVEMENT_CHECK.txt`):** recorded zone per command primary; random walk as sensitivity | the model makes 9.3 zone changes per run against 1.5 recorded, stays in the target 0.78 against 0.97, and cannot place the 16% of commands that run on the attacker machine or the firewall. Source: AttackMate records from the md5-verified scenario archives |
-| D3 | goals | **checked 2026-11-17:** S6 goal = Persistence (AttackBed `client.md`); goal mask from ATT&CK's full tactic membership (pinned release). All 34 runs then contain goal commands; no run is dropped | replaces "drop 8 runs", which would have removed all of S6 |
+| D3 | goals | **checked 2026-11-17:** S6 goal = Persistence (AttackBed `client.md`); goal commands from the dataset's own per-command tactic labels (`tactics_raw`). All 34 runs then contain goal commands; no run is dropped | replaces "drop 8 runs", which would have removed all of S6 |
 | D4 | command order | frozen order, reuse protocol 1.2 checkpoints; execution order as sensitivity | validated checkpoints exist only for this order |
 | D5 | size | 640 primary cells first (about 1.5 days on GPU PC 1), the rest afterwards | the main question first |
 | D6 | reward | engagement only; P1 as a measured side effect | a fair test of "protects better" without training for it; a combined reward would be a new arm, declared before any run |

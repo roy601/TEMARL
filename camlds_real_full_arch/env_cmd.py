@@ -47,6 +47,17 @@ COMMON RANDOM NUMBERS
 OBSERVABILITY
    Agents see their own zone only, plus two infrastructure signals, plus the
    shared PAST-ONLY history embedding h. Future commands are never observable.
+
+PROTOCOL D1.0 CHANGES (2026-11-17, PROTOCOL_D1.0.md, ZONE_GOAL_CHECK.md)
+   * Movement "recorded" (primary): each command executes in its RECORDED zone
+     (d1_data.positions, from the AttackMate execution records). A lure still
+     sends the next command to a partner zone; then the replay continues on
+     its recorded path. "random_walk" (p_goal, p_stay) is a sensitivity model.
+   * Positions = the five zones plus the Firewall. Commands that execute on the
+     attacker machine (Internet) or the Firewall have no defending agent and
+     cannot be engaged; they are counted (`undefended_commands`).
+   * Goal commands come from the dataset's own tactic labels
+     (scenario_metadata("d1")); "hand" keeps the old single-tactic goal mask.
 """
 
 from __future__ import annotations
@@ -67,6 +78,9 @@ if _missing:
 PAYOFF = PAYOFF[[TECHNIQUES[t]["id"] for t in LABELS]].copy()
 
 N_ZONES = len(ZONES)
+POSITIONS = list(ZONES) + ["Firewall"]      # D1.0: where a command can execute
+POS_ID = {z: i for i, z in enumerate(POSITIONS)}
+N_POS = len(POSITIONS)
 N_AGENTS = len(DEFENDED_ZONES)
 AGENT_ZONE = list(DEFENDED_ZONES)
 ZONE_AGENT = {z: i for i, z in enumerate(AGENT_ZONE)}
@@ -77,6 +91,7 @@ U_MOVE, U_LATERAL, U_ENGAGE, U_BURN, U_DEAD, U_WIRE = range(6)
 N_U = 6
 
 AGGREGATIONS = ("max", "mean")
+MOVEMENTS = ("recorded", "random_walk")
 
 
 @dataclass(frozen=True)
@@ -89,10 +104,13 @@ class EnvConfig:
     k_capacity: int = 2
     goal_steps: int = 1
     aggregation: str = "max"
+    movement: str = "recorded"
 
     def __post_init__(self):
         if self.aggregation not in AGGREGATIONS:
             raise ValueError(f"aggregation must be one of {AGGREGATIONS}")
+        if self.movement not in MOVEMENTS:
+            raise ValueError(f"movement must be one of {MOVEMENTS}")
 
     def to_dict(self):
         return asdict(self)
@@ -107,7 +125,10 @@ class EpisodeSpec:
     u: np.ndarray                           # (N_U, horizon)
     entry: int
     target: int
-    goal_mask: np.ndarray                   # (NT,) bool
+    goal_mask: np.ndarray                   # (NT,) bool ("hand" goals only; else all False)
+    positions: np.ndarray                   # (horizon,) recorded position index, -1 if unknown
+    goal_cmd: np.ndarray                    # (horizon,) bool: the command is a goal command
+    p1: bool = True                         # counted in the protection outcome P1
 
     @property
     def horizon(self) -> int:
@@ -124,8 +145,30 @@ def command_payoff(labels: Sequence[int], action: int, how: str) -> float:
 
 # â”€â”€ scenario metadata (zones and goal tactic) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-def scenario_metadata() -> Dict[str, dict]:
-    """Entry zone, target zone and goal tactic per scenario.
+def scenario_metadata(version: str = "d1") -> Dict[str, dict]:
+    """Entry, target and goal per scenario.
+
+    "d1" (primary, protocol D1.0): d1_data.SCENARIOS, checked against the
+    AttackBed sources; goal commands are read from each command's own released
+    tactic labels (run["goal"]), so no goal mask over labels is used.
+    "hand": the original hand-typed reconstruction (sensitivity only).
+    """
+    if version == "d1":
+        import d1_data
+        out = {}
+        for sid, (entry, target, goal, p1) in d1_data.SCENARIOS.items():
+            out[sid] = {"entry": POS_ID[entry], "target": POS_ID[target],
+                        "target_raw": target, "goal_tactic": goal,
+                        "goal_declared": goal, "goal_mask": None,
+                        "goal_label_count": None, "p1": bool(p1)}
+        return out
+    if version != "hand":
+        raise ValueError(f"unknown scenario metadata version {version!r}")
+    return _hand_metadata()
+
+
+def _hand_metadata() -> Dict[str, dict]:
+    """Entry zone, target zone and goal tactic per scenario (hand-typed).
 
     Sourced from the CAM-LDS paper reconstruction, because the AttackBed
     playbooks annotate techniques and tactics but no network zones. This is
@@ -163,7 +206,8 @@ def scenario_metadata() -> Dict[str, dict]:
         mask = np.array([tactic_of(TECHNIQUES[t]["id"]) == goal for t in LABELS], bool)
         out[s["id"]] = {"entry": entry, "target": target, "target_raw": raw_target,
                         "goal_tactic": goal, "goal_declared": declared,
-                        "goal_mask": mask, "goal_label_count": int(mask.sum())}
+                        "goal_mask": mask, "goal_label_count": int(mask.sum()),
+                        "p1": True}
     return out
 
 
@@ -171,9 +215,25 @@ def make_spec(run: dict, rng: np.random.Generator,
               meta: Dict[str, dict]) -> EpisodeSpec:
     m = meta[run["scenario"]]
     cmds = tuple(run["commands"])
+    n = len(cmds)
+    if "positions" in run:
+        if len(run["positions"]) != n:
+            raise ValueError(f"{run['id']}: positions do not match commands")
+        pos = np.array([POS_ID[z] for z in run["positions"]], np.int64)
+    else:
+        pos = np.full(n, -1, np.int64)
+    if m["goal_mask"] is not None:                      # "hand" goals
+        mask = np.asarray(m["goal_mask"], bool)
+        goal = np.array([bool(mask[list(c)].any()) for c in cmds], bool)
+    else:                                               # "d1" goals: the command's own labels
+        if "goal" not in run or len(run["goal"]) != n:
+            raise ValueError(f"{run['id']}: d1 goals need run['goal'] (d1_data.attach)")
+        mask = np.zeros(NT, bool)
+        goal = np.asarray(run["goal"], bool)
     return EpisodeSpec(run_id=run["id"], scenario=run["scenario"], commands=cmds,
-                       u=rng.random((N_U, len(cmds))), entry=m["entry"],
-                       target=m["target"], goal_mask=m["goal_mask"])
+                       u=rng.random((N_U, n)), entry=m["entry"],
+                       target=m["target"], goal_mask=mask, positions=pos,
+                       goal_cmd=goal, p1=bool(m.get("p1", True)))
 
 
 class ReplayPool:
@@ -229,14 +289,14 @@ LOCAL_DIM = O_STEP + 1
 
 # â”€â”€ global state layout (centralised critic only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 S_ZONE = 0
-S_TECH = S_ZONE + N_ZONES
+S_TECH = S_ZONE + N_POS
 S_DECOYS = S_TECH + NT
 S_BURNED = S_DECOYS + N_AGENTS * N_ACTIONS
 S_PROGRESS = S_BURNED + 1
 S_COMP = S_PROGRESS + 1
-S_LOAD = S_COMP + N_ZONES
+S_LOAD = S_COMP + N_POS
 S_PENDING = S_LOAD + 1
-S_STEP = S_PENDING + N_ZONES
+S_STEP = S_PENDING + N_POS
 S_REMAIN = S_STEP + 1
 GLOBAL_DIM = S_REMAIN + 1
 
@@ -260,7 +320,7 @@ class CommandEngagementEnv:
         self.pending = -1
         self.decoys = np.zeros(N_AGENTS, np.int64)
         self.my_engaged = np.zeros(N_AGENTS, bool)
-        self.compromised = np.zeros(N_ZONES, np.float32)
+        self.compromised = np.zeros(N_POS, np.float32)
         self.load = 0
         self.progress = 0
         self.cur_cmd: Tuple[int, ...] = ()
@@ -272,7 +332,8 @@ class CommandEngagementEnv:
         self.st = {"capacity_violations": 0, "lure_engagements": 0,
                    "lure_chains": 0, "dead_ends": 0, "decoys_deployed": 0,
                    "engaged_in_target": 0, "exposed_at": -1,
-                   "labels_engaged": 0}
+                   "labels_engaged": 0, "undefended_commands": 0,
+                   "objective_at": -1}
         return self
 
     def _move(self, u_move: float, u_lat: float) -> int:
@@ -289,10 +350,18 @@ class CommandEngagementEnv:
             return cur
         return cands[min(int(u_lat * len(cands)), len(cands) - 1)]
 
+    def _recorded(self, t: int) -> int:
+        z = int(self.spec.positions[t])
+        if z < 0:
+            raise RuntimeError(f"{self.spec.run_id}: no recorded position for step {t}")
+        return z
+
     def peek_next_zone(self) -> int:
         """Where the attacker will be next step. Clairvoyant baselines only."""
         if self.pending >= 0:
             return self.pending
+        if self.cfg.movement == "recorded":
+            return self._recorded(self.t)
         u = self.spec.u[:, self.t]
         return self._move(u[U_MOVE], u[U_LATERAL])
 
@@ -315,11 +384,18 @@ class CommandEngagementEnv:
         phi = 1.0 if n_active <= cfg.k_capacity else cfg.k_capacity / n_active
 
         followed = self.pending >= 0
-        nz = self.pending if followed else self._move(u[U_MOVE], u[U_LATERAL])
+        if followed:
+            nz = self.pending
+        elif cfg.movement == "recorded":
+            nz = self._recorded(t)
+        else:
+            nz = self._move(u[U_MOVE], u[U_LATERAL])
         self.pending = -1
         self.zone = nz
-        ag = ZONE_AGENT[nz]
-        d = int(acts[ag])
+        ag = ZONE_AGENT.get(nz)                 # None: Internet or Firewall, no agent
+        d = int(acts[ag]) if ag is not None else NULL
+        if ag is None:
+            self.st["undefended_commands"] += 1
 
         engaged = exposed = False
         wired = -1
@@ -358,7 +434,7 @@ class CommandEngagementEnv:
                 self.st["lure_chains"] += 1
         else:
             self.compromised[nz] = 1.0
-            if nz == self.target and bool(self.goal_mask[list(labels)].any()):
+            if nz == self.target and bool(self.spec.goal_cmd[t]):
                 self.progress += 1
 
         self._chain_open = wired >= 0
@@ -379,6 +455,7 @@ class CommandEngagementEnv:
         if self.progress >= cfg.goal_steps:
             self.objective = True
             self.done = True
+            self.st["objective_at"] = t
         elif self.t >= self.spec.horizon:
             self.done = True
 
@@ -417,7 +494,7 @@ class CommandEngagementEnv:
             g[S_DECOYS + i * N_ACTIONS + int(self.decoys[i])] = 1.0
         g[S_BURNED] = float(self.burned)
         g[S_PROGRESS] = self.progress / self.cfg.goal_steps
-        g[S_COMP:S_COMP + N_ZONES] = self.compromised
+        g[S_COMP:S_COMP + N_POS] = self.compromised
         g[S_LOAD] = self.load / self.cfg.k_capacity
         if self.pending >= 0:
             g[S_PENDING + self.pending] = 1.0
@@ -444,6 +521,7 @@ class CommandEngagementEnv:
         return {"dwell": float(self.dwell),
                 "depth": float(len(self.depth_set)),
                 "protected": float(not self.objective),
+                "p1": float(self.spec.p1),
                 "exposed": float(self.burned),
                 "length": float(self.t),
                 "horizon": float(self.spec.horizon),
