@@ -130,6 +130,27 @@ protocol D1.1 with the fix stated.
   contains validation numbers only. `pipeline.py --stage main` is **not** the D1.0 runner (it rescored
   the prediction test and printed test summaries).
 
+## 7a. Pilot before the freeze (`pilot_d1.py`; declared 2026-11-17 before it ran)
+
+Requested by the user: a small trial-and-error check on part of the data, to see the chain work.
+**Validation only; no test episode is built** (asserted). Folds 1_cron_sshkey, 3_vnc_puppet,
+6_macro_cron (validation runs from S1, S3, S6); seeds 101-103 (disjoint from 0-9); MAPPO; 200,000
+environment steps; 10 repeats; arms allpos, NoHistory, lstm_allpos (encoders trained in the pilot with the
+protocol 1.2 budget, selected on validation); rewards **engagement** (D6) and **proposal** (thesis
+proposal, Section 2.3: +1 per engaged command, +1 bonus when it engages a technique not engaged before in
+the episode, -5 when the deception is exposed, our closest event to the proposal's "attacker
+disconnection"; the bonus and penalty values are our choice). Reference policies on the same validation
+episodes, including **static** (best single decoy type everywhere: the proposal's Baseline 1).
+
+Rules, fixed before the pilot ran:
+- R1 works: in every pilot fold, each learned arm with the engagement reward beats none and random on
+  mean validation E1. If not, stop and investigate before the freeze.
+- R2 reward: the main study uses the proposal reward only if, over all pilot cells, its mean validation
+  E1 is at least 95% of the engagement reward's and its mean validation depth or P1 is higher; otherwise
+  the engagement reward (D6) stays.
+- R3: history differences (allpos vs NoHistory, allpos vs lstm_allpos) are reported and decide nothing.
+All pilot numbers are reported in the paper as a pilot.
+
 ## 8. Sensitivity analyses (declared now, all reported)
 
 1. Efficacy: PAYOFF scaled by 0.5 and 0.75 (1.0 = primary). Ferguson-Walter et al. 2021 (52% of

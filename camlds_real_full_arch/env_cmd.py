@@ -107,6 +107,13 @@ class EnvConfig:
     movement: str = "recorded"
     goals: str = "d1"              # scenario_metadata version: "d1" (primary) or "hand"
     efficacy: float = 1.0          # D1.0 sensitivity: every engagement probability scaled by this
+    # Reward. "engagement" (D6): 1 per engaged command. "proposal" (thesis proposal, Section 2.3):
+    # 1 per engaged command + depth_bonus when it engages a technique not engaged before in the
+    # episode - exposure_penalty when the deception is exposed (our closest event to the proposal's
+    # "attacker disconnection"). Bonus and penalty values are our choice, declared before the pilot.
+    reward: str = "engagement"
+    depth_bonus: float = 1.0
+    exposure_penalty: float = 5.0
 
     def __post_init__(self):
         if self.aggregation not in AGGREGATIONS:
@@ -117,6 +124,8 @@ class EnvConfig:
             raise ValueError("goals must be 'd1' or 'hand'")
         if not 0.0 < self.efficacy <= 1.0:
             raise ValueError("efficacy must be in (0, 1]")
+        if self.reward not in ("engagement", "proposal"):
+            raise ValueError("reward must be 'engagement' or 'proposal'")
 
     def to_dict(self):
         return asdict(self)
@@ -430,6 +439,7 @@ class CommandEngagementEnv:
             wired = -1
             self.st["exposed_at"] = t
 
+        new_technique = engaged and bool(set(labels) - self.depth_set)
         if engaged:
             # ONE command, ONE engagement step, ONE unit of reward -- however
             # many technique labels the command carries.
@@ -470,7 +480,10 @@ class CommandEngagementEnv:
         info = {"engaged": engaged, "exposed": exposed, "zone": nz,
                 "labels": labels, "rho": rho, "phi": phi, "wired": wired,
                 "followed": followed}
-        return (1.0 if engaged else 0.0), self.done, info
+        reward = 1.0 if engaged else 0.0
+        if cfg.reward == "proposal":
+            reward += cfg.depth_bonus * float(new_technique) - cfg.exposure_penalty * float(exposed)
+        return reward, self.done, info
 
     def local_obs(self, out: Optional[np.ndarray] = None) -> np.ndarray:
         """(N_AGENTS, LOCAL_DIM) -- strictly local, strictly past."""

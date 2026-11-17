@@ -269,5 +269,33 @@ class D1Sensitivity(unittest.TestCase):
                     self.assertEqual(d["order"], "execution")
 
 
+
+class D1Reward(unittest.TestCase):
+    def test_proposal_reward_adds_depth_bonus_and_exposure_penalty(self):
+        base = spec_of("3_ssh_apt", 4)
+        for burn in (1.0, 0.0):                       # 1.0: never exposed; 0.0: exposed when engaged (rho < 1)
+            s = spec_of("3_ssh_apt", 4)
+            s.u[env.U_ENGAGE] = 0.0
+            s.u[env.U_BURN] = burn
+            s.u[env.U_DEAD] = 1.0
+            got = {}
+            for rw in ("engagement", "proposal"):
+                e = env.CommandEngagementEnv(env.EnvConfig(reward=rw)).reset(s)
+                seen, rows = set(), []
+                while not e.done:
+                    r, _, info = e.step([1, 2, 3, 4])
+                    new = info["engaged"] and bool(set(info["labels"]) - seen)
+                    if info["engaged"]:
+                        seen |= set(info["labels"])
+                    rows.append((r, info["engaged"], new, info["exposed"]))
+                got[rw] = rows
+            self.assertEqual(len(got["engagement"]), len(got["proposal"]))
+            for (re_, eng, new, exp), (rp, _, _, _) in zip(got["engagement"], got["proposal"]):
+                self.assertEqual(re_, 1.0 if eng else 0.0)
+                self.assertAlmostEqual(rp, re_ + 1.0 * new - 5.0 * exp)
+        with self.assertRaises(ValueError):
+            env.EnvConfig(reward="other")
+
+
 if __name__ == "__main__":
     unittest.main()
