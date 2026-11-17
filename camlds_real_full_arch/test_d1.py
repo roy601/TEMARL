@@ -224,5 +224,50 @@ class D1RunnerAndEvaluation(unittest.TestCase):
             self.assertEqual(d["env_config"]["movement"], "recorded")
 
 
+
+class D1Sensitivity(unittest.TestCase):
+    def test_efficacy_scales_every_engagement_probability(self):
+        s = spec_of("3_ssh_apt", 2)
+        s.u[env.U_ENGAGE] = 1.0                  # never engage, so both runs follow the same path
+        rhos = {}
+        for eff in (1.0, 0.5):
+            e = env.CommandEngagementEnv(env.EnvConfig(efficacy=eff)).reset(s)
+            rhos[eff] = []
+            while not e.done:
+                _, _, info = e.step([1, 2, 3, 4])
+                rhos[eff].append(info["rho"])
+        np.testing.assert_allclose(np.array(rhos[0.5]), 0.5 * np.array(rhos[1.0]))
+        self.assertGreater(max(rhos[1.0]), 0)
+        with self.assertRaises(ValueError):
+            env.EnvConfig(efficacy=0.0)
+
+    def test_hand_goals_count_only_runs_with_goal_commands(self):
+        hand = env.scenario_metadata("hand")
+        p1 = {rid: env.make_spec(r, np.random.default_rng(0), hand).p1 for rid, r in RUNS.items()}
+        self.assertFalse(p1["6_plugin"])          # S6 'Exfiltration': no goal command (the 8 runs)
+        self.assertFalse(p1["1_sudo_pam"])
+        self.assertEqual(sum(not v for v in p1.values()), 8)
+        d1 = {rid: spec_of(rid).p1 for rid in RUNS}
+        self.assertEqual([rid for rid, v in d1.items() if not v], ["4"])
+
+    def test_runner_smoke_for_two_sensitivities(self):
+        import subprocess, sys, tempfile, json, pathlib
+        for name in ("random_walk", "execution"):
+            with tempfile.TemporaryDirectory() as tmp:
+                out = pathlib.Path(tmp) / name
+                r = subprocess.run([sys.executable, "-W", "ignore",
+                                    str(pathlib.Path(__file__).with_name("run_d1.py")),
+                                    "--smoke", "--sensitivity", name, "--output", str(out)],
+                                   capture_output=True, text=True, timeout=600)
+                self.assertEqual(r.returncode, 0, r.stderr[-2000:])
+                d = json.loads(next((pathlib.Path(tmp) / "smoke").rglob("result.json")).read_text(encoding="utf-8"))
+                self.assertEqual(d["setting"], name)
+                if name == "random_walk":
+                    self.assertEqual(d["env_config"]["movement"], "random_walk")
+                    self.assertEqual(d["env_config"]["goals"], "hand")
+                else:
+                    self.assertEqual(d["order"], "execution")
+
+
 if __name__ == "__main__":
     unittest.main()

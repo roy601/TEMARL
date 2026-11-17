@@ -138,7 +138,13 @@ protocol D1.1 with the fix stated.
 3. Movement: the old random-walk model (p_goal 0.7, p_stay 0.8) instead of the recorded zones; goals from
    the old single-tactic mask (P1 then on the runs that still contain goal commands).
 4. Execution order instead of frozen order (S6 swaps corrected).
-Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
+Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4, all 32 folds (5 settings x 320 = 1,600 cells;
+`run_d1.py --sensitivity efficacy_0.5 | efficacy_0.75 | mean | random_walk | execution`). In
+`random_walk`, P1 counts only runs that contain a goal command under the old goals (26 runs). In
+`execution`, the encoders are retrained in the cell with the protocol 1.2 budget (9,152 updates for
+Transformers, 18,304 for GRU and LSTM) and patience (16 checks), selected on validation. Each setting has
+its own dry run and its own single test opening (`evaluate_d1.py --sensitivity NAME`), Family 1 only,
+with the same statistics; sensitivity results are reported as such and never replace the primary result.
 
 ## 9. Evaluation (frozen with this protocol)
 

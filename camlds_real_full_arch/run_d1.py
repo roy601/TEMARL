@@ -4,6 +4,7 @@
     python camlds_real_full_arch/run_d1.py --device cuda                 # 640 primary cells, resumable
     python camlds_real_full_arch/run_d1.py --device cuda --timing        # one cell, no test episodes
     python camlds_real_full_arch/run_d1.py --smoke                       # code check, tiny, no freeze needed
+    python camlds_real_full_arch/run_d1.py --device cuda --sensitivity mean   # Section 8, seeds 0-4
 
 What differs from pipeline.main (deliberately):
   * command order is always 'frozen' (decision D4), environment = EnvConfig() (recorded positions);
@@ -33,6 +34,30 @@ import spec_d1  # noqa: E402
 
 env, marl, data, variants, port = P.env, P.marl, P.data, P.variants, P.port
 PRIMARY_ARMS = ("allpos", "NoHistory")
+# Section 8 sensitivity analyses: environment changes and command order
+SENSITIVITIES = {
+    "efficacy_0.5": ({"efficacy": 0.5}, "frozen"),
+    "efficacy_0.75": ({"efficacy": 0.75}, "frozen"),
+    "mean": ({"aggregation": "mean"}, "frozen"),
+    "random_walk": ({"movement": "random_walk", "goals": "hand"}, "frozen"),
+    "execution": ({}, "execution"),
+}
+ENCODER_BUDGET = {"allpos": 9152, "baseline": 9152, "gru_allpos": 18304, "lstm_allpos": 18304}  # protocol 1.2
+
+
+def setting(name):
+    """(EnvConfig, command order) of the primary study or of a Section 8 sensitivity analysis."""
+    if name in (None, "primary"):
+        return env.EnvConfig(), "frozen"
+    kw, order = SENSITIVITIES[name]
+    return env.EnvConfig(**kw), order
+
+
+def specs(rs, seed, repeats, cfg):
+    """As pipeline.specs, with the scenario metadata the setting uses."""
+    rng = np.random.default_rng(seed)
+    meta = env.scenario_metadata(cfg.goals)
+    return [env.make_spec(r, rng, meta) for r in rs for _ in range(repeats)]
 VAL_SEED, TEST_SEED = 100000, 200000
 OUT = HERE / "results_d1"
 
@@ -41,11 +66,22 @@ def sha_bytes(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 
-def load_encoder(arm, fold, seed, root: Path, device):
-    """The protocol 1.2 checkpoint, unchanged. Checked on VALIDATION only."""
+def load_encoder(arm, fold, seed, root: Path, device, cell: Path = None, order: str = "frozen"):
+    """Frozen order: the protocol 1.2 checkpoint, unchanged. Execution order (sensitivity): an encoder
+    trained here on the fold's training runs with the protocol 1.2 budget and patience, selected on
+    validation, stored in the cell. Either way it is checked on VALIDATION only."""
     if arm == "NoHistory":
         return None, {"arm": "NoHistory", "checkpoint": None}
-    path = P.checkpoint(arm, fold["fold"], seed, root)
+    if order == "frozen":
+        path = P.checkpoint(arm, fold["fold"], seed, root)
+    else:
+        path = cell / "encoder.pt"
+        if not path.exists():
+            d = data.fold_data(fold)
+            cell.mkdir(parents=True, exist_ok=True)
+            res, _ = variants.train_variant(arm, data.W, seed, d["train"], d["val"], ENCODER_BUDGET[arm],
+                                            device=torch.device(device), checkpoint_dir=str(cell),
+                                            patience_checks=16, progress=False)
     if not path.exists():
         raise FileNotFoundError(f"{path}: protocol 1.2 checkpoint missing (run on the GPU PC that holds them)")
     ck = torch.load(path, map_location="cpu", weights_only=False)
@@ -67,10 +103,11 @@ def load_encoder(arm, fold, seed, root: Path, device):
 
 
 def run_cell(arm, learner, fold, seed, args, dest: Path, test: bool):
-    cfg = env.EnvConfig()
-    va = P.specs(P.runs(fold, "val"), VAL_SEED + seed, args.eval_repeats)
-    te = P.specs(P.runs(fold, "test"), TEST_SEED + seed, args.eval_repeats) if test else []
-    model, enc = load_encoder(arm, fold, seed, Path(args.encoder_root), args.device)
+    cfg, order = setting(args.sensitivity)
+    va = specs(P.runs(fold, "val"), VAL_SEED + seed, args.eval_repeats, cfg)
+    te = specs(P.runs(fold, "test"), TEST_SEED + seed, args.eval_repeats, cfg) if test else []
+    model, enc = load_encoder(arm, fold, seed, Path(args.encoder_root), args.device,
+                              cell=dest.parent, order=order)
     t0 = time.time()
     res = marl.train(model, cfg, P.runs(fold, "train"), va, te, seed, args.env_steps, data.W, 64,
                      learner == "MAPPO", args.device, args.verbose)
@@ -82,7 +119,8 @@ def run_cell(arm, learner, fold, seed, args, dest: Path, test: bool):
     if test:
         (dest / "sealed_test.json").write_bytes(blob)
     res.update(arm=arm, learner=learner, fold=fold["fold"], family=fold["family"], seed=seed,
-               test_runs=fold["test_runs"], encoder=enc, env_config=cfg.to_dict(), order="frozen",
+               test_runs=fold["test_runs"], encoder=enc, env_config=cfg.to_dict(), order=order,
+               setting=args.sensitivity or "primary",
                sealed_test_sha256=sha_bytes(blob) if test else None, wall_seconds=time.time() - t0,
                eval_repeats=args.eval_repeats, val_seed=VAL_SEED + seed, test_seed=TEST_SEED + seed)
     P.write(dest / "result.json", res)
@@ -104,12 +142,13 @@ def validation_summary(out: Path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"])
-    ap.add_argument("--output", type=Path, default=OUT / "main")
+    ap.add_argument("--output", type=Path, default=None)
+    ap.add_argument("--sensitivity", choices=sorted(SENSITIVITIES), default=None)
     ap.add_argument("--encoder-root", default=str(P.REPO / "camlds_encoder" / "out"))
     ap.add_argument("--arms", nargs="+", choices=P.ARMS, default=list(PRIMARY_ARMS))
     ap.add_argument("--learners", nargs="+", choices=["MAPPO", "IPPO"], default=["MAPPO"])
     ap.add_argument("--folds", nargs="+")
-    ap.add_argument("--seeds", nargs="+", type=int, default=list(range(10)))
+    ap.add_argument("--seeds", nargs="+", type=int, default=None)
     ap.add_argument("--env-steps", type=int, default=2_000_000)
     ap.add_argument("--eval-repeats", type=int, default=20)
     ap.add_argument("--threads", type=int, default=4)
@@ -117,10 +156,16 @@ def main():
     ap.add_argument("--smoke", action="store_true", help="tiny code check; NoHistory only; no test")
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()
+    if a.output is None:
+        a.output = OUT / (a.sensitivity or "main")
+    if a.seeds is None:
+        a.seeds = list(range(5)) if a.sensitivity else list(range(10))
+    if a.sensitivity and (set(a.arms) - set(PRIMARY_ARMS) or a.learners != ["MAPPO"]):
+        raise SystemExit("Section 8: sensitivity runs use allpos and NoHistory with MAPPO only")
     torch.set_num_threads(a.threads)
     if a.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA is unavailable")
-    folds = [f for f in P.ordered_folds("frozen") if not a.folds or f["fold"] in a.folds]
+    folds = [f for f in P.ordered_folds(setting(a.sensitivity)[1]) if not a.folds or f["fold"] in a.folds]
     if a.folds and set(a.folds) - {f["fold"] for f in folds}:
         raise ValueError("unknown fold")
 
@@ -144,7 +189,8 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     manifest = {"protocol": "D1.0", "spec": json.loads(spec_d1.SPEC.read_text(encoding="utf-8")),
                 "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()},
-                "hp": marl.HP, "env_config": env.EnvConfig().to_dict(),
+                "hp": marl.HP, "env_config": setting(a.sensitivity)[0].to_dict(),
+                "order": setting(a.sensitivity)[1], "setting": a.sensitivity or "primary",
                 "folds": [{k: v for k, v in f.items() if k != "_steps"} for f in folds]}
     mp = out / "MANIFEST.json"
     if mp.exists() and json.loads(mp.read_text(encoding="utf-8")) != json.loads(json.dumps(manifest)):

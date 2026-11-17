@@ -3,6 +3,8 @@
 
     python camlds_real_full_arch/evaluate_d1.py --validation-dry-run --device cuda
     python camlds_real_full_arch/evaluate_d1.py --open-test --device cuda       # ONCE
+    ... --sensitivity mean    (Section 8: its own dry run and its own single opening; Family 1 only,
+                               seeds 0-4, reported as a sensitivity result, never as the main claim)
 
 1. Dry run: every primary cell's saved actor is re-evaluated on its validation episodes and must
    reproduce the best validation E1 recorded at training. No test file is read.
@@ -163,7 +165,8 @@ def fit_fixed(fold, env, P, G):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--output", type=Path, default=HERE / "results_d1" / "main")
+    ap.add_argument("--output", type=Path, default=None)
+    ap.add_argument("--sensitivity", default=None)
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"])
     ap.add_argument("--encoder-root", default=None)
     g = ap.add_mutually_exclusive_group(required=True)
@@ -178,9 +181,12 @@ def main():
     import gate_d1 as G
     import torch
     env, marl = P.env, P.marl
-    out = a.output
-    folds = P.ordered_folds("frozen")
-    seeds = list(range(10))
+    if a.sensitivity and a.sensitivity not in R.SENSITIVITIES:
+        raise SystemExit(f"unknown sensitivity {a.sensitivity}")
+    out = a.output or (HERE / "results_d1" / (a.sensitivity or "main"))
+    cfg, order = R.setting(a.sensitivity)
+    folds = P.ordered_folds(order)
+    seeds = list(range(5)) if a.sensitivity else list(range(10))
     cs = cells(out, folds, seeds)
     missing = [k for k, d in cs.items() if not (d / "result.json").exists()]
     if missing:
@@ -194,12 +200,12 @@ def main():
         for (arm, fold_id, seed), d in cs.items():
             res = json.loads((d / "result.json").read_text(encoding="utf-8"))
             f = next(x for x in folds if x["fold"] == fold_id)
-            model, _ = R.load_encoder(arm, f, seed, root, a.device)
+            model, _ = R.load_encoder(arm, f, seed, root, a.device, cell=d.parent, order=order)
             actor = marl.Actor().to(a.device)
             actor.load_state_dict(torch.load(d / "actor.pt", map_location=a.device))
-            va = P.specs(P.runs(f, "val"), R.VAL_SEED + seed, res["eval_repeats"])
+            va = R.specs(P.runs(f, "val"), R.VAL_SEED + seed, res["eval_repeats"], cfg)
             bank = marl.HistoryBank(model, P.data.W, a.device, h_zero=(model is None))
-            rows = marl.evaluate_team(actor, env.EnvConfig(), va, bank, 64, a.device)
+            rows = marl.evaluate_team(actor, cfg, va, bank, 64, a.device)
             got = marl.mean_of(rows)
             if abs(got - res["best_validation_dwell"]) > 1e-9:
                 bad.append({"cell": [arm, fold_id, seed], "recorded": res["best_validation_dwell"], "got": got})
@@ -228,6 +234,22 @@ def main():
                     merged[m].update(pr[m])
             for m in OUTCOMES:
                 (values if group == "primary" else descriptive)[(arm, m)] = merged[m]
+    f1 = family(values, [("allpos", "NoHistory", m) for m in OUTCOMES])
+    if a.sensitivity:
+        res = {"setting": a.sensitivity, "env_config": cfg.to_dict(), "order": order, "family_1": f1,
+               "means_primary": {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()},
+               "n_units": {m: len(values[("allpos", m)]) for m in OUTCOMES}}
+        dest = HERE / "out_test_d1"
+        dest.mkdir(exist_ok=True)
+        (dest / f"D1_SENSITIVITY_{a.sensitivity}.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
+        L = [f"Protocol D1.0 sensitivity '{a.sensitivity}' (simulation only; not the main claim)",
+             f"units: E1 {res['n_units']['E1']}, P1 {res['n_units']['P1']}; seeds 0-4"]
+        for c in f1:
+            L.append(f"  {c['outcome']} allpos - NoHistory: {c['mean']:+.3f} [{c['ci'][0]:+.3f}, {c['ci'][1]:+.3f}] "
+                     f"p_holm={c['p_holm']:.4f} -> {c['verdict']}")
+        P.write(opened, {"opened": True, "setting": a.sensitivity, "cells": len(cs)})
+        print("\n".join(L))
+        return
     # reference policies on the same test episodes
     ref_vals = {(n, m): {} for n in (*REFERENCES, "clairvoyant") for m in OUTCOMES}
     fixed_chosen = {}
@@ -248,7 +270,6 @@ def main():
             ref_vals[("fixed", m)].update(pr[m])
     values.update(ref_vals)
 
-    f1 = family(values, [("allpos", "NoHistory", m) for m in OUTCOMES])
     f2 = family(values, [("allpos", r, m) for r in REFERENCES for m in OUTCOMES])
     means = {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()}
     res = {"family_1": f1, "family_2": f2, "means_primary": means,

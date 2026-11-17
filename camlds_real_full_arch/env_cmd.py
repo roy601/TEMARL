@@ -105,12 +105,18 @@ class EnvConfig:
     goal_steps: int = 1
     aggregation: str = "max"
     movement: str = "recorded"
+    goals: str = "d1"              # scenario_metadata version: "d1" (primary) or "hand"
+    efficacy: float = 1.0          # D1.0 sensitivity: every engagement probability scaled by this
 
     def __post_init__(self):
         if self.aggregation not in AGGREGATIONS:
             raise ValueError(f"aggregation must be one of {AGGREGATIONS}")
         if self.movement not in MOVEMENTS:
             raise ValueError(f"movement must be one of {MOVEMENTS}")
+        if self.goals not in ("d1", "hand"):
+            raise ValueError("goals must be 'd1' or 'hand'")
+        if not 0.0 < self.efficacy <= 1.0:
+            raise ValueError("efficacy must be in (0, 1]")
 
     def to_dict(self):
         return asdict(self)
@@ -233,7 +239,9 @@ def make_spec(run: dict, rng: np.random.Generator,
     return EpisodeSpec(run_id=run["id"], scenario=run["scenario"], commands=cmds,
                        u=rng.random((N_U, n)), entry=m["entry"],
                        target=m["target"], goal_mask=mask, positions=pos,
-                       goal_cmd=goal, p1=bool(m.get("p1", True)))
+                       goal_cmd=goal,
+                       # P1 counts a run only if its scenario is defendable and it has a goal command
+                       p1=bool(m.get("p1", True)) and bool(goal.any()))
 
 
 class ReplayPool:
@@ -401,7 +409,7 @@ class CommandEngagementEnv:
         wired = -1
         rho = 0.0
         if d != NULL and not self.burned:
-            rho = phi * command_payoff(labels, d, cfg.aggregation)
+            rho = phi * cfg.efficacy * command_payoff(labels, d, cfg.aggregation)
             if u[U_ENGAGE] < rho:
                 engaged = True
                 if u[U_BURN] < cfg.beta * (1.0 - rho):
