@@ -8,17 +8,25 @@
 
 1. Dry run: every primary cell's saved actor is re-evaluated on its validation episodes and must
    reproduce the best validation E1 recorded at training. No test file is read.
-2. Open the test once: refuses unless the spec passes, all 640 primary cells exist, the dry run passed
-   and the test was never opened. Every sealed file's SHA-256 is checked before it is read.
+2. Open the test once: refuses unless the spec passes, all 960 main cells exist (allpos, NoHistory,
+   lstm_allpos x 32 folds x 10 seeds), the dry run passed and the test was never opened. Every sealed
+   file's SHA-256 is checked before it is read, and every cell must have used the protocol's test seed,
+   20 repeats, setting and order, so the reference policies below are scored on exactly the arms' test
+   episodes.
 
 Unit = test run of the 29 variant-held-out folds (the 3 scenario-held-out folds are descriptive). Per
 unit: the outcome averaged over 20 repeats, then over 10 seeds. E1 = engaged commands; P1 = defense
 success on runs with p1 (S4 excluded).
-Family 1: allpos vs NoHistory on E1 and P1. Family 2: allpos vs none, random, fixed, greedy, planner
-on E1 and P1 (the reference policies are run here on the same test episodes; fixed and planner are
-fitted on the fold's training runs only). Per comparison: mean paired difference, 95% bootstrap CI
-(10,000 resamples of runs, seed 20261103), two-sided Wilcoxon signed-rank (zero differences dropped),
-Holm within the family. "X outperforms Y" only if Holm p < 0.05 and the CI excludes 0.
+Family 1 (Q1): allpos vs NoHistory on E1 and P1 (2 comparisons).
+Family 2 (Q2): allpos vs none, random, static, fixed, greedy, planner on E1 and P1 (12 comparisons). The
+reference policies are run here on the same test episodes; static, fixed (each per outcome) and planner
+are fitted on the fold's training runs only.
+Family 3 (D7): allpos vs lstm_allpos on E1 and P1 (2 comparisons): the proposal's "MARL without the
+Transformer".
+Per comparison: mean paired difference, 95% bootstrap CI (10,000 resamples of runs, seed 20261103),
+two-sided Wilcoxon signed-rank (zero differences dropped), Holm within each family (the families answer
+different questions and are not corrected across). "X outperforms Y" only if Holm p < 0.05 and the CI
+excludes 0.
 """
 from __future__ import annotations
 
@@ -37,13 +45,26 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 ALPHA, BOOT_N, BOOT_SEED = 0.05, 10_000, 20261103
-ARMS = ("allpos", "NoHistory")
-REFERENCES = ("none", "random", "fixed", "greedy", "planner")
+PRIMARY_ARMS = ("allpos", "NoHistory")              # Family 1; every sensitivity analysis
+MAIN_ARMS = PRIMARY_ARMS + ("lstm_allpos",)          # + Family 3
+REFERENCES = ("none", "random", "static", "fixed", "greedy", "planner")
+SIMPLE = ("none", "random", "greedy", "planner", "clairvoyant")   # nothing chosen per outcome
+FITTED = ("static", "fixed")                         # chosen per outcome on the fold's training runs
 NAMES = {"allpos": "history agents (allpos)", "NoHistory": "agents without history",
-         "none": "no decoys", "random": "random", "fixed": "best fixed allocation",
-         "greedy": "greedy (reactive)", "planner": "transition planner", "clairvoyant": "clairvoyant"}
+         "lstm_allpos": "history agents (LSTM encoder)",
+         "none": "no decoys", "random": "random", "static": "static honeypot (one decoy type everywhere)",
+         "fixed": "best fixed allocation", "greedy": "greedy (reactive)", "planner": "transition planner",
+         "clairvoyant": "clairvoyant"}
 FIT_SEED, FIT_REPEATS = 400000, 5
+EVAL_REPEATS = 20
 OUTCOMES = ("E1", "P1")
+
+
+def family_pairs():
+    """The three tested families of Section 9, each Holm-corrected on its own."""
+    return {"family_1": [("allpos", "NoHistory", m) for m in OUTCOMES],
+            "family_2": [("allpos", r, m) for r in REFERENCES for m in OUTCOMES],
+            "family_3": [("allpos", "lstm_allpos", m) for m in OUTCOMES]}
 
 
 # ── statistics (identical rules to casinolimit_encoder/evaluate.py; unit = run) ──
@@ -113,9 +134,9 @@ def per_run(rows_by_seed) -> dict:
 
 # ── file handling ─────────────────────────────────────────────────────────────
 
-def cells(out: Path, folds, seeds, learner="MAPPO"):
+def cells(out: Path, folds, seeds, arms, learner="MAPPO"):
     return {(arm, f["fold"], s): out / "cells" / arm / f["fold"] / f"s{s}" / learner
-            for arm in ARMS for f in folds for s in seeds}
+            for arm in arms for f in folds for s in seeds}
 
 
 def read_sealed(dest: Path):
@@ -128,12 +149,13 @@ def read_sealed(dest: Path):
 
 # ── reference policies on the test episodes ──────────────────────────────────
 
-def reference_rows(fold, seed, repeats, env, P, G, fixed_joint):
+def reference_rows(fold, seed, repeats, env, P, G, R, cfg, chosen):
+    """Reference policies on the fold's test episodes: the same runs, test seed, repeats and setting as
+    the arms' cells (R.specs), so every comparison is paired on identical randomness."""
     B = G.B
-    cfg = env.EnvConfig()
     train = P.runs(fold, "train")
-    specs = P.specs(P.runs(fold, "test"), 200000 + seed, repeats)
-    pols = {"none": B.NullPolicy(), "random": B.RandomPolicy(200000 + seed),
+    specs = R.specs(P.runs(fold, "test"), R.TEST_SEED + seed, repeats, cfg)
+    pols = {"none": B.NullPolicy(), "random": B.RandomPolicy(R.TEST_SEED + seed),
             "greedy": B.ReactivePolicy(cfg), "planner": G.TransitionPlanner(train, cfg),
             "clairvoyant": B.ClairvoyantCoordPolicy(cfg)}
     out = {}
@@ -141,25 +163,25 @@ def reference_rows(fold, seed, repeats, env, P, G, fixed_joint):
     for name, pol in pols.items():
         out[name] = [env.run_episode(e, s, pol) for s in specs]
     for m in OUTCOMES:
-        out[f"fixed_{m}"] = [env.run_episode(e, s, B.FixedJointPolicy(fixed_joint[m])) for s in specs]
+        out[f"static_{m}"] = [env.run_episode(e, s, B.StaticPolicy(chosen["static"][m])) for s in specs]
+        out[f"fixed_{m}"] = [env.run_episode(e, s, B.FixedJointPolicy(chosen["fixed"][m])) for s in specs]
     return out
 
 
-def fit_fixed(fold, env, P, G):
-    """Best constant joint action per outcome on the fold's TRAINING runs only."""
+def fit_static_fixed(fold, env, P, G, R, cfg, joints=None):
+    """Per outcome, on the fold's TRAINING runs only (seed 400000, 5 repeats): static = the best single
+    decoy type deployed in every zone (the proposal's static honeypot); fixed = the best constant joint
+    action over all 6^4. P1 is fitted on the training runs with p1. Ties: the first in action order."""
     B = G.B
-    cfg = env.EnvConfig()
-    train = P.runs(fold, "train")
-    specs = P.specs(train, FIT_SEED, FIT_REPEATS)
-    best = {}
+    specs = R.specs(P.runs(fold, "train"), FIT_SEED, FIT_REPEATS, cfg)
+    joints = list(itertools.product(range(env.N_ACTIONS), repeat=env.N_AGENTS)) if joints is None else joints
+    best = {"static": {}, "fixed": {}}
     for m in OUTCOMES:
         use = specs if m == "E1" else [s for s in specs if s.p1]
-        top = None
-        for joint in itertools.product(range(env.N_ACTIONS), repeat=env.N_AGENTS):
-            s = G.score(B.FixedJointPolicy(joint), use, cfg)[m]
-            if top is None or s > top[0]:
-                top = (s, list(joint))
-        best[m] = top[1]
+        sc = [G.score(B.StaticPolicy(a), use, cfg)[m] for a in range(1, env.N_ACTIONS)]
+        best["static"][m] = 1 + int(np.argmax(sc))
+        fj = [G.score(B.FixedJointPolicy(j), use, cfg)[m] for j in joints]
+        best["fixed"][m] = list(joints[int(np.argmax(fj))])
     return best
 
 
@@ -183,14 +205,17 @@ def main():
     env, marl = P.env, P.marl
     if a.sensitivity and a.sensitivity not in R.SENSITIVITIES:
         raise SystemExit(f"unknown sensitivity {a.sensitivity}")
+    if (PRIMARY_ARMS, MAIN_ARMS) != (R.PRIMARY_ARMS, R.MAIN_ARMS):
+        raise SystemExit("evaluate_d1 and run_d1 disagree on the arms")
     out = a.output or (HERE / "results_d1" / (a.sensitivity or "main"))
     cfg, order = R.setting(a.sensitivity)
     folds = P.ordered_folds(order)
     seeds = list(range(5)) if a.sensitivity else list(range(10))
-    cs = cells(out, folds, seeds)
+    arms = PRIMARY_ARMS if a.sensitivity else MAIN_ARMS
+    cs = cells(out, folds, seeds, arms)
     missing = [k for k, d in cs.items() if not (d / "result.json").exists()]
     if missing:
-        raise SystemExit(f"{len(missing)} primary cells missing, e.g. {missing[:3]}")
+        raise SystemExit(f"{len(missing)} of {len(cs)} cells missing, e.g. {missing[:3]}")
     dry = out / "DRY_RUN_VALIDATION.json"
     opened = out / "TEST_OPENED.json"
 
@@ -221,11 +246,14 @@ def main():
     sealed = {}
     for key, d in cs.items():
         res, s = read_sealed(d)
+        if (res["test_seed"] != R.TEST_SEED + key[2] or res["eval_repeats"] != EVAL_REPEATS
+                or res["env_config"] != cfg.to_dict() or res["order"] != order):
+            raise RuntimeError(f"{d}: test seed, repeats, setting or order differ from the protocol")
         sealed[key] = s["test"]
     primary_folds = [f for f in folds if f["family"] == "variant_held_out"]
 
     values, descriptive = {}, {}
-    for arm in ARMS:
+    for arm in arms:
         for group, fs in (("primary", primary_folds), ("unseen", [f for f in folds if f not in primary_folds])):
             merged = {m: {} for m in OUTCOMES}
             for f in fs:
@@ -234,7 +262,8 @@ def main():
                     merged[m].update(pr[m])
             for m in OUTCOMES:
                 (values if group == "primary" else descriptive)[(arm, m)] = merged[m]
-    f1 = family(values, [("allpos", "NoHistory", m) for m in OUTCOMES])
+    pairs = family_pairs()
+    f1 = family(values, pairs["family_1"])
     if a.sensitivity:
         res = {"setting": a.sensitivity, "env_config": cfg.to_dict(), "order": order, "family_1": f1,
                "means_primary": {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()},
@@ -251,37 +280,40 @@ def main():
         print("\n".join(L))
         return
     # reference policies on the same test episodes
-    ref_vals = {(n, m): {} for n in (*REFERENCES, "clairvoyant") for m in OUTCOMES}
-    fixed_chosen = {}
+    ref_vals = {(n, m): {} for n in (*SIMPLE, *FITTED) for m in OUTCOMES}
+    chosen = {}
     for f in primary_folds:
-        fixed_chosen[f["fold"]] = fit_fixed(f, env, P, G)
-        rows = {n: {} for n in (*REFERENCES, "clairvoyant")}
+        chosen[f["fold"]] = fit_static_fixed(f, env, P, G, R, cfg)
+        rows = {n: {} for n in SIMPLE}
+        fitted = {(n, m): {} for n in FITTED for m in OUTCOMES}
         for s in seeds:
-            rr = reference_rows(f, s, 20, env, P, G, fixed_chosen[f["fold"]])
-            for n in ("none", "random", "greedy", "planner", "clairvoyant"):
+            rr = reference_rows(f, s, EVAL_REPEATS, env, P, G, R, cfg, chosen[f["fold"]])
+            for n in SIMPLE:
                 rows[n][s] = rr[n]
-            rows["fixed"][s] = {m: rr[f"fixed_{m}"] for m in OUTCOMES}
-        for n in ("none", "random", "greedy", "planner", "clairvoyant"):
+            for n, m in fitted:
+                fitted[(n, m)][s] = rr[f"{n}_{m}"]
+        for n in SIMPLE:
             pr = per_run(rows[n])
             for m in OUTCOMES:
                 ref_vals[(n, m)].update(pr[m])
-        for m in OUTCOMES:
-            pr = per_run({s: rows["fixed"][s][m] for s in seeds})
-            ref_vals[("fixed", m)].update(pr[m])
+        for (n, m), by_seed in fitted.items():
+            ref_vals[(n, m)].update(per_run(by_seed)[m])
     values.update(ref_vals)
 
-    f2 = family(values, [("allpos", r, m) for r in REFERENCES for m in OUTCOMES])
+    f2 = family(values, pairs["family_2"])
+    f3 = family(values, pairs["family_3"])
     means = {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()}
-    res = {"family_1": f1, "family_2": f2, "means_primary": means,
+    res = {"family_1": f1, "family_2": f2, "family_3": f3, "means_primary": means,
            "unseen_scenarios_descriptive": {f"{n}|{m}": v for (n, m), v in descriptive.items()},
-           "fixed_chosen_on_training": fixed_chosen,
+           "static_fixed_chosen_on_training": chosen, "env_config": cfg.to_dict(),
            "n_units": {m: len(values[("allpos", m)]) for m in OUTCOMES}}
     dest = HERE / "out_test_d1"
     dest.mkdir(exist_ok=True)
     (dest / "D1_RESULTS.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
     L = ["Protocol D1.0 results (test opened once; simulation only)", "",
          f"units: E1 {res['n_units']['E1']} test runs, P1 {res['n_units']['P1']} (S4 excluded)", ""]
-    for name, fam in (("Family 1 (history vs no history)", f1), ("Family 2 (history vs reference policies)", f2)):
+    for name, fam in (("Family 1 (history vs no history)", f1), ("Family 2 (history vs reference policies)", f2),
+                      ("Family 3 (Transformer history vs LSTM history)", f3)):
         L.append(name)
         for c in fam:
             L.append(f"  {c['outcome']} {c['a']} - {c['b']}: {c['mean']:+.3f} [{c['ci'][0]:+.3f}, {c['ci'][1]:+.3f}] "

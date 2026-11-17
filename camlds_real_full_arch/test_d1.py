@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Tests for the protocol D1.0 environment changes (recorded positions, dataset goals, undefended zones)."""
+import sys
 import unittest
 from collections import Counter
+from pathlib import Path
 
 import numpy as np
 
@@ -222,6 +224,7 @@ class D1RunnerAndEvaluation(unittest.TestCase):
             self.assertNotIn("test_summary", d)
             self.assertEqual(d["order"], "frozen")
             self.assertEqual(d["env_config"]["movement"], "recorded")
+            self.assertEqual(d["env_config"]["reward"], "proposal")          # D6
 
 
 
@@ -250,9 +253,9 @@ class D1Sensitivity(unittest.TestCase):
         d1 = {rid: spec_of(rid).p1 for rid in RUNS}
         self.assertEqual([rid for rid, v in d1.items() if not v], ["4"])
 
-    def test_runner_smoke_for_two_sensitivities(self):
+    def test_runner_smoke_for_three_sensitivities(self):
         import subprocess, sys, tempfile, json, pathlib
-        for name in ("random_walk", "execution"):
+        for name in ("random_walk", "execution", "reward_engagement"):
             with tempfile.TemporaryDirectory() as tmp:
                 out = pathlib.Path(tmp) / name
                 r = subprocess.run([sys.executable, "-W", "ignore",
@@ -265,8 +268,13 @@ class D1Sensitivity(unittest.TestCase):
                 if name == "random_walk":
                     self.assertEqual(d["env_config"]["movement"], "random_walk")
                     self.assertEqual(d["env_config"]["goals"], "hand")
-                else:
+                elif name == "execution":
                     self.assertEqual(d["order"], "execution")
+                else:
+                    self.assertEqual(d["env_config"]["movement"], "recorded")
+                    self.assertEqual(d["order"], "frozen")
+                expected = "engagement" if name == "reward_engagement" else "proposal"
+                self.assertEqual(d["env_config"]["reward"], expected, name)
 
 
 
@@ -295,6 +303,106 @@ class D1Reward(unittest.TestCase):
                 self.assertAlmostEqual(rp, re_ + 1.0 * new - 5.0 * exp)
         with self.assertRaises(ValueError):
             env.EnvConfig(reward="other")
+
+
+
+class D1Decisions(unittest.TestCase):
+    """Decisions D4, D6 and D7 (2026-11-17) as the runner and the scorer implement them."""
+
+    def test_primary_reward_is_proposal_and_each_sensitivity_changes_only_what_it_names(self):
+        import run_d1 as R
+        prim, order = R.setting(None)
+        self.assertEqual((prim.reward, order), ("proposal", "frozen"))
+        self.assertEqual((prim.depth_bonus, prim.exposure_penalty), (1.0, 5.0))
+        base = prim.to_dict()
+        self.assertEqual(len(R.SENSITIVITIES), 6)
+        for name, (kw, o) in R.SENSITIVITIES.items():
+            cfg, got = R.setting(name)
+            self.assertEqual(got, o, name)
+            changed = {k for k, v in cfg.to_dict().items() if base[k] != v}
+            self.assertEqual(changed, set(kw), name)
+        self.assertEqual(R.setting("reward_engagement")[0].reward, "engagement")
+        self.assertEqual(R.setting("execution"), (prim, "execution"))
+
+    def test_reward_changes_no_outcome_of_a_fixed_policy(self):
+        # D6: the reward only trains the agents. The environment, and every outcome of a policy that
+        # does not learn, is identical under both rewards.
+        import gate_d1 as G
+        B = G.B
+        specs = [spec_of(rid, k) for k, rid in enumerate(("1_cron_pam", "3_vnc_apt", "6_macro_cron", "4"))]
+        makers = (lambda c: B.ReactivePolicy(c), lambda c: B.FixedJointPolicy((1, 2, 3, 4)),
+                  lambda c: B.RandomPolicy(7), lambda c: B.ClairvoyantCoordPolicy(c))
+        for make in makers:
+            stats = {}
+            for rw in ("engagement", "proposal"):
+                cfg = env.EnvConfig(reward=rw)
+                e = env.CommandEngagementEnv(cfg)
+                stats[rw] = [env.run_episode(e, s, make(cfg)) for s in specs]
+            self.assertEqual(stats["engagement"], stats["proposal"])
+
+    def test_main_arms_families_and_cell_counts(self):
+        import run_d1 as R
+        import evaluate_d1 as E
+        self.assertEqual(R.PRIMARY_ARMS, ("allpos", "NoHistory"))
+        self.assertEqual(R.MAIN_ARMS, ("allpos", "NoHistory", "lstm_allpos"))
+        self.assertEqual((E.PRIMARY_ARMS, E.MAIN_ARMS), (R.PRIMARY_ARMS, R.MAIN_ARMS))
+        fam = E.family_pairs()
+        self.assertEqual({k: len(v) for k, v in fam.items()}, {"family_1": 2, "family_2": 12, "family_3": 2})
+        self.assertEqual({r for _, r, _ in fam["family_2"]},
+                         {"none", "random", "static", "fixed", "greedy", "planner"})
+        self.assertEqual(fam["family_3"], [("allpos", "lstm_allpos", "E1"), ("allpos", "lstm_allpos", "P1")])
+        folds = p.ordered_folds("frozen")
+        self.assertEqual(len(E.cells(Path("x"), folds, range(10), R.MAIN_ARMS)), 960)
+        self.assertEqual(len(E.cells(Path("x"), folds, range(10), R.PRIMARY_ARMS)), 640)
+        self.assertEqual(len(E.cells(Path("x"), folds, range(5), R.PRIMARY_ARMS)), 320)
+
+    def test_static_and_fixed_are_fitted_on_training_runs_only(self):
+        import evaluate_d1 as E
+        import gate_d1 as G
+        import run_d1 as R
+
+        class Spy:                      # stands in for pipeline and records every split it is asked for
+            def __init__(self):
+                self.splits = []
+
+            def runs(self, fold, split):
+                self.splits.append(split)
+                return p.runs(fold, split)
+
+        spy = Spy()
+        fold = p.ordered_folds("frozen")[0]
+        joints = [(0, 0, 0, 0), (1, 2, 0, 0), (3, 3, 3, 3)]
+        ch = E.fit_static_fixed(fold, env, spy, G, R, R.setting(None)[0], joints=joints)
+        self.assertEqual(set(spy.splits), {"train"})
+        for m in E.OUTCOMES:
+            self.assertIn(ch["static"][m], range(1, env.N_ACTIONS))
+            self.assertIn(tuple(ch["fixed"][m]), joints)
+
+    def test_reference_policies_are_scored_on_the_arms_episodes(self):
+        # same runs, seed rule, repeats and setting as run_d1.run_cell's test episodes (paired comparison).
+        # Seed 777 is outside the protocol's seeds 0-9, so no protocol test episode is built here.
+        import evaluate_d1 as E
+        import gate_d1 as G
+        import run_d1 as R
+        fold = p.ordered_folds("frozen")[0]
+        cfg = R.setting(None)[0]
+        chosen = {"static": {"E1": 1, "P1": 2}, "fixed": {"E1": [1, 2, 0, 0], "P1": [0, 0, 3, 4]}}
+        rr = E.reference_rows(fold, 777, 2, env, p, G, R, cfg, chosen)
+        self.assertEqual(set(rr), set(E.SIMPLE) | {f"{n}_{m}" for n in E.FITTED for m in E.OUTCOMES})
+        specs = R.specs(p.runs(fold, "test"), R.TEST_SEED + 777, 2, cfg)
+        e = env.CommandEngagementEnv(cfg)
+        self.assertEqual(rr["none"], [env.run_episode(e, s, G.B.NullPolicy()) for s in specs])
+        self.assertEqual(rr["static_P1"], [env.run_episode(e, s, G.B.StaticPolicy(2)) for s in specs])
+        self.assertEqual(rr["fixed_P1"], [env.run_episode(e, s, G.B.FixedJointPolicy([0, 0, 3, 4])) for s in specs])
+        self.assertEqual({r["run"] for r in rr["none"]}, set(fold["test_runs"]))
+
+    def test_order_check_reproduces_its_report(self):
+        # D4: checks/ORDER_CHECK.txt is what checks/order_check.py computes from the pinned data
+        sys.path.insert(0, str(Path(__file__).resolve().parent / "checks"))
+        import order_check
+        text = (Path(__file__).resolve().parent / "checks" / "ORDER_CHECK.txt").read_text(encoding="utf-8")
+        self.assertEqual(order_check.report(), text)
+        self.assertIn("runs whose order differs: 4", text)
 
 
 if __name__ == "__main__":

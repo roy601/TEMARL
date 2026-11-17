@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 """Protocol D1.0 main study runner. Test outputs are SEALED.
 
-    python camlds_real_full_arch/run_d1.py --device cuda                 # 640 primary cells, resumable
+    python camlds_real_full_arch/run_d1.py --device cuda                 # 960 main cells, resumable
     python camlds_real_full_arch/run_d1.py --device cuda --timing        # one cell, no test episodes
     python camlds_real_full_arch/run_d1.py --smoke                       # code check, tiny, no freeze needed
     python camlds_real_full_arch/run_d1.py --device cuda --sensitivity mean   # Section 8, seeds 0-4
 
+Main cells (Section 7): the 640 primary cells (allpos, NoHistory: Family 1) over all folds and seeds
+first, then the 320 lstm_allpos cells (Family 3). The test is opened only after all 960 exist.
+
 What differs from pipeline.main (deliberately):
-  * command order is always 'frozen' (decision D4), environment = EnvConfig() (recorded positions);
+  * command order is always 'frozen' (decision D4); environment = EnvConfig(reward="proposal")
+    (recorded positions; reward chosen by pilot rule R2, decision D6). Every Section 8 sensitivity
+    analysis changes one thing from this primary setting;
   * encoders are the protocol 1.2 checkpoints, loaded unchanged and checked against their recorded
     validation BCE. The CAM-LDS PREDICTION test is NEVER scored again (pipeline.encoder rescored it);
   * each cell's test episodes are written to sealed_test.json and only its SHA-256 goes into result.json;
@@ -33,7 +38,9 @@ import pipeline as P  # noqa: E402
 import spec_d1  # noqa: E402
 
 env, marl, data, variants, port = P.env, P.marl, P.data, P.variants, P.port
-PRIMARY_ARMS = ("allpos", "NoHistory")
+PRIMARY_ARMS = ("allpos", "NoHistory")             # Family 1; also the arms of every sensitivity analysis
+MAIN_ARMS = PRIMARY_ARMS + ("lstm_allpos",)         # + Family 3 (D7): the proposal's "MARL without the Transformer"
+PRIMARY_REWARD = "proposal"                         # D6, chosen by pilot rule R2 (PROTOCOL_D1.0 Section 7a)
 # Section 8 sensitivity analyses: environment changes and command order
 SENSITIVITIES = {
     "efficacy_0.5": ({"efficacy": 0.5}, "frozen"),
@@ -41,16 +48,18 @@ SENSITIVITIES = {
     "mean": ({"aggregation": "mean"}, "frozen"),
     "random_walk": ({"movement": "random_walk", "goals": "hand"}, "frozen"),
     "execution": ({}, "execution"),
+    "reward_engagement": ({"reward": "engagement"}, "frozen"),   # D6: no depth bonus, no exposure penalty
 }
 ENCODER_BUDGET = {"allpos": 9152, "baseline": 9152, "gru_allpos": 18304, "lstm_allpos": 18304}  # protocol 1.2
 
 
 def setting(name):
-    """(EnvConfig, command order) of the primary study or of a Section 8 sensitivity analysis."""
+    """(EnvConfig, command order) of the primary study, or of a Section 8 sensitivity analysis, which
+    changes only the entries it names: everything else, the reward included, is the primary setting."""
     if name in (None, "primary"):
-        return env.EnvConfig(), "frozen"
+        return env.EnvConfig(reward=PRIMARY_REWARD), "frozen"
     kw, order = SENSITIVITIES[name]
-    return env.EnvConfig(**kw), order
+    return env.EnvConfig(**{"reward": PRIMARY_REWARD, **kw}), order
 
 
 def specs(rs, seed, repeats, cfg):
@@ -145,7 +154,8 @@ def main():
     ap.add_argument("--output", type=Path, default=None)
     ap.add_argument("--sensitivity", choices=sorted(SENSITIVITIES), default=None)
     ap.add_argument("--encoder-root", default=str(P.REPO / "camlds_encoder" / "out"))
-    ap.add_argument("--arms", nargs="+", choices=P.ARMS, default=list(PRIMARY_ARMS))
+    ap.add_argument("--arms", nargs="+", choices=P.ARMS, default=None,
+                    help="default: the 3 main arms; for a sensitivity analysis, allpos and NoHistory")
     ap.add_argument("--learners", nargs="+", choices=["MAPPO", "IPPO"], default=["MAPPO"])
     ap.add_argument("--folds", nargs="+")
     ap.add_argument("--seeds", nargs="+", type=int, default=None)
@@ -160,6 +170,8 @@ def main():
         a.output = OUT / (a.sensitivity or "main")
     if a.seeds is None:
         a.seeds = list(range(5)) if a.sensitivity else list(range(10))
+    if a.arms is None:
+        a.arms = list(PRIMARY_ARMS if a.sensitivity else MAIN_ARMS)
     if a.sensitivity and (set(a.arms) - set(PRIMARY_ARMS) or a.learners != ["MAPPO"]):
         raise SystemExit("Section 8: sensitivity runs use allpos and NoHistory with MAPPO only")
     torch.set_num_threads(a.threads)
@@ -179,9 +191,9 @@ def main():
     if a.timing:
         dest = a.output.parent / "timing" / "allpos" / folds[0]["fold"] / "s0" / "MAPPO"
         r = run_cell("allpos", "MAPPO", folds[0], 0, a, dest, test=False)
-        n = len(P.ordered_folds("frozen")) * 10 * 2
+        n = len(P.ordered_folds("frozen")) * 10 * len(MAIN_ARMS)
         print(f"timing: one cell {r['wall_seconds']:.0f} s on {a.device} "
-              f"-> {n} primary cells about {n * r['wall_seconds'] / 3600:.1f} h (test episodes not included)")
+              f"-> {n} main cells about {n * r['wall_seconds'] / 3600:.1f} h (test episodes not included)")
         return
 
     spec_d1.require()
@@ -200,16 +212,19 @@ def main():
     with lock.open("x") as fh:
         fh.write(str(os.getpid()))
     try:
-        for f in folds:
-            for seed in a.seeds:
-                for arm in a.arms:
-                    for learner in a.learners:
-                        dest = out / "cells" / arm / f["fold"] / f"s{seed}" / learner
-                        if (dest / "result.json").exists():
-                            continue
-                        print(f"D1.0 cell: {arm} {learner} {f['fold']} s{seed}", flush=True)
-                        run_cell(arm, learner, f, seed, a, dest, test=True)
-                        validation_summary(out)
+        # D5: the primary cells (Family 1) over all folds and seeds first, then the other arms
+        phases = [[x for x in a.arms if x in PRIMARY_ARMS], [x for x in a.arms if x not in PRIMARY_ARMS]]
+        for arms in phases:
+            for f in folds:
+                for seed in a.seeds:
+                    for arm in arms:
+                        for learner in a.learners:
+                            dest = out / "cells" / arm / f["fold"] / f"s{seed}" / learner
+                            if (dest / "result.json").exists():
+                                continue
+                            print(f"D1.0 cell: {arm} {learner} {f['fold']} s{seed}", flush=True)
+                            run_cell(arm, learner, f, seed, a, dest, test=True)
+                            validation_summary(out)
     finally:
         lock.unlink(missing_ok=True)
     validation_summary(out)

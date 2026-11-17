@@ -27,6 +27,12 @@ FILES = (
     "camlds_real_full_arch/LITERATURE_NOTES.md",
     "camlds_real_full_arch/checks/movement_check.py",
     "camlds_real_full_arch/checks/MOVEMENT_CHECK.txt",
+    "camlds_real_full_arch/checks/order_check.py",
+    "camlds_real_full_arch/checks/ORDER_CHECK.txt",
+    # pilot (decision D6 by rule R2)
+    "camlds_real_full_arch/pilot_d1.py",
+    "camlds_real_full_arch/results_d1/pilot/PILOT_RESULTS.json",
+    "camlds_real_full_arch/results_d1/pilot/PILOT_RESULTS.md",
     # study code
     "camlds_real_full_arch/env_cmd.py",
     "camlds_real_full_arch/d1_data.py",
