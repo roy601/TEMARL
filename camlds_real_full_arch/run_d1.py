@@ -215,6 +215,40 @@ def require_preflight(out: Path, need):
         raise SystemExit(f"preflight did not check {len(missing)} needed checkpoints, e.g. {sorted(missing)[:3]}")
 
 
+def identity_of(a, order, cfg, all_folds):
+    """Everything that decides what a cell contains. A resumed or later invocation must match it exactly;
+    the machine, threads, output path and which arms, folds or seeds this invocation asks for do not."""
+    return {"protocol": "D1.0", "spec": json.loads(spec_d1.SPEC.read_text(encoding="utf-8")), "hp": dict(marl.HP),
+            "env_config": cfg.to_dict(), "order": order, "env_steps": a.env_steps, "eval_repeats": a.eval_repeats,
+            "val_seed": VAL_SEED, "test_seed": TEST_SEED,
+            "folds": [{k: v for k, v in f.items() if k != "_steps"} for f in all_folds]}
+
+
+def write_manifest(out: Path, identity: dict, invocation: dict):
+    """MANIFEST.json = identity (checked on every start) + a log of every invocation (not checked).
+    Raises RuntimeError if the identity differs from the one the directory was started with."""
+    mp = out / "MANIFEST.json"
+    log = []
+    if mp.exists():
+        old = json.loads(mp.read_text(encoding="utf-8"))
+        if old["identity"] != json.loads(json.dumps(identity)):
+            raise RuntimeError("configuration or pinned files changed: use a new output directory")
+        log = old["invocations"]
+    P.write(mp, {"identity": identity, "invocations": log + [invocation]})
+
+
+def acquire_lock(out: Path) -> Path:
+    lock = out / "RUNNING.lock"
+    try:
+        with lock.open("x") as fh:
+            fh.write(str(os.getpid()))
+    except FileExistsError:
+        raise SystemExit(f"{lock} exists: another run uses this directory, or an earlier run was killed "
+                         f"(power cut, closed window). If none is running, delete the lock and start again; "
+                         f"finished cells are kept and skipped.")
+    return lock
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"])
@@ -288,18 +322,12 @@ def main():
     if setting(a.sensitivity)[1] == "frozen":
         require_preflight(out, needed_checkpoints(a, folds, plan))
     out.mkdir(parents=True, exist_ok=True)
-    manifest = {"protocol": "D1.0", "spec": json.loads(spec_d1.SPEC.read_text(encoding="utf-8")),
-                "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()},
-                "hp": marl.HP, "env_config": setting(a.sensitivity)[0].to_dict(),
-                "order": setting(a.sensitivity)[1], "setting": a.sensitivity or "primary",
-                "folds": [{k: v for k, v in f.items() if k != "_steps"} for f in folds]}
-    mp = out / "MANIFEST.json"
-    if mp.exists() and json.loads(mp.read_text(encoding="utf-8")) != json.loads(json.dumps(manifest)):
-        raise RuntimeError("configuration or pinned files changed: use a new output directory")
-    P.write(mp, manifest)
-    lock = out / "RUNNING.lock"
-    with lock.open("x") as fh:
-        fh.write(str(os.getpid()))
+    cfg_, order_ = setting(a.sensitivity)
+    write_manifest(out, {**identity_of(a, order_, cfg_, P.ordered_folds(order_)),
+                         "setting": a.sensitivity or "primary"},
+                   {"started": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "arguments": {k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()}})
+    lock = acquire_lock(out)
     try:
         # PHASES order: primary cells over all folds and seeds first (D5), then Family 3, then Q4 (D8)
         phases = [PHASES[0]] if a.sensitivity else PHASES

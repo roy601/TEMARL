@@ -1,7 +1,7 @@
 # Protocol D1.0: history-aware deception agents on verified CAM-LDS (simulation)
 
-**Status: DRAFT, 2026-11-17. Not frozen.** No deception agent has been trained or evaluated under this
-protocol. It is frozen only after the user approves the decisions in Section 10. After that, any change
+**Status: DRAFT, 2026-11-17. Not frozen.** No main-study agent has been trained or evaluated under this
+protocol (the pilot of Section 7a used validation data only). It is frozen only after the user approves the decisions in Section 10. After that, any change
 means a new version (D1.1), never an edit of this one. The order of events is provable from git history.
 Decisions D1-D8 were settled by the user on 2026-11-17 (Section 10); the freeze itself is still pending.
 
@@ -164,6 +164,13 @@ protocol D1.1 with the fix stated.
 - Every cell's validation learning curve is reported (supplement), so convergence at 2,000,000 steps
   can be checked. All arms use the same MAPPO settings; none is tuned separately.
 - Test outputs are written with their SHA-256 and are not scored until Section 9 runs.
+- **Restarting:** the run is resumable cell by cell. `MANIFEST.json` stores what decides a cell's content
+  (spec, settings, hyperparameters, steps, repeats, seeds, folds) and a log of every invocation; a start
+  whose content-defining settings differ is refused. Machine, threads, output path and the choice of arms,
+  folds or seeds may differ between starts. After a killed run, delete `RUNNING.lock` and start again.
+- **Diagnostics before the freeze (allowed):** `--preflight` and `--timing` use no test data and print no
+  gate number, so they may be run on the GPU PC before the freeze to find a missing or non-reproducing
+  checkpoint, or a dry-run mismatch on the GPU, while a fix is still possible. They are repeated after it.
 - **Before the main run, on the GPU PC, after the freeze:** `run_d1.py --preflight` loads every
   protocol 1.2 checkpoint the main run needs (1,280: allpos, lstm_allpos, gru_allpos and baseline x 32
   folds x 10 seeds) and checks that each reproduces its recorded validation BCE; the main run refuses to

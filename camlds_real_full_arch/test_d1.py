@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the protocol D1.0 environment changes (recorded positions, dataset goals, undefended zones)."""
+import json
 import sys
 import unittest
 from collections import Counter
@@ -541,6 +542,53 @@ class D1AuditFixes(unittest.TestCase):
             rep = json.loads(next(Path(tmp).rglob("TIMING_DRY_RUN.json")).read_text(encoding="utf-8"))
             self.assertTrue(rep["pass"])
             self.assertEqual(rep["recorded"], rep["measured"])
+
+
+    def test_restart_checks_what_decides_a_cell_not_the_machine(self):
+        import argparse, tempfile
+        import run_d1 as R
+        args = lambda **kw: argparse.Namespace(**{"env_steps": 2_000_000, "eval_repeats": 20, **kw})
+        spec_stub = {"frozen_on": "x"}
+        orig = R.spec_d1.SPEC
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            R.spec_d1.SPEC = tmp / "SPEC_D1.json"
+            R.spec_d1.SPEC.write_text(json.dumps(spec_stub), encoding="utf-8")
+            try:
+                folds = p.ordered_folds("frozen")
+                cfg, order = R.setting(None)
+                ident = lambda a, c=cfg: R.identity_of(a, order, c, folds)
+                out = tmp / "main"
+                out.mkdir()
+                R.write_manifest(out, ident(args()), {"arguments": {"device": "cuda", "threads": 4}})
+                # a restart on another machine, with other threads, arms or seeds: accepted and logged
+                R.write_manifest(out, ident(args()), {"arguments": {"device": "cpu", "threads": 8, "arms": ["allpos"]}})
+                log = json.loads((out / "MANIFEST.json").read_text(encoding="utf-8"))["invocations"]
+                self.assertEqual([i["arguments"]["device"] for i in log], ["cuda", "cpu"])
+                # what decides a cell's content: refused
+                with self.assertRaises(RuntimeError):
+                    R.write_manifest(out, ident(args(env_steps=1_000_000)), {})
+                with self.assertRaises(RuntimeError):
+                    R.write_manifest(out, ident(args(eval_repeats=10)), {})
+                with self.assertRaises(RuntimeError):
+                    R.write_manifest(out, ident(args(), R.setting("efficacy_0.5")[0]), {})
+                R.spec_d1.SPEC.write_text(json.dumps({"frozen_on": "y"}), encoding="utf-8")
+                with self.assertRaises(RuntimeError):                      # a pinned file changed
+                    R.write_manifest(out, ident(args()), {})
+            finally:
+                R.spec_d1.SPEC = orig
+
+    def test_a_stale_lock_gives_an_instruction_not_a_traceback(self):
+        import tempfile
+        import run_d1 as R
+        with tempfile.TemporaryDirectory() as tmp:
+            lock = R.acquire_lock(Path(tmp))
+            self.assertTrue(lock.exists())
+            with self.assertRaises(SystemExit) as cm:
+                R.acquire_lock(Path(tmp))
+            self.assertIn("delete the lock", str(cm.exception))
+            lock.unlink()
+            R.acquire_lock(Path(tmp))
 
 
 if __name__ == "__main__":
