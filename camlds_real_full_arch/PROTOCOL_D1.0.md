@@ -121,7 +121,13 @@ protocol D1.1 with the fix stated.
 - Seeds 0-9. Validation randomness seed 100000+seed, test randomness seed 200000+seed, 20 evaluation
   repeats per run (simulation repeats, never treated as independent samples).
 - Policy checkpoint chosen by validation E1 only. Nothing else is chosen on validation.
-- Primary cells: 2 arms x 32 folds x 10 seeds = 640. Secondary cells run afterwards, on either GPU PC.
+- Primary cells: 2 arms x 32 folds x 10 seeds = 640, all run in full: no reduction of seeds or steps,
+  whatever the run time (D5). Secondary cells run afterwards, on either GPU PC.
+- Time: measured in the pilot on a CPU, median 35 s per 200,000 steps (max 39 s), so about 6 min per
+  2,000,000-step cell and about 62-64 h for the 640 primary cells, test episodes not included (linear
+  scaling assumed). GPU time is measured with `run_d1.py --timing` before the main run and reported.
+- Every cell's validation learning curve is reported (supplement), so convergence at 2,000,000 steps
+  can be checked. All arms use the same MAPPO settings; none is tuned separately.
 - Test outputs are written with their SHA-256 and are not scored until Section 9 runs.
 - Runner: `run_d1.py` (command order always frozen; environment `EnvConfig()`). Encoders are the
   protocol 1.2 checkpoints, loaded unchanged and accepted only if they reproduce their recorded
@@ -198,7 +204,7 @@ with the same statistics; sensitivity results are reported as such and never rep
 | D2 | movement | **checked 2026-11-17 (`checks/MOVEMENT_CHECK.txt`):** recorded zone per command primary; random walk as sensitivity | the model makes 9.3 zone changes per run against 1.5 recorded, stays in the target 0.78 against 0.97, and cannot place the 16% of commands that run on the attacker machine or the firewall. Source: AttackMate records from the md5-verified scenario archives |
 | D3 | goals | **checked 2026-11-17:** S6 goal = Persistence (AttackBed `client.md`); goal commands from the dataset's own per-command tactic labels (`tactics_raw`). All 34 runs then contain goal commands; no run is dropped | replaces "drop 8 runs", which would have removed all of S6 |
 | D4 | command order | frozen order, reuse protocol 1.2 checkpoints; execution order as sensitivity | validated checkpoints exist only for this order |
-| D5 | size | 640 primary cells first (about 1.5 days on GPU PC 1), the rest afterwards | the main question first |
+| D5 | size | **decided 2026-11-17:** 640 primary cells in full (10 seeds, 2,000,000 steps), no reduction; the rest afterwards. CPU time measured in the pilot (about 62-64 h); GPU time measured before the run | the main question first; fewer steps would leave learning unfinished (pilot curves still rising at 200,000) |
 | D6 | reward | engagement only; P1 as a measured side effect | a fair test of "protects better" without training for it; a combined reward would be a new arm, declared before any run |
 | D7 | comparators | Hawkeyes, Li, Wang 2020, only after their replication | STANDARD.md |
 
