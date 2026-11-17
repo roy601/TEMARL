@@ -1,5 +1,10 @@
 # CAM-LDS recorded-data full architecture
 
+> **Protocol D1.0 (2026-11-17) replaces the run path described below.** See `PROTOCOL_D1.0.md`:
+> recorded attacker positions (`d1_data.py`), validity gate (`gate_d1.py`), sealed runner (`run_d1.py`),
+> scorer (`evaluate_d1.py`), pinning (`spec_d1.py`), tests (`test_d1.py`). Do not use
+> `pipeline.py` main for the study: it rescored the prediction test and printed test summaries.
+
 This adds IPPO and MAPPO to `camlds_real` + `camlds_encoder`. Existing folders, checkpoints and results are unchanged. The new experiment has not been run to completion; smoke outputs are software checks only.
 
 ## Where the data comes from

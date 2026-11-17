@@ -47,7 +47,7 @@ Each PC only writes its own folders, so the two never conflict. Always pull befo
 | 5 | **Co-ADAM**, Sci Rep 2026 | harness exists (`COADAM_repro/`, Tushit), never executed; our audit found the paper's tables built from one frozen policy | MATLAB R2025b + Statistics toolbox | no | Idea 03: zones + per-step attacker |
 | 6 | **HoneyGPT**, Comput. Netw. 2026 | **PARTIAL**: their tables can be recomputed from released CSVs; the live LLM honeypot cannot be rerun as published | Python; (LLM API only for a live rerun, not planned) | no | citation for #2's data; fails all three ideas |
 | 7 | **HoneyFactory 2024**, Electronics | **REIMPLEMENT ONLY** (HMM over traffic stages; container honeynet, no package) | the PDF (MDPI blocks automatic download) | no | Idea 03 after rebuilding |
-| 8 | **DeepOP 2025**, Electronics | **UNKNOWN**: data release unknown | the PDF; author reply | yes, if possible | Idea 01 |
+| 8 | **DeepOP 2025**, Electronics | **NOT REPRODUCIBLE as published** (2026-11-16): no code, dataset by e-mail only; 37 targets pre-registered; Table 3 internally consistent; author request drafted (`deepop2025/`) | the authors' reply | maybe | Idea 01 |
 | 9 | **ASD-TGXAI 2026**, Ain Shams Eng. J. | **NO** with the materials found: no runnable package, no ordered per-step ATT&CK labels | — | — | closed unless the PDF shows code |
 | 10 | **Q-Cowrie 2026**, Int. J. Inf. Secur. | **BLOCKED**: 400,000 sessions available by email only | author reply | no | Idea 03 / 02 if data arrives |
 
@@ -64,3 +64,12 @@ git clone https://github.com/roy601/TEMARL.git; cd TEMARL; python -m venv .venv;
 
 `pc2_check.py` only reads: it reports Python, PyTorch + CUDA (with a short GPU test), Docker, MATLAB,
 disk and RAM, and which papers this PC can run.
+
+## Deception comparators (added 2026-11-16)
+
+| paper | area | status |
+|---|---|---|
+| **Hawkeyes 2025** (multi-agent RL honeypot allocation) | trapping / allocation, MARL | 6 targets pre-registered (`hawkeyes2025/`); no code, pure simulation: rebuild (replication) |
+| **Li et al. 2025** (DRD-PPO) | trapping / protection, single-agent RL | 11 targets pre-registered (`li2025_drdppo/`); no code, pure simulation: rebuild (replication) |
+| **CAGE Challenge 4** | independent multi-agent defence benchmark | 24 targets pre-registered (`cage4/`); only Team cybermonic's agent is released |
+| **D3O-IIoT 2025** | DSR per attack (IIoT) | screen only (same group as Co-ADAM); Table 3: DSR 5.63%, AMR 13.75%, 75 episodes |

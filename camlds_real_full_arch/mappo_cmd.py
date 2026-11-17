@@ -308,7 +308,8 @@ def train(encoder, cfg: EnvConfig, train_runs, validation_specs, test_specs,
     t0 = time.time()
 
     bank = HistoryBank(encoder, window, device, h_zero=(encoder is None))
-    pool = ReplayPool(train_runs, seed=900_000 + seed)
+    from env_cmd import scenario_metadata
+    pool = ReplayPool(train_runs, seed=900_000 + seed, meta=scenario_metadata(cfg.goals))
     vec = VecEnv(HP["n_envs"], cfg, Episodes(pool, bank), max_steps)
 
     actor = Actor().to(device)
