@@ -66,28 +66,35 @@ deception methods.*
 The names "dwell" and "depth" are never used in the write-up as attacker time or attacker depth: they are
 counts of engaged commands and of distinct techniques on engaged commands.
 
-## 5. Step 0: validity gate (run and reported BEFORE any learned agent)
+## 5. Step 0: validity gate (run and reported BEFORE any learned agent; `gate_d1.py`)
 
-Reference ladder, evaluated on the **validation** runs of every fold with the evaluation randomness of
-Section 7:
+**Data and randomness.** All 34 runs, seed 300000, 20 repeats per run. This randomness is disjoint from
+validation (100000+s) and test (200000+s). *Why not validation only (the first draft):* the validation sets
+of the 32 folds contain only 7 distinct runs from 4 of the 7 scenarios (20 of 32 folds use the same run),
+too few for a confidence interval to decide anything. The gate involves no learned agent, and the two
+fitted rules are fitted **leaving the scored run out**. *Disclosure:* the gate therefore shows how the
+fixed reference policies behave on the runs that later serve as test runs (with other randomness). Nothing
+is chosen or tuned after the gate, and the protocol is frozen before the gate is run.
 
 | policy | what it does |
 |---|---|
 | none | no decoys |
-| random | random action per agent, capacity respected |
-| fixed (best static) | the single joint allocation with the best validation E1, kept all episode (Wang's / Anwar's static baseline) |
-| greedy (reactive) | each step, decoys in the zones where the attacker is or was last seen, best payoff for the last command |
-| transition planner | greedy using the empirical next-command distribution from the fold's training runs given the previous command (uses history, no learning) |
-| clairvoyant ceiling | sees the next zone and the next command (upper bound only) |
+| random | uniform random joint action (capacity applies as for every policy) |
+| fixed | the best constant joint action over all 6^4, chosen per outcome (E1, P1) on all other runs (Wang's / Anwar's static baseline) |
+| greedy | the payoff-best decoy for the last command, in the zone where the attacker was last seen (frozen `ReactivePolicy`) |
+| planner | as greedy, but for the next command predicted from the previous one (empirical transitions of all other runs): uses history, no learning |
+| clairvoyant | sees the next zone and the next command (frozen `ClairvoyantCoordPolicy`; ceiling only, never an arm) |
 
-**Pass criteria, all required, judged on validation only:**
+**Unit:** the run (E1: 34 runs; P1: the 33 runs with p1). Bootstrap: 10,000 resamples of runs, seed
+20261103, percentile 95% interval.
 
-- G1, protection is measurable: under "none", the goal is reached in at least 50% of goal-reachable
-  validation episodes.
-- G2, headroom: for E1 and for P1, clairvoyant minus best of {fixed, greedy} > 0, with a 95% bootstrap CI
-  over runs that excludes 0.
-- G3, history can matter: transition planner minus greedy > 0 on E1 or P1, with a CI that excludes 0. If
-  G3 fails, Q1 is untestable in this environment: this is reported and the study stops before MARL.
+**Pass criteria, all required:**
+
+- G1, protection is measurable: under "none", the goal is reached in at least 50% of P1 episodes.
+- G2, headroom: for E1 and for P1, clairvoyant minus the better of {fixed, greedy} > 0, with a CI that
+  excludes 0.
+- G3, history can matter: planner minus greedy > 0 on E1 or on P1, with a CI that excludes 0. If G3
+  fails, Q1 is untestable in this environment: this is reported and the study stops before MARL.
 
 If any gate fails, the environment is not tuned to pass. The failure is reported, and any fix becomes
 protocol D1.1 with the fix stated.

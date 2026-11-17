@@ -151,5 +151,30 @@ class D1Environment(unittest.TestCase):
             self.assertEqual(e.global_state().shape, (env.GLOBAL_DIM,))
 
 
+
+class D1Gate(unittest.TestCase):
+    def test_planner_never_sees_the_scored_run(self):
+        import gate_d1 as G
+        runs = G.all_runs()
+        target = runs[0]
+        others = [r for r in runs if r["id"] != target["id"]]
+        pl = G.TransitionPlanner(others, env.EnvConfig())
+        n_trans = sum(len(r["commands"]) - 1 for r in others)
+        self.assertEqual(sum(sum(c.values()) for c in pl.next.values()), n_trans)
+
+    def test_gate_randomness_is_disjoint_from_validation_and_test(self):
+        import gate_d1 as G
+        self.assertNotIn(G.GATE_SEED, {100000 + s for s in range(10)} | {200000 + s for s in range(10)})
+
+    def test_gate_smoke_runs(self):
+        import itertools
+        import gate_d1 as G
+        runs = G.all_runs()
+        res = G.run_gate(runs[:2] + runs[-1:], env.EnvConfig(), repeats=1,
+                         joints=list(itertools.product((0, 1), repeat=env.N_AGENTS))[:4])
+        self.assertEqual(set(res["gates"]), {"G1", "G2", "G3"})
+        self.assertEqual(res["n_runs"]["E1"], 3)
+
+
 if __name__ == "__main__":
     unittest.main()
