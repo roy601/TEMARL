@@ -28,6 +28,10 @@ deception methods.*
 - **Reachability audit (done 2026-11-17, before any run):** under the scenario goal tactics, 8 of 34 runs
   contain no goal-tactic command at all (1_pwnkit_pam, 1_sudo_pam, 1_validaccount_pam, and all five S6
   runs). For these runs "protected" is always 1, whatever the agents do. See Section 4 and decision D3.
+- **Resolved from sources (2026-11-17, `ZONE_GOAL_CHECK.md`):** S6's hand-typed goal (Exfiltration) is
+  not in AttackBed's scenario 6; its stated goal is persistence. T1556 (the pam backdoor) is Persistence in
+  ATT&CK but only Credential Access in our single-tactic vocabulary. With goal = Persistence for S6 and a
+  goal mask from ATT&CK's full tactic membership, all 34 runs contain goal commands.
 
 ## 3. Environment (`env_cmd.py`, D1.0 settings)
 
@@ -46,7 +50,7 @@ deception methods.*
 | # | outcome | definition | role |
 |---|---|---|---|
 | E1 | **engaged commands** | commands engaged per episode (code name `dwell`) | **primary, engagement** |
-| P1 | **defense success probability (DSP)** | episodes in which the attacker never completes its goal / all episodes, as the ratio of Wang et al. 2020, Def. 9. The success criterion is adapted: Wang counts the attacker entering a decoy before the database; we count the goal command never succeeding un-engaged in the target zone. Computed **only on goal-reachable runs** (D3). | **primary, protection** |
+| P1 | **defense success probability (DSP)** | episodes in which the attacker never completes its goal / all episodes, as the ratio of Wang et al. 2020, Def. 9. The success criterion is adapted: Wang counts the attacker entering a decoy before the database; we count the goal command never succeeding un-engaged in the target zone. Goals as fixed in D3; any run still without a goal command is excluded from P1 and listed. | **primary, protection** |
 | S1 | commands until goal | first-passage time to the goal (cf. Huang & Zhu 2019); censored at run length | secondary |
 | S2 | engaged fraction | E1 / run length | secondary |
 | S3 | exposure rate, distinct techniques engaged, lure chains, dead ends, capacity violations | as recorded by `episode_stats` | descriptive |
@@ -110,7 +114,8 @@ protocol D1.1 with the fix stated.
 1. Efficacy: PAYOFF scaled by 0.5 and 0.75 (1.0 = primary). Ferguson-Walter et al. 2021 (52% of
    IP-addressed red-team commands went to decoys) is cited for the range, not as a calibration.
 2. Set aggregation `mean` instead of `max` (separately trained, as `env_cmd.py` states).
-3. Zones: hand-typed grounding vs data-derived (D1), whichever is not primary.
+3. Zones: S4 target DMZ (old rule) instead of LAN; goals from the old single-tactic mask (P1 then on the
+   26 runs that contain goal commands).
 4. Execution order instead of frozen order (S6 swaps corrected).
 Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 
@@ -128,16 +133,16 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 - Per comparison: mean paired difference, 95% bootstrap CI (10,000 resamples of runs, seed 20261103),
   two-sided Wilcoxon signed-rank (scipy 1.17.1, zero differences dropped), Holm within each family.
   "X outperforms Y" only if Holm p < 0.05 and the CI excludes 0; otherwise "no difference shown".
-- P1 uses goal-reachable runs only (D3); the number of runs used is reported with every P1 result.
+- The number of runs used is reported with every P1 result.
 - Every result is reported whatever its direction. Q3 is descriptive.
 
 ## 10. Decisions for the user (recommended choice first)
 
 | # | decision | recommendation | why |
 |---|---|---|---|
-| D1 | zones | data-derived entry/target from `camlds_real/derived_zones.json` primary; hand-typed as sensitivity. The 8 AttackBed subnets must first be mapped to the 5 zones by a **declared rule**. Only 172.17.100.0/24 = DMZ and 192.168.50.0/24 = User are recovered from the existing annotation; 192.42.0.0/24 (corpdns), 192.168.100.0/24 (inetfw, linuxshare, lanturtle) and 10.12.0.0/24 (adminpc) still need a decision, checked against the AttackBed inventory | the hand-typed zones differ from the data on 5 of 7 scenarios |
-| D2 | movement | keep the declared movement model (p_goal, p_stay; lures can redirect); entry and target from data | the recorded logs give hosts per run, not a zone per command that a defence could change |
-| D3 | unreachable goals | P1 on the 26 goal-reachable runs only; E1 on all runs | otherwise 8 runs count as protected whatever the agents do |
+| D1 | zones | **checked 2026-11-17 (`ZONE_GOAL_CHECK.md`):** hand-typed entry/target zones, which agree with AttackBed's scenario descriptions for 6 of 7 scenarios; S4 target = LAN (where the attack ends), DMZ as sensitivity. `derived_zones.json` is not used: its host order is where logs first show activity (DNS server and firewall see all traffic), not where the attacker is | source-verified; the earlier "data-derived" recommendation was wrong |
+| D2 | movement | not yet checked: p_goal / p_stay come from the old environment's calibration | to be checked against per-command hosts (needs a verified `manifestations_filtered.zip`) |
+| D3 | goals | **checked 2026-11-17:** S6 goal = Persistence (AttackBed `client.md`); goal mask from ATT&CK's full tactic membership (pinned release). All 34 runs then contain goal commands; no run is dropped | replaces "drop 8 runs", which would have removed all of S6 |
 | D4 | command order | frozen order, reuse protocol 1.2 checkpoints; execution order as sensitivity | validated checkpoints exist only for this order |
 | D5 | size | 640 primary cells first (about 1.5 days on GPU PC 1), the rest afterwards | the main question first |
 | D6 | reward | engagement only; P1 as a measured side effect | a fair test of "protects better" without training for it; a combined reward would be a new arm, declared before any run |
