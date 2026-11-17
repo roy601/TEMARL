@@ -205,6 +205,10 @@ def main():
         report(res)   # built but NOT printed: no gate number is seen before the protocol is frozen
         print("smoke OK:", sorted(res["means"]), "gates", sorted(res["gates"]), "runs", res["n_runs"])
         return
+    import spec_d1
+    spec_d1.require()           # the gate runs only after the protocol is frozen
+    if (a.output / "GATE_RESULT.json").exists():
+        raise SystemExit("the gate has already been run under D1.0; it is not rerun")
     res = run_gate(runs, cfg)
     a.output.mkdir(parents=True, exist_ok=True)
     (a.output / "GATE_RESULT.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
