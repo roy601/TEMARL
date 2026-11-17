@@ -61,3 +61,37 @@ Two things still to do before the protocol is frozen: (a) pin the ATT&CK release
 membership (a STIX file with its hash), because the full-membership mask can also add goal commands in
 other runs; the new counts are reported per run; (b) decide S4's target (LAN, where the attack ends,
 recommended; DMZ by the old rule as a sensitivity run).
+
+## D2. Movement: the environment's random-walk model does NOT match the recorded runs
+
+Check: `checks/movement_check.py` (read-only) -> `checks/MOVEMENT_CHECK.txt`. Each of the 904 commands is
+linked to its AttackMate execution record (all 904 matched; records from the 34 md5-verified scenario
+archives, not from the mismatched `manifestations_filtered.zip`). Its zone is the zone of the host it
+executes on, by documented rules (DNAT ports and reverse shells from `firewall.md`, implant and handler
+hosts from the scenario pages, ssh hops inside a session). The model is env_cmd's own `_move`
+(p_goal 0.7, p_stay 0.8), no defence, 20 draws per run.
+
+| | recorded | model |
+|---|---|---|
+| zone changes per run (mean) | **1.50** | **9.27** |
+| stay in the target zone, next command | **0.967** | **0.781** |
+| share of commands in the target zone | 0.737 | 0.767 |
+| share of commands in undefended zones (Internet, firewall) | **0.159** | **0.000** |
+
+Recorded paths are short and fixed by the scenario (e.g. S1: Internet x5 -> DMZ x23; S3: Internet -> DMZ ->
+LAN; S6 macro: User only). The model adds about 8 random moves per run into zones the attack never
+touches, and it cannot place the attacker on the attacker machine or the firewall at all. The similar
+"share in target" is a coincidence of averages.
+
+Consequences:
+1. Primary environment: the attacker's zone is the **recorded zone of each command**. The defence can
+   still change it only through lures (a lure engagement sends the next command to the partner zone;
+   then the replay continues on its recorded path). Commands that execute in Internet or on the firewall
+   cannot be engaged (no agent defends them); they are counted and reported. The old movement model is a
+   sensitivity analysis.
+2. Goal zones under recorded positions: 32 of 34 runs have goal commands in their hand-typed target zone.
+   **S5**: the credential theft executes on the LAN Turtle, in LAN (hand-typed DMZ is where the stolen
+   hash is used) -> target LAN. **S4**: its goal commands execute on the firewall, which no agent defends
+   -> S4 cannot be protected in this environment; it is excluded from P1 and reported as such (P1 on 33
+   runs). This replaces the S4 "LAN vs DMZ" question above.
+3. This changes `env_cmd.py`; the change is written, tested and committed before the protocol is frozen.

@@ -37,7 +37,12 @@ deception methods.*
 
 - 4 defender agents (DMZ, LAN, User, Admin), 6 actions each (none + 5 D3FEND decoy types), capacity
   K = 2 (soft: over K, every decoy's efficacy is scaled by K / active), exposure rate beta = 0.2,
-  attacker movement p_goal = 0.7, p_stay = 0.8, goal_steps = 1, set aggregation `max`.
+  goal_steps = 1, set aggregation `max`.
+- **Attacker position (changed after the D2 check):** each command executes in its **recorded zone**
+  (`checks/movement_check.py`). A lure engagement sends the next command to the partner zone, after which
+  the replay continues on its recorded path. Commands executing on the attacker machine (Internet) or the
+  firewall cannot be engaged; they are counted and reported. The old random-walk model (p_goal 0.7,
+  p_stay 0.8) is a sensitivity analysis only.
 - One command = one step = at most one unit of engagement reward.
 - Engagement probability = capacity factor x PAYOFF[label, decoy]. PAYOFF is an audited **assumption**,
   not a measured probability (sensitivity in Section 8).
@@ -50,7 +55,7 @@ deception methods.*
 | # | outcome | definition | role |
 |---|---|---|---|
 | E1 | **engaged commands** | commands engaged per episode (code name `dwell`) | **primary, engagement** |
-| P1 | **defense success probability (DSP)** | episodes in which the attacker never completes its goal / all episodes, as the ratio of Wang et al. 2020, Def. 9. The success criterion is adapted: Wang counts the attacker entering a decoy before the database; we count the goal command never succeeding un-engaged in the target zone. Goals as fixed in D3; any run still without a goal command is excluded from P1 and listed. | **primary, protection** |
+| P1 | **defense success probability (DSP)** | episodes in which the attacker never completes its goal / all episodes, as the ratio of Wang et al. 2020, Def. 9. The success criterion is adapted: Wang counts the attacker entering a decoy before the database; we count the goal command never succeeding un-engaged in the target zone. Goals as fixed in D3. S4 is excluded from P1 (its goal commands execute on the firewall, which no agent defends), so P1 uses 33 runs; this is stated with every P1 result. | **primary, protection** |
 | S1 | commands until goal | first-passage time to the goal (cf. Huang & Zhu 2019); censored at run length | secondary |
 | S2 | engaged fraction | E1 / run length | secondary |
 | S3 | exposure rate, distinct techniques engaged, lure chains, dead ends, capacity violations | as recorded by `episode_stats` | descriptive |
@@ -114,8 +119,8 @@ protocol D1.1 with the fix stated.
 1. Efficacy: PAYOFF scaled by 0.5 and 0.75 (1.0 = primary). Ferguson-Walter et al. 2021 (52% of
    IP-addressed red-team commands went to decoys) is cited for the range, not as a calibration.
 2. Set aggregation `mean` instead of `max` (separately trained, as `env_cmd.py` states).
-3. Zones: S4 target DMZ (old rule) instead of LAN; goals from the old single-tactic mask (P1 then on the
-   26 runs that contain goal commands).
+3. Movement: the old random-walk model (p_goal 0.7, p_stay 0.8) instead of the recorded zones; goals from
+   the old single-tactic mask (P1 then on the runs that still contain goal commands).
 4. Execution order instead of frozen order (S6 swaps corrected).
 Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 
@@ -140,8 +145,8 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 
 | # | decision | recommendation | why |
 |---|---|---|---|
-| D1 | zones | **checked 2026-11-17 (`ZONE_GOAL_CHECK.md`):** hand-typed entry/target zones, which agree with AttackBed's scenario descriptions for 6 of 7 scenarios; S4 target = LAN (where the attack ends), DMZ as sensitivity. `derived_zones.json` is not used: its host order is where logs first show activity (DNS server and firewall see all traffic), not where the attacker is | source-verified; the earlier "data-derived" recommendation was wrong |
-| D2 | movement | not yet checked: p_goal / p_stay come from the old environment's calibration | to be checked against per-command hosts (needs a verified `manifestations_filtered.zip`) |
+| D1 | zones | **checked 2026-11-17 (`ZONE_GOAL_CHECK.md`):** hand-typed entry/target zones, which agree with AttackBed's scenario descriptions; with recorded positions (D2) two targets follow from where the goal commands execute: S5 = LAN (credential theft on the LAN Turtle), S4 = firewall (not defended, so S4 is excluded from P1). `derived_zones.json` is not used: its host order is where logs first show activity (DNS server and firewall see all traffic), not where the attacker is | source-verified; the earlier "data-derived" recommendation was wrong |
+| D2 | movement | **checked 2026-11-17 (`checks/MOVEMENT_CHECK.txt`):** recorded zone per command primary; random walk as sensitivity | the model makes 9.3 zone changes per run against 1.5 recorded, stays in the target 0.78 against 0.97, and cannot place the 16% of commands that run on the attacker machine or the firewall. Source: AttackMate records from the md5-verified scenario archives |
 | D3 | goals | **checked 2026-11-17:** S6 goal = Persistence (AttackBed `client.md`); goal mask from ATT&CK's full tactic membership (pinned release). All 34 runs then contain goal commands; no run is dropped | replaces "drop 8 runs", which would have removed all of S6 |
 | D4 | command order | frozen order, reuse protocol 1.2 checkpoints; execution order as sensitivity | validated checkpoints exist only for this order |
 | D5 | size | 640 primary cells first (about 1.5 days on GPU PC 1), the rest afterwards | the main question first |
@@ -160,7 +165,7 @@ Sensitivity runs use allpos and NoHistory, MAPPO, seeds 0-4.
 ## 12. Known limits (stated in any write-up)
 
 - Simulation: the attacker's commands are replayed and react to the defence only through the movement
-  model. Real attackers react (Dowling et al. 2018; Ferguson-Walter et al. 2021). No result is a claim
+  Real attackers react (Dowling et al. 2018; Ferguson-Walter et al. 2021). No result is a claim
   about real attackers.
 - PAYOFF, capacity, exposure and movement are assumptions; the sensitivity analyses bound them.
 - 34 runs from 7 base scenarios on one testbed; scenario 1 has 18 variants.
