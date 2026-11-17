@@ -1,9 +1,10 @@
 # Protocol D1.0: history-aware deception agents on verified CAM-LDS (simulation)
 
-**Status: DRAFT, 2026-11-17. Not frozen.** No main-study agent has been trained or evaluated under this
-protocol (the pilot of Section 7a used validation data only). It is frozen only after the user approves the decisions in Section 10. After that, any change
-means a new version (D1.1), never an edit of this one. The order of events is provable from git history.
-Decisions D1-D8 were settled by the user on 2026-11-17 (Section 10); the freeze itself is still pending.
+**Status: FROZEN, 2026-11-17** (`SPEC_D1.json`, written by `spec_d1.py --freeze` after the user's
+approval). At the freeze no main-study agent had been trained or evaluated under this protocol (the
+pilot of Section 7a used validation data only). Any change now means a new version (D1.1), never an
+edit of this one. The order of events is provable from git history. Decisions D1-D8 were settled by the
+user on 2026-11-17 (Section 10); the freeze followed the GPU diagnostics of Section 7 the same day.
 
 Literature basis: `LITERATURE_NOTES.md` (each paper checked against its PDF).
 
@@ -43,6 +44,25 @@ the replications of decision D7 and is tested only in protocol D1.1; until then 
   AttackMate metadata, which label T1556.003 credential-access, defense-evasion and persistence), every
   run contains goal commands, and every run counted in P1 has one in its target zone (`d1_data.py`,
   `test_d1.py`). No external ATT&CK file is needed.
+
+## 2a. Earlier exposure of the test runs (disclosed before the freeze)
+
+On 2026-11-15, before this protocol existed, a partial run of the earlier `pipeline.py --stage main` on
+GPU PC 1 (old environment: random-walk movement, hand-typed goals, execution order, engagement reward)
+produced 1,171 of 3,200 planned deception cells, committed as `b6487fee` in `results/main/`. That runner
+wrote test-run outcomes **unsealed** (`test_summary` in each `result.json`; per-cell and summary tables
+in `RESULTS.md`) on the same test runs that D1.0 uses, and recomputed the CAM-LDS encoder prediction test
+for 469 encoder cells (`prediction.json`; the same checkpoints and validation-selected thresholds as
+protocol 1.2, so a recomputation, not a new choice). The files reached the shared repository on
+2026-11-17, before the freeze.
+
+- **Not seen:** the user states that nobody looked at these test numbers (2026-11-17); the analyst
+  read only the section headings of `RESULTS.md`.
+- **Not used:** no D1.0 decision used them. D1-D3 come from source checks, D4 from the order check,
+  D6 from the validation-only pilot, and D5, D7 and D8 from cost and design.
+- They are not D1.0 results and are never reported as such (`results/main/README_NOT_D1.md`). Their
+  environment differs from D1.0's primary setting; the closest D1.0 setting is the `random_walk`
+  sensitivity analysis, and this disclosure is repeated with its result.
 
 ## 3. Environment (`env_cmd.py`, D1.0 settings)
 
@@ -176,6 +196,10 @@ protocol D1.1 with the fix stated.
 - **Diagnostics before the freeze (allowed):** `--preflight` and `--timing` use no test data and print no
   gate number, so they may be run on the GPU PC before the freeze to find a missing or non-reproducing
   checkpoint, or a dry-run mismatch on the GPU, while a fix is still possible. They are repeated after it.
+  **Done 2026-11-17 on GPU PC 1** (`run_all_d1.py diagnostics`): preflight PASS, 1,280 of 1,280
+  checkpoints reproduce their validation BCE; one allpos MAPPO cell took 93 s on the GPU (about 58 h for
+  the 2,240 main cells, test episodes not included); the dry-run reproduction on the GPU passed
+  (recorded 13.85, re-evaluated 13.85).
 - **Before the main run, on the GPU PC, after the freeze:** `run_d1.py --preflight` loads every
   protocol 1.2 checkpoint the main run needs (1,280: allpos, lstm_allpos, gru_allpos and baseline x 32
   folds x 10 seeds) and checks that each reproduces its recorded validation BCE; the main run refuses to
