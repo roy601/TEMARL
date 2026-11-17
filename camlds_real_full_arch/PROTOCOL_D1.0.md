@@ -3,7 +3,7 @@
 **Status: DRAFT, 2026-11-17. Not frozen.** No deception agent has been trained or evaluated under this
 protocol. It is frozen only after the user approves the decisions in Section 10. After that, any change
 means a new version (D1.1), never an edit of this one. The order of events is provable from git history.
-Decisions D1-D7 were settled by the user on 2026-11-17 (Section 10); the freeze itself is still pending.
+Decisions D1-D8 were settled by the user on 2026-11-17 (Section 10); the freeze itself is still pending.
 
 Literature basis: `LITERATURE_NOTES.md` (each paper checked against its PDF).
 
@@ -20,7 +20,8 @@ the replications of decision D7 and is tested only in protocol D1.1; until then 
   static honeypot)? The published comparators are a later family (D1.1).
 - **Q3 (Family 3):** does the Transformer history beat an LSTM history (`lstm_allpos`, the proposal's
   "MARL without the Transformer")?
-- **Q4 (descriptive):** GRU and the old Transformer as the history encoder; IPPO vs MAPPO.
+- **Q4 (descriptive, D8):** GRU and the old Transformer as the history encoder; IPPO vs MAPPO; allpos vs
+  NoHistory under IPPO. Scored at the same single test opening; described, never tested.
 
 ## 2. Data
 
@@ -115,7 +116,9 @@ protocol D1.1 with the fix stated.
 - **Tested secondary arm (D7, Family 3):** `lstm_allpos`, MAPPO: the proposal's "MARL without the
   Transformer", with the protocol 1.2 LSTM checkpoints (capacity-matched: 77,793 trainable parameters
   against the Transformer's 77,713). Everything else as the primary arms.
-- **Descriptive arms (Q4):** `gru_allpos`, `baseline` (old Transformer); IPPO for allpos and NoHistory.
+- **Descriptive arms (Q4, D8):** `gru_allpos` (77,920 parameters) and `baseline` (old Transformer,
+  77,713), both MAPPO with their protocol 1.2 checkpoints; IPPO (independent critics, de Witt et al.
+  2020) for allpos and NoHistory. They run in the main run, before the single test opening.
 - **Reference policies at evaluation:** none, random, fixed, greedy and planner (Section 5), and the
   **static honeypot** (the proposal's Baseline 1; frozen `StaticPolicy`): one decoy type in every zone at
   every step, the type chosen per outcome on the fold's training runs. With 4 active decoys it exceeds
@@ -145,11 +148,13 @@ protocol D1.1 with the fix stated.
   repeats per run (simulation repeats, never treated as independent samples).
 - Policy checkpoint chosen by validation E1 only. Nothing else is chosen on validation.
 - Primary cells: 2 arms x 32 folds x 10 seeds = 640, all run in full: no reduction of seeds or steps,
-  whatever the run time (D5). They run first; then the 320 `lstm_allpos` cells (Family 3). The test is
-  opened only after all 960 main cells exist. Descriptive cells (Q4) run afterwards, on either GPU PC.
+  whatever the run time (D5). They run first; then the 320 `lstm_allpos` cells (Family 3); then the
+  1,280 descriptive cells (Q4, D8: `gru_allpos` and `baseline` with MAPPO, allpos and NoHistory with
+  IPPO). The test is opened only once, after all 2,240 main cells exist (`run_d1.PHASES`).
 - Time: measured in the pilot on a CPU, median 35 s per 200,000 steps (max 39 s), so about 6 min per
-  2,000,000-step cell: about 62 h for the 640 primary cells and 93 h for all 960 main cells (69 h and
-  104 h at the pilot's maximum), test episodes not included, linear scaling assumed. GPU time is
+  2,000,000-step cell: about 62 h for the 640 primary cells, 93 h with Family 3 (960 cells) and 218 h
+  for all 2,240 main cells (69 h, 104 h and 243 h at the pilot's maximum), test episodes not included,
+  linear scaling assumed. IPPO, GRU and old-Transformer cells were not timed in the pilot. GPU time is
   measured with `run_d1.py --timing` before the main run and reported.
 - Every cell's validation learning curve is reported (supplement), so convergence at 2,000,000 steps
   can be checked. All arms use the same MAPPO settings; none is tuned separately.
@@ -214,8 +219,8 @@ with the same statistics; sensitivity results are reported as such and never rep
 ## 9. Evaluation (frozen with this protocol)
 
 1. Dry run on validation outputs: the scorer must reproduce every validation number recorded at training.
-2. Test opened **once**, after all 960 main cells exist (all three families are scored at that one
-   opening).
+2. Test opened **once**, after all 2,240 main cells exist (the three tested families and Q4 are scored
+   at that one opening; nothing is scored later).
 
 - **Unit: the test run.** The 29 known-variant folds each test one run, which gives 29 paired units. Per
   unit: the outcome averaged over 20 repeats, then over 10 seeds. The 3 unseen-scenario folds are reported
@@ -229,16 +234,19 @@ with the same statistics; sensitivity results are reported as such and never rep
   **Family 3 (Q3):** allpos vs lstm_allpos on E1 and P1 (2 comparisons).
   Published comparators that pass replication are added as a separate family in protocol D1.1 (D7).
 - Scorer: `evaluate_d1.py` (`--validation-dry-run`, then `--open-test`). The open refuses unless the spec
-  passes, all 960 main cells exist, the dry run passed and `TEST_OPENED.json` is absent; every sealed
-  file's SHA-256 is checked before it is read, and every cell must have used the protocol's test seed,
-  20 repeats, setting and order.
+  passes, all 2,240 main cells exist, the dry run passed and `TEST_OPENED.json` is absent; every sealed
+  file's SHA-256 is checked before it is read, and every cell must have the expected arm and learner and
+  have used the protocol's test seed, 20 repeats, setting and order.
 - Per comparison: mean paired difference, 95% bootstrap CI (10,000 resamples of runs, seed 20261103),
   two-sided Wilcoxon signed-rank (scipy 1.17.1, zero differences dropped), Holm within each family. The
   three families answer different questions and are not corrected across families; this is stated with
   the results.
   "X outperforms Y" only if Holm p < 0.05 and the CI excludes 0; otherwise "no difference shown".
 - The number of runs used is reported with every P1 result.
-- Every result is reported whatever its direction. Q4 is descriptive.
+- Every result is reported whatever its direction.
+- **Q4 is descriptive (D8):** GRU vs allpos, old Transformer vs allpos, IPPO vs MAPPO (for allpos and
+  for NoHistory) and allpos vs NoHistory under IPPO, on E1 and P1: the mean paired difference and its
+  95% bootstrap CI over the same units. No p-value, no correction, no verdict, no claim.
 
 ## 10. Decisions for the user (recommended choice first)
 
@@ -248,9 +256,10 @@ with the same statistics; sensitivity results are reported as such and never rep
 | D2 | movement | **checked 2026-11-17 (`checks/MOVEMENT_CHECK.txt`):** recorded zone per command primary; random walk as sensitivity | the model makes 9.3 zone changes per run against 1.5 recorded, stays in the target 0.78 against 0.97, and cannot place the 16% of commands that run on the attacker machine or the firewall. Source: AttackMate records from the md5-verified scenario archives |
 | D3 | goals | **checked 2026-11-17:** S6 goal = Persistence (AttackBed `client.md`); goal commands from the dataset's own per-command tactic labels (`tactics_raw`). All 34 runs then contain goal commands; no run is dropped | replaces "drop 8 runs", which would have removed all of S6 |
 | D4 | command order | **decided 2026-11-17:** frozen order primary, reusing the protocol 1.2 checkpoints; execution order as sensitivity. Measured difference (`checks/ORDER_CHECK.txt`): 4 S6 runs, last two commands swapped (goal command one step earlier in execution order), 8 of 904 positions, 4 of 870 encoder inputs | validated checkpoints exist only for this order (a convenience, not evidence of correctness); the measured difference is small and is bounded by the sensitivity analysis |
-| D5 | size | **decided 2026-11-17:** 640 primary cells in full (10 seeds, 2,000,000 steps), no reduction, run first; then the 320 Family 3 cells; the rest afterwards. CPU time from the pilot: about 62 h (640) and 93 h (960 main cells); GPU time measured before the run | the main question first; fewer steps would leave learning unfinished (pilot curves still rising at 200,000) |
+| D5 | size | **decided 2026-11-17:** 640 primary cells in full (10 seeds, 2,000,000 steps), no reduction, run first; then the 320 Family 3 cells and the 1,280 Q4 cells (D8). CPU time from the pilot: about 62 h (640), 93 h (960), 218 h (all 2,240 main cells); GPU time measured before the run | the main question first; fewer steps would leave learning unfinished (pilot curves still rising at 200,000) |
 | D6 | reward | **decided 2026-11-17:** the proposal reward (+1 per engaged command, +1 per newly engaged technique, -5 on exposure), selected by pilot rule R2 declared before the pilot; engagement-only reward as sensitivity (Section 8); P1 not rewarded | follows the pre-declared rule and the thesis proposal; the pilot margin is within noise, and the constants are ours, so the sensitivity analysis bounds them |
 | D7 | comparators | **decided 2026-11-17:** published methods (Hawkeyes, Li 2025, Wang 2020) only after their replication, as a separate family in D1.1; now: the static honeypot in Family 2 and the `lstm_allpos` arm as Family 3 | STANDARD.md (a comparator that is not replicated would be a strawman); static honeypot and LSTM are the proposal's own baselines |
+| D8 | descriptive arms | **decided 2026-11-17:** `gru_allpos`, `baseline` (MAPPO) and IPPO for allpos and NoHistory run in the main run, before the single test opening, and are scored at it as described (Q4), never tested | anything scored after the opening would be a second look at the test; the cost (1,280 cells) was accepted |
 
 ## 11. Reproducibility
 

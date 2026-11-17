@@ -352,9 +352,59 @@ class D1Decisions(unittest.TestCase):
                          {"none", "random", "static", "fixed", "greedy", "planner"})
         self.assertEqual(fam["family_3"], [("allpos", "lstm_allpos", "E1"), ("allpos", "lstm_allpos", "P1")])
         folds = p.ordered_folds("frozen")
-        self.assertEqual(len(E.cells(Path("x"), folds, range(10), R.MAIN_ARMS)), 960)
-        self.assertEqual(len(E.cells(Path("x"), folds, range(10), R.PRIMARY_ARMS)), 640)
-        self.assertEqual(len(E.cells(Path("x"), folds, range(5), R.PRIMARY_ARMS)), 320)
+        self.assertEqual((E.MAIN_CELLS, E.SENSITIVITY_CELLS), (R.MAIN_CELLS, R.SENSITIVITY_CELLS))
+        self.assertEqual([n for n, _ in R.PHASES], ["primary (Family 1)", "Family 3", "descriptive (Q4)"])
+        self.assertEqual(R.PHASES[0][1], (("allpos", "MAPPO"), ("NoHistory", "MAPPO")))   # D5: run first
+        self.assertEqual(R.PHASES[1][1], (("lstm_allpos", "MAPPO"),))
+        self.assertEqual(set(R.PHASES[2][1]), {("gru_allpos", "MAPPO"), ("baseline", "MAPPO"),
+                                               ("allpos", "IPPO"), ("NoHistory", "IPPO")})       # D8
+        self.assertEqual(len(E.cells(Path("x"), folds, range(10), R.MAIN_CELLS)), 2240)
+        self.assertEqual(len(E.cells(Path("x"), folds, range(10), R.PHASES[0][1])), 640)
+        self.assertEqual(len(E.cells(Path("x"), folds, range(5), R.SENSITIVITY_CELLS)), 320)
+
+    def test_q4_is_described_never_tested(self):
+        import evaluate_d1 as E
+        rng = np.random.default_rng(3)
+        runs = [f"r{i}" for i in range(29)]
+        names = {E.unit_name(a, lr) for a, lr in E.MAIN_CELLS}
+        self.assertEqual(names, {"allpos", "NoHistory", "lstm_allpos", "gru_allpos", "baseline",
+                                 "allpos_IPPO", "NoHistory_IPPO"})
+        values = {(n, m): {r: float(rng.normal()) for r in runs} for n in names for m in E.OUTCOMES}
+        rows = E.describe(values)
+        self.assertEqual(len(rows), 10)
+        for c in rows:
+            self.assertNotIn("p", c)
+            self.assertNotIn("p_holm", c)
+            self.assertNotIn("verdict", c)
+            self.assertIn(c["a"], names)
+            self.assertIn(c["b"], names)
+
+    def test_every_encoder_gives_the_agents_a_history(self):
+        # all four history encoders of the main run produce the 64-dim h; row 0 (no history) is zero
+        import torch
+        s = spec_of("1_cron_pam")
+        for arm, n_params in (("allpos", 77713), ("baseline", 77713), ("gru_allpos", 77920),
+                              ("lstm_allpos", 77793)):
+            torch.manual_seed(0)
+            m = p.variants.build_variant(arm, p.data.W)
+            self.assertEqual(sum(x.numel() for x in m.parameters()), n_params, arm)
+            tab = p.marl.HistoryBank(m, p.data.W).table(s)
+            self.assertEqual(tab.shape, (s.horizon + 1, p.marl.H_DIM), arm)
+            self.assertTrue(np.isfinite(tab).all(), arm)
+            self.assertFalse(tab[0].any(), arm)
+            self.assertTrue(tab[1:].any(), arm)
+
+    def test_runner_smoke_with_ippo(self):
+        import subprocess, json, tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "main"
+            r = subprocess.run([sys.executable, "-W", "ignore", str(Path(__file__).with_name("run_d1.py")),
+                                "--smoke", "--learners", "IPPO", "--output", str(out)],
+                               capture_output=True, text=True, timeout=600)
+            self.assertEqual(r.returncode, 0, r.stderr[-2000:])
+            d = json.loads(next((Path(tmp) / "smoke").rglob("result.json")).read_text(encoding="utf-8"))
+            self.assertEqual((d["arm"], d["learner"]), ("NoHistory", "IPPO"))
+            self.assertIsNone(d["sealed_test_sha256"])
 
     def test_static_and_fixed_are_fitted_on_training_runs_only(self):
         import evaluate_d1 as E

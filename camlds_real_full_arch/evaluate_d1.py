@@ -6,10 +6,10 @@
     ... --sensitivity mean    (Section 8: its own dry run and its own single opening; Family 1 only,
                                seeds 0-4, reported as a sensitivity result, never as the main claim)
 
-1. Dry run: every primary cell's saved actor is re-evaluated on its validation episodes and must
+1. Dry run: every main cell's saved actor is re-evaluated on its validation episodes and must
    reproduce the best validation E1 recorded at training. No test file is read.
-2. Open the test once: refuses unless the spec passes, all 960 main cells exist (allpos, NoHistory,
-   lstm_allpos x 32 folds x 10 seeds), the dry run passed and the test was never opened. Every sealed
+2. Open the test once: refuses unless the spec passes, all 2,240 main cells exist (run_d1.MAIN_CELLS:
+   7 arm/learner pairs x 32 folds x 10 seeds), the dry run passed and the test was never opened. Every sealed
    file's SHA-256 is checked before it is read, and every cell must have used the protocol's test seed,
    20 repeats, setting and order, so the reference policies below are scored on exactly the arms' test
    episodes.
@@ -23,6 +23,9 @@ reference policies are run here on the same test episodes; static, fixed (each p
 are fitted on the fold's training runs only.
 Family 3 (D7): allpos vs lstm_allpos on E1 and P1 (2 comparisons): the proposal's "MARL without the
 Transformer".
+Q4 (D8), descriptive only, scored at the same single opening: GRU and old-Transformer history vs
+allpos; IPPO vs MAPPO for allpos and for NoHistory; allpos vs NoHistory under IPPO. Mean paired
+difference and 95% bootstrap CI only: no test, no correction, no verdict, no claim.
 Per comparison: mean paired difference, 95% bootstrap CI (10,000 resamples of runs, seed 20261103),
 two-sided Wilcoxon signed-rank (zero differences dropped), Holm within each family (the families answer
 different questions and are not corrected across). "X outperforms Y" only if Holm p < 0.05 and the CI
@@ -47,17 +50,45 @@ sys.path.insert(0, str(HERE))
 ALPHA, BOOT_N, BOOT_SEED = 0.05, 10_000, 20261103
 PRIMARY_ARMS = ("allpos", "NoHistory")              # Family 1; every sensitivity analysis
 MAIN_ARMS = PRIMARY_ARMS + ("lstm_allpos",)          # + Family 3
+MAIN_CELLS = (("allpos", "MAPPO"), ("NoHistory", "MAPPO"), ("lstm_allpos", "MAPPO"),     # tested
+              ("gru_allpos", "MAPPO"), ("baseline", "MAPPO"),                            # Q4, descriptive
+              ("allpos", "IPPO"), ("NoHistory", "IPPO"))
+SENSITIVITY_CELLS = (("allpos", "MAPPO"), ("NoHistory", "MAPPO"))
 REFERENCES = ("none", "random", "static", "fixed", "greedy", "planner")
 SIMPLE = ("none", "random", "greedy", "planner", "clairvoyant")   # nothing chosen per outcome
 FITTED = ("static", "fixed")                         # chosen per outcome on the fold's training runs
 NAMES = {"allpos": "history agents (allpos)", "NoHistory": "agents without history",
-         "lstm_allpos": "history agents (LSTM encoder)",
+         "lstm_allpos": "history agents (LSTM encoder)", "gru_allpos": "history agents (GRU encoder)",
+         "baseline": "history agents (old Transformer)", "allpos_IPPO": "history agents, IPPO",
+         "NoHistory_IPPO": "agents without history, IPPO",
          "none": "no decoys", "random": "random", "static": "static honeypot (one decoy type everywhere)",
          "fixed": "best fixed allocation", "greedy": "greedy (reactive)", "planner": "transition planner",
          "clairvoyant": "clairvoyant"}
 FIT_SEED, FIT_REPEATS = 400000, 5
 EVAL_REPEATS = 20
 OUTCOMES = ("E1", "P1")
+
+
+# Q4 (D8): described, never tested
+DESCRIPTIVE_CONTRASTS = (("gru_allpos", "allpos"), ("baseline", "allpos"), ("allpos_IPPO", "allpos"),
+                         ("NoHistory_IPPO", "NoHistory"), ("allpos_IPPO", "NoHistory_IPPO"))
+
+
+def unit_name(arm, learner):
+    """Name of an arm/learner pair in the results: the arm for MAPPO, arm_IPPO for IPPO."""
+    return arm if learner == "MAPPO" else f"{arm}_{learner}"
+
+
+def describe(values: dict) -> list:
+    """Q4: mean paired difference and 95% bootstrap CI per contrast and outcome. No p-value, no verdict."""
+    out = []
+    for a, b in DESCRIPTIVE_CONTRASTS:
+        for m in OUTCOMES:
+            c = contrast(values[(a, m)], values[(b, m)])
+            out.append({"a": a, "b": b, "outcome": m, "mean": c["mean"], "ci": c["ci"], "n_runs": c["n_runs"],
+                        "runs_a_better": c["runs_a_better"], "runs_b_better": c["runs_b_better"],
+                        "note": "descriptive: not tested, no claim"})
+    return out
 
 
 def family_pairs():
@@ -134,9 +165,10 @@ def per_run(rows_by_seed) -> dict:
 
 # ── file handling ─────────────────────────────────────────────────────────────
 
-def cells(out: Path, folds, seeds, arms, learner="MAPPO"):
-    return {(arm, f["fold"], s): out / "cells" / arm / f["fold"] / f"s{s}" / learner
-            for arm in arms for f in folds for s in seeds}
+def cells(out: Path, folds, seeds, pairs):
+    """{(arm, learner, fold, seed): cell directory}, the layout run_d1 writes."""
+    return {(arm, lr, f["fold"], s): out / "cells" / arm / f["fold"] / f"s{s}" / lr
+            for arm, lr in pairs for f in folds for s in seeds}
 
 
 def read_sealed(dest: Path):
@@ -205,14 +237,15 @@ def main():
     env, marl = P.env, P.marl
     if a.sensitivity and a.sensitivity not in R.SENSITIVITIES:
         raise SystemExit(f"unknown sensitivity {a.sensitivity}")
-    if (PRIMARY_ARMS, MAIN_ARMS) != (R.PRIMARY_ARMS, R.MAIN_ARMS):
-        raise SystemExit("evaluate_d1 and run_d1 disagree on the arms")
+    if (PRIMARY_ARMS, MAIN_ARMS, MAIN_CELLS, SENSITIVITY_CELLS) != \
+            (R.PRIMARY_ARMS, R.MAIN_ARMS, R.MAIN_CELLS, R.SENSITIVITY_CELLS):
+        raise SystemExit("evaluate_d1 and run_d1 disagree on the arms or cells")
     out = a.output or (HERE / "results_d1" / (a.sensitivity or "main"))
     cfg, order = R.setting(a.sensitivity)
     folds = P.ordered_folds(order)
     seeds = list(range(5)) if a.sensitivity else list(range(10))
-    arms = PRIMARY_ARMS if a.sensitivity else MAIN_ARMS
-    cs = cells(out, folds, seeds, arms)
+    plan = SENSITIVITY_CELLS if a.sensitivity else MAIN_CELLS
+    cs = cells(out, folds, seeds, plan)
     missing = [k for k, d in cs.items() if not (d / "result.json").exists()]
     if missing:
         raise SystemExit(f"{len(missing)} of {len(cs)} cells missing, e.g. {missing[:3]}")
@@ -222,7 +255,7 @@ def main():
     if a.validation_dry_run:
         root = Path(a.encoder_root or (P.REPO / "camlds_encoder" / "out"))
         bad = []
-        for (arm, fold_id, seed), d in cs.items():
+        for (arm, learner, fold_id, seed), d in cs.items():
             res = json.loads((d / "result.json").read_text(encoding="utf-8"))
             f = next(x for x in folds if x["fold"] == fold_id)
             model, _ = R.load_encoder(arm, f, seed, root, a.device, cell=d.parent, order=order)
@@ -233,7 +266,8 @@ def main():
             rows = marl.evaluate_team(actor, cfg, va, bank, 64, a.device)
             got = marl.mean_of(rows)
             if abs(got - res["best_validation_dwell"]) > 1e-9:
-                bad.append({"cell": [arm, fold_id, seed], "recorded": res["best_validation_dwell"], "got": got})
+                bad.append({"cell": [arm, learner, fold_id, seed], "recorded": res["best_validation_dwell"],
+                            "got": got})
         P.write(dry, {"pass": not bad, "cells": len(cs), "mismatches": bad})
         print(f"dry run: {'PASS' if not bad else 'FAIL'} ({len(cs)} cells, {len(bad)} mismatches)")
         return
@@ -246,22 +280,24 @@ def main():
     sealed = {}
     for key, d in cs.items():
         res, s = read_sealed(d)
-        if (res["test_seed"] != R.TEST_SEED + key[2] or res["eval_repeats"] != EVAL_REPEATS
-                or res["env_config"] != cfg.to_dict() or res["order"] != order):
-            raise RuntimeError(f"{d}: test seed, repeats, setting or order differ from the protocol")
+        if (res["test_seed"] != R.TEST_SEED + key[3] or res["eval_repeats"] != EVAL_REPEATS
+                or res["env_config"] != cfg.to_dict() or res["order"] != order
+                or (res["arm"], res["learner"]) != key[:2]):
+            raise RuntimeError(f"{d}: arm, learner, test seed, repeats, setting or order differ from the protocol")
         sealed[key] = s["test"]
     primary_folds = [f for f in folds if f["family"] == "variant_held_out"]
 
     values, descriptive = {}, {}
-    for arm in arms:
+    for arm, lr in plan:
+        name = unit_name(arm, lr)
         for group, fs in (("primary", primary_folds), ("unseen", [f for f in folds if f not in primary_folds])):
             merged = {m: {} for m in OUTCOMES}
             for f in fs:
-                pr = per_run({s: sealed[(arm, f["fold"], s)] for s in seeds})
+                pr = per_run({s: sealed[(arm, lr, f["fold"], s)] for s in seeds})
                 for m in OUTCOMES:
                     merged[m].update(pr[m])
             for m in OUTCOMES:
-                (values if group == "primary" else descriptive)[(arm, m)] = merged[m]
+                (values if group == "primary" else descriptive)[(name, m)] = merged[m]
     pairs = family_pairs()
     f1 = family(values, pairs["family_1"])
     if a.sensitivity:
@@ -302,8 +338,9 @@ def main():
 
     f2 = family(values, pairs["family_2"])
     f3 = family(values, pairs["family_3"])
+    q4 = describe(values)
     means = {f"{n}|{m}": float(np.mean(list(v.values()))) for (n, m), v in values.items()}
-    res = {"family_1": f1, "family_2": f2, "family_3": f3, "means_primary": means,
+    res = {"family_1": f1, "family_2": f2, "family_3": f3, "q4_descriptive": q4, "means_primary": means,
            "unseen_scenarios_descriptive": {f"{n}|{m}": v for (n, m), v in descriptive.items()},
            "static_fixed_chosen_on_training": chosen, "env_config": cfg.to_dict(),
            "n_units": {m: len(values[("allpos", m)]) for m in OUTCOMES}}
@@ -319,6 +356,11 @@ def main():
             L.append(f"  {c['outcome']} {c['a']} - {c['b']}: {c['mean']:+.3f} [{c['ci'][0]:+.3f}, {c['ci'][1]:+.3f}] "
                      f"p_holm={c['p_holm']:.4f} n={c['n_runs']} -> {c['verdict']}")
         L.append("")
+    L.append("Q4, descriptive only (no test, no correction, no claim)")
+    for c in q4:
+        L.append(f"  {c['outcome']} {c['a']} - {c['b']}: {c['mean']:+.3f} [{c['ci'][0]:+.3f}, {c['ci'][1]:+.3f}] "
+                 f"n={c['n_runs']}")
+    L.append("")
     L.append("means (primary units): " + "; ".join(f"{k} {v:.3f}" for k, v in sorted(means.items())))
     (dest / "D1_RESULTS.txt").write_text("\n".join(L) + "\n", encoding="utf-8")
     # written once results exist and before anything is shown: the test is never opened again

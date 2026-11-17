@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 """Protocol D1.0 main study runner. Test outputs are SEALED.
 
-    python camlds_real_full_arch/run_d1.py --device cuda                 # 960 main cells, resumable
+    python camlds_real_full_arch/run_d1.py --device cuda                 # 2,240 main cells, resumable
     python camlds_real_full_arch/run_d1.py --device cuda --timing        # one cell, no test episodes
     python camlds_real_full_arch/run_d1.py --smoke                       # code check, tiny, no freeze needed
     python camlds_real_full_arch/run_d1.py --device cuda --sensitivity mean   # Section 8, seeds 0-4
 
-Main cells (Section 7): the 640 primary cells (allpos, NoHistory: Family 1) over all folds and seeds
-first, then the 320 lstm_allpos cells (Family 3). The test is opened only after all 960 exist.
+Main cells (Section 7), run in the order of PHASES, each phase over all folds and seeds:
+  1. primary, Family 1   allpos and NoHistory, MAPPO                              640 cells
+  2. Family 3            lstm_allpos, MAPPO                                       320 cells
+  3. descriptive, Q4     gru_allpos and baseline, MAPPO; allpos and NoHistory, IPPO  1,280 cells
+The test is opened only once, after all 2,240 exist (decision D8).
 
 What differs from pipeline.main (deliberately):
   * command order is always 'frozen' (decision D4); environment = EnvConfig(reward="proposal")
@@ -41,6 +44,15 @@ env, marl, data, variants, port = P.env, P.marl, P.data, P.variants, P.port
 PRIMARY_ARMS = ("allpos", "NoHistory")             # Family 1; also the arms of every sensitivity analysis
 MAIN_ARMS = PRIMARY_ARMS + ("lstm_allpos",)         # + Family 3 (D7): the proposal's "MARL without the Transformer"
 PRIMARY_REWARD = "proposal"                         # D6, chosen by pilot rule R2 (PROTOCOL_D1.0 Section 7a)
+# (arm, learner) per phase, in run order (D5 primary first; D8 descriptive cells before the test opening)
+PHASES = (
+    ("primary (Family 1)", (("allpos", "MAPPO"), ("NoHistory", "MAPPO"))),
+    ("Family 3", (("lstm_allpos", "MAPPO"),)),
+    ("descriptive (Q4)", (("gru_allpos", "MAPPO"), ("baseline", "MAPPO"),
+                          ("allpos", "IPPO"), ("NoHistory", "IPPO"))),
+)
+MAIN_CELLS = tuple(c for _, cs in PHASES for c in cs)
+SENSITIVITY_CELLS = PHASES[0][1]                    # Section 8: allpos and NoHistory, MAPPO
 # Section 8 sensitivity analyses: environment changes and command order
 SENSITIVITIES = {
     "efficacy_0.5": ({"efficacy": 0.5}, "frozen"),
@@ -156,7 +168,8 @@ def main():
     ap.add_argument("--encoder-root", default=str(P.REPO / "camlds_encoder" / "out"))
     ap.add_argument("--arms", nargs="+", choices=P.ARMS, default=None,
                     help="default: the 3 main arms; for a sensitivity analysis, allpos and NoHistory")
-    ap.add_argument("--learners", nargs="+", choices=["MAPPO", "IPPO"], default=["MAPPO"])
+    ap.add_argument("--learners", nargs="+", choices=["MAPPO", "IPPO"], default=None,
+                    help="filter; default: every learner of the plan")
     ap.add_argument("--folds", nargs="+")
     ap.add_argument("--seeds", nargs="+", type=int, default=None)
     ap.add_argument("--env-steps", type=int, default=2_000_000)
@@ -170,8 +183,11 @@ def main():
         a.output = OUT / (a.sensitivity or "main")
     if a.seeds is None:
         a.seeds = list(range(5)) if a.sensitivity else list(range(10))
+    plan = SENSITIVITY_CELLS if a.sensitivity else MAIN_CELLS
     if a.arms is None:
-        a.arms = list(PRIMARY_ARMS if a.sensitivity else MAIN_ARMS)
+        a.arms = sorted({arm for arm, _ in plan})
+    if a.learners is None:
+        a.learners = sorted({lr for _, lr in plan})
     if a.sensitivity and (set(a.arms) - set(PRIMARY_ARMS) or a.learners != ["MAPPO"]):
         raise SystemExit("Section 8: sensitivity runs use allpos and NoHistory with MAPPO only")
     torch.set_num_threads(a.threads)
@@ -184,14 +200,15 @@ def main():
     if a.smoke:
         marl.HP.update(n_envs=2, rollout_len=4, ppo_epochs=1, n_evals=1)
         a.env_steps, a.eval_repeats = 8, 1
-        dest = a.output.parent / "smoke" / "NoHistory" / folds[0]["fold"] / "s0" / "MAPPO"
-        run_cell("NoHistory", "MAPPO", folds[0], 0, a, dest, test=False)
+        learner = "IPPO" if a.learners == ["IPPO"] else "MAPPO"
+        dest = a.output.parent / "smoke" / "NoHistory" / folds[0]["fold"] / "s0" / learner
+        run_cell("NoHistory", learner, folds[0], 0, a, dest, test=False)
         print("smoke OK:", dest)
         return
     if a.timing:
         dest = a.output.parent / "timing" / "allpos" / folds[0]["fold"] / "s0" / "MAPPO"
         r = run_cell("allpos", "MAPPO", folds[0], 0, a, dest, test=False)
-        n = len(P.ordered_folds("frozen")) * 10 * len(MAIN_ARMS)
+        n = len(P.ordered_folds("frozen")) * 10 * len(MAIN_CELLS)
         print(f"timing: one cell {r['wall_seconds']:.0f} s on {a.device} "
               f"-> {n} main cells about {n * r['wall_seconds'] / 3600:.1f} h (test episodes not included)")
         return
@@ -212,19 +229,19 @@ def main():
     with lock.open("x") as fh:
         fh.write(str(os.getpid()))
     try:
-        # D5: the primary cells (Family 1) over all folds and seeds first, then the other arms
-        phases = [[x for x in a.arms if x in PRIMARY_ARMS], [x for x in a.arms if x not in PRIMARY_ARMS]]
-        for arms in phases:
+        # PHASES order: primary cells over all folds and seeds first (D5), then Family 3, then Q4 (D8)
+        phases = [PHASES[0]] if a.sensitivity else PHASES
+        for name, pairs in phases:
+            pairs = [(arm, lr) for arm, lr in pairs if arm in a.arms and lr in a.learners]
             for f in folds:
                 for seed in a.seeds:
-                    for arm in arms:
-                        for learner in a.learners:
-                            dest = out / "cells" / arm / f["fold"] / f"s{seed}" / learner
-                            if (dest / "result.json").exists():
-                                continue
-                            print(f"D1.0 cell: {arm} {learner} {f['fold']} s{seed}", flush=True)
-                            run_cell(arm, learner, f, seed, a, dest, test=True)
-                            validation_summary(out)
+                    for arm, learner in pairs:
+                        dest = out / "cells" / arm / f["fold"] / f"s{seed}" / learner
+                        if (dest / "result.json").exists():
+                            continue
+                        print(f"D1.0 cell [{name}]: {arm} {learner} {f['fold']} s{seed}", flush=True)
+                        run_cell(arm, learner, f, seed, a, dest, test=True)
+                        validation_summary(out)
     finally:
         lock.unlink(missing_ok=True)
     validation_summary(out)
