@@ -126,8 +126,20 @@ def score(sealed: dict, sel: dict, folds, seeds, grid, arms, default: str) -> di
     tuned_vs_default = [{"arm": arm, "outcome": m, "a": "tuned", "b": default,
                          **described(tuned[(arm, m)], per_cfg[(default, arm, m)])}
                         for arm in arms for m in OUTCOMES]
+    def effect(get):
+        return {r: get("allpos")[r] - get("NoHistory")[r] for r in sorted(set(get("allpos")) & set(get("NoHistory")))}
+    matched = []
+    for m in OUTCOMES:
+        te = effect(lambda a, m=m: tuned[(a, m)])
+        de = effect(lambda a, m=m: per_cfg[(default, a, m)])
+        matched.append({"outcome": m, "a": "tuned effect", "b": "D1.0-setting effect (same 3 seeds)",
+                        **described(te, de), "depends_on_hyperparameters": None})
+    for c in matched:
+        lo, hi = c["ci"]
+        c["depends_on_hyperparameters"] = bool(lo > 0 or hi < 0)
     return {"family_H": fam, "allpos_minus_NoHistory_by_setting": by_setting,
             "tuned_minus_D1_0_setting": tuned_vs_default,
+            "tuned_effect_minus_default_effect": matched,
             "means_tuned_primary": {f"{a}|{m}": float(np.mean(list(v.values()))) for (a, m), v in tuned.items()},
             "means_by_setting_primary": {f"{c}|{a}|{m}": float(np.mean(list(v.values())))
                                          for (c, a, m), v in per_cfg.items()},

@@ -1,32 +1,47 @@
 # -*- coding: utf-8 -*-
 """Protocol D1.1, Section 6a: supplementary analyses of D1.0's main cells, declared before D1.0's opening.
 
-    python camlds_real_full_arch/supplement_d1_1.py --validation-by-scenario         # any time: validation only
-    python camlds_real_full_arch/supplement_d1_1.py --open --device cuda             # ONCE, after D1.0's opening
+    python camlds_real_full_arch/supplement_d1_1.py --validation-by-scenario   # any time: validation only
+    python camlds_real_full_arch/supplement_d1_1.py --dry-run --device cuda    # after D1.0's main stage and
+                                                                               #   BEFORE D1.0's opening; no test
+    python camlds_real_full_arch/supplement_d1_1.py --open --device cuda       # ONCE, after D1.0's opening
 
-Why (devil's-advocate review, 2026-11-18): every one of D1.0's 29 primary folds trains only on sibling
-variants of its test run's scenario (18 of the 29 units are S1). A history effect may therefore be
-recognition of a known scenario's script rather than use of the run's own past. These analyses separate
-the two. They are descriptive (mean paired difference and 95% bootstrap CI, no p-value, no verdict) and
-change no D1.0 result.
+Why (devil's-advocate review and a second review, 2026-11-18): every one of D1.0's 29 primary folds trains
+only on sibling variants of its test run's scenario (18 of the 29 units are S1). A history effect may come
+from shared scenario information rather than from transferable use of the run's own past. These analyses
+investigate that explanation; they cannot settle it alone. All are descriptive (mean paired difference and
+95% bootstrap CI, unadjusted, no p-value, no verdict) and change no D1.0 result.
 
-  A  per-scenario effect: allpos - NoHistory (MAPPO) on E1 and P1, separately for S1, S3 and S6
-  B  scenario-balanced effect: the mean of the three scenario effects, with a stratified bootstrap
-     (runs resampled within each scenario, 10,000 resamples, seed 20261103)
-  C  unseen scenarios: allpos - NoHistory on the 13 test runs of the 3 scenario-held-out folds, whose
-     scenario never appears in training (the generalisation evidence), overall and per scenario
-  D  other-run history (evaluation only, no retraining): each trained allpos actor (MAPPO, 29 variant
-     folds x seeds 0-9) is evaluated on its own test episodes with h taken from the DONOR run, its fold's
-     validation run, a sibling of the same scenario (at step t: the donor's h after min(t, donor length)
-     commands). Compared with its own h (D1.0) and with h = 0 (D1.0's sealed test_h0_summary):
-       own - donor  > 0: the run's own past matters
-       donor - zero > 0 with own - donor about 0: the gain is scenario recognition
-     The re-evaluation with its own h must reproduce D1.0's sealed rows exactly (a harness check).
-  V  validation gap by scenario (validation only, any time after the main stage): the same split as A and
-     C on the cells' best validation E1. No test file is read.
+  A  per-scenario effect: allpos - NoHistory (MAPPO) on E1 and P1, separately for S1 (18 runs), S3 (6), S6 (5)
+  B  scenario-balanced effect: the mean of the three scenario effects, stratified bootstrap (runs resampled
+     within each scenario; 10,000 resamples, seed 20261103). It describes these 3 scenarios only.
+  C  held-out scenarios: allpos - NoHistory on the test runs of D1.0's 3 scenario-held-out folds (S2: 2 runs,
+     S3: 6, S6: 5), each scenario reported separately; the pooled value is descriptive only. Evidence about
+     3 held-out scenarios, not about 13 independent campaigns.
+  D  history-substitution sensitivity (evaluation only, no retraining): each trained allpos MAPPO actor
+     (29 variant folds x seeds 0-9) is evaluated on its own test episodes (D1.0's test seed, 20 repeats) with
+       own      its own h (must reproduce D1.0's sealed rows exactly, every reported field)
+       sibling  the h of a same-scenario donor: the fold's FIRST training run (not the validation run the
+                checkpoint was selected on)
+       cross    the h of a different-scenario donor: the first run (sorted) of the next scenario in the
+                order S1 -> S3 -> S6 -> S1
+       zero     h = 0 (D1.0's sealed test_h0_summary)
+     At step t a donor gives its h after min(t, donor length) commands. Substituted h is input the actor
+     never saw in training, so every difference may also reflect mismatched timing, length or content.
+     Reading (declared now; "about 0" means the 95% CI includes 0):
+       own - sibling about 0 and sibling - cross > 0 (CI excludes 0): consistent with shared scenario
+         information being used; not conclusive
+       own - sibling > 0 and own - cross > 0: run-specific history OR sensitivity to mismatched input;
+         the two cannot be separated here
+       anything else: reported as observed, without interpretation
+  V  validation gap by scenario (validation only, any time after D1.0's main stage).
+Multiplicity: A-D give about 30 unadjusted intervals; no single interval supports a claim, and D1.0's
+Family 1 verdict is reported unchanged next to them.
 
-`--open` refuses unless D1.1's spec passes, D1.0's main test has been opened (results_d1/main/
-TEST_OPENED.json: D1.0's opening stays the first look) and this supplement has not run before.
+`--dry-run` (validation episodes only, no test file): every allpos MAPPO actor of the 29 variant folds
+must reproduce its recorded best validation E1 with its own h, and both donor paths must run. `--open`
+refuses unless D1.1's spec passes, the dry run passed, D1.0's main test has been opened (D1.0's opening
+stays the first look) and the supplement has not run before.
 """
 from __future__ import annotations
 
@@ -88,6 +103,28 @@ def by_scenario(values: dict, scenario_of: dict) -> dict:
     return out
 
 
+ROW_KEYS = ("run", "dwell", "protected", "p1", "length", "horizon", "depth", "exposed", "episode_reward")
+SCENARIO_ORDER = ("S1", "S3", "S6")
+DRY = HERE / "results_d1_1" / "SUPPLEMENT_DRY_RUN.json"
+
+
+def same_rows(a: list, b: list) -> bool:
+    """Exact reproduction: the same episodes in the same order, with identical values in every field used."""
+    pick = lambda rows: [tuple(r.get(k) for k in ROW_KEYS) for r in rows]
+    return pick(a) == pick(b)
+
+
+def donors(fold: dict, runs_of, all_runs: dict) -> tuple:
+    """(sibling, cross) donor runs of a variant fold. sibling = the fold's first training run (a sibling of
+    the test run's scenario, not the validation run the checkpoint was chosen on); cross = the first run,
+    sorted by id, of the next scenario in SCENARIO_ORDER."""
+    train = sorted(runs_of(fold, "train"), key=lambda r: r["id"])
+    test_s = runs_of(fold, "test")[0]["scenario"]
+    nxt = SCENARIO_ORDER[(SCENARIO_ORDER.index(test_s) + 1) % len(SCENARIO_ORDER)]
+    cross = min((r for r in all_runs.values() if r["scenario"] == nxt), key=lambda r: r["id"])
+    return train[0], cross
+
+
 class DonorBank:
     """History tables for evaluate_team: every test spec gets the donor's h, aligned by step."""
 
@@ -142,10 +179,52 @@ def validation_by_scenario(main: Path = MAIN) -> dict:
     return {k: {"folds": len(v), "mean_gap": float(np.mean(v))} for k, v in sorted(out.items())}
 
 
+def _setup():
+    import pipeline as P
+    import run_d1 as R
+    cfg, order = R.setting(None)
+    folds = P.ordered_folds(order)
+    all_runs = {r["id"]: r for f in folds for sp in ("train", "val", "test") for r in P.runs(f, sp)}
+    return P, R, cfg, folds, all_runs
+
+
+def _actor(P, R, f, s, root, device):
+    import torch
+    d = MAIN / "cells" / "allpos" / f["fold"] / f"s{s}" / "MAPPO"
+    model, _ = R.load_encoder("allpos", f, s, root, device)
+    actor = P.marl.Actor().to(device)
+    actor.load_state_dict(torch.load(d / "actor.pt", map_location=device))
+    return d, model, actor
+
+
+def dry_run(device, root) -> dict:
+    """Validation episodes only: own-h reproduction of best validation E1 and both donor paths, every
+    allpos MAPPO cell of the 29 variant folds. Reads no test file."""
+    P, R, cfg, folds, all_runs = _setup()
+    marl, bad, n = P.marl, [], 0
+    for f in [x for x in folds if x["family"] == "variant_held_out"]:
+        sib, cross = donors(f, P.runs, all_runs)
+        for s in SEEDS:
+            d, model, actor = _actor(P, R, f, s, root, device)
+            res = json.loads((d / "result.json").read_text(encoding="utf-8"))
+            va = R.specs(P.runs(f, "val"), R.VAL_SEED + s, res["eval_repeats"], cfg)
+            bank = marl.HistoryBank(model, P.data.W, device)
+            got = marl.mean_of(marl.evaluate_team(actor, cfg, va, bank, 64, device))
+            for donor in (sib, cross):
+                rows = marl.evaluate_team(actor, cfg, va, DonorBank(bank.table(R.specs([donor], 0, 1, cfg)[0])), 64, device)
+                if len(rows) != len(va):
+                    bad.append({"cell": [f["fold"], s], "error": f"donor {donor['id']}: {len(rows)} rows"})
+            if abs(got - res["best_validation_dwell"]) > 1e-9:
+                bad.append({"cell": [f["fold"], s], "recorded": res["best_validation_dwell"], "got": got})
+            n += 1
+    return {"pass": not bad and n > 0, "cells": n, "problems": bad}
+
+
 def main():
     ap = argparse.ArgumentParser()
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--validation-by-scenario", action="store_true")
+    g.add_argument("--dry-run", action="store_true")
     g.add_argument("--open", action="store_true")
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"])
     ap.add_argument("--encoder-root", default=None)
@@ -159,19 +238,27 @@ def main():
 
     import spec_d1_1
     spec_d1_1.require()
+    root = Path(a.encoder_root) if a.encoder_root else None
+    if a.dry_run:
+        import pipeline as P0
+        rep = dry_run(a.device, root or (P0.REPO / "camlds_encoder" / "out"))
+        P0.write(DRY, rep)
+        print(f"D1.1 supplement dry run (validation only): {'PASS' if rep['pass'] else 'FAIL'} "
+              f"({rep['cells']} cells, {len(rep['problems'])} problems)")
+        raise SystemExit(0 if rep["pass"] else 1)
+
+    if not (DRY.exists() and json.loads(DRY.read_text(encoding="utf-8")).get("pass")):
+        raise SystemExit("the supplement's validation dry run has not passed: run --dry-run before D1.0's opening")
     if not (MAIN / "TEST_OPENED.json").exists():
         raise SystemExit("D1.0's main test has not been opened: D1.0's opening must be the first look")
     if DONE.exists():
         raise SystemExit("the D1.1 supplement has already run; it is not run again")
-    import torch
-    import pipeline as P
-    import run_d1 as R
+    P, R, cfg, folds, all_runs = _setup()
     marl = P.marl
-    cfg, order = R.setting(None)
-    folds = P.ordered_folds(order)
+    root = root or (P.REPO / "camlds_encoder" / "out")
     variant = [f for f in folds if f["family"] == "variant_held_out"]
     unseen = [f for f in folds if f["family"] != "variant_held_out"]
-    scenario_of = {r["id"]: r["scenario"] for f in folds for r in P.runs(f, "test")}
+    scenario_of = {rid: r["scenario"] for rid, r in all_runs.items()}
     sealed = {}
     for arm, lr in PAIR:
         for f in folds:
@@ -181,7 +268,8 @@ def main():
                 if (res["arm"], res["learner"], res["test_seed"]) != (arm, lr, R.TEST_SEED + s):
                     raise RuntimeError(f"{d}: not the declared cell")
                 sealed[(arm, f["fold"], s)] = blob
-    # S3 and S6 runs are test runs twice (variant fold and unseen-scenario fold): never merge the groups
+
+    # S3 and S6 runs are test runs twice (variant fold and held-out-scenario fold): never merge the groups
     def group_values(fs):
         return {(arm, m): v for arm, _ in PAIR
                 for m, v in unit_values({f["fold"]: {s: sealed[(arm, f["fold"], s)]["test"] for s in SEEDS}
@@ -190,37 +278,33 @@ def main():
     out = {"A_per_scenario": by_scenario(vv, scenario_of),
            "B_scenario_balanced": {m: stratified(diff(vv[("allpos", m)], vv[("NoHistory", m)]), scenario_of)
                                    for m in OUTCOMES},
-           "C_unseen_scenarios": by_scenario(vu, scenario_of)}
-    # D: other-run history, variant folds only
-    root = Path(a.encoder_root or (P.REPO / "camlds_encoder" / "out"))
-    own, donor, zero, mismatches = defaultdict(dict), defaultdict(dict), defaultdict(dict), []
+           "C_held_out_scenarios": by_scenario(vu, scenario_of)}
+    conds = {k: defaultdict(dict) for k in ("own", "sibling", "cross", "zero")}
+    mismatches = []
     for f in variant:
-        don_run = P.runs(f, "val")[0]
+        sib, cross = donors(f, P.runs, all_runs)
         for s in SEEDS:
-            d = MAIN / "cells" / "allpos" / f["fold"] / f"s{s}" / "MAPPO"
-            model, _ = R.load_encoder("allpos", f, s, root, a.device)
-            actor = marl.Actor().to(a.device)
-            actor.load_state_dict(torch.load(d / "actor.pt", map_location=a.device))
+            d, model, actor = _actor(P, R, f, s, root, a.device)
             te = R.specs(P.runs(f, "test"), R.TEST_SEED + s, E.EVAL_REPEATS, cfg)
             bank = marl.HistoryBank(model, P.data.W, a.device)
             again = marl.evaluate_team(actor, cfg, te, bank, 64, a.device)
-            if [x["dwell"] for x in again] != [x["dwell"] for x in sealed[("allpos", f["fold"], s)]["test"]]:
+            if not same_rows(again, sealed[("allpos", f["fold"], s)]["test"]):
                 mismatches.append([f["fold"], s])
-            dspec = R.specs([don_run], 0, 1, cfg)[0]
-            rows_d = marl.evaluate_team(actor, cfg, te, DonorBank(bank.table(dspec)), 64, a.device)
-            own[f["fold"]][s], donor[f["fold"]][s] = again, rows_d
-            zero[f["fold"]][s] = h0_rows(sealed[("allpos", f["fold"], s)])
+            conds["own"][f["fold"]][s] = again
+            for name, donor in (("sibling", sib), ("cross", cross)):
+                dbank = DonorBank(bank.table(R.specs([donor], 0, 1, cfg)[0]))
+                conds[name][f["fold"]][s] = marl.evaluate_team(actor, cfg, te, dbank, 64, a.device)
+            conds["zero"][f["fold"]][s] = h0_rows(sealed[("allpos", f["fold"], s)])
     if mismatches:
         raise SystemExit(f"re-evaluation with the actors' own h does not reproduce D1.0's sealed rows: {mismatches[:5]}")
-    vo, vd, vz = unit_values(own, variant), unit_values(donor, variant), unit_values(zero, variant)
-    out["D_other_run_history"] = {
-        "donor_rule": "the fold's validation run (a sibling of the same scenario); h at step t = donor's h after "
-                      "min(t, donor length) commands",
-        **{f"own_minus_donor|{m}": described(diff(vo[m], vd[m])) for m in OUTCOMES},
-        **{f"donor_minus_zero|{m}": described(diff(vd[m], vz[m])) for m in OUTCOMES},
-        **{f"own_minus_zero|{m}": described(diff(vo[m], vz[m])) for m in OUTCOMES},
-        "means": {f"{n}|{m}": float(np.mean(list(v[m].values()))) for n, v in (("own", vo), ("donor", vd), ("zero", vz))
-                  for m in OUTCOMES}}
+    v = {k: unit_values(c, variant) for k, c in conds.items()}
+    pairs = (("own", "sibling"), ("own", "cross"), ("sibling", "cross"), ("sibling", "zero"), ("own", "zero"))
+    out["D_history_substitution"] = {
+        "donors": {f["fold"]: [x["id"] for x in donors(f, P.runs, all_runs)] for f in variant},
+        **{f"{x}_minus_{y}|{m}": described(diff(v[x][m], v[y][m])) for x, y in pairs for m in OUTCOMES},
+        "means": {f"{k}|{m}": float(np.mean(list(v[k][m].values()))) for k in v for m in OUTCOMES},
+        "reading": "declared in PROTOCOL_D1.1.md Section 6a; 'about 0' = the 95% CI includes 0; not conclusive"}
+    out["multiplicity"] = "all intervals descriptive and unadjusted; no single interval supports a claim"
     RESULTS.mkdir(parents=True, exist_ok=True)
     (RESULTS / "D1_1_SUPPLEMENT.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
     DONE.parent.mkdir(parents=True, exist_ok=True)

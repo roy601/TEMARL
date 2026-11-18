@@ -284,6 +284,9 @@ class D11Scoring(unittest.TestCase):
         self.assertTrue(all("p" not in c and "verdict" not in c for c in res["allpos_minus_NoHistory_by_setting"]))
         self.assertTrue(all("p" not in c for c in res["tuned_minus_D1_0_setting"]))
         self.assertEqual(sorted(res["unseen_scenarios_descriptive_tuned"]["allpos|E1"]), ["u1", "u2"])
+        m = {c["outcome"]: c for c in res["tuned_effect_minus_default_effect"]}
+        self.assertIn("depends_on_hyperparameters", m["E1"])
+        self.assertNotIn("p", m["E1"])
         self.assertEqual(res["unseen_scenarios_descriptive_tuned"]["allpos|E1"]["u1"], 18.0)   # fold 8: g[8]
 
     def test_open_once_with_every_check(self):
@@ -507,6 +510,85 @@ class D11Supplement(unittest.TestCase):
         same = marl.evaluate_team(actor, cfg, specs, X.DonorBank(bank.table(specs[0])), 64, "cpu")
         self.assertEqual([r["dwell"] for r in own], [r["dwell"] for r in same])  # donor = itself -> identical
 
+    def test_reproduction_compares_every_reported_field(self):
+        import supplement_d1_1 as X
+        row = {"run": "r", "dwell": 3.0, "protected": 1.0, "p1": 1.0, "length": 9.0, "horizon": 9.0, "depth": 2.0,
+               "exposed": 0.0, "episode_reward": 4.0}
+        self.assertTrue(X.same_rows([row], [dict(row)]))
+        for k in X.ROW_KEYS:                                                  # any field, not only dwell
+            other = dict(row)
+            other[k] = "x" if k == "run" else row[k] + 1
+            self.assertFalse(X.same_rows([row], [other]), k)
+        self.assertFalse(X.same_rows([row, row], [row]))
+
+    def test_donors_are_a_training_sibling_and_a_different_scenario(self):
+        import supplement_d1_1 as X
+        allr = {r["id"]: r for f in FOLDS for sp in ("train", "val", "test") for r in p.runs(f, sp)}
+        for f in [x for x in FOLDS if x["family"] == "variant_held_out"]:
+            test_s = p.runs(f, "test")[0]["scenario"]
+            sib, cross = X.donors(f, p.runs, allr)
+            self.assertIn(sib["id"], f["train_runs"])
+            self.assertNotIn(sib["id"], f["val_runs"])                         # not the selection run
+            self.assertEqual(sib["scenario"], test_s)
+            self.assertNotEqual(cross["scenario"], test_s)
+            self.assertNotIn(cross["id"], f["test_runs"])
+
+    def test_the_dry_run_needs_the_freeze(self):
+        if S.SPEC.exists():
+            self.skipTest("frozen")
+        r = subprocess.run([sys.executable, "-W", "ignore", str(HERE / "supplement_d1_1.py"), "--dry-run"],
+                           capture_output=True, text=True, timeout=600)
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("not frozen", r.stdout + r.stderr)
+
+    def test_dry_run_and_open_end_to_end_on_a_small_fixture(self):
+        """Real tiny cells (6 folds: S1/S3/S6 variants + the 3 held-out-scenario folds, seed 0, sealed tests),
+        then the supplement's --dry-run and --open on them: every code path runs before any real test exists."""
+        import supplement_d1_1 as X
+        pick = [next(f for f in FOLDS if f["family"] == "variant_held_out" and f["fold"].startswith(k)) for k in "136"]
+        pick += [f for f in FOLDS if f["family"] != "variant_held_out"]
+        orig = (S.require, X.MAIN, X.DONE, X.DRY, X.RESULTS, X.SEEDS, p.ordered_folds)
+        with tempfile.TemporaryDirectory() as tmp, tiny_hp():
+            tmp = Path(tmp)
+            root, main = tmp / "enc", tmp / "main"
+            for f in pick:
+                d = p.data.fold_data(f)
+                p.variants.train_variant("allpos", p.data.W, 0, d["train"], d["val"], 64, device=torch.device("cpu"),
+                                         checkpoint_dir=str(root / "variants" / "allpos" / f["fold"] / "s0"),
+                                         patience_checks=16, progress=False)
+                for arm in ("allpos", "NoHistory"):
+                    R.run_cell(arm, "MAPPO", f, 0, args(encoder_root=str(root), eval_repeats=20, env_steps=16),
+                               main / "cells" / arm / f["fold"] / "s0" / "MAPPO", test=True)
+            S.require, X.MAIN, X.DONE, X.DRY, X.RESULTS = (lambda: None), main, tmp / "DONE.json", tmp / "DRY.json", tmp / "res"
+            X.SEEDS = (0,)
+            p.ordered_folds = lambda order: [dict(f) for f in pick]
+            argv = sys.argv
+            try:
+                sys.argv = ["supplement_d1_1.py", "--dry-run", "--encoder-root", str(root)]
+                with self.assertRaises(SystemExit) as cm:
+                    X.main()
+                self.assertEqual(cm.exception.code, 0)
+                rep = json.loads(X.DRY.read_text(encoding="utf-8"))
+                self.assertTrue(rep["pass"], rep)
+                self.assertEqual(rep["cells"], 3)                              # the variant folds only
+                (main / "TEST_OPENED.json").write_text("{}", encoding="utf-8")
+                sys.argv = ["supplement_d1_1.py", "--open", "--encoder-root", str(root)]
+                X.main()                                                       # own-h reproduction must hold
+                out = json.loads((X.RESULTS / "D1_1_SUPPLEMENT.json").read_text(encoding="utf-8"))
+                self.assertEqual(set(out), {"A_per_scenario", "B_scenario_balanced", "C_held_out_scenarios",
+                                            "D_history_substitution", "multiplicity"})
+                self.assertEqual({k.split("|")[0] for k in out["A_per_scenario"]}, {"S1", "S3", "S6", "all"})
+                self.assertEqual({k.split("|")[0] for k in out["C_held_out_scenarios"]}, {"S2", "S3", "S6", "all"})
+                self.assertEqual(out["C_held_out_scenarios"]["S3|E1"]["n_runs"], 6)
+                for k in ("own_minus_sibling|E1", "own_minus_cross|P1", "sibling_minus_cross|E1", "sibling_minus_zero|E1"):
+                    self.assertIn(k, out["D_history_substitution"])
+                self.assertTrue(X.DONE.exists())
+                with self.assertRaises(SystemExit):                            # never twice
+                    X.main()
+            finally:
+                sys.argv = argv
+                S.require, X.MAIN, X.DONE, X.DRY, X.RESULTS, X.SEEDS, p.ordered_folds = orig
+
     def test_h0_rows_read_the_sealed_summary(self):
         import supplement_d1_1 as X
         sealed = {"test": [{"run": "r", "p1": 1.0}], "test_h0_summary": {"dwell": 4.5, "protected": 0.25}}
@@ -514,12 +596,16 @@ class D11Supplement(unittest.TestCase):
 
     def test_the_supplement_refuses_before_d10s_opening_and_runs_once(self):
         import supplement_d1_1 as X
-        orig = (S.require, X.MAIN, X.DONE)
+        orig = (S.require, X.MAIN, X.DONE, X.DRY)
         with tempfile.TemporaryDirectory() as tmp:
-            S.require, X.MAIN, X.DONE = (lambda: None), Path(tmp) / "main", Path(tmp) / "DONE.json"
+            S.require, X.MAIN, X.DONE, X.DRY = (lambda: None), Path(tmp) / "main", Path(tmp) / "DONE.json", Path(tmp) / "DRY.json"
             argv = sys.argv
             try:
                 sys.argv = ["supplement_d1_1.py", "--open"]
+                with self.assertRaises(SystemExit) as cm:
+                    X.main()
+                self.assertIn("dry run has not passed", str(cm.exception))
+                X.DRY.write_text(json.dumps({"pass": True}), encoding="utf-8")
                 with self.assertRaises(SystemExit) as cm:
                     X.main()
                 self.assertIn("has not been opened", str(cm.exception))
@@ -531,7 +617,7 @@ class D11Supplement(unittest.TestCase):
                 self.assertIn("already run", str(cm.exception))
             finally:
                 sys.argv = argv
-                S.require, X.MAIN, X.DONE = orig
+                S.require, X.MAIN, X.DONE, X.DRY = orig
 
     def test_the_driver_stage_waits_for_d10s_opening(self):
         import run_all_d1_1 as DD
@@ -544,7 +630,9 @@ class D11Supplement(unittest.TestCase):
 
     def test_protocol_declares_section_6a(self):
         text = (HERE / "PROTOCOL_D1.1.md").read_text(encoding="utf-8")
-        for s in ("## 6a.", "| H7 |", "18 of the 29", "13 test runs", "donor", "once, after D1.0's opening"):
+        for s in ("## 6a.", "| H7 |", "18 of the 29", "13 test runs", "history-substitution sensitivity test",
+                  "not conclusive", "first training run", "95% CI includes 0", "Multiplicity", "matched seeds",
+                  "`--dry-run`", "once, after D1.0's opening", "S2: 2 runs, S3: 6, S6: 5"):
             self.assertIn(s, text)
         self.assertIn("camlds_real_full_arch/supplement_d1_1.py", S.FILES)
 

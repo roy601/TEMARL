@@ -147,14 +147,16 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
   - (b) tuned minus the D1.0 setting (D1.1's own cells) for each arm;
   - (c) per arm, the number of folds that selected each setting;
   - (d) per arm, the mean validation E1 of each setting.
-- **How the result is read (declared now).** For each outcome:
-  - If Family H's verdict equals the verdict of D1.0's Family 1, the write-up says the D1.0 result for
-    that outcome agrees with the result under per-arm tuning in this grid.
-  - If the verdicts differ, it says the D1.0 result for that outcome depends on the hyperparameters, and
-    both results are reported.
+- **How the result is read (declared now; revised 2026-11-18 after two reviews).** For each outcome:
+  - **Hyperparameter dependence is judged within D1.1, at matched seeds.** Per test run, the tuned effect
+    (tuned allpos − tuned NoHistory) is compared with the effect under D1.0's setting in D1.1's own cells
+    (same 3 seeds, same episodes): the mean paired difference and its 95% bootstrap CI
+    (`tuned_effect_minus_default_effect`). Only if that CI excludes 0 does the write-up say the effect
+    depends on the hyperparameters (in this grid).
+  - D1.0's Family 1 verdict (10 seeds) and Family H's verdict (3 seeds) are both reported, but a difference
+    between them is **not** read as hyperparameter dependence: fewer seeds and selection noise alone can
+    change a verdict. Any such difference is described cautiously.
   - D1.1 never replaces D1.0's primary result.
-  - The seed counts differ (D1.0: 10 seeds; D1.1: 3), so the two confidence intervals are not equally
-    wide; this is stated.
 - Every result is reported whatever its direction.
 
 ## 6a. Supplementary analyses of D1.0's main cells (`supplement_d1_1.py`; added 2026-11-18)
@@ -162,39 +164,68 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
 **Why.** A devil's-advocate review (2026-11-18) pointed out a structural fact, which was then checked in
 code: every one of D1.0's 29 primary folds trains **only** on sibling variants of its test run's scenario
 (16 training runs for S1, 4 for S3, 3 for S6), and 18 of the 29 units are S1. A positive D1.0 Family 1
-result therefore means "history helps on **held-out variants of known attack scenarios**". Part of that
-help may be recognising a known scenario's script rather than using the run's own past. These analyses
-separate the two and show how much S1 drives the result. All of them are descriptive (mean paired
-difference and 95% bootstrap CI, no p-value, no verdict), and none changes a D1.0 result.
+result therefore means "history helps on **held-out variants of known attack scenarios**". The strongest
+alternative explanation is that the agents benefit from familiar scenario information rather than from
+transferable understanding of the attack. These analyses investigate that explanation; they cannot settle
+it alone. All of them are descriptive (mean paired difference and 95% bootstrap CI, unadjusted, no
+p-value, no verdict), and none changes a D1.0 result. A second review and a second devil's-advocate round
+(both 2026-11-18) led to the revisions marked below, before the freeze.
 
 - **A, per-scenario effect:** allpos − NoHistory (MAPPO) on E1 and P1, separately for S1 (18 runs), S3 (6)
   and S6 (5).
 - **B, scenario-balanced effect:** the mean of the three scenario effects (each weight 1/3), with a
   stratified bootstrap (runs resampled within each scenario; 10,000 resamples, seed 20261103). A cluster
-  bootstrap over scenarios is not used: 3 clusters are too few.
-- **C, unseen scenarios:** allpos − NoHistory on the 13 test runs of D1.0's 3 scenario-held-out folds,
-  whose scenario never appears in training, overall and per scenario. This is the evidence on
-  generalisation to new attacks. The S3 and S6 runs are test runs in both groups, so A and C are computed
-  separately and never merged.
-- **D, other-run history (evaluation only, no retraining):** each trained allpos MAPPO actor (29 variant
-  folds × seeds 0-9) is evaluated on its own test episodes (D1.0's test seed and 20 repeats) with the
-  history h of a **donor** run: the fold's validation run, which in every variant fold is a sibling of the
-  same scenario. At step t the actor gets the donor's h after min(t, donor length) commands. This is
-  compared with its own h (D1.0's sealed rows) and with h = 0 (D1.0's sealed `test_h0_summary`).
-  - Reading, declared now: if own − donor > 0 (CI excluding 0), the run's own past matters. If
-    donor − zero > 0 while own − donor is about 0, the gain is recognition of the scenario.
-  - Harness check: the re-evaluation with each actor's own h must reproduce D1.0's sealed rows exactly,
-    or the supplement stops.
+  bootstrap over scenarios is not used: 3 clusters are too few. The interval describes uncertainty for
+  these 3 observed scenarios only; it does not establish generalisation to other attack scenarios.
+- **C, held-out scenarios:** allpos − NoHistory on the test runs of D1.0's 3 scenario-held-out folds,
+  whose scenario never appears in training: **each scenario reported separately with its run count**
+  (S2: 2 runs, S3: 6, S6: 5); the pooled value is descriptive only. This is evidence about **3 held-out
+  scenarios**, not about 13 independent campaigns. The S3 and S6 runs are test runs in both groups, so A
+  and C are computed separately and never merged.
+- **D, history-substitution sensitivity test (evaluation only, no retraining; revised).** Each trained
+  allpos MAPPO actor (29 variant folds × seeds 0-9) is evaluated on its own test episodes (D1.0's test
+  seed and 20 repeats) under four histories:
+  - **own:** its own h; the re-evaluation must reproduce D1.0's sealed rows exactly in every field used
+    (run, E1, P1/`protected`, `p1`, length, horizon, techniques, exposure, episode reward), or the
+    supplement stops;
+  - **sibling:** the h of the fold's **first training run**, a sibling of the same scenario. It is not the
+    validation run, on which the actor's checkpoint was selected;
+  - **cross:** the h of a different-scenario donor, the first run (sorted) of the next scenario in the
+    order S1 → S3 → S6 → S1;
+  - **zero:** h = 0 (D1.0's sealed `test_h0_summary`).
+
+  At step t a donor gives its h after min(t, donor length) commands. Substituted h is input the actor
+  never saw in training, so every difference may also reflect mismatched timing, sequence length or
+  content. Reported: own − sibling, own − cross, sibling − cross, sibling − zero, own − zero, on E1 and P1.
+  - **Reading, declared now** ("about 0" means the 95% CI includes 0; "> 0" means the CI excludes 0 and
+    the mean is positive):
+    - own − sibling about 0 **and** sibling − cross > 0: *consistent with shared scenario information
+      being used; not conclusive*;
+    - own − sibling > 0 **and** own − cross > 0: *run-specific history or sensitivity to mismatched input;
+      the two cannot be separated here*;
+    - any other pattern: reported as observed, without interpretation.
+  - Neither pattern identifies memorisation or reasoning uniquely: a drop can come from mismatched input,
+    and no drop can mean that two histories carry similar useful information.
 - **V, validation gap by scenario (validation only):** the same split as A and C on the cells' best
   validation E1. It can be run any time after D1.0's main stage and reads no test file.
 
-**When:** `--open` runs **once**, after D1.0's single test opening, and refuses before it
-(`results_d1/main/TEST_OPENED.json` must exist). D1.0's opening therefore stays the first look at the
-test. The supplement reads D1.0's sealed files (SHA-256 checked) and evaluates the trained actors, but it
-can change no D1.0 verdict, because every analysis and its reading is fixed here, before the opening.
+**Multiplicity (added).** A-D give about 30 intervals. All are descriptive and unadjusted; their number is
+stated with the results, and no single interval supports a claim on its own.
 
-**Reporting:** D1.0's Family 1 is always reported together with A-C, and with the statement that 18 of the
-29 units are S1. The 29 variants are never described as 29 independent campaigns.
+**When.**
+1. **Dry run first (added):** `--dry-run` uses validation episodes only and reads no test file. Every
+   allpos MAPPO actor of the 29 variant folds must reproduce its recorded best validation E1 with its own
+   h, and both donor paths must run. It runs after D1.0's main stage and **before** D1.0's opening, so a
+   harness fault is found while no test number exists.
+2. `--open` runs **once**, after D1.0's single test opening. It refuses unless the dry run passed and
+   `results_d1/main/TEST_OPENED.json` exists, so D1.0's opening stays the first look at the test.
+
+The supplement reads D1.0's sealed files (SHA-256 checked) and evaluates the trained actors. It can change
+no D1.0 verdict, because every analysis and its reading are fixed here, before the opening.
+
+**Reporting:** D1.0's Family 1 verdict is reported unchanged; A-D are given next to it as context, with
+the statement that 18 of the 29 units are S1. The 29 variants are never described as 29 independent
+campaigns.
 
 ## 7. Procedure (`run_all_d1_1.py`, on a GPU PC)
 
@@ -205,7 +236,10 @@ can change no D1.0 verdict, because every analysis and its reading is fixed here
   4. the 1,728 cells, test sealed;
   5. validation dry run and nested selection.
 - **`open`:** opens the D1.1 test once.
-- **`supplement`:** Section 6a, once, after D1.0's opening (refused before it).
+- **`supplement-dry-run`:** Section 6a's validation dry run, after D1.0's main stage and before its
+  opening.
+- **`supplement`:** Section 6a, once, after D1.0's opening (refused before it, and refused until the dry
+  run has passed).
 - As in D1.0, each stage logs to `results_d1_1/logs/`, stops at the first failure and can be restarted.
   `MANIFEST.json` checks what decides a cell's content (both specs, grid, base hyperparameters, setting,
   steps, repeats, folds). After a killed run, delete `RUNNING.lock` and start again.
@@ -224,9 +258,12 @@ can change no D1.0 verdict, because every analysis and its reading is fixed here
 - Selection uses one validation run per variant fold (the same run for 20 of the 32 folds) and 3 seeds,
   so it is noisy. Nested selection keeps it honest but does not make it precise.
 - The tuned result uses 3 seeds against D1.0's 10.
-- Section 6a's unseen-scenario evidence rests on 13 test runs from 3 scenarios; it is descriptive.
-- The donor ablation uses one donor per fold (the fold's validation run); another sibling could give a
-  different value.
+- Section 6a's held-out-scenario evidence rests on 3 scenarios (13 test runs); it is descriptive.
+- The history-substitution test uses one sibling and one cross-scenario donor per fold; other donors could
+  give different values, and substituted histories are out of the actor's training distribution.
+- Equal environment steps are not equal computation: 15 PPO epochs reuse each rollout more than 5. Both
+  arms get the same grid, which is fair, but optimiser work and runtime are reported per setting and no
+  claim of identical computational effort is made.
 - The other limits of D1.0 (Section 12) apply unchanged.
 
 ## 9. Decisions for the user (recommended choice first)
@@ -239,7 +276,7 @@ can change no D1.0 verdict, because every analysis and its reading is fixed here
 | H4 | D1.0 setting | trained again in D1.1, not copied | every Family H number comes from D1.1 cells (cost: 192 cells, about 5 h) |
 | H5 | numbering | this is D1.1; the published comparators become D1.2 | this analysis must be declared before the D1.0 opening, and the replications are not done |
 | H6 | schedule | frozen before the D1.0 opening; run after D1.0's main stage | no D1.0 test number can influence D1.1 |
-| H7 | supplementary analyses (Section 6a) | per-scenario, scenario-balanced, unseen-scenario and other-run-history analyses of D1.0's main cells, descriptive, run once after D1.0's opening | the devil's-advocate review: D1.0's primary units are held-out variants of scenarios seen in training (29 of 29), and 18 of 29 are S1 |
+| H7 | supplementary analyses (Section 6a) | per-scenario, scenario-balanced, held-out-scenario (per scenario) and history-substitution analyses of D1.0's main cells, descriptive; a validation dry run before D1.0's opening; run once after it; hyperparameter dependence judged within D1.1 at matched seeds (Section 6) | the devil's-advocate review: D1.0's primary units are held-out variants of scenarios seen in training (29 of 29), and 18 of 29 are S1; revised after a second review and a second devil's-advocate round (2026-11-18) |
 
 ## 10. Reproducibility
 
