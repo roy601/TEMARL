@@ -10,8 +10,9 @@ freeze, any change means a new version, never an edit of this one.
 
 - **D1.0 is unchanged.** Every rule, file and number frozen in `SPEC_D1.json` stays as it is. D1.1 pins
   `SPEC_D1.json` itself, and its runner, scorer and stage driver refuse to run unless D1.0's spec check
-  passes. D1.1 adds one sensitivity analysis. It changes nothing that D1.0 runs, scores or reports, and
-  its result never replaces D1.0's primary result.
+  passes. D1.1 adds a hyperparameter sensitivity analysis (Sections 1-6) and descriptive supplementary
+  analyses of D1.0's main cells (Section 6a). It changes nothing that D1.0 runs, scores or reports, and
+  its results never replace D1.0's primary result.
 - **Why:** our supervisor noted that MARL results can be poor when hyperparameters are not tuned. D1.0
   uses one untuned setting for every arm (D1.0 Section 7). D1.1 asks whether the D1.0 answer to Q1
   depends on that setting.
@@ -156,6 +157,45 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
     wide; this is stated.
 - Every result is reported whatever its direction.
 
+## 6a. Supplementary analyses of D1.0's main cells (`supplement_d1_1.py`; added 2026-11-18)
+
+**Why.** A devil's-advocate review (2026-11-18) pointed out a structural fact, which was then checked in
+code: every one of D1.0's 29 primary folds trains **only** on sibling variants of its test run's scenario
+(16 training runs for S1, 4 for S3, 3 for S6), and 18 of the 29 units are S1. A positive D1.0 Family 1
+result therefore means "history helps on **held-out variants of known attack scenarios**". Part of that
+help may be recognising a known scenario's script rather than using the run's own past. These analyses
+separate the two and show how much S1 drives the result. All of them are descriptive (mean paired
+difference and 95% bootstrap CI, no p-value, no verdict), and none changes a D1.0 result.
+
+- **A, per-scenario effect:** allpos − NoHistory (MAPPO) on E1 and P1, separately for S1 (18 runs), S3 (6)
+  and S6 (5).
+- **B, scenario-balanced effect:** the mean of the three scenario effects (each weight 1/3), with a
+  stratified bootstrap (runs resampled within each scenario; 10,000 resamples, seed 20261103). A cluster
+  bootstrap over scenarios is not used: 3 clusters are too few.
+- **C, unseen scenarios:** allpos − NoHistory on the 13 test runs of D1.0's 3 scenario-held-out folds,
+  whose scenario never appears in training, overall and per scenario. This is the evidence on
+  generalisation to new attacks. The S3 and S6 runs are test runs in both groups, so A and C are computed
+  separately and never merged.
+- **D, other-run history (evaluation only, no retraining):** each trained allpos MAPPO actor (29 variant
+  folds × seeds 0-9) is evaluated on its own test episodes (D1.0's test seed and 20 repeats) with the
+  history h of a **donor** run: the fold's validation run, which in every variant fold is a sibling of the
+  same scenario. At step t the actor gets the donor's h after min(t, donor length) commands. This is
+  compared with its own h (D1.0's sealed rows) and with h = 0 (D1.0's sealed `test_h0_summary`).
+  - Reading, declared now: if own − donor > 0 (CI excluding 0), the run's own past matters. If
+    donor − zero > 0 while own − donor is about 0, the gain is recognition of the scenario.
+  - Harness check: the re-evaluation with each actor's own h must reproduce D1.0's sealed rows exactly,
+    or the supplement stops.
+- **V, validation gap by scenario (validation only):** the same split as A and C on the cells' best
+  validation E1. It can be run any time after D1.0's main stage and reads no test file.
+
+**When:** `--open` runs **once**, after D1.0's single test opening, and refuses before it
+(`results_d1/main/TEST_OPENED.json` must exist). D1.0's opening therefore stays the first look at the
+test. The supplement reads D1.0's sealed files (SHA-256 checked) and evaluates the trained actors, but it
+can change no D1.0 verdict, because every analysis and its reading is fixed here, before the opening.
+
+**Reporting:** D1.0's Family 1 is always reported together with A-C, and with the statement that 18 of the
+29 units are S1. The 29 variants are never described as 29 independent campaigns.
+
 ## 7. Procedure (`run_all_d1_1.py`, on a GPU PC)
 
 - **`tune`:**
@@ -165,6 +205,7 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
   4. the 1,728 cells, test sealed;
   5. validation dry run and nested selection.
 - **`open`:** opens the D1.1 test once.
+- **`supplement`:** Section 6a, once, after D1.0's opening (refused before it).
 - As in D1.0, each stage logs to `results_d1_1/logs/`, stops at the first failure and can be restarted.
   `MANIFEST.json` checks what decides a cell's content (both specs, grid, base hyperparameters, setting,
   steps, repeats, folds). After a killed run, delete `RUNNING.lock` and start again.
@@ -172,7 +213,8 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
   1. Freeze D1.1 and push it before `run_all_d1.py open` is run for D1.0.
   2. The D1.1 cells run on GPU PC 1 after D1.0's main stage (and, if the GPU is needed, after its
      sensitivity stage), or on another GPU PC whose D1.1 preflight passes.
-  3. D1.1 writes only `results_d1_1/` and `out_test_d1_1/`.
+  3. D1.1 writes only `results_d1_1/` and `out_test_d1_1/`. The supplement reads D1.0's main cells
+     without changing them.
 
 ## 8. Known limits (stated with the result)
 
@@ -182,6 +224,9 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
 - Selection uses one validation run per variant fold (the same run for 20 of the 32 folds) and 3 seeds,
   so it is noisy. Nested selection keeps it honest but does not make it precise.
 - The tuned result uses 3 seeds against D1.0's 10.
+- Section 6a's unseen-scenario evidence rests on 13 test runs from 3 scenarios; it is descriptive.
+- The donor ablation uses one donor per fold (the fold's validation run); another sibling could give a
+  different value.
 - The other limits of D1.0 (Section 12) apply unchanged.
 
 ## 9. Decisions for the user (recommended choice first)
@@ -191,14 +236,16 @@ D1.0's text cites `mappo_cmd.HP`, not this paper.
 | H1 | grid | learning rate {1e-4, 5e-4, 1e-3} × PPO epochs {5, 10, 15}: 9 settings, about 45 h GPU. Cheaper alternative: learning rate × 2 epoch values, 6 settings, about 30 h | the MAPPO authors swept these two in every domain (Section 2). This replaces the 2026-11-18 proposal of learning rate × entropy: they swept entropy only in Hanabi |
 | H2 | selection | nested: per arm and fold, on that fold's validation run | the proposal "tune on 3 folds, apply to all" would let other folds' test runs take part in the selection (Section 5) |
 | H3 | seeds | 0-2 | encoder checkpoints exist for seeds 0-9 only; budget |
-| H4 | D1.0 setting | trained again in D1.1, not copied | no D1.0 sealed file is read twice; every D1.1 number comes from D1.1 cells (cost: 192 cells, about 5 h) |
+| H4 | D1.0 setting | trained again in D1.1, not copied | every Family H number comes from D1.1 cells (cost: 192 cells, about 5 h) |
 | H5 | numbering | this is D1.1; the published comparators become D1.2 | this analysis must be declared before the D1.0 opening, and the replications are not done |
 | H6 | schedule | frozen before the D1.0 opening; run after D1.0's main stage | no D1.0 test number can influence D1.1 |
+| H7 | supplementary analyses (Section 6a) | per-scenario, scenario-balanced, unseen-scenario and other-run-history analyses of D1.0's main cells, descriptive, run once after D1.0's opening | the devil's-advocate review: D1.0's primary units are held-out variants of scenarios seen in training (29 of 29), and 18 of 29 are S1 |
 
 ## 10. Reproducibility
 
 - `spec_d1_1.py --freeze` writes `SPEC_D1_1.json`: the SHA-256 (after CRLF→LF) of `SPEC_D1.json`, this
-  protocol, `run_d1_1.py`, `evaluate_d1_1.py`, `run_all_d1_1.py`, `test_d1_1.py` and `spec_d1_1.py`, plus
+  protocol, `run_d1_1.py`, `evaluate_d1_1.py`, `supplement_d1_1.py`, `run_all_d1_1.py`, `test_d1_1.py` and
+  `spec_d1_1.py`, plus
   the git commit at the freeze. The check also runs D1.0's check, so D1.0's 31 files stay pinned.
 - **Tests (`test_d1_1.py`):**
   - the grid and its source;

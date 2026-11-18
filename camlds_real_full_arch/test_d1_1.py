@@ -443,5 +443,111 @@ class D11SpecAndDriver(unittest.TestCase):
             self.assertIn(s, text)
 
 
+
+class D11Supplement(unittest.TestCase):
+    """Section 6a: per-scenario, scenario-balanced, unseen-scenario and other-run-history analyses."""
+
+    def test_variant_folds_train_only_on_siblings_and_the_donor_is_a_sibling(self):
+        scen = {r["id"]: r["scenario"] for f in FOLDS for sp in ("train", "val", "test") for r in p.runs(f, sp)}
+        variant = [f for f in FOLDS if f["family"] == "variant_held_out"]
+        self.assertEqual(len(variant), 29)
+        from collections import Counter
+        self.assertEqual(Counter(scen[f["test_runs"][0]] for f in variant), {"S1": 18, "S3": 6, "S6": 5})
+        for f in variant:
+            s = scen[f["test_runs"][0]]
+            self.assertTrue(all(scen[r] == s for r in f["train_runs"]), f["fold"])
+            self.assertEqual([scen[r] for r in f["val_runs"]], [s])            # the donor is a sibling
+        for f in FOLDS:
+            if f["family"] != "variant_held_out":
+                s = {scen[r] for r in f["test_runs"]}
+                self.assertFalse(any(scen[r] in s for r in f["train_runs"]), f["fold"])
+
+    def test_per_scenario_and_scenario_balanced_effects(self):
+        import supplement_d1_1 as X
+        scen = {f"a{i}": "S1" for i in range(18)} | {f"b{i}": "S3" for i in range(6)} | {f"c{i}": "S6" for i in range(5)}
+        hist = {r: (3.0 if s == "S1" else 0.0) for r, s in scen.items()}
+        none = {r: 0.0 for r in scen}
+        vals = {("allpos", "E1"): hist, ("NoHistory", "E1"): none, ("allpos", "P1"): none, ("NoHistory", "P1"): none}
+        by = X.by_scenario(vals, scen)
+        self.assertAlmostEqual(by["S1|E1"]["mean"], 3.0)
+        self.assertAlmostEqual(by["S3|E1"]["mean"], 0.0)
+        self.assertAlmostEqual(by["all|E1"]["mean"], 3.0 * 18 / 29)            # S1 dominates the pooled mean
+        self.assertNotIn("p", by["all|E1"])
+        st = X.stratified(X.diff(hist, none), scen)
+        self.assertAlmostEqual(st["mean"], 1.0)                                 # (3 + 0 + 0) / 3
+        self.assertEqual(st["ci"], [1.0, 1.0])
+        self.assertEqual(st["scenarios"]["S1"]["n_runs"], 18)
+
+    def test_groups_are_kept_apart_when_a_run_is_tested_twice(self):
+        import supplement_d1_1 as X
+        fa, fb = {"fold": "variant"}, {"fold": "unseen"}
+        rows = lambda v: {0: [{"run": "3_ssh_apt", "dwell": v, "protected": 1.0, "p1": 1.0}]}
+        self.assertEqual(X.unit_values({"variant": rows(5.0)}, [fa])["E1"], {"3_ssh_apt": 5.0})
+        self.assertEqual(X.unit_values({"unseen": rows(2.0)}, [fb])["E1"], {"3_ssh_apt": 2.0})
+
+    def test_donor_history_is_aligned_by_step_and_own_history_reproduces_evaluation(self):
+        import supplement_d1_1 as X
+        d = np.arange(4, dtype=np.float32)[:, None].repeat(3, 1)              # a donor of 3 commands
+        np.testing.assert_array_equal(X.DonorBank(d).aligned(6)[:, 0], [0, 1, 2, 3, 3, 3, 3])
+        np.testing.assert_array_equal(X.DonorBank(d).aligned(2)[:, 0], [0, 1, 2])
+
+        class Fake(torch.nn.Module):                                           # deterministic h from the window
+            def __init__(self):
+                super().__init__()
+                self.w = torch.nn.Parameter(torch.zeros(1))
+
+            def history(self, x, m):
+                return torch.tanh(x.sum(1)[:, :64] + m.sum(1, keepdim=True))
+        cfg = R.setting(None)[0]
+        f = FOLDS[0]
+        specs = R.specs(p.runs(f, "test"), 7, 2, cfg)
+        actor = marl.Actor()
+        bank = marl.HistoryBank(Fake(), p.data.W, "cpu")
+        own = marl.evaluate_team(actor, cfg, specs, bank, 64, "cpu")
+        same = marl.evaluate_team(actor, cfg, specs, X.DonorBank(bank.table(specs[0])), 64, "cpu")
+        self.assertEqual([r["dwell"] for r in own], [r["dwell"] for r in same])  # donor = itself -> identical
+
+    def test_h0_rows_read_the_sealed_summary(self):
+        import supplement_d1_1 as X
+        sealed = {"test": [{"run": "r", "p1": 1.0}], "test_h0_summary": {"dwell": 4.5, "protected": 0.25}}
+        self.assertEqual(X.h0_rows(sealed), [{"run": "r", "dwell": 4.5, "protected": 0.25, "p1": 1.0}])
+
+    def test_the_supplement_refuses_before_d10s_opening_and_runs_once(self):
+        import supplement_d1_1 as X
+        orig = (S.require, X.MAIN, X.DONE)
+        with tempfile.TemporaryDirectory() as tmp:
+            S.require, X.MAIN, X.DONE = (lambda: None), Path(tmp) / "main", Path(tmp) / "DONE.json"
+            argv = sys.argv
+            try:
+                sys.argv = ["supplement_d1_1.py", "--open"]
+                with self.assertRaises(SystemExit) as cm:
+                    X.main()
+                self.assertIn("has not been opened", str(cm.exception))
+                X.MAIN.mkdir()
+                (X.MAIN / "TEST_OPENED.json").write_text("{}", encoding="utf-8")
+                X.DONE.write_text("{}", encoding="utf-8")
+                with self.assertRaises(SystemExit) as cm:
+                    X.main()
+                self.assertIn("already run", str(cm.exception))
+            finally:
+                sys.argv = argv
+                S.require, X.MAIN, X.DONE = orig
+
+    def test_the_driver_stage_waits_for_d10s_opening(self):
+        import run_all_d1_1 as DD
+        self.assertNotIn("supplement", " ".join(" ".join(c) for _, c, _ in DD.plan("tune", "cuda") if c))
+        cmd = [c for _, c, _ in DD.plan("supplement", "cuda") if c]
+        self.assertEqual(len(cmd), 1)
+        self.assertIn("--open", cmd[0])
+        if not (HERE / "results_d1" / "main" / "TEST_OPENED.json").exists():
+            self.assertEqual(DD._supplement_pre()[0], "stop")
+
+    def test_protocol_declares_section_6a(self):
+        text = (HERE / "PROTOCOL_D1.1.md").read_text(encoding="utf-8")
+        for s in ("## 6a.", "| H7 |", "18 of the 29", "13 test runs", "donor", "once, after D1.0's opening"):
+            self.assertIn(s, text)
+        self.assertIn("camlds_real_full_arch/supplement_d1_1.py", S.FILES)
+
+
 if __name__ == "__main__":
     unittest.main()

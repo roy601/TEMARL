@@ -4,6 +4,7 @@
     python camlds_real_full_arch/run_all_d1_1.py tune   # checks, preflight, timing, 1,728 cells,
                                                         #   validation dry run + nested selection
     python camlds_real_full_arch/run_all_d1_1.py open   # opens the D1.1 test, ONCE
+    python camlds_real_full_arch/run_all_d1_1.py supplement   # Section 6a, ONCE, after D1.0's opening
     add --plan to print a stage's steps without running anything
 
 As run_all_d1.py: each stage runs unattended, writes everything it prints to results_d1_1/logs/, stops
@@ -55,6 +56,14 @@ def _open_pre():
     return None
 
 
+def _supplement_pre():
+    if (OUT / "SUPPLEMENT_DONE.json").exists():
+        return ("skip", "the supplement has already run (never again)")
+    if not (HERE / "results_d1" / "main" / "TEST_OPENED.json").exists():
+        return ("stop", "D1.0's main test has not been opened: run `run_all_d1.py open` first")
+    return None
+
+
 def plan(stage: str, device: str):
     dev = ["--device", device]
     if stage == "tune":
@@ -68,12 +77,15 @@ def plan(stage: str, device: str):
     if stage == "open":
         return [("protocols D1.0 and D1.1 frozen", None, _frozen),
                 ("open the D1.1 test ONCE", py("evaluate_d1_1.py", *dev, "--open-test"), _open_pre)]
+    if stage == "supplement":
+        return [("protocols D1.0 and D1.1 frozen", None, _frozen),
+                ("Section 6a, ONCE, after D1.0's opening", py("supplement_d1_1.py", *dev, "--open"), _supplement_pre)]
     raise ValueError(stage)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["tune", "open"])
+    ap.add_argument("stage", choices=["tune", "open", "supplement"])
     ap.add_argument("--device", default="cuda", choices=["cuda", "cpu"])
     ap.add_argument("--plan", action="store_true", help="print the steps, run nothing")
     a = ap.parse_args()
