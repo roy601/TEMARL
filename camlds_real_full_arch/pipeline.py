@@ -47,13 +47,26 @@ def write(path, obj):
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes().replace(b'\r\n', b'\n')).hexdigest()
 
+_D1 = {}
+
+def d1_tables():
+    """Recorded positions and released tactics, read once (protocol D1.0, d1_data.py)."""
+    if not _D1:
+        import d1_data
+        _D1['pos'], _D1['tac'] = d1_data.positions(), d1_data.tactics()
+    return _D1['pos'], _D1['tac']
+
 def runs(fold, split):
     # Command sets are retained intact; fold['_steps'] fixes the chosen order.
     out = data._runs(fold['_steps'], fold[split + '_runs'])
     scenario = {s['run']: 'S' + str(s['base_scenario']) for s in fold['_steps']}
     for r in out:
         r['scenario'] = scenario[r['id']]
-    return out
+    # D1.0: recorded position and goal flag of every command, matched by (run, source_row),
+    # so they stay aligned whichever command order the fold uses.
+    import d1_data
+    pos, tac = d1_tables()
+    return d1_data.attach(out, pos, tac)
 
 def specs(rs, seed, repeats):
     rng = np.random.default_rng(seed)
