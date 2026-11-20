@@ -249,3 +249,22 @@ REPORT.md's verdicts belong to the calibrated replication and do not change. The
 **figure-derived reconstruction**: even full consistency would show only that the paper's numbers follow from
 mechanics inferred from its own figures. Outputs: `out/figure_reconstruction_log.csv`,
 `out/figure_reconstruction.json`, `FIGURE_RECONSTRUCTION.md`. Runs once.
+
+## A14, A13 closed without a run (2026-11-21)
+
+A devil's-advocate review of A13 (verdict STOP) showed, by arithmetic on the measured plateaus, that the A13 run
+could not be a test:
+- Under D1 (reward = R1(2p - 1) - cost, R1 = 1) the Fig. 6 plateaus already imply each method's success rate:
+  DRD-PPO 99.82%, Alg1 31.20%, Alg2 99.85%, Alg3 57.52%, within 3 points of Table 3 (97.09, 28.43, 98.31, 55.19;
+  gaps +2.73, +2.77, +1.54, +2.33). Table 3 is therefore **encoded in the derivation inputs**, not independent.
+- The figure-implied random-baseline rates (Alg1 31.20%, Alg3 57.52%) **falsify** both attacker rules: the
+  clone-specific rule gives 36.17% and 66.41%, the all-honeypot rule 60.83% and 100% (exact arithmetic).
+- After removing what Fig. 6a encodes, fewer than three independent quantities remain.
+
+**Decision:** `figure_reconstruction.py run` is not executed. The findings reported are: (1) the paper's Figs. 5-6
+and Table 3 are mutually consistent under reward = R1(2p - 1) - cost with R1 = 1 and the cost charged once per
+episode; (2) the learned DRD-PPO deployment is 1 H-honeypot + 4 F-honeypots (cost 0.912), full deployment 2 H + 9 F
+(cost 1.901); (3) no attacker rule we could derive or read from the paper reproduces the random baselines'
+success rates implied by the paper's own figures. Li 2025 is closed: **not reproducible from the published text**;
+DRD-PPO enters D1.2 only as an adapted comparator (A4), with R1 = 1 and the cost once per episode (D1) as its
+reward, since those two are recovered from the paper's figures.

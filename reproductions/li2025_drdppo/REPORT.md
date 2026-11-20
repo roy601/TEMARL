@@ -41,6 +41,22 @@ Primary targets: T3.DRD-PPO, T4.DRD-PPO. Trials logged: 910 (`out/calibration_lo
 - Table 3 is not produced by any of these 256 readings of the paper. Combinations fitting Table 3 within 2 points: 0 of 256; decoys fitted: [0, 0, 0] (`SENSITIVITY_M.md`).
 - Ranges over the 256 readings: Alg1 2.10-82.34, Alg3 32.16-100.00, DRD-PPO 0.34-94.60. No reading reaches Alg3 55.19 or DRD-PPO 97.09 within 2 points, even alone.
 
+## What the paper's own figures imply (A13-A14, algebra only)
+
+Plateaus measured from Figs. 5-6 (`data/figure_values.json`). Under reward = R1(2p - 1) - cost with R1 = 1 and
+the cost once per episode (recovered from two independent plateaus: 0.996 and 0.997):
+
+| method | cost (Fig. 6c) | implied success | Table 3 |
+|---|---|---|---|
+| DRD-PPO | 0.912 | 99.82% | 97.09 |
+| Alg1 | 1.534 | 31.20% | 28.43 |
+| Alg2 | 1.901 | 99.85% | 98.31 |
+| Alg3 | 1.901 | 57.52% | 55.19 |
+
+- The figures and Table 3 agree (gaps +1.5 to +2.8 points); DRD-PPO's learned deployment is 1 H + 4 F.
+- No attacker rule we derived reproduces the figure-implied random baselines (31.20%, 57.52%): clone-specific
+  36.17% / 66.41%, all honeypots 60.83% / 100% (exact arithmetic). A13's run was therefore not executed (A14).
+
 ## Limits
 
 - Every unpublished setting is an assumption (DECISIONS.md decisions 5-11, A6-A9); the corresponding author did

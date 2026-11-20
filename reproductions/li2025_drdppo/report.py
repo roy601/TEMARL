@@ -17,6 +17,28 @@ def _fmt(s):
     return f"{s['mean']:.2f} [{max(lo, 0.0):.2f}, {min(hi, 100.0):.2f}]{mark}"
 
 
+def _a14() -> list:
+    """A13/A14: what the paper's own figures imply (algebra only, no run)."""
+    p = HERE / "data" / "figure_values.json"
+    if not p.exists():
+        return []
+    f = json.loads(p.read_text(encoding="utf-8"))
+    r = {k: v["median"] for k, v in f["fig6a_reward"]["curves"].items()}
+    c = {k: v["median"] for k, v in f["fig6c_cost"]["curves"].items()}
+    c["green"] = c["orange"]
+    rows = [("DRD-PPO", "blue", 97.09), ("Alg1", "red", 28.43), ("Alg2", "green", 98.31), ("Alg3", "orange", 55.19)]
+    L = ["## What the paper's own figures imply (A13-A14, algebra only)", "",
+         "Plateaus measured from Figs. 5-6 (`data/figure_values.json`). Under reward = R1(2p - 1) - cost with R1 = 1 and",
+         "the cost once per episode (recovered from two independent plateaus: 0.996 and 0.997):", "",
+         "| method | cost (Fig. 6c) | implied success | Table 3 |", "|---|---|---|---|"]
+    for n, k, t3 in rows:
+        L.append(f"| {n} | {c[k]:.3f} | {50 * (r[k] + c[k] + 1):.2f}% | {t3} |")
+    L += ["", "- The figures and Table 3 agree (gaps +1.5 to +2.8 points); DRD-PPO's learned deployment is 1 H + 4 F.",
+          "- No attacker rule we derived reproduces the figure-implied random baselines (31.20%, 57.52%): clone-specific",
+          "  36.17% / 66.41%, all honeypots 60.83% / 100% (exact arithmetic). A13's run was therefore not executed (A14).", ""]
+    return L
+
+
 def _a12(out: Path) -> list:
     """A12 (declared sensitivity of the paper's readings), if it has run."""
     p = Path(out) / "sensitivity_m.json"
@@ -103,6 +125,7 @@ def write(out: Path, dest: Path = None) -> Path:
          f"- CVSS v3 instead of v2 (final setting, DRD-PPO, 500 episodes): {_fmt(ho['sensitivity_cvss_v3_drdppo_500'])}.",
          "- Clip 0.9 (Table 2) versus 0.2 (text): both are in the stage-2 grid; see `out/stage2.json`.", "",
          *_a12(out),
+         *_a14(),
          "## Limits", "",
          "- Every unpublished setting is an assumption (DECISIONS.md decisions 5-11, A6-A9); the corresponding author did",
          "  not answer. A calibrated match is weaker evidence than a replication with the authors' settings.",
