@@ -62,16 +62,19 @@ class Setting:
     action: str = "single"        # M4: "single" or "joint"
     cost: str = "step"            # M5: "step" or "final"
     f_score: str = "none"         # M7: "none" or "host_clone"
+    # A13 (figure-derived reconstruction)
+    full_f: int = 10              # D4: F-honeypots in a full deployment (Alg2, Alg3)
 
     def __post_init__(self):
         assert self.links in LINKS and self.timing in ("last", "random") and self.cvss in IMPACT
         assert self.h_links in ("f_only", "f_plus_server")
-        assert self.attacker in ("argmax", "proportional") and self.ties in ("random", "real_first")
-        assert self.alg1 in ("walk", "config") and self.action in ("single", "joint")
+        assert self.attacker in ("argmax", "proportional", "clone_specific") and self.ties in ("random", "real_first")
+        assert self.alg1 in ("walk", "config", "fig") and self.action in ("single", "joint")
+        assert 0 <= self.full_f <= BETA
         assert self.cost in ("step", "final") and self.f_score in ("none", "host_clone")
 
     A12_DEFAULTS = {"attacker": "argmax", "ties": "random", "alg1": "walk", "action": "single", "cost": "step",
-                    "f_score": "none"}
+                    "f_score": "none", "full_f": 10}
 
     def key(self) -> str:
         """Identical to the pre-A12 key when every A12 reading is at its default (logged trials stay valid)."""
@@ -131,11 +134,18 @@ class Env:
         self.h_target = np.zeros(ALPHA, int)
         self.f_on = np.zeros(BETA, bool)
         self.f_link = np.zeros(BETA, int)
-        if start == "full_random":                     # A7: Alg2 and Alg3
+        if start == "full_random":                     # A7: Alg2 and Alg3 (A13 D4: full_f F-honeypots)
+            nv = self.s.full_f
             self.h_on[:] = True
             self.h_target[:] = self.rng.integers(0, len(SERVERS), ALPHA)
-            self.f_on[:] = True
-            self.f_link[:] = self.rng.integers(0, ALPHA, BETA)
+            self.f_on[:nv] = True
+            self.f_link[:nv] = self.rng.integers(0, ALPHA, nv)
+        elif start == "fig_random":                    # A13 D7: 2 H, F uniform 1-10, random targets and links
+            nv = int(self.rng.integers(1, BETA + 1))
+            self.h_on[:] = True
+            self.h_target[:] = self.rng.integers(0, len(SERVERS), ALPHA)
+            self.f_on[:nv] = True
+            self.f_link[:nv] = self.rng.integers(0, ALPHA, nv)
         elif start == "config_random":                 # A12 M3: one random configuration per episode
             nd = int(self.rng.integers(0, ALPHA + 1))
             nv = int(self.rng.integers(0, BETA + 1)) if nd > 0 else 0
@@ -148,6 +158,8 @@ class Env:
         self.t = 0
         self.attack_at = STEPS if self.s.timing == "last" else int(self.rng.integers(1, STEPS + 1))   # A6
         self.done = False
+        self.ep_reward = 0.0
+        self.stats = None
         self.success = None
         return self.observe()
 
@@ -231,8 +243,28 @@ class Env:
             hp.append(True)
         return names, np.asarray(sc), np.asarray(hp)
 
+    def target_and_clones(self):
+        """A13 D6: the most important real asset (ties: the first) and the active H-honeypots cloning it."""
+        t = int(np.argmax(self.world.real_scores))
+        name = REAL[t]
+        clones = [i for i in np.flatnonzero(self.h_on) if name in SERVERS and SERVERS[self.h_target[i]] == name]
+        return t, clones
+
+    def attack_probability(self) -> float:
+        """A13 D6 reading of Fig. 6b: importance(target) / (importance(target) + sum over its clones)."""
+        names, sc, hp = self.scores()
+        t, clones = self.target_and_clones()
+        s_t = sc[t]
+        return float(s_t / (s_t + sum(sc[names.index(f"H{i}")] for i in clones)))
+
     def attack(self) -> bool:
-        _, sc, hp = self.scores()
+        names, sc, hp = self.scores()
+        if self.s.attacker == "clone_specific":                         # A13 D6
+            t, clones = self.target_and_clones()
+            cand = [t] + [names.index(f"H{i}") for i in clones]
+            c_sc = sc[cand]
+            best = [cand[j] for j in np.flatnonzero(np.isclose(c_sc, c_sc.max(), rtol=0, atol=1e-12))]
+            return bool(hp[int(self.rng.choice(best))])
         if self.s.attacker == "proportional":                           # A12 M1: Eq. (2) as a distribution
             return bool(hp[int(self.rng.choice(len(sc), p=sc / sc.sum()))])
         best = np.flatnonzero(np.isclose(sc, sc.max(), rtol=0, atol=1e-12))
@@ -256,6 +288,11 @@ class Env:
             self.done = True
         if self.s.cost == "step" or self.done:                          # A12 M5: "final" = once, at the attack
             r -= self.h_on.sum() * COST_H + self.f_on.sum() * COST_F       # Eq. (5): counts after the action
+        self.ep_reward += r
+        if self.done:
+            self.stats = {"success": bool(self.success), "reward": float(self.ep_reward),
+                          "cost": float(self.h_on.sum() * COST_H + self.f_on.sum() * COST_F),
+                          "attack_probability": self.attack_probability()}
         return self.observe(), float(r), self.done
 
     # ── A12 M4: one joint action per step (Eq. 4) ────────────────────────────
@@ -341,7 +378,7 @@ def scripted_joint(env: Env) -> dict:
     return {"dd": 1, "dv": nv, "targets": tgt, "links": np.zeros(BETA, int)}
 
 
-def run_policy(s: Setting, seed: int, episodes: int, policy: str) -> list:
+def run_policy(s: Setting, seed: int, episodes: int, policy: str, details: bool = False) -> list:
     """policy: 'alg1' (random; M3 'walk' from empty or 'config' = one random configuration), 'alg3' (random
     relations, full counts), 'scripted'. M4 'joint' uses joint actions. Returns one bool per episode."""
     rng = np.random.default_rng(seed)
@@ -351,12 +388,12 @@ def run_policy(s: Setting, seed: int, episodes: int, policy: str) -> list:
     for _ in range(episodes):
         if policy == "alg3":
             env.reset("full_random")
-        elif policy == "alg1" and s.alg1 == "config":
-            env.reset("config_random")
+        elif policy == "alg1" and s.alg1 in ("config", "fig"):
+            env.reset("config_random" if s.alg1 == "config" else "fig_random")
         else:
             env.reset("empty")
         while not env.done:
-            if policy == "alg1" and s.alg1 == "config":
+            if policy == "alg1" and s.alg1 in ("config", "fig"):
                 a = env.keep_joint() if joint else NOOP
             elif policy == "alg1":
                 a = random_joint(env) if joint else random_action(env)
@@ -367,7 +404,7 @@ def run_policy(s: Setting, seed: int, episodes: int, policy: str) -> list:
             else:
                 raise ValueError(policy)
             env.step(a)
-        out.append(env.success)
+        out.append(dict(env.stats) if details else env.success)
     return out
 
 
@@ -417,6 +454,7 @@ def train_ppo(s: Setting, seed: int, episodes: int, variant: str = "drd", learn:
             nxt, r, done = env.step(a)
             traj.append((obs, m, a, lp, r, done))
             obs = nxt
+        details.append(dict(env.stats))
         return traj, env.success
 
     def update(traj):
@@ -451,14 +489,15 @@ def train_ppo(s: Setting, seed: int, episodes: int, variant: str = "drd", learn:
             loss_c.backward()
             opt_c.step()
 
-    train = []
+    train, details = [], []
     for _ in range(episodes):
         traj, ok = episode()
         train.append(ok)
         if learn:
             update(traj)
+    train_details = details[:]
     evals = [episode()[1] for _ in range(eval_episodes)]
-    return {"train": train, "eval": evals}
+    return {"train": train, "eval": evals, "train_details": train_details}
 
 
 def dsp(successes) -> float:

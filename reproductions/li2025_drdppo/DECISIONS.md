@@ -190,3 +190,62 @@ declared sensitivity analysis. It does **not** change any verdict in REPORT.md, 
     consistent with Table 3* (never "reproduced"), and only for them Alg2 (500 episodes) and Table 4 DRD-PPO
     (1,500 episodes) are run once, descriptively.
 - Outputs: `out/sensitivity_m_log.csv` (every trial), `out/sensitivity_m.json`, `SENSITIVITY_M.md`. Runs once.
+
+## A13, figure-derived reconstruction (2026-11-21, before any code change or run)
+
+Requested by the user ("try another way") after A12. Instead of searching, the hidden settings are **derived** from
+the paper's own figures, then the model runs **once**. The plateaus of Figs. 5 and 6 were measured from the figure
+images in the PDF (`checks/digitize_figures.py`, `data/figure_values.json`; median over episodes 400-500; axis
+calibration residual <= 0.002):
+
+| quantity | DRD-PPO | Alg1 | Alg2 | Alg3 | DRD-PPO without F (Fig. 5) |
+|---|---|---|---|---|---|
+| reward (Figs. 6a, 5a) | +0.084 | -1.910 | -0.904 | -1.750 | -1.004 |
+| attack probability (Figs. 6b, 5b) | 0.453 | 0.621 | 0.329 | 0.554 | 1.000 |
+| defence cost (Fig. 6c) | 0.912 | 1.534 | 1.901 (hidden under Alg3) | 1.901 | - |
+
+**Derivations** (arithmetic on the measured plateaus; no Table 3 or Table 4 number is used):
+- **D1 reward rule:** the plotted episode reward = outcome (+R1 success, -R1 failure) - deployment cost, the cost
+  charged **once per episode**. R1 = reward + cost for the converged near-certain successes: 0.084 + 0.912 = 0.996
+  (DRD-PPO), -0.904 + 1.901 = 0.997 (Alg2); and without F-honeypots the agent deploys nothing and always fails:
+  -1.004. So **R1 = 1, R2 = 0** (an R2 would add 29 R2 to every episode reward), **cost once** (A12's M5 "final").
+- **D2 DRD-PPO's converged deployment:** cost 0.912 -> **1 H + 4 F** (the only combination costing 0.9).
+- **D3 links:** 4 linked F-honeypots outrank the top server and 3 do not (the learner would otherwise pay 0.8), so
+  the top server has exactly **3 communicating devices**: link pattern **P2** (subnet2's three hosts with Server2,
+  subnet1's two with Server1).
+- **D4 full deployment** (Alg2, Alg3): cost 1.901 -> **2 H + 9 F**.
+- **D5 w:** Fig. 6b DRD-PPO 0.453 = (0.9607 + 3w) / (0.9607 + 3w + 0.9607 + 4w) gives w = 0.53; **w = 0.5** (0.454).
+- **D6 attacker (an inference):** Fig. 6b's values for Alg3 (0.554) and Alg2 (0.329) contradict an attack
+  probability counted over all H-honeypots (0.277 for both) and agree with one counted over the **clones of the
+  target only** (about 0.54 and 0.33). Hence the attacker's target is the most important real asset, and only
+  H-honeypots cloning that asset compete with it: the attacker attacks the most important of the target and its
+  clones (ties uniform), and the defence succeeds iff that is a clone (**"clone_specific"**). Attack probability
+  (reported) = importance(target) / (importance(target) + sum over its clones).
+- **D7 Alg1:** mean cost 1.534 -> the simplest consistent random configuration: **2 H, F uniform 1-10** (mean
+  1.55; F uniform 0-10 gives 1.50, also within the plotted noise).
+- **Not derivable, kept from the protocol:** one change per step (A8), attack at the last step (A6), clip 0.2
+  (decision 11), A9's PPO settings, CVSS v2, F-honeypots without a vulnerability (decision 7), H links f_only.
+
+**Readings run (10 seeds each):** **R-A (primary)** = D1-D7; **R-B (secondary)** = D1-D5 and D7 with the pre-A13
+attacker (all honeypots compete).
+
+**Pre-registered predictions** (exact arithmetic for the non-learning baselines, before any run):
+
+| | R-A | R-B | Table 3 |
+|---|---|---|---|
+| Alg1 | 36.17% | 60.83% | 28.43 |
+| Alg3 | 66.41% | 100.00% | 55.19 |
+
+Both readings are therefore predicted to miss Alg1 and Alg3 by more than 2 points. The learners have no exact
+prediction.
+
+**Roles.** Used for the derivations (not tests): the Fig. 5 and Fig. 6 plateaus above, except Alg1's attack
+probability (0.621). **Tests** (never used): Table 3 DSP of Alg1 (28.43), Alg3 (55.19), DRD-PPO (97.09) and Alg2
+(98.31); Table 4 DRD-PPO (98.61, 1,500 episodes); Fig. 6b Alg1 (0.621); and, descriptively, how fast DRD-PPO's
+cost falls below 1.0 (in Fig. 6c, by about episode 150-200). A2's references (scripted, untrained) are reported
+for every learner target. A test is "consistent" if within 2 points (0.02 for attack probability).
+
+REPORT.md's verdicts belong to the calibrated replication and do not change. The result is labelled a
+**figure-derived reconstruction**: even full consistency would show only that the paper's numbers follow from
+mechanics inferred from its own figures. Outputs: `out/figure_reconstruction_log.csv`,
+`out/figure_reconstruction.json`, `FIGURE_RECONSTRUCTION.md`. Runs once.
