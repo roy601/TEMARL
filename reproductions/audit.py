@@ -28,7 +28,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SKIP = {"TEMPLATE", "out", "tests", "__pycache__"}
 REQUIRED = ("SOURCES.md", "TARGETS.csv", "DECISIONS.md", "AUTHOR_CONTACT.md", "REPORT.md")
 HEADER = ["id", "table_or_figure", "quantity", "published", "tolerance", "primary"]
-VERDICTS = ("MATCH", "CLOSE", "NO MATCH", "NOT ATTEMPTED")
+VERDICTS = ("MATCH", "CLOSE", "NO MATCH", "NOT ATTEMPTED", "CALIBRATION TARGET", "UNINFORMATIVE")
 SOURCE_FIELDS = ("Paper", "Version read", "Code", "Data", "Type", "Stochastic")
 
 

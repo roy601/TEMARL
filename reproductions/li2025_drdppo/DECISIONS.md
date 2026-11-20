@@ -32,9 +32,12 @@ under stated assumptions".
   number of communicating devices, which the paper does not publish (Fig. 3 is the physical topology). Under
   v3 all six available CVEs are High/High/High. The paper's attacker model therefore cannot be reconstructed
   from the paper alone; decision 6 is the single most influential assumption.
-- **F2:** with decisions 6-8, any policy that clones the most important server with one H-honeypot and links at
-  least one F-honeypot to it makes the H-honeypot the strict argmax, so defence succeeds with certainty. A DSP
-  below 100% then comes from exploration during training (decision 12) or from tie-breaking.
+- **F2 (corrected 2026-11-20, see A1):** with decisions 6-8, an H-honeypot that clones the most important
+  server outranks it only with **more linked F-honeypots than the server has communicating devices**: 6 under
+  link patterns P1 and P3, 4 under P2, for every w (w scales both sides and drops out). Such a deployment
+  (1 H + 4-6 F) costs 27-33 over a 30-step episode under decision 9, against R1 <= 10, so whether a
+  reward-maximising learner defends at all depends on the reward settings. The first version of F2 ("one
+  F-honeypot") was wrong.
 
 ## Inconsistencies recorded
 
@@ -88,3 +91,50 @@ targets, so that a match is evidence and not a fit. The result is called a **cal
 - **C9, Table 4's other algorithms** stay NOT ATTEMPTED (decision 14). Exception noted for later: DRD-Q
   follows the paper's reference 8, Wang et al. 2020 (IEEE Access 8, 35792), which is on our comparator list;
   its published Q-learning settings could support DRD-Q (95.32) as a separate, declared step.
+
+## Amendments after the devil's-advocate review (A1-A10), 2026-11-20, before any code or run
+
+The review (verdict STOP on the claim "the held-out verdicts are genuine evidence") showed that both held-out
+targets (98.31, 98.61) lie within 2 points of the calibration target 97.09, and that a policy at 100% is CLOSE
+to both (gaps 1.69 and 1.39). The protocol is amended as follows; nothing has been run.
+
+- **A1, F2 corrected** (above).
+- **A2, informativeness test.** A held-out target receives MATCH / CLOSE / NO MATCH only if two reference
+  policies are both **outside** its CLOSE band (more than 2 points away), under the final setting: the
+  **scripted** policy (one H-honeypot on the top server, then F-honeypots linked to it until it outranks the
+  server, then no change) and the **random-initialised** DRD-PPO (no update, same DSP metric). Otherwise the
+  target is reported **UNINFORMATIVE**, with the three numbers.
+- **A3, verdict labels** (added to STANDARD.md and audit.py): **CALIBRATION TARGET** for a number used to set
+  unpublished parameters (distance reported, no verdict) and **UNINFORMATIVE** as in A2.
+- **A4, the claim.** In D1.2, DRD-PPO enters as an **adapted comparator** (its published hyperparameters, our
+  environment) whatever this replication finds. "Replicated" is claimed only from informative held-out
+  verdicts of MATCH or CLOSE. Decision 16 is read with this amendment.
+- **A5, DSP reported three ways.** Primary as decision 12 (over training episodes); also the DSP of the
+  trained policy over separate evaluation episodes (same count, sampled actions) and the random-initialised
+  policy's DSP (A2). Verdicts use the primary.
+- **A6, attack timing replaces "every step".** "Every step, episode ends at the first attack" would end
+  every episode after one action, which no policy can defend. The second option is instead: the attack step
+  is drawn uniformly from 1-30 at the start of each episode, and the episode ends at the attack (the defender
+  does not know when reconnaissance finishes). Stage 1's grid is otherwise unchanged (24 settings).
+- **A7, episode start and baselines.** DRD-PPO, Alg1 and the scripted policy start with no honeypot. Alg2 and
+  Alg3 start each episode at the maximum counts (2 H, 10 F) with targets and links drawn uniformly at random;
+  then Alg2's PPO chooses only re-targeting and re-linking actions, and Alg3 chooses them uniformly at random.
+- **A8, action details (decision 10, completed).** 29 discrete actions: no change; add H (lowest free slot,
+  target Server1); remove H (highest active slot; its F-honeypots move to the other H); add F (lowest free slot,
+  linked to the lowest active H); remove F (highest active slot); re-target H_i to server j (4); re-link F_k to
+  H_i (20). Masks follow Eqs. (10)-(14); because Eq. (14) links every F-honeypot to exactly one H-honeypot,
+  the last H cannot be removed while F-honeypots exist. Actions that change nothing are masked.
+- **A9, PPO details (decision 11, completed).** Actor and critic each one hidden layer of 32 with tanh; masked
+  softmax output; Adam lr 0.005 for both; standard clipped surrogate min(r A, clip(r) A) and squared critic
+  error (Eqs. (17) and (21) as printed omit these: inconsistencies 8-9); no entropy term (Eq. (17) has none);
+  advantages normalised per update; one update of 4 epochs after every episode; CPU, 1 thread.
+- **A10, user trials and sensitivities.** The user's own guesses are rows of `EXTRA_TRIALS.csv`; a row runs only
+  if the file is committed and unchanged, and is logged like every grid trial. Besides the grid parameters, an
+  extra trial may set: `cvss` (v2 or v3; v3 uses CVE-2014-0226's v2 values, which has no v3 record) and `h_links`
+  (`f_only`, decision 7, or `f_plus_server`: an H-honeypot also copies its server's communicating devices).
+  The calibration log is `out/calibration_log.csv` (C6's path changed so that the audit sees it as a result).
+
+## Inconsistencies recorded (continued)
+
+8. Eq. (17) is printed as A_t min(r_t, clip(r_t)); PPO's surrogate is min(r_t A_t, clip(r_t) A_t).
+9. Eq. (21) is printed without the square of the critic error.

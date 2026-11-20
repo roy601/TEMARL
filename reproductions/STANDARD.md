@@ -49,6 +49,17 @@ Never write "reproduced" for a rebuild, and never write either word for a partia
 | **CLOSE** | outside the tolerance, inside twice the tolerance (or, for a stochastic method, the published value is inside our 95% CI) |
 | **NO MATCH** | anything else |
 | **NOT ATTEMPTED** | with the reason (for example: needs the physical testbed) |
+| **CALIBRATION TARGET** | calibrated replications only (Section 3a): the number was used to set an unpublished parameter, so it cannot be a match; the distance reached is reported |
+| **UNINFORMATIVE** | calibrated replications only (Section 3a): a trivial reference policy also lands within the target's tolerance, so agreement would not show fidelity; the numbers are reported |
+
+### 3a. Calibrated replications (added 2026-11-20, before any calibrated run)
+
+When a paper leaves parameters unpublished and the authors do not answer, the parameters may be calibrated
+against published numbers, but only if, before any run: the grid of candidate values is committed; the
+targets are split into calibration targets and held-out targets; the held-out targets are computed once, after
+the calibration is closed and committed; every trial is logged; and each held-out target passes an
+informativeness test (trivial reference policies must fall outside its tolerance). The paper is then called
+**calibrated-replicated** (never "replicated") if every informative primary held-out target is MATCH or CLOSE.
 
 Per paper: "reproduced / replicated" needs every primary target MATCH; "partially" names the
 targets that are not; "not" is said plainly. Primary targets are marked in `TARGETS.csv` before
