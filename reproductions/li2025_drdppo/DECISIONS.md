@@ -47,3 +47,44 @@ under stated assumptions".
 5. Eq. (3)'s description names "H-honeypots and H-honeypots" for n_d and n_v (the second is F-honeypots).
 6. The attack is called vulnerability exploitation (p. 4-5) and a "DDOS attack" (p. 9, step 6).
 7. SOURCES.md recorded the licence as CC BY; the article states CC BY-NC-ND 4.0 (corrected in SOURCES.md).
+
+## Calibration protocol (C1-C9), declared 2026-11-20 before any code or run
+
+The corresponding author did not answer earlier requests (user, 2026-11-20). The unpublished settings are
+therefore **calibrated** against published numbers, under a split between calibration targets and held-out
+targets, so that a match is evidence and not a fit. The result is called a **calibrated replication**.
+
+- **C1, verdicts.** Only held-out targets receive MATCH / CLOSE / NO MATCH. Calibration targets are reported
+  as "used for calibration", with the distance reached, never as a match.
+- **C2, stage 1: environment, no learning.** Alg1 (random deployment) and Alg3 (random relations, maximum
+  counts) have no learning, so their DSP depends only on the environment rules. Calibration targets: Table 3
+  Alg1 **28.43** and Alg3 **55.19**. Grid (declared now, 24 settings):
+  - w in {0.05, 0.1, 0.2, 0.5};
+  - host-server links: P1 every host with both servers; P2 subnet1 hosts with Server1, subnet2 hosts with
+    Server2; P3 subnet1 hosts with both servers, subnet2 hosts with Server2;
+  - attack timing: at the last step only, or at every step (episode ends at the first attack).
+
+  Each setting: 10 seeds x 500 episodes. Selection: the smallest sum of squared differences from the two
+  targets; ties to the earlier setting in the order listed (w = 0.1, P1, last step first).
+- **C3, stage 2: the learner.** With the stage-1 environment fixed, calibration target: Table 3 DRD-PPO
+  **97.09**. Grid (12 settings): R1 in {1, 5, 10}, R2 in {0, 0.5}, clip in {0.2, 0.9}; other PPO settings as
+  decision 11. Each: 10 seeds x 500 training episodes. Selection: the mean DSP closest to 97.09; ties to the
+  earlier setting.
+- **C4, held-out targets, run once with the final setting:** Table 3 Alg2 **98.31** (PPO chooses relations at
+  maximum counts) and Table 4 DRD-PPO **98.61** (1,500 training episodes). They are never used for selection
+  and are computed once, after stages 1 and 2 are closed (as a sealed test).
+- **C5, identifiability.** Each stage reports how many grid settings land within 2 points of its targets. If
+  many do, the calibration is weakly identified, and this is stated with the result.
+- **C6, every trial is logged** in `calibration/CALIBRATION_LOG.csv` (stage, setting, seed, DSP) and committed.
+  New trials (for example the user's own guesses) are allowed only by adding them to this protocol in a
+  commit **before** they run, and never after a held-out target has been computed.
+- **C7, the links are a simulation setting.** The paper is a pure NetworkX simulation, so its communication
+  links are a setting of the simulator, not empirical data. Only the three declared patterns are tried, not a
+  search over all 1,024.
+- **C8, raw material used.** No code and no dataset exist ("all data ... included in this published
+  article"). Everything available is used: equations (1)-(21), Algorithm 1, Table 1 (CVEs), Table 2, Fig. 3,
+  the baseline descriptions, and the NVD records of the seven CVEs (`data/nvd/`). Nothing else needs to be
+  downloaded.
+- **C9, Table 4's other algorithms** stay NOT ATTEMPTED (decision 14). Exception noted for later: DRD-Q
+  follows the paper's reference 8, Wang et al. 2020 (IEEE Access 8, 35792), which is on our comparator list;
+  its published Q-learning settings could support DRD-Q (95.32) as a separate, declared step.
