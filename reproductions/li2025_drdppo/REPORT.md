@@ -36,6 +36,11 @@ Primary targets: T3.DRD-PPO, T4.DRD-PPO. Trials logged: 910 (`out/calibration_lo
 - CVSS v3 instead of v2 (final setting, DRD-PPO, 500 episodes): 0.34 [0.00, 0.72]*.
 - Clip 0.9 (Table 2) versus 0.2 (text): both are in the stage-2 grid; see `out/stage2.json`.
 
+## Readings of the paper (A12, declared sensitivity analysis)
+
+- Table 3 is not produced by any of these 256 readings of the paper. Combinations fitting Table 3 within 2 points: 0 of 256; decoys fitted: [0, 0, 0] (`SENSITIVITY_M.md`).
+- Ranges over the 256 readings: Alg1 2.10-82.34, Alg3 32.16-100.00, DRD-PPO 0.34-94.60. No reading reaches Alg3 55.19 or DRD-PPO 97.09 within 2 points, even alone.
+
 ## Limits
 
 - Every unpublished setting is an assumption (DECISIONS.md decisions 5-11, A6-A9); the corresponding author did

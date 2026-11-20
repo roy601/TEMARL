@@ -17,6 +17,21 @@ def _fmt(s):
     return f"{s['mean']:.2f} [{max(lo, 0.0):.2f}, {min(hi, 100.0):.2f}]{mark}"
 
 
+def _a12(out: Path) -> list:
+    """A12 (declared sensitivity of the paper's readings), if it has run."""
+    p = Path(out) / "sensitivity_m.json"
+    if not p.exists():
+        return []
+    r = json.loads(p.read_text(encoding="utf-8"))
+    rng = {k: (min(x["means"][k] for x in r["table"]), max(x["means"][k] for x in r["table"])) for k in ("alg1", "alg3", "drdppo")}
+    return ["## Readings of the paper (A12, declared sensitivity analysis)", "",
+            f"- {r['reading']} Combinations fitting Table 3 within {r['fit_points']:.0f} points: {r['n_fit_real']} of "
+            f"{r['n_combinations']}; decoys fitted: {r['n_fit_decoys']} (`SENSITIVITY_M.md`).",
+            f"- Ranges over the {r['n_combinations']} readings: Alg1 {rng['alg1'][0]:.2f}-{rng['alg1'][1]:.2f}, Alg3 "
+            f"{rng['alg3'][0]:.2f}-{rng['alg3'][1]:.2f}, DRD-PPO {rng['drdppo'][0]:.2f}-{rng['drdppo'][1]:.2f}. No reading "
+            f"reaches Alg3 55.19 or DRD-PPO 97.09 within 2 points, even alone.", ""]
+
+
 def write(out: Path, dest: Path = None) -> Path:
     out = Path(out)
     dest = dest or (HERE / "REPORT.md" if out.resolve() == (HERE / "out").resolve() else out / "REPORT.md")
@@ -87,6 +102,7 @@ def write(out: Path, dest: Path = None) -> Path:
          "## Sensitivity", "",
          f"- CVSS v3 instead of v2 (final setting, DRD-PPO, 500 episodes): {_fmt(ho['sensitivity_cvss_v3_drdppo_500'])}.",
          "- Clip 0.9 (Table 2) versus 0.2 (text): both are in the stage-2 grid; see `out/stage2.json`.", "",
+         *_a12(out),
          "## Limits", "",
          "- Every unpublished setting is an assumption (DECISIONS.md decisions 5-11, A6-A9); the corresponding author did",
          "  not answer. A calibrated match is weaker evidence than a replication with the authors' settings.",
