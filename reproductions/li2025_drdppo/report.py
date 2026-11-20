@@ -11,7 +11,10 @@ HERE = Path(__file__).resolve().parent
 
 
 def _fmt(s):
-    return f"{s['mean']:.2f} [{s['ci'][0]:.2f}, {s['ci'][1]:.2f}]"
+    """Mean [95% CI]; a t-interval on a percentage can leave [0, 100], so it is shown clipped (marked *)."""
+    lo, hi = s["ci"]
+    mark = "*" if lo < 0 or hi > 100 else ""
+    return f"{s['mean']:.2f} [{max(lo, 0.0):.2f}, {min(hi, 100.0):.2f}]{mark}"
 
 
 def write(out: Path, dest: Path = None) -> Path:
@@ -63,11 +66,12 @@ def write(out: Path, dest: Path = None) -> Path:
         overall = ("**Not replicated:** at least one informative held-out target is NO MATCH. DRD-PPO enters D1.2 only "
                    "as an adapted comparator (A4).")
     L = ["# Li 2025 DRD-PPO: report (calibrated replication)", "",
-         "Written by `report.py` from `out/`. Protocol: DECISIONS.md (decisions 1-16, C1-C9, A1-A10). Rebuilt from the",
+         "Written by `report.py` from `out/`. Protocol: DECISIONS.md (decisions 1-16, C1-C9, A1-A11). Rebuilt from the",
          "paper (no code released); unpublished parameters calibrated on Table 3 Alg1, Alg3 and DRD-PPO; Alg2 and",
          "Table 4 DRD-PPO held out and computed once.", "",
          f"**Overall:** {overall}", "",
          f"Primary targets: {', '.join(prim)}. Trials logged: {n_trials} (`out/calibration_log.csv`).", "",
+         r"\* 95% t-interval clipped to [0, 100].", "",
          "| id | table | published | ours: mean [95% CI], 10 seeds | role and notes | verdict |",
          "|---|---|---|---|---|---|", *rows, "",
          "## Calibration", "",

@@ -1,6 +1,6 @@
 # Li 2025 DRD-PPO: report (calibrated replication)
 
-Written by `report.py` from `out/`. Protocol: DECISIONS.md (decisions 1-16, C1-C9, A1-A10). Rebuilt from the
+Written by `report.py` from `out/`. Protocol: DECISIONS.md (decisions 1-16, C1-C9, A1-A11). Rebuilt from the
 paper (no code released); unpublished parameters calibrated on Table 3 Alg1, Alg3 and DRD-PPO; Alg2 and
 Table 4 DRD-PPO held out and computed once.
 
@@ -8,13 +8,15 @@ Table 4 DRD-PPO held out and computed once.
 
 Primary targets: T3.DRD-PPO, T4.DRD-PPO. Trials logged: 910 (`out/calibration_log.csv`).
 
+\* 95% t-interval clipped to [0, 100].
+
 | id | table | published | ours: mean [95% CI], 10 seeds | role and notes | verdict |
 |---|---|---|---|---|---|
-| T3.DRD-PPO | Table 3 | 97.09 | 0.34 [-0.04, 0.72] | calibration target, stage 2 (C3); distance 96.75 | CALIBRATION TARGET |
+| T3.DRD-PPO | Table 3 | 97.09 | 0.34 [0.00, 0.72]* | calibration target, stage 2 (C3); distance 96.75 | CALIBRATION TARGET |
 | T3.Alg1_random_deployment | Table 3 | 28.43 | 3.46 [2.78, 4.14] | calibration target, stage 1 (C2); distance 24.97 | CALIBRATION TARGET |
 | T3.Alg2_intelligent_full_deployment | Table 3 | 98.31 | 88.90 [86.24, 91.56] | held out (C4); evaluation DSP 89.76 [85.56, 93.96]; references scripted 100.00, random_init 87.34; a reference policy is within 2 points of the published value (A2) | UNINFORMATIVE |
 | T3.Alg3_random_full_deployment | Table 3 | 55.19 | 87.90 [86.49, 89.31] | calibration target, stage 1 (C2); distance 32.71 | CALIBRATION TARGET |
-| T4.DRD-PPO | Table 4 | 98.61 | 0.11 [-0.01, 0.24] | held out (C4); evaluation DSP 0.00 [0.00, 0.00]; references scripted 100.00, random_init 3.23; a reference policy is within 2 points of the published value (A2) | UNINFORMATIVE |
+| T4.DRD-PPO | Table 4 | 98.61 | 0.11 [0.00, 0.24]* | held out (C4); evaluation DSP 0.00 [0.00, 0.00]; references scripted 100.00, random_init 3.23; a reference policy is within 2 points of the published value (A2) | UNINFORMATIVE |
 | T4.DRD-Q | Table 4 | 95.32 | - | no setting of this algorithm is published (decision 14) | NOT ATTEMPTED |
 | T4.DRD-AC | Table 4 | 66.85 | - | no setting of this algorithm is published (decision 14) | NOT ATTEMPTED |
 | T4.DRD-DQN | Table 4 | 64.28 | - | no setting of this algorithm is published (decision 14) | NOT ATTEMPTED |
@@ -31,7 +33,7 @@ Primary targets: T3.DRD-PPO, T4.DRD-PPO. Trials logged: 910 (`out/calibration_lo
 
 ## Sensitivity
 
-- CVSS v3 instead of v2 (final setting, DRD-PPO, 500 episodes): 0.34 [-0.04, 0.72].
+- CVSS v3 instead of v2 (final setting, DRD-PPO, 500 episodes): 0.34 [0.00, 0.72]*.
 - Clip 0.9 (Table 2) versus 0.2 (text): both are in the stage-2 grid; see `out/stage2.json`.
 
 ## Limits
