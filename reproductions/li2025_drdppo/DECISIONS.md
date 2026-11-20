@@ -138,3 +138,19 @@ to both (gaps 1.69 and 1.39). The protocol is amended as follows; nothing has be
 
 8. Eq. (17) is printed as A_t min(r_t, clip(r_t)); PPO's surrogate is min(r_t A_t, clip(r_t) A_t).
 9. Eq. (21) is printed without the square of the critic error.
+
+## A11, after stages 1-2 and a second devil's-advocate review (2026-11-21, before the held-out run)
+
+- **Stage results:** no stage-1 setting came within 2 points of both Alg1 28.43 and Alg3 55.19 (Alg1 0.9-19.6,
+  Alg3 87.6-100; w had no effect, as F2 predicted), and no stage-2 setting came within 2 points of DRD-PPO
+  97.09 (0.02-0.34%: under decisions 7-9 a reward-maximising learner does not defend).
+- **Proposal rejected:** a search over eight further readings of the paper (M1 proportional attacker, M2 tie rule,
+  M3 Alg1 as one random configuration, M4 joint action per step, M5 cost once per episode, M6 larger R1, M7
+  F-honeypot as a host clone, M8 H copies server links) until the targets are met. Review verdict STOP: about 9,216
+  configurations against 3 numbers, with uninformative held-out targets, cannot separate the authors' mechanics
+  from our flexibility; reaching DRD-PPO 97 needs a reward-to-cost dial (M5/M6), not a mechanism.
+- **Decision:** the calibration is closed as run. The held-out targets are computed once, and the paper is reported
+  as **not reproducible from the published text**. M1-M8 may later be run only as a **declared sensitivity
+  analysis** (every combination reported, no selection), with a null-fit rule fixed beforehand: a reading counts
+  only if it is within 2 points of all three targets and the same search against three random decoy targets
+  fits clearly worse. In D1.2, only conclusions that hold under all readings are claimed.

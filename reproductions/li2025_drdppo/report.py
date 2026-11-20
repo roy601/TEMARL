@@ -46,7 +46,15 @@ def write(out: Path, dest: Path = None) -> Path:
     prim = [t["id"] for t in targets if t["primary"].strip().lower() == "yes"]
     informative = [tid for tid, h in ho["heldout"].items() if h["verdict"] in ("MATCH", "CLOSE", "NO MATCH")]
     held_ok = [tid for tid in informative if ho["heldout"][tid]["verdict"] in ("MATCH", "CLOSE")]
-    if not informative:
+    cal_missed = (not s1["identifiability_settings_within_2_points_of_both"]) or (not s2["identifiability_settings_within_2_points"])
+    if cal_missed:
+        overall = (f"**Not reproducible from the published text.** No declared setting came within 2 points of the "
+                   f"calibration targets (best: Alg1 {b1['alg1']['mean']:.2f} vs 28.43, Alg3 {b1['alg3']['mean']:.2f} vs 55.19, "
+                   f"DRD-PPO {b2['drdppo']['mean']:.2f} vs 97.09, over {s1['n_settings']} + {s2['n_settings']} settings), and "
+                   f"the held-out targets are {'uninformative' if not informative else 'reported below'} (A2). The paper's "
+                   f"unpublished mechanics cannot be recovered without the authors' simulator (A11). DRD-PPO enters D1.2 "
+                   f"only as an adapted comparator (A4).")
+    elif not informative:
         overall = ("**Not determinable as a replication:** no held-out target is informative (A2), so agreement with the "
                    "paper cannot be shown or refuted. DRD-PPO enters D1.2 only as an adapted comparator (A4).")
     elif set(held_ok) == set(informative):
