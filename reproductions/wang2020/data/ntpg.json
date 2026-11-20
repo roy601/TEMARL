@@ -1,0 +1,29 @@
+{
+ "source": "Wang et al. 2020, Fig. 8 (network threat penetration graph), transcribed from the vector figure rendered at 5x (glyph-outline labels); every edge checked against Tables 1-2 in DECISIONS.md F7",
+ "edge_label": "<UP, RP> = probability that the attacker obtains user / root privilege on the destination",
+ "locations": {"1": "Web Server (H1)", "2": "Pad (H2)", "3": "Host 1 (H3)", "4": "Host 2 (H4)", "5": "Host 3 (H5)",
+               "6": "File Server (H6)", "7": "Data Server (H7, holds the confidential resources: the attacker's goal)"},
+ "not_in_ntpg": ["Host 4 (physically isolated)", "Print Server (no vulnerability)"],
+ "edges": [
+  ["Attacker", "Web Server", 0.8, 0.6],
+  ["Attacker", "Pad", 0.6, 0.6],
+  ["Attacker", "Host 1", 0.6, 0.48],
+  ["Pad", "Web Server", 0.8, 0.6],
+  ["Pad", "Host 1", 0.6, 0.48],
+  ["Pad", "Host 3", 0.32, 0.32],
+  ["Pad", "Host 2", 0.32, 0.32],
+  ["Host 1", "Pad", 0.6, 0.6],
+  ["Host 1", "Web Server", 0.8, 0.6],
+  ["Host 1", "Host 3", 0.32, 0.32],
+  ["Host 1", "Host 2", 0.32, 0.32],
+  ["Web Server", "File Server", 0.8, 0.04],
+  ["Web Server", "Data Server", 0.8, 0.04],
+  ["Host 2", "Host 3", 0.8, 0.8],
+  ["Host 3", "Host 2", 0.8, 0.8],
+  ["Host 2", "File Server", 0.8, 0.6],
+  ["Host 3", "File Server", 0.8, 0.6],
+  ["Host 2", "Data Server", 0.8, 0.6],
+  ["Host 3", "Data Server", 0.8, 0.6],
+  ["File Server", "Data Server", 0.8, 0.04]
+ ]
+}
