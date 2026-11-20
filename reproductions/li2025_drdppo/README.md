@@ -72,3 +72,25 @@ unchanged, and it refuses to run a second time.
 4. Not allowed after `heldout` has run.
 
 Every guess stays in the log and in the report's trial count, including the ones that did not fit.
+
+## A12: sensitivity analysis of the paper's readings (after the held-out run)
+
+The calibration found no setting close to Table 3 and is closed (REPORT.md: not reproducible from the
+published text). A12 (DECISIONS.md) asks a different question: **is there any reasonable reading of the paper
+under which its Table 3 numbers come out?** It runs all 256 combinations of eight readings (proportional
+attacker, tie rule, Alg1 as one random configuration, joint action per step, cost once, R1 = 100, F-honeypot as a
+host clone, H copying server links), every one reported, nothing selected, with three decoy triples fixed in
+advance as a null-fit check. About 9 minutes on PC 2:
+
+```powershell
+cd C:\Users\CMR\TEMARL
+git pull --no-rebase --no-edit
+python -m unittest discover -s reproductions/li2025_drdppo/tests          # expect: Ran 31 tests ... OK
+python reproductions/li2025_drdppo/sensitivity_m.py smoke
+python reproductions/li2025_drdppo/sensitivity_m.py run
+git add reproductions/li2025_drdppo
+git commit -m "Li 2025: A12 sensitivity of the paper's readings (256 combinations, once)"
+git pull --no-rebase --no-edit; git push
+```
+
+Results: `SENSITIVITY_M.md`, `out/sensitivity_m.json`, every trial in `out/sensitivity_m_log.csv`. It runs once.

@@ -55,14 +55,30 @@ class Setting:
     R1: float = 10.0              # decision 9
     R2: float = 0.0
     clip: float = 0.2             # decision 11
+    # A12 readings (defaults = the reading used before A12)
+    attacker: str = "argmax"      # M1: "argmax" or "proportional"
+    ties: str = "random"          # M2: "random" or "real_first"
+    alg1: str = "walk"            # M3: "walk" or "config"
+    action: str = "single"        # M4: "single" or "joint"
+    cost: str = "step"            # M5: "step" or "final"
+    f_score: str = "none"         # M7: "none" or "host_clone"
 
     def __post_init__(self):
         assert self.links in LINKS and self.timing in ("last", "random") and self.cvss in IMPACT
         assert self.h_links in ("f_only", "f_plus_server")
+        assert self.attacker in ("argmax", "proportional") and self.ties in ("random", "real_first")
+        assert self.alg1 in ("walk", "config") and self.action in ("single", "joint")
+        assert self.cost in ("step", "final") and self.f_score in ("none", "host_clone")
+
+    A12_DEFAULTS = {"attacker": "argmax", "ties": "random", "alg1": "walk", "action": "single", "cost": "step",
+                    "f_score": "none"}
 
     def key(self) -> str:
-        return (f"w={self.w}|links={self.links}|timing={self.timing}|cvss={self.cvss}|h_links={self.h_links}"
-                f"|R1={self.R1}|R2={self.R2}|clip={self.clip}")
+        """Identical to the pre-A12 key when every A12 reading is at its default (logged trials stay valid)."""
+        k = (f"w={self.w}|links={self.links}|timing={self.timing}|cvss={self.cvss}|h_links={self.h_links}"
+             f"|R1={self.R1}|R2={self.R2}|clip={self.clip}")
+        extra = [f"{f}={getattr(self, f)}" for f, d in self.A12_DEFAULTS.items() if getattr(self, f) != d]
+        return k + ("|" + "|".join(extra) if extra else "")
 
 
 def load_impacts(version: str) -> dict:
@@ -120,6 +136,13 @@ class Env:
             self.h_target[:] = self.rng.integers(0, len(SERVERS), ALPHA)
             self.f_on[:] = True
             self.f_link[:] = self.rng.integers(0, ALPHA, BETA)
+        elif start == "config_random":                 # A12 M3: one random configuration per episode
+            nd = int(self.rng.integers(0, ALPHA + 1))
+            nv = int(self.rng.integers(0, BETA + 1)) if nd > 0 else 0
+            self.h_on[:nd] = True
+            self.h_target[:nd] = self.rng.integers(0, len(SERVERS), nd)
+            self.f_on[:nv] = True
+            self.f_link[:nv] = self.rng.integers(0, nd, nv) if nv else 0
         elif start != "empty":
             raise ValueError(start)
         self.t = 0
@@ -203,28 +226,69 @@ class Env:
             hp.append(True)
         for k in np.flatnonzero(self.f_on):
             names.append(f"F{k}")
-            sc.append(0.0 + 1 * w)                                       # decision 7: no vulnerability, NL = 1
+            fv = self.world.vuln[HOSTS[k % len(HOSTS)]] if self.s.f_score == "host_clone" else 0.0   # A12 M7
+            sc.append(fv + 1 * w)                                        # decision 7: NL = 1
             hp.append(True)
         return names, np.asarray(sc), np.asarray(hp)
 
     def attack(self) -> bool:
         _, sc, hp = self.scores()
+        if self.s.attacker == "proportional":                           # A12 M1: Eq. (2) as a distribution
+            return bool(hp[int(self.rng.choice(len(sc), p=sc / sc.sum()))])
         best = np.flatnonzero(np.isclose(sc, sc.max(), rtol=0, atol=1e-12))
+        if self.s.ties == "real_first" and (~hp[best]).any():            # A12 M2
+            best = best[~hp[best]]
         return bool(hp[int(self.rng.choice(best))])
 
     # ── one step ─────────────────────────────────────────────────────────────
-    def step(self, a: int):
+    def step(self, a):
         if self.done:
             raise RuntimeError("episode finished")
-        self.apply(a)
+        if isinstance(a, dict):
+            self.apply_joint(a)
+        else:
+            self.apply(a)
         self.t += 1
         r = self.s.R2
         if self.t >= self.attack_at:
             self.success = self.attack()
             r = self.s.R1 if self.success else -self.s.R1
             self.done = True
-        r -= self.h_on.sum() * COST_H + self.f_on.sum() * COST_F           # Eq. (5): counts after the action
+        if self.s.cost == "step" or self.done:                          # A12 M5: "final" = once, at the attack
+            r -= self.h_on.sum() * COST_H + self.f_on.sum() * COST_F       # Eq. (5): counts after the action
         return self.observe(), float(r), self.done
+
+    # ── A12 M4: one joint action per step (Eq. 4) ────────────────────────────
+    def joint_count_masks(self, dd=None):
+        """(mask over dd in -2..2, mask over dv in -10..10 given dd). Eqs. (10)-(12), (14)."""
+        nd, nv = int(self.h_on.sum()), int(self.f_on.sum())
+        md = np.array([0 <= nd + d <= ALPHA for d in range(-ALPHA, ALPHA + 1)])
+        if dd is None:
+            return md, None
+        nd2 = nd + dd
+        if nd2 == 0:
+            mv = np.array([nv + v == 0 for v in range(-BETA, BETA + 1)])
+        else:
+            mv = np.array([0 <= nv + v <= BETA for v in range(-BETA, BETA + 1)])
+        return md, mv
+
+    def apply_joint(self, a: dict):
+        """a = {"dd": int, "dv": int, "targets": (ALPHA,), "links": (BETA,)}. Active slots stay a prefix."""
+        md, mv = self.joint_count_masks(a["dd"])
+        if not md[a["dd"] + ALPHA] or not mv[a["dv"] + BETA]:
+            raise ValueError(f"joint action {a['dd']}, {a['dv']} is not allowed in this state")
+        nd2, nv2 = int(self.h_on.sum()) + a["dd"], int(self.f_on.sum()) + a["dv"]
+        self.h_on[:] = False
+        self.h_on[:nd2] = True
+        self.f_on[:] = False
+        self.f_on[:nv2] = True
+        self.h_target[:nd2] = np.asarray(a["targets"])[:nd2]
+        links = np.asarray(a["links"])[:nv2]
+        self.f_link[:nv2] = np.where(links < nd2, links, 0)            # Eq. (14): an F links to an active H
+
+    def keep_joint(self) -> dict:
+        """The joint action that changes nothing."""
+        return {"dd": 0, "dv": 0, "targets": self.h_target.copy(), "links": self.f_link.copy()}
 
 
 # ── non-learning policies ─────────────────────────────────────────────────────
@@ -247,21 +311,59 @@ def scripted_action(env: Env) -> int:
     return ADD_F if env.mask()[ADD_F] else NOOP
 
 
+def random_joint(env: Env, counts: bool = True) -> dict:
+    """A12 M4 random joint action: valid count changes (or none) and uniformly random targets and links."""
+    if counts:
+        md, _ = env.joint_count_masks()
+        dd = int(env.rng.choice(np.flatnonzero(md))) - ALPHA
+        _, mv = env.joint_count_masks(dd)
+        dv = int(env.rng.choice(np.flatnonzero(mv))) - BETA
+    else:
+        dd = dv = 0
+    return {"dd": dd, "dv": dv, "targets": env.rng.integers(0, len(SERVERS), ALPHA),
+            "links": env.rng.integers(0, ALPHA, BETA)}
+
+
+def scripted_joint(env: Env) -> dict:
+    """A2's scripted reference as one joint action: 1 H on the top server and the fewest F (all linked to it)
+    that make it outrank every real node (10 if none suffices); afterwards no change."""
+    if env.h_on.any():
+        return env.keep_joint()
+    tgt = np.full(ALPHA, env.world.top_server)
+    for nv in range(BETA + 1):
+        probe = Env.__new__(Env)
+        probe.s, probe.world = env.s, env.world
+        probe.h_on, probe.f_on = np.array([True, False]), np.arange(BETA) < nv
+        probe.h_target, probe.f_link = tgt.copy(), np.zeros(BETA, int)
+        _, sc, hp = probe.scores()
+        if sc[hp].max() > sc[~hp].max() + 1e-12:
+            break
+    return {"dd": 1, "dv": nv, "targets": tgt, "links": np.zeros(BETA, int)}
+
+
 def run_policy(s: Setting, seed: int, episodes: int, policy: str) -> list:
-    """policy: 'alg1' (random, from empty), 'alg3' (random relations, full counts), 'scripted'.
-    Returns one bool per episode (defence success)."""
+    """policy: 'alg1' (random; M3 'walk' from empty or 'config' = one random configuration), 'alg3' (random
+    relations, full counts), 'scripted'. M4 'joint' uses joint actions. Returns one bool per episode."""
     rng = np.random.default_rng(seed)
     env = Env(s, rng)
+    joint = s.action == "joint"
     out = []
     for _ in range(episodes):
-        env.reset("full_random" if policy == "alg3" else "empty")
+        if policy == "alg3":
+            env.reset("full_random")
+        elif policy == "alg1" and s.alg1 == "config":
+            env.reset("config_random")
+        else:
+            env.reset("empty")
         while not env.done:
-            if policy == "alg1":
-                a = random_action(env)
+            if policy == "alg1" and s.alg1 == "config":
+                a = env.keep_joint() if joint else NOOP
+            elif policy == "alg1":
+                a = random_joint(env) if joint else random_action(env)
             elif policy == "alg3":
-                a = random_action(env, RELATION_ACTIONS)
+                a = random_joint(env, counts=False) if joint else random_action(env, RELATION_ACTIONS)
             elif policy == "scripted":
-                a = scripted_action(env)
+                a = scripted_joint(env) if joint else scripted_action(env)
             else:
                 raise ValueError(policy)
             env.step(a)
@@ -278,8 +380,13 @@ def make_nets(state_dim: int):
     return actor, critic
 
 
+JOINT_HEADS = 2 * ALPHA + 1 + 2 * BETA + 1 + ALPHA * len(SERVERS) + BETA * ALPHA   # 5 + 21 + 4 + 20 = 50
+
+
 def train_ppo(s: Setting, seed: int, episodes: int, variant: str = "drd", learn: bool = True,
               eval_episodes: int = 0, lr: float = 0.005, gamma: float = 0.9, lam: float = 0.95, epochs: int = 4):
+    if s.action == "joint":
+        return train_ppo_joint(s, seed, episodes, variant, learn, eval_episodes, lr, gamma, lam, epochs)
     """variant 'drd' = DRD-PPO (full action set, starts empty); 'alg2' = PPO over relations at full counts.
     learn=False gives the random-initialised reference (A2). Returns a dict with the success list of the
     training episodes and, if eval_episodes > 0, of separate evaluation episodes (sampled actions, A5)."""
@@ -357,3 +464,111 @@ def train_ppo(s: Setting, seed: int, episodes: int, variant: str = "drd", learn:
 def dsp(successes) -> float:
     """Defensive success probability in percent."""
     return 100.0 * float(np.mean(successes)) if len(successes) else float("nan")
+
+
+def train_ppo_joint(s: Setting, seed: int, episodes: int, variant: str = "drd", learn: bool = True,
+                    eval_episodes: int = 0, lr: float = 0.005, gamma: float = 0.9, lam: float = 0.95, epochs: int = 4):
+    """A12 M4: DRD-PPO with one joint action per step. Factored softmax heads (dd, dv | dd, one target per H
+    slot, one link per F slot); the log-probability is the sum over dd, dv and the heads of the slots active
+    after the action. Everything else as train_ppo (A9)."""
+    import torch
+    import torch.nn as nn
+    torch.manual_seed(seed)
+    torch.set_num_threads(1)
+    rng = np.random.default_rng(seed)
+    env = Env(s, rng)
+    actor = nn.Sequential(nn.Linear(env.state_dim, 32), nn.Tanh(), nn.Linear(32, JOINT_HEADS))
+    critic = nn.Sequential(nn.Linear(env.state_dim, 32), nn.Tanh(), nn.Linear(32, 1))
+    opt_a = torch.optim.Adam(actor.parameters(), lr=lr)
+    opt_c = torch.optim.Adam(critic.parameters(), lr=lr)
+    start = "full_random" if variant == "alg2" else "empty"
+    nD, nV, nT = 2 * ALPHA + 1, 2 * BETA + 1, ALPHA * len(SERVERS)
+
+    def split(logits):
+        return (logits[..., :nD], logits[..., nD:nD + nV], logits[..., nD + nV:nD + nV + nT].reshape(*logits.shape[:-1], ALPHA, len(SERVERS)),
+                logits[..., nD + nV + nT:].reshape(*logits.shape[:-1], BETA, ALPHA))
+
+    def logprob(logits, dd_m, dv_m, a_dd, a_dv, a_t, a_l, rel_t, rel_l):
+        ld, lv, lt, ll = split(logits)
+        ld = torch.log_softmax(ld.masked_fill(~dd_m, -1e9), -1).gather(-1, a_dd[..., None])[..., 0]
+        lv = torch.log_softmax(lv.masked_fill(~dv_m, -1e9), -1).gather(-1, a_dv[..., None])[..., 0]
+        lt = (torch.log_softmax(lt, -1).gather(-1, a_t[..., None])[..., 0] * rel_t).sum(-1)
+        ll = (torch.log_softmax(ll, -1).gather(-1, a_l[..., None])[..., 0] * rel_l).sum(-1)
+        return ld + lv + lt + ll
+
+    def act(obs):
+        with torch.no_grad():
+            ld, lv, lt, ll = split(actor(torch.as_tensor(obs)))
+        md, _ = env.joint_count_masks()
+        if variant == "alg2":
+            md = np.zeros_like(md)
+            md[ALPHA] = True
+        dd = int(torch.distributions.Categorical(logits=ld.masked_fill(~torch.as_tensor(md), -1e9)).sample()) - ALPHA
+        _, mv = env.joint_count_masks(dd)
+        if variant == "alg2":
+            mv = np.zeros_like(mv)
+            mv[BETA] = True
+        dv = int(torch.distributions.Categorical(logits=lv.masked_fill(~torch.as_tensor(mv), -1e9)).sample()) - BETA
+        tg = torch.distributions.Categorical(logits=lt).sample().numpy()
+        lk = torch.distributions.Categorical(logits=ll).sample().numpy()
+        nd2, nv2 = int(env.h_on.sum()) + dd, int(env.f_on.sum()) + dv
+        rel_t = (np.arange(ALPHA) < nd2).astype(np.float32)
+        rel_l = (np.arange(BETA) < nv2).astype(np.float32)
+        rec = (obs, md, mv, dd + ALPHA, dv + BETA, tg, lk, rel_t, rel_l)
+        with torch.no_grad():
+            lp = float(logprob(actor(torch.as_tensor(obs)), torch.as_tensor(md), torch.as_tensor(mv),
+                               torch.as_tensor(dd + ALPHA), torch.as_tensor(dv + BETA), torch.as_tensor(tg),
+                               torch.as_tensor(lk), torch.as_tensor(rel_t), torch.as_tensor(rel_l)))
+        return {"dd": dd, "dv": dv, "targets": tg, "links": lk}, rec, lp
+
+    def episode():
+        obs = env.reset(start)
+        traj = []
+        while not env.done:
+            a, rec, lp = act(obs)
+            nxt, r, done = env.step(a)
+            traj.append((rec, lp, r))
+            obs = nxt
+        return traj, env.success
+
+    def update(traj):
+        cols = list(zip(*[x[0] for x in traj]))
+        S = torch.as_tensor(np.stack(cols[0]))
+        DM, VM = torch.as_tensor(np.stack(cols[1])), torch.as_tensor(np.stack(cols[2]))
+        ADD, ADV = torch.as_tensor(np.array(cols[3])), torch.as_tensor(np.array(cols[4]))
+        AT, AL = torch.as_tensor(np.stack(cols[5])), torch.as_tensor(np.stack(cols[6]))
+        RT, RL = torch.as_tensor(np.stack(cols[7])), torch.as_tensor(np.stack(cols[8]))
+        LP = torch.as_tensor([x[1] for x in traj])
+        R = np.array([x[2] for x in traj], np.float32)
+        with torch.no_grad():
+            V = critic(S).squeeze(-1).numpy()
+        adv = np.zeros_like(R)
+        gae = 0.0
+        for t in reversed(range(len(R))):
+            nxt = 0.0 if t == len(R) - 1 else V[t + 1]
+            gae = R[t] + gamma * nxt - V[t] + gamma * lam * gae
+            adv[t] = gae
+        ret = torch.as_tensor(adv + V)
+        adv = torch.as_tensor(adv)
+        if len(adv) > 1:
+            adv = (adv - adv.mean()) / (adv.std() + 1e-8)
+        for _ in range(epochs):
+            lp = logprob(actor(S), DM, VM, ADD, ADV, AT, AL, RT, RL)
+            ratio = torch.exp(lp - LP)
+            loss_a = -torch.min(ratio * adv, ratio.clamp(1 - s.clip, 1 + s.clip) * adv).mean()
+            opt_a.zero_grad()
+            loss_a.backward()
+            opt_a.step()
+            loss_c = ((critic(S).squeeze(-1) - ret) ** 2).mean()
+            opt_c.zero_grad()
+            loss_c.backward()
+            opt_c.step()
+
+    train = []
+    for _ in range(episodes):
+        traj, ok = episode()
+        train.append(ok)
+        if learn:
+            update(traj)
+    evals = [episode()[1] for _ in range(eval_episodes)]
+    return {"train": train, "eval": evals}

@@ -154,3 +154,39 @@ to both (gaps 1.69 and 1.39). The protocol is amended as follows; nothing has be
   analysis** (every combination reported, no selection), with a null-fit rule fixed beforehand: a reading counts
   only if it is within 2 points of all three targets and the same search against three random decoy targets
   fits clearly worse. In D1.2, only conclusions that hold under all readings are claimed.
+
+## A12, declared sensitivity analysis of the paper's readings (2026-11-21, before any code or run)
+
+Requested by the user after the held-out run ("try again with a different approach"); allowed by A11 as a
+declared sensitivity analysis. It does **not** change any verdict in REPORT.md, and nothing is selected.
+
+- **Question:** is there any reasonable reading of the paper under which its Table 3 numbers come out?
+- **Factors** (each tied to the paper; first value = the reading used so far):
+  - M1 attacker: argmax of Eq. (2) / **samples a node with probability proportional to its normalised
+    importance** (Eq. 2 normalises; the paper reports an "attack probability");
+  - M2 ties: random / real asset first;
+  - M3 Alg1: random walk of actions / **one random configuration per episode** (n_d uniform 0-2, n_v uniform
+    0-10 when n_d > 0, random targets and links; "randomly configures the number ..., the association
+    relationship, and the protection target");
+  - M4 action: one change per step (A8) / **one joint action per step** (Eq. 4: change of n_d, change of n_v,
+    all targets m1, all links m2; factored softmax heads, the log-probability summed over the heads in use);
+  - M5 cost: every step (Eq. 5 as read) / **once, for the deployment at the attack** ("deployment cost of
+    H-honeypot and F-honeypot in the ... strategy");
+  - M6 R1: 10 / 100;
+  - M7 F-honeypot: no vulnerability / **low-level clone of a host** (F_k carries the CVE of Host(k mod 5)+1);
+  - M8 H-honeypot links: F links only / also its server's communicating devices (`h_links`).
+- **Design:** the full factorial, 2^8 = **256 combinations**, each run once on the closed calibration's final
+  setting (w 0.1, links P1, attack at the last step, CVSS v2, R2 0.5, clip 0.9; R1 as M6). Per combination:
+  Alg1, Alg3 and DRD-PPO (500 episodes), 10 seeds, DSP as decision 12. Every combination is reported.
+- **Null-fit rule:** a combination *fits* a triple if its mean Alg1, Alg3 and DRD-PPO are each within 2 points.
+  Three **decoy triples**, drawn before any run (seed 20261121, offsets of 10-30 points with random sign,
+  clipped to [1, 99]): D1 = (51.17, 84.51, 99.00), D2 = (39.70, 34.60, 75.48), D3 = (8.24, 75.21, 99.00).
+- **Reading, declared now:**
+  - no combination fits the real triple (28.43, 55.19, 97.09): *Table 3 is not produced by any of these 256
+    readings of the paper*;
+  - some fit the real triple, and at least as many fit a decoy: *the readings are flexible enough to fit nearby
+    arbitrary numbers, so a fit does not identify the paper's mechanics*;
+  - some fit the real triple and no decoy is fitted: those combinations are reported as *candidate readings
+    consistent with Table 3* (never "reproduced"), and only for them Alg2 (500 episodes) and Table 4 DRD-PPO
+    (1,500 episodes) are run once, descriptively.
+- Outputs: `out/sensitivity_m_log.csv` (every trial), `out/sensitivity_m.json`, `SENSITIVITY_M.md`. Runs once.
