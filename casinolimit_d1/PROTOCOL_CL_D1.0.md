@@ -269,12 +269,14 @@ only.
 - **Machine:** GPU PC 2. Before the diagnostics (2026-11-21):
   1. PC 2's retrained encoders were moved out of the repository.
   2. The 200 CL 1.0 files were copied from GPU PC 1.
-- **Diagnostics (2026-11-21, under the earlier BCE-only check):**
-  - all 200 checkpoints reproduced CL 1.0's validation BCE;
-  - one cell took 96 s on PC 2's GPU;
-  - its dry-run reproduction was exact.
+- **Diagnostics, before the freeze:**
+  - 2026-11-21, under the earlier BCE-only check: all 200 checkpoints reproduced CL 1.0's validation
+    BCE.
+  - 2026-11-22, under the full identity check of Section 6: all 200 checkpoints passed, with the
+    largest validation-logit difference 2.86e-06 (tolerance 1e-3).
+  - Both times one cell took 96 s on PC 2's GPU, and its dry-run reproduction was exact.
 
-  The full identity check above runs in the `run` stage's preflight, after the freeze.
+  The `run` stage repeats the preflight under the frozen spec.
 - **Time:** 870 cells at 96 s each, about **23 h**, plus test episodes.
 
 ## 8. Sensitivity analyses (declared now, all reported)
