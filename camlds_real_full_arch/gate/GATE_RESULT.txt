@@ -1,0 +1,31 @@
+Protocol D1.0 validity gate (no learned agent)
+
+runs: E1 34, P1 33; 20 repeats per run, seed 300000
+
+policy | E1 engaged commands | P1 defense success
+none | 0.000 | 0.000
+random | 2.051 | 0.030
+greedy | 6.009 | 0.036
+planner | 8.428 | 0.232
+clairvoyant | 15.085 | 0.561
+fixed_E1 | 6.215 | 0.102
+fixed_P1 | 4.296 | 0.214
+
+G1 goal reached under none: 1.000 -> PASS
+G2 E1: clairvoyant - fixed_E1 = 8.871 [7.584, 10.203] -> pass
+G2 P1: clairvoyant - fixed_P1 = 0.347 [0.253, 0.441] -> pass
+G2 -> PASS
+G3 E1: planner - greedy = 2.419 [1.637, 3.197] -> pass
+G3 P1: planner - greedy = 0.195 [0.118, 0.274] -> pass
+G3 -> PASS
+
+GATE: PASS
+
+per scenario (E1 / P1):
+S1 | none 0.00/0.00 | random 1.83/0.02 | greedy 6.38/0.04 | planner 9.71/0.27 | clairvoyant 15.12/0.54 | fixed_E1 6.92/0.08 | fixed_P1 6.38/0.36
+S2 | none 0.00/0.00 | random 2.15/0.03 | greedy 4.70/0.05 | planner 7.77/0.40 | clairvoyant 15.55/0.65 | fixed_E1 2.40/0.00 | fixed_P1 4.72/0.00
+S3 | none 0.00/0.00 | random 2.91/0.01 | greedy 5.68/0.00 | planner 5.73/0.00 | clairvoyant 19.16/0.48 | fixed_E1 4.01/0.00 | fixed_P1 3.53/0.06
+S4 | none 0.00/0.00 | random 0.25/0.00 | greedy 0.90/0.00 | planner 0.30/0.00 | clairvoyant 1.65/0.00 | fixed_E1 1.65/0.00 | fixed_P1 0.10/0.00
+S5 | none 0.00/0.00 | random 0.20/0.10 | greedy 0.00/0.00 | planner 0.00/0.00 | clairvoyant 2.55/0.95 | fixed_E1 0.00/0.00 | fixed_P1 0.00/0.00
+S6 | none 0.00/0.00 | random 2.73/0.00 | greedy 8.83/0.04 | planner 12.13/0.36 | clairvoyant 17.38/0.56 | fixed_E1 11.17/0.36 | fixed_P1 0.00/0.00
+S7 | none 0.00/0.00 | random 0.95/0.40 | greedy 0.95/0.20 | planner 0.95/0.20 | clairvoyant 3.50/0.85 | fixed_E1 0.45/0.20 | fixed_P1 0.45/0.20
