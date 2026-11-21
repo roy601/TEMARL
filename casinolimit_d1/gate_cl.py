@@ -14,9 +14,14 @@ Unit = run (all 114 attackers). Outcome E1 only: CasinoLimit records no attacker
 protection outcome P1 and its gate G1 do not exist here.
 Randomness: seed 300000, 20 repeats per run, disjoint from validation (100000+s) and test (200000+s).
 
-Pass criteria, both required (D1.0's G2 and G3 on E1):
-  G2  headroom: clairvoyant - best of {fixed, greedy} > 0, 95% bootstrap CI over runs excludes 0
-  G3  history can matter: planner - greedy > 0, 95% CI excludes 0
+Pass criteria, both required (D1.0's G2 and G3 on E1; a stop rule, decision C10):
+  G2  a real decision problem: clairvoyant - best of {fixed, greedy} > 0, 95% bootstrap CI over runs
+      excludes 0
+  G3  a simple history rule helps: planner - greedy > 0, 95% CI excludes 0
+A failure means "this simple history rule shows no benefit in this setup", not "no history-based method
+can help". The fixed and planner policies here are fitted on all other runs (leave-one-run-out), as in
+D1.0's gate, so some of those runs are later test runs; the gate is a diagnostic of the environment,
+nothing is chosen or tuned after it, and the learned arms' evaluation uses training-run fits only.
 Bootstrap: 10,000 resamples of runs, seed 20261103, percentile interval. Also reported, descriptive:
 each policy's E1 as a share of the run length.
 """
