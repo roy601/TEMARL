@@ -1,10 +1,12 @@
 # Protocol D1.1: hyperparameter sensitivity of the history effect (an addition to D1.0; simulation)
 
-**Status: DRAFT, 2026-11-18. Not frozen.** No D1.1 cell has been trained. D1.1 must be frozen
-(`spec_d1_1.py --freeze`, after the user's approval) **before the D1.0 test is opened**
-(`run_all_d1.py open`). The freeze refuses once `results_d1/main/TEST_OPENED.json` exists, and the order of
-the two events is provable from git history (the freeze records the git commit it was made on). After the
-freeze, any change means a new version, never an edit of this one.
+**Status: FROZEN, 2026-11-21** (`SPEC_D1_1.json`, written by `spec_d1_1.py --freeze` after the user's
+approval; decisions H1-H7 of Section 9 settled the same day, every one as recommended, H1 = 9 settings). At the
+freeze no D1.1 cell had been trained, D1.0's main stage had finished with its test sealed (2,240 cells,
+validation dry run PASS, commit f8886b34) and **the D1.0 test had not been opened**
+(`results_d1/main/TEST_OPENED.json` absent). The freeze refuses once that file exists, and the order of the
+two events is provable from git history (the freeze records the git commit it was made on). Any change now
+means a new version, never an edit of this one.
 
 ## 0. What D1.1 is, and what it does not change
 
@@ -267,6 +269,8 @@ campaigns.
 - The other limits of D1.0 (Section 12) apply unchanged.
 
 ## 9. Decisions for the user (recommended choice first)
+
+Settled by the user on 2026-11-21 ("freeze"): every decision as recommended; H1 = 9 settings.
 
 | # | decision | recommendation | why |
 |---|---|---|---|
