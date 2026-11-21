@@ -1,10 +1,14 @@
 # Protocol CL-D1.0: history-aware deception agents on CasinoLimit (simulation)
 
-**Status: DRAFT, revised 2026-11-22 after the design review of 2026-11-18. Not frozen.** No CL-D1.0
-agent has been trained or evaluated, and the gate has not run. Before the freeze, only the
-validation-only check of Section 2b, the diagnostics stage of Section 7 (2026-11-21) and code tests
-have run. The protocol is frozen (`spec_cl_d1.py --freeze`) only after the user approves it. After the
-freeze, any change needs a new version. The order of events is provable from git history.
+**Status: FROZEN, 2026-11-22** (`SPEC_CL_D1.json`, written by `spec_cl_d1.py --freeze` after the
+user's approval; decisions C1-C10 settled the same day). Revised before the freeze after the design
+review of 2026-11-18. At the freeze:
+- no CL-D1.0 agent had been trained or evaluated, and the gate had not run;
+- only the validation-only check of Section 2b, the diagnostics of Section 7 (2026-11-21 and
+  2026-11-22) and code tests had run;
+- the D1.0 test (CAM-LDS) had not been opened, so no D1.0 test number could influence this protocol.
+
+Any change now needs a new version. The order of events is provable from git history.
 
 ## 0. What CL-D1.0 is
 
