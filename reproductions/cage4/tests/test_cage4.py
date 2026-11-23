@@ -85,24 +85,30 @@ class Report(unittest.TestCase):
         self.assertEqual(float(rows["T3.Teamcybermonic.CC4"]["published"]), -193.0)
 
     def test_report_on_synthetic_seed_files(self):
+        centre = {"Teamcybermonic": -193.0, "Teampunch": -142.0}
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp)
-            for s in R.SEEDS:
-                eps = [{"episode": i, "score": -193.0 + ((i % 2) * 2 - 1) * 5 + (s - 4.5) * 0.8, "steps": 499,
-                        "seconds": 1.0} for i in range(100)]          # seed means spread evenly around -193
-                (out / f"episodes_seed{s}.json").write_text(json.dumps({"seed": s, "n": 100, "episodes": eps}), encoding="utf-8")
+            for team, c in centre.items():
+                for s in R.SEEDS:                                 # seed means spread evenly around the target
+                    eps = [{"episode": i, "score": c + ((i % 2) * 2 - 1) * 5 + (s - 4.5) * 0.8, "steps": 499,
+                            "seconds": 1.0} for i in range(100)]
+                    R.seed_file(team, s, out).write_text(json.dumps({"team": team, "seed": s, "n": 100, "episodes": eps}),
+                                                         encoding="utf-8")
             res = R.report(out, out / "REPORT.md")
             text = (out / "REPORT.md").read_text(encoding="utf-8")
         v = {r["id"]: r["verdict"] for r in res["targets"]}
         self.assertEqual(v["T3.Teamcybermonic.CC4"], "MATCH")
-        self.assertEqual(sum(x == "NOT ATTEMPTED" for x in v.values()), 23)
+        self.assertEqual(v["T3.Teampunch.CC4"], "MATCH")
+        self.assertEqual(sum(x == "NOT ATTEMPTED" for x in v.values()), 22)
         self.assertEqual(len(v), 24)
-        self.assertIn("Paper verdict: reproduced (scenario CC4)", text)
+        self.assertIn("Paper verdict: reproduced for the two teams that released code", text)
         for tid in v:
             self.assertIn(f"| {tid} |", text)
         reasons = {r["id"]: r.get("reason") for r in res["targets"]}
         self.assertIn("no code released", reasons["T3.TeamUC.CC4"])
+        self.assertIn("no code released", reasons["T3.Teamlancer.CC4"])
         self.assertIn("no configuration for this variation", reasons["T3.Teamcybermonic.stealthy_red"])
+        self.assertIn("no configuration for this variation", reasons["T3.Teampunch.aggressive_red"])
 
     def test_report_refuses_until_every_seed_exists(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -118,6 +124,9 @@ class Pins(unittest.TestCase):
         self.assertIn("8c3c50c", text)
         self.assertEqual(fetch.REPOS["cage-challenge-4"][1][:7], "8c3c50c")
         self.assertEqual(fetch.REPOS["cage-4-submission"][1][:7], "2afd652")
+        self.assertEqual(fetch.REPOS["cage-4-submissions-punch"][1][:7], "9cc4ff8")
+        self.assertEqual(set(R.TEAMS), {"Teamcybermonic", "Teampunch"})
+        self.assertIn("| 15 | **Correction of decision 6", text)
         req = (HERE / "requirements_cage4.txt").read_text(encoding="utf-8").split()
         for pin in ("ray[rllib]==2.10.0", "torch_geometric==2.3.1", "numpy==1.26.4", "torch==2.2.0"):
             self.assertIn(pin, req)

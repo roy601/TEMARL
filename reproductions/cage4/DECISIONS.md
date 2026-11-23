@@ -26,6 +26,7 @@ stack runs (it is not a result: no episode finished and nothing was kept).
 | 12 | Variations | **NOT ATTEMPTED** (decision 4). The environment at 8c3c50c has no named configuration for any of the five; it has knobs (the green agent's `phishing_error_rate`, the red agent's choice between stealthy and aggressive service discovery, the `DiscoverDeception` action, the scenario generator's sizes), but the paper does not give their values. The organisers are asked (`AUTHOR_CONTACT.md`). | not provided | 2026-11-24 |
 | 13 | Decision 5's metrics | Deferred to the Idea 03 stage: the reproduction reports the CAGE 4 score only. | the reproduction is about Table 3; our metrics belong to the comparison | 2026-11-24 |
 | 14 | Machine | CPU only, one process per seed (torch threads 1). Any machine with the environment of decision 8; the first run is on the development PC (12 cores), because GPU PC 2 is busy with CL-D1.0. | the agents are small graph networks | 2026-11-24 |
+| 15 | **Correction of decision 6: Team punch released code** | Decision 6 missed it. A teammate's kit (`reproduction_dump/`, commit 79ff1e72, 2026-11-23) points to `PUNCH-Cyber/cage-4-submissions` (released 2025-02-07). Its README gives **Analyse Restore v1** a final score of **-142.72, 3rd place**, which is Table 3's Team punch (-142 ± 44). So Team punch is reproduced too: `punch_analyse_restore_v1` at commit 9cc4ff8, unchanged, under decisions 8-11 (same software, loop, seeds and verdict rule). It is a fixed analyse-and-restore heuristic: no weights, no randomness of its own. Its five variations stay NOT ATTEMPTED (decision 12). Teams UC and lancer: still no code found, NOT ATTEMPTED. | released code found before any run | 2026-11-24 |
 
 ### SHA-256 of the released files (decision 7)
 
@@ -43,6 +44,9 @@ endings, the weight files are binary).
 | models/cage4.py | 922949d38d856c5a995976ddb889fc0e88eadef0dac1cedb5d941c2825df4751 |
 | wrapper/graph_wrapper.py | 1ec7529a6cf1dad63f25e625d4444287821128dbdf072a51ff7c48290d82062f |
 | (environment) CybORG/Evaluation/evaluation.py | 8c01f269c25a6f8e61916524321aca2ecf5c1b572f6568cc71eb18f89a7ce28d |
+| (punch, decision 15) punch_analyse_restore_v1/submission.py | 06d0ec52e8e2e36efe0f433da395697eb43e36a79909267d2673f5bb59fd8c56 |
+| (punch) punch_analyse_restore_v1/punchagents.py | 9b170f8950498c622b1037be753ff52c461a47f0a25835115ebcaf1f49e0754e |
+| (punch) punch_analyse_restore_v1/punchwrappers.py | 9caf35eabd35fe1803c0f7ae8c59ee905aa8381dcdfe2c0e9d51713f1325a209 |
 
 ## Notes from reading
 

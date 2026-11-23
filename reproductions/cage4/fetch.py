@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""CAGE 4 reproduction: fetch the two released repositories at their pinned commits (DECISIONS.md 2, 7).
+"""CAGE 4 reproduction: fetch the released repositories at their pinned commits (DECISIONS.md 2, 7, 15).
 
     python reproductions/cage4/fetch.py
 
@@ -21,6 +21,8 @@ REPOS = {
                          "8c3c50ca54b176c2de199847944e8dcc035497e3"),
     "cage-4-submission": ("https://github.com/cybermonic/cage-4-submission.git",
                           "2afd652d80ce9d4051a07c23c2538f3dec6bb6c6"),
+    "cage-4-submissions-punch": ("https://github.com/PUNCH-Cyber/cage-4-submissions.git",   # DECISIONS 15
+                                 "9cc4ff83d600b0c810dad2ec428e35c0f3a0b6b0"),
 }
 SHA256 = {   # DECISIONS.md, decision 7
     "cage-4-submission/weights/gnn_ppo-0.pt": "991d96cb5132eec36595f6d407e67b93b2e5045c960dc4d25586e0c0bf124e60",
@@ -32,6 +34,9 @@ SHA256 = {   # DECISIONS.md, decision 7
     "cage-4-submission/models/cage4.py": "922949d38d856c5a995976ddb889fc0e88eadef0dac1cedb5d941c2825df4751",
     "cage-4-submission/wrapper/graph_wrapper.py": "1ec7529a6cf1dad63f25e625d4444287821128dbdf072a51ff7c48290d82062f",
     "cage-challenge-4/CybORG/Evaluation/evaluation.py": "8c01f269c25a6f8e61916524321aca2ecf5c1b572f6568cc71eb18f89a7ce28d",
+    "cage-4-submissions-punch/punch_analyse_restore_v1/submission.py": "06d0ec52e8e2e36efe0f433da395697eb43e36a79909267d2673f5bb59fd8c56",
+    "cage-4-submissions-punch/punch_analyse_restore_v1/punchagents.py": "9b170f8950498c622b1037be753ff52c461a47f0a25835115ebcaf1f49e0754e",
+    "cage-4-submissions-punch/punch_analyse_restore_v1/punchwrappers.py": "9caf35eabd35fe1803c0f7ae8c59ee905aa8381dcdfe2c0e9d51713f1325a209",
 }
 
 
@@ -81,7 +86,7 @@ def main():
     if bad:
         print("FAIL:\n  " + "\n  ".join(bad))
         sys.exit(1)
-    print(f"OK: both repositories at their pinned commits; {len(SHA256)} released files match DECISIONS.md")
+    print(f"OK: all {len(REPOS)} repositories at their pinned commits; {len(SHA256)} released files match DECISIONS.md")
 
 
 if __name__ == "__main__":
