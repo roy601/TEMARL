@@ -1,0 +1,95 @@
+{
+  "master_seed": 20260818,
+  "paired_seeds": 30,
+  "events_per_episode": 120,
+  "scenarios": {
+    "office": {
+      "criticality": 0.55,
+      "capacity": 0.95,
+      "attack_rate": 0.28
+    },
+    "research": {
+      "criticality": 0.78,
+      "capacity": 0.78,
+      "attack_rate": 0.34
+    },
+    "data_service": {
+      "criticality": 0.95,
+      "capacity": 0.64,
+      "attack_rate": 0.4
+    }
+  },
+  "in_distribution_attackers": {
+    "credential": {
+      "credential": 0.92,
+      "lateral": 0.28,
+      "web": 0.22,
+      "patience": 0.58,
+      "stealth": 0.38
+    },
+    "lateral": {
+      "credential": 0.46,
+      "lateral": 0.94,
+      "web": 0.24,
+      "patience": 0.72,
+      "stealth": 0.54
+    },
+    "web": {
+      "credential": 0.24,
+      "lateral": 0.18,
+      "web": 0.95,
+      "patience": 0.42,
+      "stealth": 0.3
+    },
+    "hybrid": {
+      "credential": 0.66,
+      "lateral": 0.67,
+      "web": 0.62,
+      "patience": 0.82,
+      "stealth": 0.66
+    }
+  },
+  "held_out_attacker": {
+    "slow_blend": {
+      "credential": 0.18,
+      "lateral": 0.78,
+      "web": 0.16,
+      "patience": 0.99,
+      "stealth": 0.98
+    }
+  },
+  "policies": [
+    "Static",
+    "Adaptive",
+    "Consensus",
+    "CADO"
+  ],
+  "fixed_design_parameters": {
+    "max_attack_stage": 3,
+    "risk_weights": {
+      "confidence": 0.34,
+      "severity": 0.27,
+      "criticality": 0.22,
+      "stage": 0.17
+    },
+    "consensus_thresholds": [
+      0.3,
+      0.56,
+      0.81
+    ],
+    "profile_update_confidence": 0.4,
+    "minimum_profile_evidence": 6,
+    "ood_distance_limit": 2.2,
+    "escalation_confidence_minimum": 0.55,
+    "one_sided_95_z": 1.645,
+    "uncertainty_count_coefficient": 0.11,
+    "uncertainty_distance_coefficient": 0.025
+  },
+  "observability_boundary": "PolicyState uses alert confidence and observed behavior features only; the latent malicious label is reserved for evaluation scoring.",
+  "bootstrap_resamples": 10000,
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "numpy": "2.1.3",
+  "pandas": "2.2.3",
+  "matplotlib": "3.10.0"
+}

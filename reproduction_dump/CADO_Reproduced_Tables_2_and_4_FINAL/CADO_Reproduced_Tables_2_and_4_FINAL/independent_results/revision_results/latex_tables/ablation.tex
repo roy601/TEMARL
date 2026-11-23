@@ -1,0 +1,20 @@
+\begin{table}[t]
+\caption{\revised{Safety-gate ablation and the Consensus reference for both datasets. Values are means of 30 seed-level summaries.}}\label{tab3}
+\begin{adjustwidth}{-\extralength}{0cm}
+\begin{revision}\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\fulllength}{@{}l L{1.6}L{0.8}L{0.9}L{0.9}L{0.9}L{0.9}@{}}
+\toprule
+\textbf{Dataset} & \textbf{Variant} & \textbf{Utility} & \textbf{Precision} & \textbf{Benign false redirects} & \textbf{Unsafe actions} & \textbf{Fallback}\\\midrule
+Primary & Consensus & 0.6953 & 0.6978 & 0.000082 & 0.000046 & 1.0000\\\addlinespace[2pt]
+Primary & Full CADO & 0.7020 & 0.7282 & 0.000082 & 0.000046 & 0.9633\\\addlinespace[2pt]
+Primary & No evidence gate & 0.7024 & 0.7289 & 0.000082 & 0.000046 & 0.9610\\\addlinespace[2pt]
+Primary & No confidence/value gates & 0.7163 & 0.7717 & 0.000377 & 0.006042 & 0.2050\\\addlinespace[2pt]
+Primary & Bounded residual only & 0.7208 & 0.7895 & 0.000409 & 0.007731 & 0.0000\\\addlinespace[2pt]
+\midrule
+Held-out & Consensus & 0.6572 & 0.5549 & 0.000299 & 0.000185 & 1.0000\\\addlinespace[2pt]
+Held-out & Full CADO & 0.6590 & 0.5745 & 0.000299 & 0.000185 & 0.9868\\\addlinespace[2pt]
+Held-out & No OOD gate & 0.6611 & 0.5970 & 0.000299 & 0.000185 & 0.9746\\\addlinespace[2pt]
+Held-out & Bounded residual only & 0.6966 & 0.8117 & 0.000579 & 0.040093 & 0.0000\\\addlinespace[2pt]
+\bottomrule\end{tabularx}
+\par\vspace{3pt}\noindent For Consensus, fallback 1.0000 denotes selection of its own reference action by definition, not a measured gate-rejection rate. For CADO variants, fallback denotes rejection of personalization.
+\end{revision}\end{adjustwidth}\end{table}
