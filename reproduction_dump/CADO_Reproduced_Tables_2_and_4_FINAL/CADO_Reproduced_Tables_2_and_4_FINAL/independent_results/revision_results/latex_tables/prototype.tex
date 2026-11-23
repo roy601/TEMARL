@@ -1,0 +1,20 @@
+\begin{table}[t]
+\caption{\revised{Local HTTP prototype: expected protocol outcomes in 30 repetitions per case.}}\label{tab:poc}
+\begin{adjustwidth}{-\extralength}{0cm}
+\begin{revision}\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\fulllength}{@{}L{1.0}L{0.65}L{0.85}L{1.5}@{}}
+\toprule
+\textbf{Test case} & \textbf{Expected outcome met} & \textbf{Path restored} & \textbf{Observed behavior}\\\midrule
+Verified expiry & 30/30 & 30/30 & Route expired; protected path restored\\\addlinespace[3pt]
+Duplicate application & 30/30 & 30/30 & One mutation; duplicate acknowledged idempotently\\\addlinespace[3pt]
+Lost acknowledgement & 30/30 & 30/30 & Installed state found; compensation verified\\\addlinespace[3pt]
+Divergent state & 30/30 & 30/30 & Wrong destination rejected by verification\\\addlinespace[3pt]
+Unavailable telemetry & 30/30 & 30/30 & Probe failure triggered compensation\\\addlinespace[3pt]
+Stale actuator TTL & 30/30 & 30/30 & Coordinator detected residual route and removed it\\\addlinespace[3pt]
+Transient rollback error & 30/30 & 30/30 & Second deletion attempt restored the path\\\addlinespace[3pt]
+Persistent rollback error & 30/30 & 0/30 & Failure retained after three attempts; escalation required\\\addlinespace[3pt]
+Unauthorized scope & 30/30 & Not applicable & HTTP 403; no route installed\\\addlinespace[3pt]
+Conflicting identifier reuse & 30/30 & 30/30 & HTTP 409; original request not overwritten\\\addlinespace[3pt]
+\bottomrule\end{tabularx}
+\par\vspace{3pt}\noindent All 300 trials met their stated acceptance criteria. Persistent rollback failure is an expected failure outcome, not successful recovery. Unauthorized requests made no state change. Test-fixture cleanup after persistent failure is excluded from recovery counts.
+\end{revision}\end{adjustwidth}\end{table}
