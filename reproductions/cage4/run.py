@@ -141,7 +141,7 @@ def stage_check():
            "released_files_sha256_ok": True,
            "packages": sorted(f"{d.metadata['Name']}=={d.version}" for d in md.distributions())}
     write_json(OUT / "ENVIRONMENT.json", env)
-    key = {p.split("==")[0].lower(): p for p in env["packages"]}
+    key = {p.split("==")[0].lower().replace("_", "-"): p for p in env["packages"]}
     print("check OK:", env["cyborg_version"], "|", ", ".join(key.get(k, k + " missing") for k in
                                                          ("numpy", "torch", "torch-geometric", "ray", "gymnasium")))
 
