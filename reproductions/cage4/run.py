@@ -6,6 +6,7 @@ Run with the Python of the CAGE 4 environment (README.md), except `report`.
     <venv python> reproductions/cage4/run.py check             # versions, commits, files -> out/ENVIRONMENT.json
     <venv python> reproductions/cage4/run.py verify            # our loop == official run_evaluation, each team
     <venv python> reproductions/cage4/run.py run --workers 10  # 2 teams x seeds 0-9 x 100 episodes
+    <venv python> reproductions/cage4/run.py recheck --team Teamcybermonic --seed 0   # 3 kept episodes rerun
     python reproductions/cage4/run.py report                   # out/results.json and REPORT.md (any Python)
 
 The episode loop is the official CAGE 4 evaluation loop (CybORG/Evaluation/evaluation.py, run_evaluation),
@@ -39,6 +40,7 @@ EPISODES = 100
 EPISODE_LENGTH = 500
 T_975_DF9 = 2.2621571627982264                 # Student t, 0.975 quantile, 9 degrees of freedom
 SCENARIO_ATTEMPTED = "CC4"
+LEADERBOARD = {"Teamcybermonic": -193.68, "Teampunch": -142.72}   # the teams' READMEs; Table 3 truncates
 
 
 # ── the official loop ─────────────────────────────────────────────────────────
@@ -204,6 +206,25 @@ def stage_run(workers: int):
     print("all runs finished; next: python reproductions/cage4/run.py report")
 
 
+def stage_recheck(team: str, seed: int, episodes: int):
+    """Run a finished seed's first episodes again (fresh process state, same seed) and compare them with its
+    file: same machine = the kept files stand after a crash; another machine = machine independence."""
+    import platform
+    import torch
+    torch.set_num_threads(1)
+    kept = json.loads(seed_file(team, seed).read_text(encoding="utf-8"))["episodes"][:episodes]
+    L = load(team)
+    seed_all(seed)
+    w = make_env(L, seed)
+    again = [episode(w, L["Submission"].AGENTS)[0] for _ in range(episodes)]
+    same = [k["score"] for k in kept] == again
+    dest = OUT / f"RECHECK_{platform.node()}_{team}_seed{seed}.json"
+    write_json(dest, {"machine": platform.node(), "team": team, "seed": seed, "episodes": episodes,
+                      "kept": [k["score"] for k in kept], "again": again, "identical": same})
+    print(f"recheck {team} seed {seed}, {episodes} episodes on {platform.node()}: "
+          f"{'IDENTICAL' if same else 'DIFFERENT'} -> {dest.name}")
+
+
 # ── report (pure; tested) ─────────────────────────────────────────────────────
 
 def summarise(seed_rows: dict) -> dict:
@@ -289,7 +310,13 @@ def report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
               f"episode std {s['episode_stdev']:.1f}.",
               f"- Published (Table 3): {r['published']:g} ± {r['published_std']:g}, one 100-episode evaluation. Verdict: **{r['verdict']}**.",
               "- Each seed, mean ± std of its 100 episodes (each comparable to one Table 3 entry): " +
-              "; ".join(f"s{k} {m:.1f} ± {sd:.1f}" for k, m, sd in zip(SEEDS, s["seed_means"], s["seed_stdevs"])) + ".", ""]
+              "; ".join(f"s{k} {m:.1f} ± {sd:.1f}" for k, m, sd in zip(SEEDS, s["seed_means"], s["seed_stdevs"])) + ".",
+              f"- Added after the results, descriptive (no verdict changes): Table 3 is ONE 100-episode evaluation. "
+              f"Our ten 100-episode evaluations range over [{min(s['seed_means']):.1f}, {max(s['seed_means']):.1f}]; "
+              f"the published {r['published']:g} is {'inside' if min(s['seed_means']) <= r['published'] <= max(s['seed_means']) else 'outside'} "
+              f"that range, and {sum(m >= r['published'] for m in s['seed_means'])} of 10 are at least as good. "
+              f"Table 3 appears to truncate the teams' leaderboard scores ({t} README: {LEADERBOARD[t]}); against "
+              f"{LEADERBOARD[t]}, {sum(m >= LEADERBOARD[t] for m in s['seed_means'])} of 10 are at least as good.", ""]
     L += ["## Every target", "", "| id | quantity | published | ours | difference | verdict |", "|---|---|---|---|---|---|"]
     for r in rows:
         if r["ours"] is None:
@@ -302,7 +329,9 @@ def report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
           f"commits {env.get('commits', {})}; machine {env.get('machine', '?')}. Full package list: `out/ENVIRONMENT.json`.",
           "- Changes from the 2024 software, all declared before the run (DECISIONS 8): Ray 2.10.0 for 2.12.0 (no",
           "  Windows build), torch_geometric 2.3.1 (cybermonic's pin), unpinned packages resolved as of 2024-06-15.",
-          "- Our loop was checked against the official `run_evaluation` for each team (`out/VERIFY.json`).", "",
+          "- Our loop was checked against the official `run_evaluation` for each team (`out/VERIFY.json`).",
+          "- Rerunning the first 3 episodes of a kept seed gives identical scores (`out/RECHECK_*.json`), so the",
+          "  seeds that started over after the out-of-memory failure (DECISIONS run log) are the episodes their seeds fix.", "",
           "Every episode: `out/episodes_<team>_seed<k>.json`.", ""]
     dest.write_text("\n".join(L), encoding="utf-8")
     sys.stdout.reconfigure(errors="replace")                 # Windows consoles may not print the ± sign
@@ -312,7 +341,7 @@ def report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["check", "verify", "run", "seed", "report"])
+    ap.add_argument("stage", choices=["check", "verify", "run", "seed", "recheck", "report"])
     ap.add_argument("--workers", type=int, default=10)
     ap.add_argument("--team", choices=list(TEAMS))
     ap.add_argument("--seed", type=int)
@@ -324,6 +353,8 @@ def main():
         stage_verify()
     elif a.stage == "run":
         stage_run(a.workers)
+    elif a.stage == "recheck":
+        stage_recheck(a.team or "Teamcybermonic", 0 if a.seed is None else a.seed, 3 if a.episodes == EPISODES else a.episodes)
     elif a.stage == "seed":
         if a.team is None or a.seed not in SEEDS or a.episodes != EPISODES:
             raise SystemExit("--team, a seed 0-9 and 100 episodes (DECISIONS 10)")
