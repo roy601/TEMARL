@@ -180,14 +180,15 @@ def stage_run(workers: int):
     print(f"{len(TEAMS) * len(SEEDS) - len(todo)} (team, seed) runs already finished; {len(todo)} to run with {workers} workers")
     logs = OUT / "logs"
     logs.mkdir(parents=True, exist_ok=True)
-    running, t0 = {}, time.time()
+    env = dict(os.environ, OMP_NUM_THREADS="1", MKL_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1")
+    running, failed, t0 = {}, [], time.time()
     while todo or running:
         while todo and len(running) < workers:
             t, s = todo.pop(0)
             fh = (logs / f"{t}_seed{s}.log").open("w", encoding="utf-8")
             running[(t, s)] = (subprocess.Popen([sys.executable, "-W", "ignore", str(HERE / "run.py"), "seed",
                                                  "--team", t, "--seed", str(s)],
-                                                stdout=fh, stderr=subprocess.STDOUT, cwd=str(HERE)), fh)
+                                                stdout=fh, stderr=subprocess.STDOUT, cwd=str(HERE), env=env), fh)
         time.sleep(5)
         for (t, s), (p, fh) in list(running.items()):
             if p.poll() is not None:
@@ -197,7 +198,9 @@ def stage_run(workers: int):
                 print(f"{t} seed {s}: {'done' if ok else f'FAILED (see out/logs/{t}_seed{s}.log)'} "
                       f"after {(time.time() - t0) / 60:.1f} min", flush=True)
                 if not ok:
-                    raise SystemExit(1)
+                    failed.append((t, s))          # the others go on; start `run` again to retry it
+    if failed:
+        raise SystemExit(f"failed: {failed}. Start `run` again: finished runs are kept, failed ones start over.")
     print("all runs finished; next: python reproductions/cage4/run.py report")
 
 

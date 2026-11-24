@@ -53,3 +53,15 @@ endings, the weight files are binary).
 - In Table 3 the best agents are heuristics (Team UC -113 +- 35); the only MARL agent scores -193 +- 84. A MARL claim must be measured against -113.
 - The AI Magazine and AAAI versions report the same competition; the AI Magazine version is the journal record and is used for targets.
 - The submission's README gives its final leaderboard score as -193.68, which Table 3 rounds to -193.
+
+## Run log (no decision changes)
+
+- **2026-11-24, first `run`, 10 workers on the development PC (15.6 GB RAM):** it ran out of memory.
+  Teamcybermonic seed 2 failed at import ("paging file is too small"), and seeds 8 and 9 failed at
+  episode 82 ("bad allocation"). Seeds 0, 1 and 3-7 finished all 100 episodes; their files are kept. One
+  recorded episode took 4.9 h of wall time (the PC probably slept); wall time is not a result.
+- **Why the kept files stand:** a seed's episodes are fixed by its seed. The `verify` stage reproduced the
+  official evaluation exactly in two separate processes, so a seed that starts over gives the episodes it
+  would have given. Failures stop a run; they cannot change a score.
+- **2026-11-25:** one process uses about 440 MB (cybermonic) or 345 MB (punch), flat over episodes. The
+  remaining runs use 4 workers, one thread each; a failed run no longer stops the others.
