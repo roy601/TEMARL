@@ -3,7 +3,7 @@
 **Paper verdict: reproduced (every primary target MATCH).**
 
 - Targets: 333 printed numbers; MATCH 326, CLOSE 0, NO MATCH 0, NOT ATTEMPTED 7. Primary (208): MATCH 208, CLOSE 0, NO MATCH 0, NOT ATTEMPTED 0.
-- The authors' code ran unchanged (DECISIONS 5, 6, 15): `code/reproduce_submitted.py` exit 0; `code/revision_analysis.py` exit 0; `prototype/run_poc.py` exit 0. Exit 1 of `reproduce_submitted.py` means its own 1e-12 comparison with the archived outputs failed somewhere; the files below show where.
+- The authors' code ran unchanged (DECISIONS 5, 6, 15): `code/reproduce_submitted.py` exit 0; `code/revision_analysis.py` exit 0; `prototype/run_poc.py` exit 0. `reproduce_submitted.py` ends with its own comparison of every scientific value with the authors' archived outputs (1e-12); exit 0 means it passed.
 - Our fresh outputs against the authors' archived ones, timing columns excluded: 17 of 17 files equal within 1e-12.
 - Host timings (decision and parsing latency, throughput) are NOT ATTEMPTED (DECISIONS 7).
 - Scope (DECISIONS 14): a match shows that the released code produces the published numbers. The alerts, attackers and outcomes are synthetic; nothing here tests the simulator's realism.
@@ -346,12 +346,28 @@
 | S44.validation.episode_rows | Section 4.4 | CADO/Consensus episode rows checked by the vectorized evaluator | 900 | 900.00 | +0.00e+00 | MATCH |
 | S44.validation.scalar_decisions | Section 4.4 | scalar policy decisions checked | 4200 | 4200.00 | +0.00e+00 | MATCH |
 
+## Printed claims that the targets missed (added 2026-11-25, after the results; not targets)
+
+A second reading of the paper against `TARGETS.csv`, after the results, found printed claims that the targets did not cover (DECISIONS 19). They cannot become targets after the results (STANDARD requirement 1), so they are checked here on our outputs and reported separately. Figures are not compared: they plot the tabled values, except Figure 4 (host timings).
+
+| check | where | claim | holds on our outputs | detail |
+|---|---|---|---|---|
+| A1 | Section 3.6 | worked example: R' = 0.786433, consensus level 2, residual rejected by the value-margin check, action stays 2 | yes | risk 0.786433, consensus 2, selected 2, path noninferiority |
+| A2 | Table 5 note | held-out unsafe-rate difference is zero in every one of the 26 configurations | yes | 26 settings, max |difference| 0 |
+| A3 | Section 5.4 | thresholds +0.05, or the uncertainty penalty halved, raise CADO's primary unsafe rate over Consensus by 0.000023; both together by 0.000046 | yes | threshold_shift_0.05 +0.000023, uncertainty_scale_0.5 +0.000023, joint_0.05_0.5 +0.000046 |
+| A4 | Section 5.4 | the only negative held-out utility difference is thresholds -0.05 with penalty x1.5, and its paired 95% interval includes zero | yes | joint_-0.05_1.5 -0.000032 [-0.000107, +0.000008] |
+| A5 | Section 5.4 | an OOD limit of 1.65, or a penalty of x1.5, applied alone, suppresses held-out personalization completely | yes | ood_limit_1.65: held-out fallback 1.0000, uncertainty_scale_1.5: held-out fallback 1.0000 |
+| A6 | Section 5.4 | radius zero reproduces Consensus exactly; radius two gives the same results as the default | yes | radius 0: all differences zero True; radius 2: means, differences and tests identical to the default True (bootstrap intervals differ by construction: seeded by setting name) |
+| A7 | Section 5.5 | the state journal's hash chain is consistent | yes | journal_hash_chain_valid True |
+| A8 | Section 4.2 | 43,200 primary decisions per policy (172,800 over four) and 10,800 held-out per policy | yes | ood Adaptive 10800, ood CADO 10800, ood Consensus 10800, ood Static 10800, primary Adaptive 43200, primary CADO 43200, primary Consensus 43200, primary Static 43200 |
+| A9 | S1 `code/verify_claims.py` | the authors' own claim checks (benign actions unchanged, radius 0 and 2, one-level bound, the negative held-out setting, prototype counts) pass on our outputs | yes | exit 0 (`out/claims/claim_verification.json`) |
+
 ## Checklist (STANDARD.md, Section 2)
 
 | # | requirement | met? | where |
 |---|---|---|---|
-| 1 | targets committed before any result | see `audit.py` (ORDER) | `TARGETS.csv`, git history |
-| 2 | gaps decided before the run | yes | `DECISIONS.md` 1-15, committed before the run |
+| 1 | targets committed before any result | yes | 4b34e1d2 before the first result 8dbeec2d; `audit.py` ORDER |
+| 2 | gaps decided before the run | yes: decisions 1-18 before the run; decision 19 is marked as made after the results | `DECISIONS.md` |
 | 3 | authors asked about every gap | **not yet**: the two questions are drafted, to be sent by the user | `AUTHOR_CONTACT.md` |
 | 4 | exact sources and licence | yes | `SOURCES.md`; S1 SHA-256 and the authors' manifest checked by `fetch.py` |
 | 5 | variance: two machines identical (deterministic method) | **not yet**: the second-machine recheck has not run | `out/RECHECK_*.json`, DECISIONS 10 |

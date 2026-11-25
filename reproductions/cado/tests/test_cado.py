@@ -194,5 +194,19 @@ class S1Check(unittest.TestCase):
         self.assertEqual((cfg["master_seed"], cfg["paired_seeds"], cfg["events_per_episode"]), (20260818, 30, 120))
 
 
+class AfterChecks(unittest.TestCase):
+    def test_missing_files_are_not_checked_and_a_nonzero_difference_fails(self):
+        with tempfile.TemporaryDirectory() as t:
+            out = Path(t)
+            rows = "setting,dataset,metric,difference,ci_low,ci_high,cado_mean,p_raw\n" + "".join(
+                f"s{i},ood,unsafe_action_rate,{'0.0' if i else '0.000023'},0,0,0,1\n" for i in range(26))
+            write(out / "revision" / "sensitivity_paired_comparisons.csv", rows)
+            a = {x["id"]: x for x in R.after_checks(out)}
+            self.assertIs(a["A2"]["holds"], False)                      # one setting differs: the note fails
+            self.assertIsNone(a["A1"]["holds"])                         # no prototype output: not checked, not passed
+            write(out / "revision" / "sensitivity_paired_comparisons.csv", rows.replace("0.000023", "0.0"))
+            self.assertIs({x["id"]: x for x in R.after_checks(out)}["A2"]["holds"], True)
+
+
 if __name__ == "__main__":
     unittest.main()

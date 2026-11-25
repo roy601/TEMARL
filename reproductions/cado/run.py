@@ -379,6 +379,125 @@ def stage_recheck():
           f"({len(a)} scientific files) -> {dest.name}")
 
 
+def stage_claims(out: Path = OUT):
+    """DECISIONS 19 (after the results): the authors' own claim checker, code/verify_claims.py, unchanged, on
+    OUR outputs: a working copy of S1 whose result files are replaced by ours from out/."""
+    if not (out / "RUN.json").exists():
+        raise SystemExit("no run yet")
+    w = EXT / "work_claims"
+    if w.exists():
+        shutil.rmtree(w)
+    shutil.copytree(S1, w)
+    for p in (out / "fresh").glob("*"):
+        shutil.copy2(p, w / "submitted_results" / p.name)
+    for d in ("revision", "prototype"):
+        for p in (out / d).glob("*"):
+            shutil.copy2(p, w / "revision_results" / p.name)
+    (w / "revision_results" / "claim_verification.json").unlink(missing_ok=True)
+    step = authors_script(w, "code/verify_claims.py", out / "logs" / "verify_claims.log")
+    made = w / "revision_results" / "claim_verification.json"
+    (out / "claims").mkdir(parents=True, exist_ok=True)
+    if made.exists():
+        shutil.copy2(made, out / "claims" / "claim_verification.json")
+    write_json(out / "claims" / "CLAIMS_RUN.json", {**step, "machine": platform.node(), "output_written": made.exists()})
+    print(f"verify_claims.py on our outputs: exit {step['exit_code']}")
+
+
+def after_checks(out: Path = OUT) -> list:
+    """DECISIONS 19: printed claims that TARGETS.csv missed, checked on our outputs AFTER the results (not targets).
+    Each: id, where, claim, holds (True/False/None if a file is missing), detail."""
+    rows = []
+
+    def add(id_, where, claim, fn):
+        try:
+            holds, detail = fn()
+        except (FileNotFoundError, KeyError, StopIteration, ValueError) as e:
+            holds, detail = None, f"not checked: {type(e).__name__} {e}"
+        rows.append({"id": id_, "where": where, "claim": claim, "holds": holds, "detail": detail})
+
+    def comp():
+        return read_csv(out / "revision" / "sensitivity_paired_comparisons.csv")
+
+    def d(setting, ds, metric, col="difference"):
+        return float(next(r[col] for r in comp() if r["setting"] == setting and r["dataset"] == ds and r["metric"] == metric))
+
+    def ex():
+        e = json.loads((out / "prototype" / "poc_workflow_example.json").read_text(encoding="utf-8"))
+        ok = (round(e["risk"], 6) == 0.786433 and e["consensus_action"] == 2 and e["selected_action"] == 2
+              and e["policy_path"] == "noninferiority")
+        return ok, f"risk {e['risk']:.6f}, consensus {e['consensus_action']}, selected {e['selected_action']}, path {e['policy_path']}"
+    add("A1", "Section 3.6", "worked example: R' = 0.786433, consensus level 2, residual rejected by the value-margin check, action stays 2", ex)
+
+    def foot():
+        v = [float(r["difference"]) for r in comp() if r["dataset"] == "ood" and r["metric"] == "unsafe_action_rate"]
+        return len(v) == 26 and all(x == 0 for x in v), f"{len(v)} settings, max |difference| {max(abs(x) for x in v):.3g}"
+    add("A2", "Table 5 note", "held-out unsafe-rate difference is zero in every one of the 26 configurations", foot)
+
+    def unsafe():
+        got = {s: d(s, "primary", "unsafe_action_rate") for s in ("threshold_shift_0.05", "uncertainty_scale_0.5", "joint_0.05_0.5")}
+        ok = (round(got["threshold_shift_0.05"], 6) == 0.000023 and round(got["uncertainty_scale_0.5"], 6) == 0.000023
+              and round(got["joint_0.05_0.5"], 6) == 0.000046)
+        return ok, ", ".join(f"{k} {v:+.6f}" for k, v in got.items())
+    add("A3", "Section 5.4", "thresholds +0.05, or the uncertainty penalty halved, raise CADO's primary unsafe rate over Consensus "
+        "by 0.000023; both together by 0.000046", unsafe)
+
+    def negative():
+        neg = [r for r in comp() if r["dataset"] == "ood" and r["metric"] == "utility" and float(r["difference"]) < 0]
+        ok = (len(neg) == 1 and neg[0]["setting"] == "joint_-0.05_1.5" and float(neg[0]["ci_low"]) < 0 < float(neg[0]["ci_high"]))
+        return ok, "; ".join(f"{r['setting']} {float(r['difference']):+.6f} [{float(r['ci_low']):+.6f}, {float(r['ci_high']):+.6f}]"
+                             for r in neg) or "none"
+    add("A4", "Section 5.4", "the only negative held-out utility difference is thresholds -0.05 with penalty x1.5, and its "
+        "paired 95% interval includes zero", negative)
+
+    def suppressed():
+        fb = {}
+        for r in read_csv(out / "revision" / "sensitivity_seed_metrics.csv"):
+            if r["dataset"] == "ood" and r["policy"] == "CADO" and r["setting"] in ("ood_limit_1.65", "uncertainty_scale_1.5"):
+                fb.setdefault(r["setting"], []).append(float(r["fallback_rate"]))
+        ok = len(fb) == 2 and all(x == 1.0 for v in fb.values() for x in v)
+        return ok, ", ".join(f"{k}: held-out fallback {mean(v):.4f}" for k, v in fb.items())
+    add("A5", "Section 5.4", "an OOD limit of 1.65, or a penalty of x1.5, applied alone, suppresses held-out personalization completely",
+        suppressed)
+
+    def radius():
+        c = comp()
+        zero = all(float(r["difference"]) == 0 for r in c if r["setting"] == "residual_bound_0")
+        key = lambda r: (r["dataset"], r["metric"])  # noqa: E731
+        # Same decisions give the same means, differences and tests. The bootstrap intervals are NOT compared: the
+        # authors seed them with the setting's name (revision_analysis.py, derive_rng('revision-bootstrap', label, ...)),
+        # so they differ between settings by construction even when the decisions are identical.
+        cols = ("cado_mean", "consensus_mean", "difference", "wilcoxon_statistic", "p_raw", "effect_size_dz",
+                "nonzero_pairs", "p_holm_six_endpoints")
+        default = {key(r): tuple(r[k] for k in cols) for r in c if r["setting"] == "default"}
+        two = {key(r): tuple(r[k] for k in cols) for r in c if r["setting"] == "residual_bound_2"}
+        same = default == two and len(two) == 12
+        return zero and same, (f"radius 0: all differences zero {zero}; radius 2: means, differences and tests identical "
+                               f"to the default {same} (bootstrap intervals differ by construction: seeded by setting name)")
+    add("A6", "Section 5.4", "radius zero reproduces Consensus exactly; radius two gives the same results as the default", radius)
+
+    def chain():
+        s = json.loads((out / "prototype" / "poc_summary.json").read_text(encoding="utf-8"))
+        return s["journal_hash_chain_valid"] is True, f"journal_hash_chain_valid {s['journal_hash_chain_valid']}"
+    add("A7", "Section 5.5", "the state journal's hash chain is consistent", chain)
+
+    def decisions():
+        n = {}
+        for f, ds in (("primary_episode_metrics.csv", "primary"), ("ood_episode_metrics.csv", "ood")):
+            for r in read_csv(out / "fresh" / f):
+                n[(ds, r["policy"])] = n.get((ds, r["policy"]), 0) + int(r["events"])
+        ok = all(v == 43200 for (ds, _), v in n.items() if ds == "primary") and all(
+            v == 10800 for (ds, _), v in n.items() if ds == "ood") and len(n) == 8
+        return ok, ", ".join(f"{ds} {p} {v}" for (ds, p), v in sorted(n.items()))
+    add("A8", "Section 4.2", "43,200 primary decisions per policy (172,800 over four) and 10,800 held-out per policy", decisions)
+
+    def claims():
+        run = json.loads((out / "claims" / "CLAIMS_RUN.json").read_text(encoding="utf-8"))
+        return run["exit_code"] == 0 and run["output_written"], f"exit {run['exit_code']} (`out/claims/claim_verification.json`)"
+    add("A9", "S1 `code/verify_claims.py`", "the authors' own claim checks (benign actions unchanged, radius 0 and 2, one-level "
+        "bound, the negative held-out setting, prototype counts) pass on our outputs", claims)
+    return rows
+
+
 def prototype_counts(out: Path) -> dict:
     """The prototype's outcome counts (its logs hold ports and clock readings, so only counts are compared)."""
     s = json.loads((out / "prototype" / "poc_summary.json").read_text(encoding="utf-8"))
@@ -418,8 +537,9 @@ def checklist(run: dict, checks: list, asked: bool) -> list:
           f"yes: identical scientific outputs on a second machine ({', '.join(other)})" if other else
           "**not yet**: the second-machine recheck has not run")
     rows = [
-        ("targets committed before any result", "see `audit.py` (ORDER)", "`TARGETS.csv`, git history"),
-        ("gaps decided before the run", "yes", "`DECISIONS.md` 1-15, committed before the run"),
+        ("targets committed before any result", "yes", "4b34e1d2 before the first result 8dbeec2d; `audit.py` ORDER"),
+        ("gaps decided before the run", "yes: decisions 1-18 before the run; decision 19 is marked as made after the results",
+         "`DECISIONS.md`"),
         ("authors asked about every gap", "yes" if asked else
          "**not yet**: the two questions are drafted, to be sent by the user", "`AUTHOR_CONTACT.md`"),
         ("exact sources and licence", "yes", "`SOURCES.md`; S1 SHA-256 and the authors' manifest checked by `fetch.py`"),
@@ -461,9 +581,10 @@ def stage_report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
          f"- Targets: {len(rows)} printed numbers; " + ", ".join(f"{k} {v}" for k, v in count.items()) +
          f". Primary ({sum(pc.values())}): " + ", ".join(f"{k} {v}" for k, v in pc.items()) + ".",
          "- The authors' code ran unchanged (DECISIONS 5, 6, 15): " +
-         "; ".join(f"`{s['script']}` exit {s['exit_code']}" for s in run["steps"]) +
-         ". Exit 1 of `reproduce_submitted.py` means its own 1e-12 comparison with the archived outputs failed somewhere; "
-         "the files below show where.",
+         "; ".join(f"`{s['script']}` exit {s['exit_code']}" for s in run["steps"]) + ". " +
+         ("`reproduce_submitted.py` ends with its own comparison of every scientific value with the authors' archived "
+          "outputs (1e-12); exit 0 means it passed." if run["steps"][0]["exit_code"] == 0 else
+          "`reproduce_submitted.py` did not pass its own 1e-12 comparison with the archived outputs; the next line shows where."),
          f"- Our fresh outputs against the authors' archived ones, timing columns excluded: {len(same)} of "
          f"{len(archive)} files equal within 1e-12" + ("." if not differ else "; different: " + "; ".join(
              f"{a['file']} (" + ", ".join(f"{c} {m:.2g}" for c, m in a.get("max_abs_difference", {}).items() if m > 1e-12)
@@ -478,6 +599,18 @@ def stage_report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
         diff = "-" if r["difference"] is None else f"{r['difference']:+.2e}"
         L.append(f"| {r['id']} | {r['table']} | {r['quantity']}{' (primary)' if r['primary'] else ''} | {r['published']} | "
                  f"{fmt(r['ours'], r['published'])} | {diff} | {r['verdict']} |")
+    after = after_checks(out)
+    res["after_checks"] = after
+    write_json(out / "results.json", res)
+    L += ["", "## Printed claims that the targets missed (added 2026-11-25, after the results; not targets)", "",
+          "A second reading of the paper against `TARGETS.csv`, after the results, found printed claims that the targets "
+          "did not cover (DECISIONS 19). They cannot become targets after the results (STANDARD requirement 1), so they "
+          "are checked here on our outputs and reported separately. Figures are not compared: they plot the tabled values, "
+          "except Figure 4 (host timings).", "",
+          "| check | where | claim | holds on our outputs | detail |", "|---|---|---|---|---|"]
+    for a in after:
+        held = {True: "yes", False: "**no**", None: "not checked"}[a["holds"]]
+        L.append(f"| {a['id']} | {a['where']} | {a['claim']} | {held} | {a['detail']} |")
     L += [""] + checklist(run, checks, authors_asked())
     env = json.loads((out / "ENVIRONMENT.json").read_text(encoding="utf-8"))
     L += ["## Environment", "",
@@ -496,9 +629,10 @@ def stage_report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("stage", choices=["check", "run", "report", "recheck"])
+    ap.add_argument("stage", choices=["check", "run", "claims", "report", "recheck"])
     a = ap.parse_args()
-    {"check": stage_check, "run": stage_run, "report": stage_report, "recheck": stage_recheck}[a.stage]()
+    {"check": stage_check, "run": stage_run, "claims": stage_claims, "report": stage_report,
+     "recheck": stage_recheck}[a.stage]()
 
 
 if __name__ == "__main__":
