@@ -110,10 +110,82 @@ class Report(unittest.TestCase):
         self.assertIn("no configuration for this variation", reasons["T3.Teamcybermonic.stealthy_red"])
         self.assertIn("no configuration for this variation", reasons["T3.Teampunch.aggressive_red"])
 
+    def test_report_writes_checklist_limits_and_hashes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            for team, c in {"Teamcybermonic": -193.0, "Teampunch": -150.0}.items():
+                for s in R.SEEDS:
+                    eps = [{"episode": i, "score": c + ((i % 2) * 2 - 1) * 5 + (s - 4.5) * 0.8, "steps": 499,
+                            "seconds": 1.0} for i in range(100)]
+                    R.seed_file(team, s, out).write_text(json.dumps({"team": team, "seed": s, "n": 100, "episodes": eps}),
+                                                         encoding="utf-8")
+            R.report(out, out / "REPORT.md")
+            text = (out / "REPORT.md").read_text(encoding="utf-8")
+            hashes = (out / "HASHES.txt").read_text(encoding="utf-8").splitlines()
+            listed = {line.split("  ")[1] for line in hashes}
+            self.assertEqual(R.sha_lf(out / "results.json"),
+                             next(line.split("  ")[0] for line in hashes if line.endswith("  results.json")))
+        self.assertIn("## Checklist (STANDARD.md, Section 2)", text)
+        for i in range(1, 11):
+            self.assertIn(f"\n| {i} | ", text)
+        self.assertIn("**second machine not yet**", text)                     # no recheck file in this folder
+        self.assertIn("Teampunch is CLOSE, not reproduced", text)             # -150 vs -142: CLOSE
+        self.assertIn("ONE released trained policy", text)
+        self.assertIn("Rechecks, the first episodes of a kept seed run again (`out/RECHECK_*.json`): none yet.", text)
+        self.assertIn("results.json", listed)
+        self.assertIn("episodes_Teampunch_seed9.json", listed)
+        self.assertNotIn("HASHES.txt", listed)
+
     def test_report_refuses_until_every_seed_exists(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(SystemExit):
                 R.report(Path(tmp), Path(tmp) / "REPORT.md")
+
+
+class Standard(unittest.TestCase):
+    def test_hashes_do_not_depend_on_line_endings(self):
+        with tempfile.TemporaryDirectory() as a, tempfile.TemporaryDirectory() as b:
+            (Path(a) / "logs").mkdir()
+            (Path(b) / "logs").mkdir()
+            (Path(a) / "x.json").write_bytes(b'{\r\n "s": 1\r\n}')            # a Windows checkout
+            (Path(b) / "x.json").write_bytes(b'{\n "s": 1\n}')                # as git stores it
+            (Path(a) / "logs" / "y.log").write_bytes(b"done\r\n")
+            (Path(b) / "logs" / "y.log").write_bytes(b"done\n")
+            ha, hb = R.write_hashes(Path(a)), R.write_hashes(Path(b))
+            self.assertEqual(ha, hb)
+            self.assertEqual(list(ha), ["logs/y.log", "x.json"])
+            self.assertEqual(R.write_hashes(Path(a)), ha)                      # HASHES.txt never lists itself
+
+    def recheck(self, out, machine, team, identical):
+        R.write_json(out / f"RECHECK_{machine}_{team}_seed0.json",
+                     {"machine": machine, "team": team, "seed": 0, "episodes": 3, "kept": [], "again": [],
+                      "identical": identical})
+
+    def test_second_machine_row_follows_the_recheck_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            self.recheck(out, "DEV", "Teampunch", True)
+            row = [r for r in R.checklist(R.rechecks(out), "DEV", False) if r.startswith("| 5 |")][0]
+            self.assertEqual(row.count("**second machine not yet**"), 2)       # the same machine does not count
+            self.recheck(out, "PC2", "Teampunch", True)
+            self.recheck(out, "PC2", "Teamcybermonic", True)
+            row = [r for r in R.checklist(R.rechecks(out), "DEV", False) if r.startswith("| 5 |")][0]
+            self.assertEqual(row.count("identical on a second machine (PC2)"), 2)
+            self.assertIn("no training seeds", row)                            # stays "partly" (DECISIONS 10)
+            self.assertTrue(row.split(" | ")[2].startswith("partly"))
+            self.recheck(out, "PC3", "Teampunch", False)
+            row = [r for r in R.checklist(R.rechecks(out), "DEV", False) if r.startswith("| 5 |")][0]
+            self.assertIn("**no**: a recheck gave DIFFERENT scores (Teampunch seed 0 on PC3)", row)
+
+    def test_authors_row_follows_the_contact_log(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "AUTHOR_CONTACT.md"
+            p.write_text("| (draft, not sent) | organisers | variations | - |", encoding="utf-8")
+            self.assertFalse(R.authors_asked(p))
+            p.write_text("| 2026-11-26 | organisers | variations | no reply after 0 days |", encoding="utf-8")
+            self.assertTrue(R.authors_asked(p))
+        self.assertIn("| 3 | authors asked about every gap | yes |", "\n".join(R.checklist([], "DEV", True)))
+        self.assertIn("**not yet**", "\n".join(R.checklist([], "DEV", False)))
 
 
 class Pins(unittest.TestCase):

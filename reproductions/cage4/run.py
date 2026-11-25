@@ -7,16 +7,18 @@ Run with the Python of the CAGE 4 environment (README.md), except `report`.
     <venv python> reproductions/cage4/run.py verify            # our loop == official run_evaluation, each team
     <venv python> reproductions/cage4/run.py run --workers 10  # 2 teams x seeds 0-9 x 100 episodes
     <venv python> reproductions/cage4/run.py recheck --team Teamcybermonic --seed 0   # 3 kept episodes rerun
-    python reproductions/cage4/run.py report                   # out/results.json and REPORT.md (any Python)
+    python reproductions/cage4/run.py report    # out/results.json, out/HASHES.txt and REPORT.md (any Python)
 
 The episode loop is the official CAGE 4 evaluation loop (CybORG/Evaluation/evaluation.py, run_evaluation),
 repeated line for line in `episode()` to keep each episode's score; `verify` checks it against the official
 function. A finished (team, seed) is never run again (its file is kept); `report` refuses until all exist.
+`report` only reads the kept files: it can be run again (for example after another machine's recheck).
 """
 from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import os
@@ -261,6 +263,67 @@ def not_attempted_reason(target_id: str) -> str:
     return "the environment provides no configuration for this variation (DECISIONS 4, 12)"
 
 
+def sha_lf(path: Path) -> str:
+    """SHA-256 of a saved (text) output as git stores it, CRLF -> LF: the same on every checkout."""
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def write_hashes(out: Path = OUT) -> dict:
+    """out/HASHES.txt: the SHA-256 of every saved output (STANDARD requirement 8), paths relative to out/."""
+    files = sorted((p for p in out.rglob("*") if p.is_file() and p.name != "HASHES.txt"
+                    and not p.name.endswith(".tmp")), key=lambda p: p.relative_to(out).as_posix())
+    h = {p.relative_to(out).as_posix(): sha_lf(p) for p in files}
+    (out / "HASHES.txt").write_bytes("".join(f"{v}  {k}\n" for k, v in h.items()).encode("utf-8"))
+    return h
+
+
+def rechecks(out: Path = OUT) -> list:
+    """Every recheck file: on which machine a kept seed's first episodes were run again, and the outcome."""
+    rows = []
+    for p in sorted(out.glob("RECHECK_*.json")):
+        d = json.loads(p.read_text(encoding="utf-8"))
+        rows.append({"file": p.name, **{k: d[k] for k in ("machine", "team", "seed", "episodes", "identical")}})
+    return rows
+
+
+def authors_asked(path: Path = HERE / "AUTHOR_CONTACT.md") -> bool:
+    return path.exists() and "(draft, not sent)" not in path.read_text(encoding="utf-8")
+
+
+def checklist(checks: list, run_machine, asked: bool) -> list:
+    """The ten requirements of ../STANDARD.md, Section 2; rows 3, 5 and 8 follow the saved files."""
+    other = {t: sorted({c["machine"] for c in checks if c["team"] == t and c["identical"]
+                        and c["machine"] != run_machine}) for t in TEAMS}
+    bad = [c for c in checks if not c["identical"]]
+    if bad:
+        r5 = "**no**: a recheck gave DIFFERENT scores (" + ", ".join(
+            f"{c['team']} seed {c['seed']} on {c['machine']}" for c in bad) + ")"
+    else:
+        def second(t):
+            return f"identical on a second machine ({', '.join(other[t])})" if other[t] else "**second machine not yet**"
+        r5 = ("partly. Teampunch (a fixed heuristic, no training): " + second("Teampunch") +
+              ". Teamcybermonic: one released trained policy, so no training seeds (DECISIONS 10); "
+              "10 evaluation seeds with a 95% CI; " + second("Teamcybermonic"))
+    rows = [
+        ("targets committed before any result", "yes", "c6084db3 (2026-11-16) before the first result 4f293f36; `audit.py`"),
+        ("gaps decided before the run", "yes", "`DECISIONS.md` 1-15 (c6084db3, 2ce5df05, fd82842e, d1c8c010) before "
+         "the first run; the run log (1ec82ac2) changes no decision; notes written after the results are marked so"),
+        ("authors asked about every gap", "yes" if asked else
+         "**not yet**: the question about the five variations is drafted, to be posted by the user", "`AUTHOR_CONTACT.md`"),
+        ("exact sources and licence", "yes", "`SOURCES.md`; released files' SHA-256 checked by `fetch.py`"),
+        ("variance: two machines identical, or 10+ seeds with CI", r5, "`out/RECHECK_*.json`, DECISIONS 10"),
+        ("every target reported", "yes", "table above, `audit.py`"),
+        ("environment recorded", "yes", "`out/ENVIRONMENT.json`"),
+        ("one command from public inputs, outputs hashed", "yes: a fixed sequence of commands (`README.md`); "
+         "every saved output's SHA-256 in `out/HASHES.txt`", "`fetch.py`, `run.py`"),
+        ("unit tests for each rule", "yes: the loop, statistics, verdict rule, pins, hashes and this checklist",
+         "`tests/test_cage4.py`"),
+        ("comparison only after this report; adaptations declared", "not started", "limits in the next section"),
+    ]
+    return (["## Checklist (STANDARD.md, Section 2)", "", "| # | requirement | met? | where |", "|---|---|---|---|"] +
+            [f"| {i} | {a} | {b} | {c} |" for i, (a, b, c) in enumerate(rows, 1)] + [""])
+
+
 def report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
     missing = [(t, s) for t in TEAMS for s in SEEDS if not seed_file(t, s, out).exists()]
     if missing:
@@ -286,7 +349,8 @@ def report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
             rows.append({"id": tg["id"], "published": pub, "ours": None, "difference": None, "verdict": "NOT ATTEMPTED",
                          "reason": not_attempted_reason(tg["id"])})
     env = json.loads((out / "ENVIRONMENT.json").read_text(encoding="utf-8")) if (out / "ENVIRONMENT.json").exists() else {}
-    res = {"summary": summ, "targets": rows,
+    checks = rechecks(out)
+    res = {"summary": summ, "targets": rows, "rechecks": checks,
            "environment": {k: env.get(k) for k in ("python", "cyborg_version", "commits", "machine")}}
     write_json(out / "results.json", res)
     attempted = [r for r in rows if r["ours"] is not None]
@@ -324,16 +388,38 @@ def report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
         else:
             L.append(f"| {r['id']} | mean episode reward, 10 seeds x 100 episodes x 500 steps | {r['published']:g} | "
                      f"{r['ours']:.1f} [{r['ci'][0]:.1f}, {r['ci'][1]:.1f}] | {r['difference']:+.1f} | {r['verdict']} |")
+    L += [""] + checklist(checks, env.get("machine"), authors_asked())
+    L += ["## Before any comparison (requirement 10)", "",
+          "Added 2026-11-25, after the results; no verdict changes. A comparison with these numbers must state:", "",
+          "- Teamcybermonic is ONE released trained policy: a comparison is with that policy, not with the method "
+          "trained again (retraining with its `train.py` is NOT ATTEMPTED, DECISIONS 10).",
+          "- Teams UC (-113) and lancer (-118), the best in Table 3, released no code: their numbers are published "
+          "values only, each one 100-episode evaluation with no stated seed.",
+          "- The CAGE 4 score is a defence penalty against a scripted red agent; it does not measure engagement with "
+          "real attacker command histories (DECISIONS 5, 13)."]
+    for r in attempted:
+        if r["verdict"] != "MATCH":
+            L.append(f"- {r['id'].split('.')[1]} is {r['verdict']}, not reproduced: the published {r['published']:g} is "
+                     f"outside our 95% CI; ours differs by {r['difference']:+.1f} "
+                     f"({100 * abs(r['difference']) / abs(r['published']):.1f}% of the published value).")
     L += ["", "## Environment", "",
           f"- {env.get('python', '?').split()[0] if env else '?'}; CybORG {env.get('cyborg_version', '?')}; "
-          f"commits {env.get('commits', {})}; machine {env.get('machine', '?')}. Full package list: `out/ENVIRONMENT.json`.",
+          f"commits {env.get('commits', {})}; seeds run on machine {env.get('machine', '?')}. Full package list: "
+          "`out/ENVIRONMENT.json`.",
           "- Changes from the 2024 software, all declared before the run (DECISIONS 8): Ray 2.10.0 for 2.12.0 (no",
           "  Windows build), torch_geometric 2.3.1 (cybermonic's pin), unpinned packages resolved as of 2024-06-15.",
           "- Our loop was checked against the official `run_evaluation` for each team (`out/VERIFY.json`).",
-          "- Rerunning the first 3 episodes of a kept seed gives identical scores (`out/RECHECK_*.json`), so the",
-          "  seeds that started over after the out-of-memory failure (DECISIONS run log) are the episodes their seeds fix.", "",
+          "- Rechecks, the first episodes of a kept seed run again (`out/RECHECK_*.json`): " +
+          ("; ".join(f"{c['team']} seed {c['seed']}, {c['episodes']} episodes on {c['machine']}"
+                     f"{' (the machine that ran the seeds)' if c['machine'] == env.get('machine') else ''}: "
+                     f"{'IDENTICAL' if c['identical'] else 'DIFFERENT'}" for c in checks) or "none yet") + ".",
+          "  Identical on the machine that ran the seeds: the seeds that started over after the out-of-memory failure",
+          "  (DECISIONS run log) are the episodes their seeds fix. Identical on another machine: the scores do not",
+          "  depend on the machine.",
+          "- Every saved output's SHA-256, as git stores it (LF line endings): `out/HASHES.txt`.", "",
           "Every episode: `out/episodes_<team>_seed<k>.json`.", ""]
     dest.write_text("\n".join(L), encoding="utf-8")
+    write_hashes(out)
     sys.stdout.reconfigure(errors="replace")                 # Windows consoles may not print the ± sign
     print("\n".join(L[:20]))
     return res

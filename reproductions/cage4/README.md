@@ -12,7 +12,7 @@ variations are not provided by the environment (NOT ATTEMPTED). Decisions 1-15 a
 | `requirements_cage4.txt` | the environment's requirements with the declared changes (DECISIONS 8) |
 | `run.py` | `check`, `verify`, `run` (2 teams x 10 seeds x 100 episodes), `report` |
 | `tests/` | the loop, the statistics, the verdict rule and the pins (no CybORG needed) |
-| `out/` | `ENVIRONMENT.json`, `VERIFY.json`, `episodes_<team>_seed<k>.json`, `results.json` |
+| `out/` | `ENVIRONMENT.json`, `VERIFY.json`, `episodes_<team>_seed<k>.json`, `RECHECK_<machine>_<team>_seed<k>.json`, `results.json`, `HASHES.txt` (SHA-256 of every output, LF line endings), `logs/` |
 
 ## Run (any Windows PC; CPU only; about 1-2 h with 10 cores)
 
@@ -34,3 +34,18 @@ python reproductions/audit.py
 
 `run` keeps every finished seed and can be started again after a stop; `report` refuses until all ten
 seeds exist.
+
+## Second machine (STANDARD requirement 5)
+
+On another PC, after `git pull --no-rebase --no-edit` and the first four lines above (from
+`pip install --user uv` to `uv pip install`):
+
+```powershell
+$py = "reproductions/cage4/external/venv/Scripts/python.exe"
+& $py -W ignore reproductions/cage4/run.py recheck --team Teampunch --seed 0
+& $py -W ignore reproductions/cage4/run.py recheck --team Teamcybermonic --seed 0
+python reproductions/cage4/run.py report
+```
+
+Each `recheck` reruns the first 3 episodes of a kept seed and must print `IDENTICAL`. `report` then lists
+the second machine in the checklist (row 5) and rewrites `out/HASHES.txt`. Commit `out/`, `REPORT.md`.
