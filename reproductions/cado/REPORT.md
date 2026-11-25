@@ -370,7 +370,7 @@ A second reading of the paper against `TARGETS.csv`, after the results, found pr
 | 2 | gaps decided before the run | yes: decisions 1-18 before the run; decision 19 is marked as made after the results | `DECISIONS.md` |
 | 3 | authors asked about every gap | **not yet**: the two questions are drafted, to be sent by the user | `AUTHOR_CONTACT.md` |
 | 4 | exact sources and licence | yes | `SOURCES.md`; S1 SHA-256 and the authors' manifest checked by `fetch.py` |
-| 5 | variance: two machines identical (deterministic method) | **not yet**: the second-machine recheck has not run | `out/RECHECK_*.json`, DECISIONS 10 |
+| 5 | variance: two machines identical (deterministic method) | yes: identical scientific outputs on a second machine (DESKTOP-JV86IM7) | `out/RECHECK_*.json`, DECISIONS 10 |
 | 6 | every target reported | yes | table above, `audit.py` |
 | 7 | environment recorded | yes | `out/ENVIRONMENT.json` |
 | 8 | one command from public inputs, outputs hashed | yes: a fixed sequence of commands (`README.md`); every output's SHA-256 in `out/HASHES.txt` | `fetch.py`, `run.py` |
@@ -380,5 +380,5 @@ A second reading of the paper against `TARGETS.csv`, after the results, found pr
 ## Environment
 
 - Python 3.13.5, Windows-11-10.0.26100-SP0, machine DESKTOP-Q1DMJ51; matplotlib==3.10.0, numpy==2.1.3, pandas==2.2.3, scipy==1.15.3 (the authors' pins); full list in `out/ENVIRONMENT.json`.
-- Rechecks on another machine: none yet.
+- Rechecks on another machine: DESKTOP-JV86IM7: IDENTICAL.
 - Every output's SHA-256 (LF line endings): `out/HASHES.txt`; scientific CSVs without timing columns: `out/SCIENTIFIC_SHA256.json`.
