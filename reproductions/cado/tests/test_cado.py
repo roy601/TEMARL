@@ -67,6 +67,42 @@ class Verdict(unittest.TestCase):
         self.assertEqual(R.verdict(0.6855, "0.6853"), "NO MATCH")
         self.assertEqual(R.verdict(1.0, "1.000"), "MATCH")
         self.assertEqual(R.verdict(0.0005049, "0.000505"), "MATCH")
+        self.assertEqual(R.verdict(-0.000208, "-0.000208"), "MATCH")
+
+    def test_scientific_notation_counts_and_timings(self):
+        self.assertEqual(R.decimals("3.35e-8"), 10)
+        self.assertEqual(R.verdict(3.3527612686157227e-08, "3.35e-8"), "MATCH")
+        self.assertEqual(R.verdict(3.36e-08, "3.35e-8"), "CLOSE")
+        self.assertEqual(R.verdict(3.4e-08, "3.35e-8"), "NO MATCH")
+        exact = "exact: MATCH only if equal"
+        self.assertEqual(R.verdict(300.0, "300", exact), "MATCH")
+        self.assertEqual(R.verdict(299.0, "300", exact), "NO MATCH")
+        self.assertEqual(R.verdict(0.999, "1", exact), "NO MATCH")             # 'all' means all
+        self.assertEqual(R.verdict(1.0, "7.31", "NOT ATTEMPTED: host timing"), "NOT ATTEMPTED")
+
+    def test_paper_verdict(self):
+        rows = [{"id": "a", "primary": True, "verdict": "MATCH"}, {"id": "b", "primary": False, "verdict": "NO MATCH"},
+                {"id": "t", "primary": False, "verdict": "NOT ATTEMPTED"}]
+        self.assertTrue(R.paper_verdict(rows).startswith("reproduced"))       # a secondary miss is reported, not decisive
+        rows.append({"id": "c", "primary": True, "verdict": "CLOSE"})
+        self.assertEqual(R.paper_verdict(rows), "partially reproduced; primary targets not MATCH: c")
+
+
+class Targets(unittest.TestCase):
+    def test_targets_file(self):
+
+        rows = R.read_csv(HERE / "TARGETS.csv")
+        self.assertEqual((len(rows), sum(r["primary"] == "yes" for r in rows)), (333, 208))   # DECISIONS 16, 18
+        prefixes = {"T2", "T3", "T4", "T5", "T6", "S44", "S51", "S52", "S54", "S55", "S56", "TIME"}
+        for r in rows:
+            self.assertIn(r["id"].split(".")[0], prefixes, r["id"])
+            if r["id"].startswith("TIME."):
+                self.assertTrue(r["tolerance"].startswith("NOT ATTEMPTED"))
+                self.assertEqual(r["primary"], "no")
+            else:
+                float(r["published"])
+        self.assertFalse(any(r["id"].startswith("T3.") and r["id"].split(".")[2] == "Consensus"
+                             and r["id"].endswith("fallback_rate") for r in rows))      # by definition, not a target
 
 
 class Lookup(unittest.TestCase):
@@ -84,9 +120,46 @@ class Lookup(unittest.TestCase):
             self.assertEqual(R.lookup("T2.CADO.utility.mean", out), 0.702)             # primary, not ood
             self.assertEqual(R.lookup("T4.Consensus.utility.ci_low", out), 0.6523)
             self.assertEqual(R.lookup("T4.diff.utility.p_holm", out), 0.000505)       # CADO - Consensus only
-            self.assertIsNone(R.lookup("T5.anything.at.all", out))
+            self.assertIsNone(R.lookup("TIME.policy_p95_latency_CADO_us", out))
             with self.assertRaises(SystemExit):
                 R.lookup("T2.Adaptive.utility.mean", out)                              # no row: refuse
+            with self.assertRaises(SystemExit):
+                R.lookup("T9.anything.at.all", out)                                    # unknown id: refuse
+
+    def test_table3_table5_and_section_lookups(self):
+        with tempfile.TemporaryDirectory() as t:
+            out = Path(t)
+            write(out / "fresh" / "summary_statistics.csv",
+                  "dataset,policy,metric,mean,ci_low,ci_high,n\nprimary,Consensus,utility,0.6953,0,1,30\n"
+                  "ood,CADO,fallback_rate,0.9868,0.9831,0.9904,30\nfault,CADO,rollback_success_rate,0.9804,0,1,30\n")
+            write(out / "fresh" / "ablation_summary.csv",
+                  "dataset,policy,utility,fallback_rate\nprimary,CADO-NoEvidence,0.7024,0.961\nood,CADO-NoEvidence,0.1,0.2\n")
+            write(out / "fresh" / "ablation_episode_metrics.csv",
+                  "dataset,policy,gate_ood\nprimary,CADO,0.1\nprimary,CADO,0.2\nood,CADO,0.9\nprimary,Consensus,0.9\n")
+            write(out / "revision" / "heldout_summary_statistics.csv",
+                  "policy,metric,mean,ci_low,ci_high,n\nConsensus,utility,0.6572,0,1,30\n")
+            (out / "revision" / "sensitivity_settings.json").write_text(json.dumps(
+                [{"name": "default", "family": "default"}, {"name": "ood_limit_1.65", "family": "OOD gate"},
+                 {"name": "ood_limit_2.75", "family": "OOD gate"}]), encoding="utf-8")
+            write(out / "revision" / "sensitivity_paired_comparisons.csv",
+                  "setting,dataset,metric,difference\ndefault,primary,utility,0.006735\n"
+                  "ood_limit_1.65,primary,utility,0.004378\nood_limit_2.75,primary,utility,0.006978\n"
+                  "ood_limit_1.65,ood,utility,0.0\nood_limit_2.75,ood,utility,0.003932\n")
+            write(out / "revision" / "sensitivity_seed_metrics.csv",
+                  "dataset,seed,policy,fallback_rate,setting\nood,0,CADO,0.96,a\nood,1,CADO,0.98,a\nood,0,CADO,1.0,b\n"
+                  "ood,0,Consensus,0.5,a\nprimary,0,CADO,0.1,a\n")
+            self.assertEqual(R.lookup("T3.primary.Consensus.utility", out), 0.6953)   # Consensus: primary summary
+            self.assertEqual(R.lookup("T3.ood.Consensus.utility", out), 0.6572)       # Consensus: held-out summary
+            self.assertEqual(R.lookup("T3.primary.CADO-NoEvidence.fallback_rate", out), 0.961)
+            self.assertEqual(R.lookup("T5.OOD_gate.primary_utility.min", out), 0.004378)
+            self.assertEqual(R.lookup("T5.OOD_gate.ood_utility.max", out), 0.003932)
+            self.assertEqual(R.lookup("T5.OOD_gate.settings.n", out), 2.0)
+            self.assertEqual(R.lookup("T5.default.primary_utility.max", out), 0.006735)
+            self.assertAlmostEqual(R.lookup("S52.gate.gate_ood", out), 0.15)          # primary CADO episodes only
+            self.assertEqual(R.lookup("S52.ood_fallback.ci_high", out), 0.9904)
+            self.assertAlmostEqual(R.lookup("S54.ood_fallback.min", out), 0.97)       # mean per setting, then min
+            self.assertEqual(R.lookup("S54.ood_fallback.max", out), 1.0)
+            self.assertEqual(R.lookup("S55.rollback.CADO", out), 0.9804)
 
 
 class S1Check(unittest.TestCase):

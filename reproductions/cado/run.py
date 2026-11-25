@@ -46,6 +46,8 @@ REVISION_OUTPUTS = ("sensitivity_settings.json", "default_episode_reanalysis.csv
                     "sensitivity_seed_metrics.csv", "sensitivity_paired_comparisons.csv",
                     "primary_heldout_consensus_paired.csv", "heldout_paired_statistical_comparisons.csv",
                     "heldout_summary_statistics.csv", "revision_environment.json")
+PROTOTYPE_OUTPUTS = ("poc_summary.json", "poc_trials.csv", "poc_http_requests.jsonl", "poc_state_journal.jsonl",
+                     "poc_workflow_example.json")
 POLICIES = ("Static", "Adaptive", "Consensus", "CADO")
 METRICS = ("utility", "redirection_precision", "engagement_rate", "benign_false_redirect_rate",
            "unsafe_action_rate", "normalized_cost")
@@ -104,15 +106,24 @@ def compare_csv(ours: Path, theirs: Path) -> dict:
 
 
 def decimals(published: str) -> int:
-    s = published.strip()
-    return len(s.split(".")[1]) if "." in s else 0
+    """Printed decimals; for 3.35e-8 the last printed digit is 1e-10, so 10."""
+    s = published.strip().lower()
+    exp = 0
+    if "e" in s:
+        s, e = s.split("e")
+        exp = int(e)
+    return max(0, (len(s.split(".")[1]) if "." in s else 0) - exp)
 
 
-def verdict(ours: float, published: str) -> str:
+def verdict(ours, published: str, tolerance: str = "") -> str:
     """Deterministic method (DECISIONS 9): MATCH if ours rounds to the printed value (within half a unit of
-    the last printed digit), CLOSE if within one unit, else NO MATCH."""
-    half = 0.5 * 10 ** (-decimals(published))
+    the last printed digit), CLOSE if within one unit, else NO MATCH. Counts and 'all' claims: exact."""
+    if tolerance.strip().lower().startswith("not attempted"):
+        return "NOT ATTEMPTED"
     d = abs(ours - float(published))
+    if tolerance.strip().lower().startswith("exact"):
+        return "MATCH" if d <= 1e-12 else "NO MATCH"
+    half = 0.5 * 10 ** (-decimals(published))
     if d <= half + 1e-12:
         return "MATCH"
     if d <= 2 * half + 1e-12:
@@ -120,26 +131,110 @@ def verdict(ours: float, published: str) -> str:
     return "NO MATCH"
 
 
+def one(rows: list, target_id: str, column: str, **where) -> float:
+    hit = [r for r in rows if all(r[k] == v for k, v in where.items())]
+    if len(hit) != 1 or column not in hit[0]:
+        raise SystemExit(f"target {target_id}: {len(hit)} rows match {where} or no column {column}")
+    return float(hit[0][column])
+
+
+def mean(values) -> float:
+    v = list(values)
+    return sum(v) / len(v)
+
+
 def lookup(target_id: str, out: Path = OUT):
-    """Our value for a target id (DECISIONS 8), or None if the id names nothing we compute.
-    T2.<policy>.<metric>.<mean|ci_low|ci_high>   primary summary (out/fresh/summary_statistics.csv)
-    T4.<Consensus|CADO>.<metric>.<stat>           held-out summary (out/revision/heldout_summary_statistics.csv)
-    T4.diff.<metric>.<mean_difference|ci_low|ci_high|p_holm|effect_size_dz>   CADO - Consensus, held out"""
+    """Our value for a target id (DECISIONS 8 and 15), or None for an id with no computed value (timings).
+    T2.<policy>.<metric>.<mean|ci_low|ci_high>          Table 2: fresh/summary_statistics.csv, primary
+    T3.<primary|ood>.<variant>.<column>                 Table 3: Consensus from the primary or held-out summary,
+                                                          CADO variants from fresh/ablation_summary.csv
+    T4.<Consensus|CADO>.<metric>.<stat>                 Table 4: revision/heldout_summary_statistics.csv
+    T4.diff.<metric>.<stat>                             Table 4: revision/heldout_paired_..., CADO - Consensus
+    T5.<family>.<primary_utility|ood_utility|primary_unsafe|settings>.<min|max|n>
+                                                        Table 5: revision/sensitivity_paired_comparisons.csv
+    T6.<case>.<passed|restored>                         Table 6: prototype/poc_summary.json
+    S51.<metric>.<stat>                                 Section 5.1: fresh/paired_statistical_comparisons.csv
+    S52.gate.<column> | S52.ood_fallback.<stat> | S52.ood_unsafe.<policy>   Section 5.2
+    S54.ood_fallback.<min|max>                          Section 5.4: revision/sensitivity_seed_metrics.csv
+    S55.rollback.<policy> | S55.persistence.<policy> | S55.prototype.<key>  Section 5.5
+    S56.recovery.<format> | S56.records.total           Section 5.6: fresh/normalization_benchmark.csv
+    S44.validation.<episode_rows|scalar_decisions>      Section 4.4: revision/reproduction_validation.json
+    TIME.*                                              host timings: None (NOT ATTEMPTED, DECISIONS 7)"""
     p = target_id.split(".")
-    if p[0] == "T2" and len(p) == 4:
-        rows = read_csv(out / "fresh" / "summary_statistics.csv")
-        hit = [r for r in rows if r["dataset"] == "primary" and r["policy"] == p[1] and r["metric"] == p[2]]
-    elif p[0] == "T4" and p[1] == "diff" and len(p) == 4:
-        rows = read_csv(out / "revision" / "heldout_paired_statistical_comparisons.csv")
-        hit = [r for r in rows if r["comparison"] == "CADO - Consensus" and r["metric"] == p[2]]
-    elif p[0] == "T4" and len(p) == 4:
-        rows = read_csv(out / "revision" / "heldout_summary_statistics.csv")
-        hit = [r for r in rows if r["policy"] == p[1] and r["metric"] == p[2]]
-    else:
+    fresh, rev, proto = out / "fresh", out / "revision", out / "prototype"
+    if p[0] == "TIME":
         return None
-    if len(hit) != 1 or p[3] not in hit[0]:
-        raise SystemExit(f"target {target_id}: {len(hit)} matching rows or no column {p[3]}")
-    return float(hit[0][p[3]])
+    if p[0] == "T2":
+        return one(read_csv(fresh / "summary_statistics.csv"), target_id, p[3], dataset="primary", policy=p[1], metric=p[2])
+    if p[0] == "T3":
+        if p[2] == "Consensus" and p[1] == "primary":
+            return one(read_csv(fresh / "summary_statistics.csv"), target_id, "mean", dataset="primary",
+                       policy="Consensus", metric=p[3])
+        if p[2] == "Consensus":
+            return one(read_csv(rev / "heldout_summary_statistics.csv"), target_id, "mean", policy="Consensus", metric=p[3])
+        return one(read_csv(fresh / "ablation_summary.csv"), target_id, p[3], dataset=p[1], policy=p[2])
+    if p[0] == "T4" and p[1] == "diff":
+        return one(read_csv(rev / "heldout_paired_statistical_comparisons.csv"), target_id, p[3],
+                   comparison="CADO - Consensus", metric=p[2])
+    if p[0] == "T4":
+        return one(read_csv(rev / "heldout_summary_statistics.csv"), target_id, p[3], policy=p[1], metric=p[2])
+    if p[0] == "T5":
+        family = p[1].replace("_", " ")
+        names = [s["name"] for s in json.loads((rev / "sensitivity_settings.json").read_text(encoding="utf-8"))
+                 if s["family"] == family]
+        if not names:
+            raise SystemExit(f"target {target_id}: no setting in family {family!r}")
+        if p[2] == "settings":
+            return float(len(names))
+        ds, metric = {"primary_utility": ("primary", "utility"), "ood_utility": ("ood", "utility"),
+                      "primary_unsafe": ("primary", "unsafe_action_rate")}[p[2]]
+        vals = [float(r["difference"]) for r in read_csv(rev / "sensitivity_paired_comparisons.csv")
+                if r["setting"] in names and r["dataset"] == ds and r["metric"] == metric]
+        if len(vals) != len(names):
+            raise SystemExit(f"target {target_id}: {len(vals)} values for {len(names)} settings")
+        return {"min": min(vals), "max": max(vals)}[p[3]]
+    if p[0] == "T6":
+        cases = json.loads((proto / "poc_summary.json").read_text(encoding="utf-8"))["cases"]
+        hit = [c for c in cases if c["case"] == p[1]]
+        if len(hit) != 1:
+            raise SystemExit(f"target {target_id}: {len(hit)} prototype cases named {p[1]}")
+        return float(hit[0][p[2]])
+    if p[0] == "S51":
+        return one(read_csv(fresh / "paired_statistical_comparisons.csv"), target_id, p[2],
+                   comparison="CADO - Consensus", metric=p[1])
+    if p[0] == "S52" and p[1] == "gate":
+        rows = [r for r in read_csv(fresh / "ablation_episode_metrics.csv") if r["dataset"] == "primary"
+                and r["policy"] == "CADO"]
+        return mean(float(r[p[2]]) for r in rows)
+    if p[0] == "S52" and p[1] == "ood_fallback":
+        return one(read_csv(fresh / "summary_statistics.csv"), target_id, p[2], dataset="ood", policy="CADO",
+                   metric="fallback_rate")
+    if p[0] == "S52" and p[1] == "ood_unsafe":
+        return one(read_csv(fresh / "summary_statistics.csv"), target_id, "mean", dataset="ood", policy=p[2],
+                   metric="unsafe_action_rate")
+    if p[0] == "S54" and p[1] == "ood_fallback":
+        by = {}
+        for r in read_csv(rev / "sensitivity_seed_metrics.csv"):
+            if r["dataset"] == "ood" and r["policy"] == "CADO":
+                by.setdefault(r["setting"], []).append(float(r["fallback_rate"]))
+        return {"min": min, "max": max}[p[2]](mean(v) for v in by.values())
+    if p[0] == "S55" and p[1] in ("rollback", "persistence"):
+        metric = "rollback_success_rate" if p[1] == "rollback" else "failed_action_persistence_steps"
+        return one(read_csv(fresh / "summary_statistics.csv"), target_id, "mean", dataset="fault", policy=p[2], metric=metric)
+    if p[0] == "S55" and p[1] == "prototype":
+        return float(json.loads((proto / "poc_summary.json").read_text(encoding="utf-8"))[p[2]])
+    if p[0] == "S56":
+        rows = read_csv(fresh / "normalization_benchmark.csv")
+        if p[1] == "records":
+            return float(sum(int(r["records"]) for r in rows))
+        return one(rows, target_id, "exact_field_recovery", format=p[2])
+    if p[0] == "S44":
+        v = json.loads((rev / "reproduction_validation.json").read_text(encoding="utf-8"))
+        if p[2] == "scalar_decisions":
+            return float(v["scalar_decisions_checked"])
+        utility = [c for c in v["episode_comparisons"] if c["metric"] == "utility"]
+        return float(sum(c["episodes"] for c in utility))
+    raise SystemExit(f"target {target_id}: unknown id")
 
 
 def sha_lf(path: Path) -> str:
@@ -214,17 +309,20 @@ def pipeline(out: Path, tag: str) -> dict:
         if (t4 / "submitted_results" / p.name).exists():
             shutil.copy2(p, t4 / "submitted_results" / p.name)
     steps.append(authors_script(t4, "code/revision_analysis.py", out / "logs" / "revision_analysis.log"))
-    (out / "fresh").mkdir(parents=True, exist_ok=True)
-    (out / "revision").mkdir(parents=True, exist_ok=True)
+    # step 4 (DECISIONS 15): the HTTP prototype, unchanged, on 127.0.0.1 only, in the fresh working copy
+    steps.append(authors_script(fresh, "prototype/run_poc.py", out / "logs" / "run_poc.log"))
+    for d in ("fresh", "revision", "prototype"):
+        (out / d).mkdir(parents=True, exist_ok=True)
     for p in produced:
         shutil.copy2(p, out / "fresh" / p.name)
     stale = []
-    for name in REVISION_OUTPUTS:
-        p = t4 / "revision_results" / name
-        if not p.exists() or p.stat().st_mtime < start:
-            stale.append(name)
-        else:
-            shutil.copy2(p, out / "revision" / name)
+    for d, work, names in (("revision", t4, REVISION_OUTPUTS), ("prototype", fresh, PROTOTYPE_OUTPUTS)):
+        for name in names:
+            p = work / "revision_results" / name
+            if not p.exists() or p.stat().st_mtime < start:
+                stale.append(f"{d}/{name}")
+            else:
+                shutil.copy2(p, out / d / name)
     run = {"machine": platform.node(), "steps": steps, "fresh_files": [p.name for p in produced],
            "revision_files_not_regenerated": stale}
     archived = [compare_csv(out / "fresh" / p.name, S1 / "submitted_results" / p.name)
@@ -270,6 +368,8 @@ def stage_recheck():
     pipeline(tmp, "_recheck")
     a = json.loads((OUT / "SCIENTIFIC_SHA256.json").read_text(encoding="utf-8"))
     b = json.loads((tmp / "SCIENTIFIC_SHA256.json").read_text(encoding="utf-8"))
+    a["prototype/poc_summary.json counts"] = prototype_counts(OUT)
+    b["prototype/poc_summary.json counts"] = prototype_counts(tmp)
     diff = sorted(k for k in a.keys() | b.keys() if a.get(k) != b.get(k))
     dest = OUT / f"RECHECK_{platform.node()}.json"
     write_json(dest, {"machine": platform.node(), "files": len(a), "identical": not diff, "different": diff,
@@ -279,10 +379,119 @@ def stage_recheck():
           f"({len(a)} scientific files) -> {dest.name}")
 
 
+def prototype_counts(out: Path) -> dict:
+    """The prototype's outcome counts (its logs hold ports and clock readings, so only counts are compared)."""
+    s = json.loads((out / "prototype" / "poc_summary.json").read_text(encoding="utf-8"))
+    keys = ("trials", "passed_criteria", "requests", "journal_entries", "installed_routes",
+            "restored_installed_routes", "persistent_rollback_failures", "journal_hash_chain_valid")
+    return {**{k: s.get(k) for k in keys}, "cases": s.get("cases")}
+
+
 # ── report (pure) ─────────────────────────────────────────────────────────────
 
-def stage_report(out: Path = OUT, dest: Path = HERE / "REPORT.md"):
-    raise SystemExit("report is written after TARGETS.csv is committed (requirement 1)")
+def authors_asked(path: Path = HERE / "AUTHOR_CONTACT.md") -> bool:
+    return path.exists() and "(draft, not sent)" not in path.read_text(encoding="utf-8")
+
+
+def fmt(x, published: str) -> str:
+    if x is None:
+        return "-"
+    if "e" in published.lower():
+        return f"{x:.4g}"
+    return f"{x:.{decimals(published) + 2}f}"
+
+
+def paper_verdict(rows: list) -> str:
+    prim = [r for r in rows if r["primary"] and r["verdict"] != "NOT ATTEMPTED"]
+    bad = [r["id"] for r in prim if r["verdict"] != "MATCH"]
+    if prim and not bad:
+        return "reproduced (every primary target MATCH)"
+    if prim and all(r["verdict"] == "NO MATCH" for r in prim):
+        return "not reproduced"
+    return "partially reproduced; primary targets not MATCH: " + ", ".join(bad)
+
+
+def checklist(run: dict, checks: list, asked: bool) -> list:
+    other = sorted({c["machine"] for c in checks if c["identical"] and c["machine"] != run.get("machine")})
+    bad = [c["machine"] for c in checks if not c["identical"]]
+    r5 = (f"**no**: DIFFERENT on {', '.join(bad)}" if bad else
+          f"yes: identical scientific outputs on a second machine ({', '.join(other)})" if other else
+          "**not yet**: the second-machine recheck has not run")
+    rows = [
+        ("targets committed before any result", "see `audit.py` (ORDER)", "`TARGETS.csv`, git history"),
+        ("gaps decided before the run", "yes", "`DECISIONS.md` 1-15, committed before the run"),
+        ("authors asked about every gap", "yes" if asked else
+         "**not yet**: the two questions are drafted, to be sent by the user", "`AUTHOR_CONTACT.md`"),
+        ("exact sources and licence", "yes", "`SOURCES.md`; S1 SHA-256 and the authors' manifest checked by `fetch.py`"),
+        ("variance: two machines identical (deterministic method)", r5, "`out/RECHECK_*.json`, DECISIONS 10"),
+        ("every target reported", "yes", "table above, `audit.py`"),
+        ("environment recorded", "yes", "`out/ENVIRONMENT.json`"),
+        ("one command from public inputs, outputs hashed", "yes: a fixed sequence of commands (`README.md`); "
+         "every output's SHA-256 in `out/HASHES.txt`", "`fetch.py`, `run.py`"),
+        ("unit tests for each rule", "yes: comparison, verdict, hashing, lookups, S1 check", "`tests/test_cado.py`"),
+        ("comparison only after this report; adaptations declared", "not started", "DECISIONS 1"),
+    ]
+    return (["## Checklist (STANDARD.md, Section 2)", "", "| # | requirement | met? | where |", "|---|---|---|---|"] +
+            [f"| {i} | {a} | {b} | {c} |" for i, (a, b, c) in enumerate(rows, 1)] + [""])
+
+
+def stage_report(out: Path = OUT, dest: Path = HERE / "REPORT.md") -> dict:
+    if not (out / "RUN.json").exists():
+        raise SystemExit("no run yet")
+    run = json.loads((out / "RUN.json").read_text(encoding="utf-8"))
+    rows = []
+    for t in read_csv(HERE / "TARGETS.csv"):
+        ours = lookup(t["id"], out)
+        v = verdict(ours, t["published"], t["tolerance"]) if ours is not None else "NOT ATTEMPTED"
+        rows.append({"id": t["id"], "table": t["table_or_figure"], "quantity": t["quantity"],
+                     "published": t["published"], "ours": ours, "primary": t["primary"].strip().lower() == "yes",
+                     "difference": None if ours is None else ours - float(t["published"]), "verdict": v})
+    archive = json.loads((out / "ARCHIVE_COMPARISON.json").read_text(encoding="utf-8"))
+    checks = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(out.glob("RECHECK_*.json"))]
+    head = paper_verdict(rows)
+    count = {k: sum(r["verdict"] == k for r in rows) for k in ("MATCH", "CLOSE", "NO MATCH", "NOT ATTEMPTED")}
+    pc = {k: sum(r["verdict"] == k for r in rows if r["primary"]) for k in count}
+    res = {"paper_verdict": head, "counts": count, "primary_counts": pc, "targets": rows, "run": run,
+           "archive_comparison": archive, "rechecks": checks}
+    write_json(out / "results.json", res)
+    same = [a["file"] for a in archive if a.get("within_1e-12")]
+    differ = [a for a in archive if not a.get("within_1e-12")]
+    L = ["# CADO (Huang et al., Future Internet 18(10), 552, 2026): reproduction from Supplementary Material S1", "",
+         f"**Paper verdict: {head}.**", "",
+         f"- Targets: {len(rows)} printed numbers; " + ", ".join(f"{k} {v}" for k, v in count.items()) +
+         f". Primary ({sum(pc.values())}): " + ", ".join(f"{k} {v}" for k, v in pc.items()) + ".",
+         "- The authors' code ran unchanged (DECISIONS 5, 6, 15): " +
+         "; ".join(f"`{s['script']}` exit {s['exit_code']}" for s in run["steps"]) +
+         ". Exit 1 of `reproduce_submitted.py` means its own 1e-12 comparison with the archived outputs failed somewhere; "
+         "the files below show where.",
+         f"- Our fresh outputs against the authors' archived ones, timing columns excluded: {len(same)} of "
+         f"{len(archive)} files equal within 1e-12" + ("." if not differ else "; different: " + "; ".join(
+             f"{a['file']} (" + ", ".join(f"{c} {m:.2g}" for c, m in a.get("max_abs_difference", {}).items() if m > 1e-12)
+             + (f"; text columns {a['text_columns_different']}" if a.get("text_columns_different") else "")
+             + ("; shape differs" if not a.get("same_shape", True) else "") + ")" for a in differ) + "."),
+         "- Host timings (decision and parsing latency, throughput) are NOT ATTEMPTED (DECISIONS 7).",
+         "- Scope (DECISIONS 14): a match shows that the released code produces the published numbers. The alerts, "
+         "attackers and outcomes are synthetic; nothing here tests the simulator's realism.", "",
+         "## Every target", "", "| id | table or section | quantity | published | ours | difference | verdict |",
+         "|---|---|---|---|---|---|---|"]
+    for r in rows:
+        diff = "-" if r["difference"] is None else f"{r['difference']:+.2e}"
+        L.append(f"| {r['id']} | {r['table']} | {r['quantity']}{' (primary)' if r['primary'] else ''} | {r['published']} | "
+                 f"{fmt(r['ours'], r['published'])} | {diff} | {r['verdict']} |")
+    L += [""] + checklist(run, checks, authors_asked())
+    env = json.loads((out / "ENVIRONMENT.json").read_text(encoding="utf-8"))
+    L += ["## Environment", "",
+          f"- Python {env['python'].split()[0]}, {env['platform']}, machine {env['machine']}; "
+          + ", ".join(p for p in env["packages"] if p.split("==")[0].lower() in PINS) + " (the authors' pins); "
+          "full list in `out/ENVIRONMENT.json`.",
+          "- Rechecks on another machine: " + ("; ".join(f"{c['machine']}: {'IDENTICAL' if c['identical'] else 'DIFFERENT'}"
+                                                     for c in checks) or "none yet") + ".",
+          "- Every output's SHA-256 (LF line endings): `out/HASHES.txt`; scientific CSVs without timing columns: "
+          "`out/SCIENTIFIC_SHA256.json`.", ""]
+    dest.write_text("\n".join(L), encoding="utf-8")
+    write_hashes(out)
+    print("\n".join(L[:9]))
+    return res
 
 
 def main():

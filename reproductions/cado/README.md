@@ -2,7 +2,7 @@
 
 CADO is a rule-based alert-to-deception orchestrator evaluated in a synthetic simulator. The authors
 released the simulator and the analysis code (S1), so the paper's tables can be **reproduced** in the ACM
-sense: their own code, unchanged, rerun by us and compared with the printed numbers. Decisions 1-14 are in
+sense: their own code, unchanged, rerun by us and compared with the printed numbers. Decisions 1-18 are in
 `DECISIONS.md`; the standard is `../STANDARD.md`.
 
 | file | what it is |

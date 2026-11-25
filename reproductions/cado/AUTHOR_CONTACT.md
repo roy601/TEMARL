@@ -4,13 +4,13 @@ Every gap in `DECISIONS.md` is asked here. Replies are quoted, not paraphrased.
 
 | date | to | question (gap #) | reply or "no reply after N days" |
 |---|---|---|---|
-| (draft, not sent) | the corresponding author (address from the published PDF) | the missing `README.md` (3); whether Table 4 was computed from the archived held-out episodes (6) | - |
+| (draft, not sent) | Lin He, corresponding author (helin_9707@163.com, from the published PDF) | the missing `README.md` (3); whether Table 4 was computed from the archived held-out episodes (6) | - |
 
 ## Draft email (for the user to send, or not)
 
 Subject: CADO (Future Internet 18(10), 552): two questions about Supplementary Material S1
 
-Dear Dr. <corresponding author>,
+Dear Dr. He,
 
 We are reproducing the results of your paper "CADO: Constraint-Aware Alert-to-Deception Orchestration
 for Heterogeneous Security Controls" from Supplementary Material S1, and thank you for releasing the
