@@ -55,7 +55,7 @@ Each team is one fixed policy, so the intervals cover evaluation randomness only
 | 2 | gaps decided before the run | yes | `DECISIONS.md` 1-15 (c6084db3, 2ce5df05, fd82842e, d1c8c010) before the first run; the run log (1ec82ac2) changes no decision; notes written after the results are marked so |
 | 3 | authors asked about every gap | **not yet**: the question about the five variations is drafted, to be posted by the user | `AUTHOR_CONTACT.md` |
 | 4 | exact sources and licence | yes | `SOURCES.md`; released files' SHA-256 checked by `fetch.py` |
-| 5 | variance: two machines identical, or 10+ seeds with CI | partly. Teampunch (a fixed heuristic, no training): **second machine not yet**. Teamcybermonic: one released trained policy, so no training seeds (DECISIONS 10); 10 evaluation seeds with a 95% CI; **second machine not yet** | `out/RECHECK_*.json`, DECISIONS 10 |
+| 5 | variance: two machines identical, or 10+ seeds with CI | partly. Teampunch (a fixed heuristic, no training): identical on a second machine (DESKTOP-JV86IM7). Teamcybermonic: one released trained policy, so no training seeds (DECISIONS 10); 10 evaluation seeds with a 95% CI; identical on a second machine (DESKTOP-JV86IM7) | `out/RECHECK_*.json`, DECISIONS 10 |
 | 6 | every target reported | yes | table above, `audit.py` |
 | 7 | environment recorded | yes | `out/ENVIRONMENT.json` |
 | 8 | one command from public inputs, outputs hashed | yes: a fixed sequence of commands (`README.md`); every saved output's SHA-256 in `out/HASHES.txt` | `fetch.py`, `run.py` |
@@ -77,7 +77,7 @@ Added 2026-11-25, after the results; no verdict changes. A comparison with these
 - Changes from the 2024 software, all declared before the run (DECISIONS 8): Ray 2.10.0 for 2.12.0 (no
   Windows build), torch_geometric 2.3.1 (cybermonic's pin), unpinned packages resolved as of 2024-06-15.
 - Our loop was checked against the official `run_evaluation` for each team (`out/VERIFY.json`).
-- Rechecks, the first episodes of a kept seed run again (`out/RECHECK_*.json`): Teamcybermonic seed 0, 3 episodes on DESKTOP-Q1DMJ51 (the machine that ran the seeds): IDENTICAL; Teampunch seed 0, 3 episodes on DESKTOP-Q1DMJ51 (the machine that ran the seeds): IDENTICAL.
+- Rechecks, the first episodes of a kept seed run again (`out/RECHECK_*.json`): Teamcybermonic seed 0, 3 episodes on DESKTOP-JV86IM7: IDENTICAL; Teampunch seed 0, 3 episodes on DESKTOP-JV86IM7: IDENTICAL; Teamcybermonic seed 0, 3 episodes on DESKTOP-Q1DMJ51 (the machine that ran the seeds): IDENTICAL; Teampunch seed 0, 3 episodes on DESKTOP-Q1DMJ51 (the machine that ran the seeds): IDENTICAL.
   Identical on the machine that ran the seeds: the seeds that started over after the out-of-memory failure
   (DECISIONS run log) are the episodes their seeds fix. Identical on another machine: the scores do not
   depend on the machine.

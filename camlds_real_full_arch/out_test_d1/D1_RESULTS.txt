@@ -1,0 +1,48 @@
+Protocol D1.0 results (test opened once; simulation only)
+
+units: E1 29 test runs, P1 29 (S4 excluded)
+
+Family 1 (history vs no history)
+  E1 allpos - NoHistory: +2.268 [+1.737, +2.841] p_holm=0.0000 n=29 -> history agents (allpos) outperforms agents without history
+  P1 allpos - NoHistory: +0.042 [+0.012, +0.076] p_holm=0.0183 n=29 -> history agents (allpos) outperforms agents without history
+
+Family 2 (history vs reference policies)
+  E1 allpos - none: +14.263 [+12.961, +15.420] p_holm=0.0000 n=29 -> history agents (allpos) outperforms no decoys
+  P1 allpos - none: +0.448 [+0.382, +0.509] p_holm=0.0000 n=29 -> history agents (allpos) outperforms no decoys
+  E1 allpos - random: +12.183 [+11.050, +13.169] p_holm=0.0000 n=29 -> history agents (allpos) outperforms random
+  P1 allpos - random: +0.432 [+0.371, +0.486] p_holm=0.0000 n=29 -> history agents (allpos) outperforms random
+  E1 allpos - static: +11.011 [+9.880, +11.993] p_holm=0.0000 n=29 -> history agents (allpos) outperforms static honeypot (one decoy type everywhere)
+  P1 allpos - static: +0.424 [+0.364, +0.477] p_holm=0.0000 n=29 -> history agents (allpos) outperforms static honeypot (one decoy type everywhere)
+  E1 allpos - fixed: +6.366 [+5.212, +7.431] p_holm=0.0000 n=29 -> history agents (allpos) outperforms best fixed allocation
+  P1 allpos - fixed: +0.044 [+0.010, +0.075] p_holm=0.0117 n=29 -> history agents (allpos) outperforms best fixed allocation
+  E1 allpos - greedy: +7.631 [+6.600, +8.572] p_holm=0.0000 n=29 -> history agents (allpos) outperforms greedy (reactive)
+  P1 allpos - greedy: +0.428 [+0.364, +0.485] p_holm=0.0000 n=29 -> history agents (allpos) outperforms greedy (reactive)
+  E1 allpos - planner: +5.278 [+4.188, +6.446] p_holm=0.0000 n=29 -> history agents (allpos) outperforms transition planner
+  P1 allpos - planner: +0.249 [+0.169, +0.328] p_holm=0.0002 n=29 -> history agents (allpos) outperforms transition planner
+
+Family 3 (Transformer history vs LSTM history)
+  E1 allpos - lstm_allpos: +0.296 [+0.055, +0.586] p_holm=0.3321 n=29 -> no difference shown
+  P1 allpos - lstm_allpos: +0.023 [+0.006, +0.043] p_holm=0.3321 n=29 -> no difference shown
+
+Q4, descriptive only (no test, no correction, no claim)
+  E1 gru_allpos - allpos: -0.252 [-0.483, -0.052] n=29
+  P1 gru_allpos - allpos: -0.018 [-0.034, -0.005] n=29
+  E1 baseline - allpos: -0.725 [-1.116, -0.376] n=29
+  P1 baseline - allpos: -0.041 [-0.074, -0.014] n=29
+  E1 allpos_IPPO - allpos: -0.148 [-0.277, -0.032] n=29
+  P1 allpos_IPPO - allpos: -0.008 [-0.016, -0.002] n=29
+  E1 NoHistory_IPPO - NoHistory: -0.024 [-0.127, +0.080] n=29
+  P1 NoHistory_IPPO - NoHistory: +0.002 [-0.007, +0.010] n=29
+  E1 allpos_IPPO - NoHistory_IPPO: +2.145 [+1.636, +2.696] n=29
+  P1 allpos_IPPO - NoHistory_IPPO: +0.032 [+0.002, +0.065] n=29
+
+Team activity, descriptive (share of steps with >= 2 decoys; per agent: share of steps with a decoy out / engagements per episode; lure chains)
+  allpos: >=2 decoys 0.291; DMZ 0.808/10.03; LAN 0.287/1.85; User 0.254/2.39; Admin 0.084/0.00; lure chains 1.26
+  NoHistory: >=2 decoys 0.299; DMZ 0.852/8.67; LAN 0.242/1.12; User 0.188/2.20; Admin 0.024/0.00; lure chains 0.64
+  lstm_allpos: >=2 decoys 0.300; DMZ 0.816/9.75; LAN 0.286/1.81; User 0.248/2.40; Admin 0.083/0.00; lure chains 1.16
+  gru_allpos: >=2 decoys 0.292; DMZ 0.806/9.78; LAN 0.288/1.85; User 0.252/2.38; Admin 0.089/0.00; lure chains 1.21
+  baseline: >=2 decoys 0.299; DMZ 0.806/9.53; LAN 0.299/1.75; User 0.269/2.26; Admin 0.101/0.00; lure chains 1.16
+  allpos_IPPO: >=2 decoys 0.299; DMZ 0.817/9.90; LAN 0.296/1.86; User 0.255/2.36; Admin 0.090/0.00; lure chains 1.25
+  NoHistory_IPPO: >=2 decoys 0.281; DMZ 0.835/8.67; LAN 0.238/1.12; User 0.186/2.18; Admin 0.028/0.00; lure chains 0.68
+
+means (primary units): NoHistory_IPPO|E1 11.971; NoHistory_IPPO|P1 0.408; NoHistory|E1 11.995; NoHistory|P1 0.406; allpos_IPPO|E1 14.115; allpos_IPPO|P1 0.440; allpos|E1 14.263; allpos|P1 0.448; baseline|E1 13.538; baseline|P1 0.407; clairvoyant|E1 16.198; clairvoyant|P1 0.519; fixed|E1 7.897; fixed|P1 0.404; greedy|E1 6.632; greedy|P1 0.020; gru_allpos|E1 14.011; gru_allpos|P1 0.430; lstm_allpos|E1 13.968; lstm_allpos|P1 0.425; none|E1 0.000; none|P1 0.000; planner|E1 8.985; planner|P1 0.200; random|E1 2.081; random|P1 0.017; static|E1 3.252; static|P1 0.024
