@@ -175,8 +175,16 @@ def seed_file(method: str, seed: int, out: Path = OUT) -> Path:
     return out / "seeds" / f"{method}_seed{seed}.json"
 
 
+_PREPARED = []
+
+
 def prepare(method: str, plain: bool = False):
-    """Enter the method's directory, import the authors' evaluator and submission; return (module, Submission)."""
+    """Enter the method's directory, import the authors' evaluator and submission; return (module, Submission).
+    One method per process: Python caches `evaluation_metrics` and `submission`, so a second method in the same
+    process would silently reuse the first one's code and policies."""
+    if _PREPARED and _PREPARED[0] != (method, plain):
+        raise RuntimeError(f"{_PREPARED[0]} already loaded in this process; run {(method, plain)} in a new process")
+    _PREPARED.append((method, plain))
     sys.path.insert(0, str(HERE))
     import fetch
     bad = fetch.check()
