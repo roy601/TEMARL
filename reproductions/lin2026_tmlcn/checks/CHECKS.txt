@@ -1,0 +1,41 @@
+Lin et al. 2026 (IEEE TMLCN): internal-consistency checks (no reproduction run)
+
+C1. Table 6 has 14 negative entries: Initial Access/Block -4.76; Execution/Block -4.6; Persistence/Block -4.07; Persistence/System Error -2.12; Privilege escalation/Block -3.25; Evasion/Block -3.25; Discovery/Block -3.58; Lateral Movement/Block -4.07; Collection/Block -2.34; C&C/Block -4.24; Inhibit Response Function/Block -4.98; Impair Process Control/Block -4.96; Impact/Allow -4.99; Impact/Block -4.99
+    Algorithm 1 as printed cannot give a negative Q: the -5 is set (line 13) and the loop breaks (line 14)
+    before the update; every other reward is >= 1 and Q starts at 0, so each update is a convex
+    combination of non-negative numbers.
+C2. Table 6 row 'Impact' (tau_T) = [-4.99, 11.29, 3.31, 2.02, -4.99, 4.59, 2.1]. In Algorithm 1 the loop ends when t' = tau_T (lines 4, 29),
+    so Q[tau_T, .] is never updated and stays 0.
+    Exercised: 30 random attackers x 300 episodes (alpha raised to 0.05 so values move):
+    lowest Q ever = 0.0, largest |Q[Impact, .]| = 0.0 (both 0, as proved).
+
+C3. Even if the -5 penalty WERE applied (not Algorithm 1), Table 6 needs more penalties than sessions.
+    A penalty ends its session, so there is at most one per session: at most 2000 (Sec. VI-B; 1200 in Sec. VII).
+    alpha 0.0001: cells below -3.5 need >= 228075 penalty updates in total (largest single cell Impact/Allow -4.99: 50104); IMPOSSIBLE with <= 2000 sessions
+    alpha 0.0002: cells below -3.5 need >= 114034 penalty updates in total (largest single cell Impact/Allow -4.99: 25051); IMPOSSIBLE with <= 2000 sessions
+    alpha 0.0005: cells below -3.5 need >= 45608 penalty updates in total (largest single cell Impact/Allow -4.99: 10019); IMPOSSIBLE with <= 2000 sessions
+    alpha 0.001: cells below -3.5 need >= 22802 penalty updates in total (largest single cell Impact/Allow -4.99: 5009); IMPOSSIBLE with <= 2000 sessions
+
+C4. Text vs Table 6 (greedy action = largest Q in the row):
+     1 Initial Access              best Allow   10.08
+     2 Execution                   best Allow   11.5
+     3 Persistence                 best Allow   11.12
+     4 Privilege escalation        best Modify  11.79
+     5 Evasion                     best Allow   13.51
+     6 Discovery                   best Allow   14.44
+     7 Lateral Movement            best Allow   13.55
+     8 Collection                  best Allow   14.45
+     9 C&C                         best Allow   12.26
+    10 Inhibit Response Function   best Allow   13.71
+    11 Impair Process Control      best Allow   14.5
+    12 Impact                      best Restore 11.29
+    Text: tactics 6-9 'increasingly favors Modify' -> table's best there: ['Allow', 'Allow', 'Allow', 'Allow']
+    Text: later stages 'shift toward Delay and Jitter' -> table's best in tactics 10-11: ['Allow', 'Allow']
+
+C5. Epsilon is reset to 0.8 every episode (line 3) and decays per step (line 28): it reaches 0.01 after 85.4 steps (rho 0.95) or 436.0 steps (rho 0.99), ratio 5.10. The text says rho 0.99 explores 'roughly twice as many episodes'; with the reset, exploration does not span episodes at all.
+
+C6. Time: 'tactic 10 within 800 episodes (approximately 12 minutes)' = 0.90 s per session; '300 episodes (around 4 minutes)' = 0.80 s; 'first 400 sessions = initial five minutes' = 0.75 s. Fig. 7 / Sec. VI-B: one session lasts 17-70 s, so 800 consecutive sessions take 3.8-15.6 hours.
+
+C7. Session counts: 2000 consecutive sessions (Sec. VI-B, Fig. 6); 1200 (Fig. 8, Sec. VII); 1000 (Figs. 7, 9, 10, 11); '700 attack-response cycles' (abstract).
+
+C8. Duration: abstract 'more than doubles the average engagement time'; Sec. VI-B/VII 'median ... factor of two'. Fig. 7 (moving average): RL > 70 s vs Static1 ~40 s = 1.75x, vs Static0 ~17 s = 4.12x. Medians are not shown.
