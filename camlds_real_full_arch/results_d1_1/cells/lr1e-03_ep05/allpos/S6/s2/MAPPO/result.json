@@ -1,0 +1,158 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 7.505,
+      "val_dwell": 7.783333333333333,
+      "val_depth": 8.233333333333333,
+      "val_protected": 0.06666666666666667,
+      "seconds": 8.17339038848877
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.3825,
+      "val_dwell": 9.133333333333333,
+      "val_depth": 8.45,
+      "val_protected": 0.18333333333333332,
+      "seconds": 16.46502184867859
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.4525,
+      "val_dwell": 9.8,
+      "val_depth": 9.25,
+      "val_protected": 0.23333333333333334,
+      "seconds": 24.50254726409912
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.11,
+      "val_dwell": 9.616666666666667,
+      "val_depth": 9.083333333333334,
+      "val_protected": 0.25,
+      "seconds": 32.695515155792236
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.555,
+      "val_dwell": 9.983333333333333,
+      "val_depth": 9.25,
+      "val_protected": 0.36666666666666664,
+      "seconds": 40.95426964759827
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 12.1475,
+      "val_dwell": 10.95,
+      "val_depth": 9.883333333333333,
+      "val_protected": 0.38333333333333336,
+      "seconds": 48.63046336174011
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 10.71,
+      "val_dwell": 11.3,
+      "val_depth": 10.3,
+      "val_protected": 0.38333333333333336,
+      "seconds": 56.330666303634644
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.81,
+      "val_dwell": 10.133333333333333,
+      "val_depth": 9.383333333333333,
+      "val_protected": 0.36666666666666664,
+      "seconds": 63.840407848358154
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 11.8225,
+      "val_dwell": 11.783333333333333,
+      "val_depth": 10.666666666666666,
+      "val_protected": 0.43333333333333335,
+      "seconds": 71.59207558631897
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 12.8975,
+      "val_dwell": 12.6,
+      "val_depth": 11.483333333333333,
+      "val_protected": 0.45,
+      "seconds": 79.9112503528595
+    }
+  ],
+  "best_update": 488,
+  "best_validation_dwell": 12.6,
+  "seconds": 80.02165198326111,
+  "protocol": "D1.1",
+  "config": "lr1e-03_ep05",
+  "hp": {
+    "lr": 0.001,
+    "ppo_epochs": 5,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S6",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "6_macro_binary",
+    "6_macro_cron",
+    "6_plugin",
+    "6_screensharing_binary",
+    "6_screensharing_cron"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S6\\s2\\encoder.pt",
+    "checkpoint_sha256": "2470f6592ff991c5f783ea5f4ee2d1835a60f06d3f99aa9765209cbc906a7a18",
+    "validation_bce": 0.020446968467352618
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "f7582bfb309d81d96691d50fb9566a767a454f574d8b0574c3a9ef34bc269434",
+  "wall_seconds": 80.02465534210205,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

@@ -1,0 +1,159 @@
+{
+  "seed": 0,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 3.44,
+      "val_dwell": 2.966666666666667,
+      "val_depth": 2.9,
+      "val_protected": 0.0,
+      "seconds": 9.953268766403198
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 7.2875,
+      "val_dwell": 9.65,
+      "val_depth": 8.5,
+      "val_protected": 0.25,
+      "seconds": 19.704590797424316
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 10.2025,
+      "val_dwell": 10.533333333333333,
+      "val_depth": 9.4,
+      "val_protected": 0.26666666666666666,
+      "seconds": 29.329244136810303
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 10.885,
+      "val_dwell": 10.566666666666666,
+      "val_depth": 9.4,
+      "val_protected": 0.26666666666666666,
+      "seconds": 39.06404209136963
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.75,
+      "val_dwell": 10.15,
+      "val_depth": 9.0,
+      "val_protected": 0.23333333333333334,
+      "seconds": 47.868234157562256
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.0325,
+      "val_dwell": 10.633333333333333,
+      "val_depth": 9.4,
+      "val_protected": 0.26666666666666666,
+      "seconds": 56.64416313171387
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.1125,
+      "val_dwell": 10.15,
+      "val_depth": 9.0,
+      "val_protected": 0.23333333333333334,
+      "seconds": 65.50124025344849
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.7625,
+      "val_dwell": 10.15,
+      "val_depth": 9.0,
+      "val_protected": 0.23333333333333334,
+      "seconds": 74.47321200370789
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 11.7725,
+      "val_dwell": 10.566666666666666,
+      "val_depth": 9.4,
+      "val_protected": 0.26666666666666666,
+      "seconds": 84.0978991985321
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.3725,
+      "val_dwell": 10.45,
+      "val_depth": 9.3,
+      "val_protected": 0.23333333333333334,
+      "seconds": 93.84367966651917
+    }
+  ],
+  "best_update": 293,
+  "best_validation_dwell": 10.633333333333333,
+  "seconds": 93.93755006790161,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep15",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 15,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S3\\s0\\encoder.pt",
+    "checkpoint_sha256": "ab5259266c2c6537d97f37a3ded3df0d3036ad04b05d106dfbbcbb19a267dde6",
+    "validation_bce": 0.022940061219372372
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "dc913d43655a7ea52661f834f2d17425f677171bfcf29e047b06be74c3f0105b",
+  "wall_seconds": 93.93854904174805,
+  "eval_repeats": 20,
+  "val_seed": 100000,
+  "test_seed": 200000
+}

@@ -1,0 +1,159 @@
+{
+  "seed": 1,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 8.8675,
+      "val_dwell": 9.0,
+      "val_depth": 6.2,
+      "val_protected": 0.2833333333333333,
+      "seconds": 9.44902777671814
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.35,
+      "val_dwell": 10.45,
+      "val_depth": 9.133333333333333,
+      "val_protected": 0.3,
+      "seconds": 18.478407382965088
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 12.125,
+      "val_dwell": 11.35,
+      "val_depth": 9.816666666666666,
+      "val_protected": 0.3,
+      "seconds": 27.47428297996521
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.0475,
+      "val_dwell": 11.15,
+      "val_depth": 9.716666666666667,
+      "val_protected": 0.3,
+      "seconds": 36.12301301956177
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 12.295,
+      "val_dwell": 11.766666666666667,
+      "val_depth": 10.233333333333333,
+      "val_protected": 0.3333333333333333,
+      "seconds": 44.384063482284546
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.54,
+      "val_dwell": 11.766666666666667,
+      "val_depth": 10.233333333333333,
+      "val_protected": 0.3333333333333333,
+      "seconds": 52.83241891860962
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.5625,
+      "val_dwell": 11.266666666666667,
+      "val_depth": 9.733333333333333,
+      "val_protected": 0.3,
+      "seconds": 61.11061334609985
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 12.0975,
+      "val_dwell": 11.166666666666666,
+      "val_depth": 9.733333333333333,
+      "val_protected": 0.3,
+      "seconds": 70.2737295627594
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 11.5975,
+      "val_dwell": 12.25,
+      "val_depth": 10.666666666666666,
+      "val_protected": 0.36666666666666664,
+      "seconds": 79.63814949989319
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.465,
+      "val_dwell": 12.216666666666667,
+      "val_depth": 10.633333333333333,
+      "val_protected": 0.36666666666666664,
+      "seconds": 89.01893067359924
+    }
+  ],
+  "best_update": 439,
+  "best_validation_dwell": 12.25,
+  "seconds": 89.11281514167786,
+  "protocol": "D1.1",
+  "config": "lr5e-04_ep10",
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S3\\s1\\encoder.pt",
+    "checkpoint_sha256": "e62beb5d86e1da786b8661533396e2db0f102dcb64bae41f397bbb80c4d32269",
+    "validation_bce": 0.02320933351228216
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "5a3d9e484a69719562a06aefedda40d524e04816b32903dd85d21b51fec6ed10",
+  "wall_seconds": 89.12946438789368,
+  "eval_repeats": 20,
+  "val_seed": 100001,
+  "test_seed": 200001
+}

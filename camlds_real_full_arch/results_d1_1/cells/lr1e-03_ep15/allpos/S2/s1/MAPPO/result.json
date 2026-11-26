@@ -1,0 +1,155 @@
+{
+  "seed": 1,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 9.2225,
+      "val_dwell": 12.216666666666667,
+      "val_depth": 10.066666666666666,
+      "val_protected": 0.26666666666666666,
+      "seconds": 9.990904808044434
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.655,
+      "val_dwell": 13.116666666666667,
+      "val_depth": 10.783333333333333,
+      "val_protected": 0.4166666666666667,
+      "seconds": 19.80410885810852
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.025,
+      "val_dwell": 13.166666666666666,
+      "val_depth": 10.883333333333333,
+      "val_protected": 0.4166666666666667,
+      "seconds": 29.388181924819946
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 10.065,
+      "val_dwell": 12.783333333333333,
+      "val_depth": 10.6,
+      "val_protected": 0.36666666666666664,
+      "seconds": 39.182631969451904
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.455,
+      "val_dwell": 12.166666666666666,
+      "val_depth": 10.25,
+      "val_protected": 0.35,
+      "seconds": 48.96826410293579
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.095,
+      "val_dwell": 13.033333333333333,
+      "val_depth": 10.816666666666666,
+      "val_protected": 0.38333333333333336,
+      "seconds": 58.77299976348877
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 10.9675,
+      "val_dwell": 13.366666666666667,
+      "val_depth": 11.333333333333334,
+      "val_protected": 0.45,
+      "seconds": 68.34767818450928
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 10.6675,
+      "val_dwell": 13.2,
+      "val_depth": 11.016666666666667,
+      "val_protected": 0.38333333333333336,
+      "seconds": 77.7351758480072
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 10.425,
+      "val_dwell": 13.266666666666667,
+      "val_depth": 11.083333333333334,
+      "val_protected": 0.4,
+      "seconds": 86.80255198478699
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 10.975,
+      "val_dwell": 13.166666666666666,
+      "val_depth": 11.316666666666666,
+      "val_protected": 0.43333333333333335,
+      "seconds": 95.60618448257446
+    }
+  ],
+  "best_update": 342,
+  "best_validation_dwell": 13.366666666666667,
+  "seconds": 95.65318942070007,
+  "protocol": "D1.1",
+  "config": "lr1e-03_ep15",
+  "hp": {
+    "lr": 0.001,
+    "ppo_epochs": 15,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S2",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "2_cron",
+    "2_rootkit"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S2\\s1\\encoder.pt",
+    "checkpoint_sha256": "4d444f2e94d9ba8a3d63dd8c10fd469d2117e0567a4aa2761569520a8117c953",
+    "validation_bce": 0.017934933778412727
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "de46473c02da1fdbe7e01143bf101de0d74455155a91bbe07f42e24c5145850f",
+  "wall_seconds": 95.65418863296509,
+  "eval_repeats": 20,
+  "val_seed": 100001,
+  "test_seed": 200001
+}

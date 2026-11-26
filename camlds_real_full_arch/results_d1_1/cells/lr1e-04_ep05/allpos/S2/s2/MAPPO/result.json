@@ -1,0 +1,155 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 2.7225,
+      "val_dwell": 3.816666666666667,
+      "val_depth": 2.75,
+      "val_protected": 0.0,
+      "seconds": 8.035133361816406
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 3.0725,
+      "val_dwell": 4.316666666666666,
+      "val_depth": 5.766666666666667,
+      "val_protected": 0.03333333333333333,
+      "seconds": 16.311134576797485
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 3.73,
+      "val_dwell": 4.883333333333334,
+      "val_depth": 4.066666666666666,
+      "val_protected": 0.03333333333333333,
+      "seconds": 24.57113480567932
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 5.08,
+      "val_dwell": 8.35,
+      "val_depth": 5.233333333333333,
+      "val_protected": 0.06666666666666667,
+      "seconds": 33.033135175704956
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 7.0225,
+      "val_dwell": 11.216666666666667,
+      "val_depth": 8.283333333333333,
+      "val_protected": 0.23333333333333334,
+      "seconds": 41.38670754432678
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 8.33,
+      "val_dwell": 13.816666666666666,
+      "val_depth": 10.1,
+      "val_protected": 0.3333333333333333,
+      "seconds": 49.80370759963989
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 9.7875,
+      "val_dwell": 13.866666666666667,
+      "val_depth": 10.116666666666667,
+      "val_protected": 0.3333333333333333,
+      "seconds": 58.34202313423157
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 9.5575,
+      "val_dwell": 13.483333333333333,
+      "val_depth": 9.783333333333333,
+      "val_protected": 0.3333333333333333,
+      "seconds": 66.64402389526367
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 10.6325,
+      "val_dwell": 13.2,
+      "val_depth": 9.666666666666666,
+      "val_protected": 0.2833333333333333,
+      "seconds": 75.07002282142639
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.16,
+      "val_dwell": 12.633333333333333,
+      "val_depth": 9.333333333333334,
+      "val_protected": 0.23333333333333334,
+      "seconds": 83.44302272796631
+    }
+  ],
+  "best_update": 342,
+  "best_validation_dwell": 13.866666666666667,
+  "seconds": 83.48702359199524,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep05",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 5,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S2",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "2_cron",
+    "2_rootkit"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S2\\s2\\encoder.pt",
+    "checkpoint_sha256": "0f7694d61a077e29599a15da72c6a7be94100ccb63dbda09cda3b8be1d2b76f8",
+    "validation_bce": 0.017523277724168305
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "d7fe5ddf7f94a736a41de510df647fdcb8838f39bf88dfeb24960d80fc5952e5",
+  "wall_seconds": 83.49102425575256,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

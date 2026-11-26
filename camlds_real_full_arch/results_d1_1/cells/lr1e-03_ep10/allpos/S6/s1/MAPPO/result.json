@@ -1,0 +1,158 @@
+{
+  "seed": 1,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 8.0575,
+      "val_dwell": 8.883333333333333,
+      "val_depth": 9.3,
+      "val_protected": 0.13333333333333333,
+      "seconds": 9.5352201461792
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.385,
+      "val_dwell": 11.016666666666667,
+      "val_depth": 10.533333333333333,
+      "val_protected": 0.21666666666666667,
+      "seconds": 19.264240980148315
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.4025,
+      "val_dwell": 12.25,
+      "val_depth": 11.866666666666667,
+      "val_protected": 0.3333333333333333,
+      "seconds": 28.377968072891235
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.1625,
+      "val_dwell": 12.616666666666667,
+      "val_depth": 11.966666666666667,
+      "val_protected": 0.48333333333333334,
+      "seconds": 37.87345004081726
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.4625,
+      "val_dwell": 10.616666666666667,
+      "val_depth": 10.416666666666666,
+      "val_protected": 0.4,
+      "seconds": 47.28944420814514
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.425,
+      "val_dwell": 10.633333333333333,
+      "val_depth": 10.466666666666667,
+      "val_protected": 0.4,
+      "seconds": 56.03384494781494
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.4725,
+      "val_dwell": 11.85,
+      "val_depth": 11.55,
+      "val_protected": 0.48333333333333334,
+      "seconds": 64.38628959655762
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.84,
+      "val_dwell": 12.25,
+      "val_depth": 11.616666666666667,
+      "val_protected": 0.4666666666666667,
+      "seconds": 72.72364211082458
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 12.1875,
+      "val_dwell": 11.183333333333334,
+      "val_depth": 10.866666666666667,
+      "val_protected": 0.38333333333333336,
+      "seconds": 81.33899903297424
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.2625,
+      "val_dwell": 11.233333333333333,
+      "val_depth": 10.866666666666667,
+      "val_protected": 0.4666666666666667,
+      "seconds": 91.0472023487091
+    }
+  ],
+  "best_update": 195,
+  "best_validation_dwell": 12.616666666666667,
+  "seconds": 91.15679144859314,
+  "protocol": "D1.1",
+  "config": "lr1e-03_ep10",
+  "hp": {
+    "lr": 0.001,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S6",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "6_macro_binary",
+    "6_macro_cron",
+    "6_plugin",
+    "6_screensharing_binary",
+    "6_screensharing_cron"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S6\\s1\\encoder.pt",
+    "checkpoint_sha256": "b330bda11ecede2c9b5e6c33e5ee556eabe79e36f39b0c159c4b735ed4e8e7d6",
+    "validation_bce": 0.01926339322641982
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "c80520234f380d05456fbec39d1702035ed68aa09818b43c5c94dc12dc7ad707",
+  "wall_seconds": 91.15778875350952,
+  "eval_repeats": 20,
+  "val_seed": 100001,
+  "test_seed": 200001
+}

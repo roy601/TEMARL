@@ -1,0 +1,159 @@
+{
+  "seed": 1,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 2.29,
+      "val_dwell": 2.216666666666667,
+      "val_depth": 1.7,
+      "val_protected": 0.0,
+      "seconds": 8.188497543334961
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 2.685,
+      "val_dwell": 2.9,
+      "val_depth": 3.1666666666666665,
+      "val_protected": 0.0,
+      "seconds": 16.092219829559326
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 3.1475,
+      "val_dwell": 1.35,
+      "val_depth": 2.9,
+      "val_protected": 0.0,
+      "seconds": 23.56333637237549
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 4.655,
+      "val_dwell": 6.283333333333333,
+      "val_depth": 4.716666666666667,
+      "val_protected": 0.03333333333333333,
+      "seconds": 31.295905590057373
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 7.435,
+      "val_dwell": 10.166666666666666,
+      "val_depth": 6.766666666666667,
+      "val_protected": 0.35,
+      "seconds": 38.89234685897827
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 9.89,
+      "val_dwell": 11.45,
+      "val_depth": 9.866666666666667,
+      "val_protected": 0.36666666666666664,
+      "seconds": 47.057957887649536
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 10.655,
+      "val_dwell": 12.166666666666666,
+      "val_depth": 10.416666666666666,
+      "val_protected": 0.36666666666666664,
+      "seconds": 55.210405349731445
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 10.1275,
+      "val_dwell": 11.816666666666666,
+      "val_depth": 10.066666666666666,
+      "val_protected": 0.36666666666666664,
+      "seconds": 63.257328510284424
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 10.3375,
+      "val_dwell": 12.266666666666667,
+      "val_depth": 10.516666666666667,
+      "val_protected": 0.36666666666666664,
+      "seconds": 71.46663928031921
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.2225,
+      "val_dwell": 12.133333333333333,
+      "val_depth": 10.5,
+      "val_protected": 0.36666666666666664,
+      "seconds": 79.71897459030151
+    }
+  ],
+  "best_update": 439,
+  "best_validation_dwell": 12.266666666666667,
+  "seconds": 79.81363129615784,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep05",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 5,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S3\\s1\\encoder.pt",
+    "checkpoint_sha256": "e62beb5d86e1da786b8661533396e2db0f102dcb64bae41f397bbb80c4d32269",
+    "validation_bce": 0.02320933351228216
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "2f858d2bdcef27dafce22d2eec67ba75a9ddd6521b4f1a3452f0bb9a97fb9aba",
+  "wall_seconds": 79.8156316280365,
+  "eval_repeats": 20,
+  "val_seed": 100001,
+  "test_seed": 200001
+}

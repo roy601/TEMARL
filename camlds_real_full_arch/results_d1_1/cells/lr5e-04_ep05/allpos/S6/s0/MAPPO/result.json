@@ -1,0 +1,158 @@
+{
+  "seed": 0,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 5.0075,
+      "val_dwell": 6.55,
+      "val_depth": 5.05,
+      "val_protected": 0.03333333333333333,
+      "seconds": 8.389338254928589
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 9.95,
+      "val_dwell": 9.05,
+      "val_depth": 8.866666666666667,
+      "val_protected": 0.13333333333333333,
+      "seconds": 16.731613159179688
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 10.395,
+      "val_dwell": 9.5,
+      "val_depth": 8.95,
+      "val_protected": 0.13333333333333333,
+      "seconds": 24.854745626449585
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.5125,
+      "val_dwell": 10.75,
+      "val_depth": 10.25,
+      "val_protected": 0.21666666666666667,
+      "seconds": 33.090126276016235
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.8125,
+      "val_dwell": 10.916666666666666,
+      "val_depth": 10.483333333333333,
+      "val_protected": 0.16666666666666666,
+      "seconds": 41.34088706970215
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.39,
+      "val_dwell": 11.166666666666666,
+      "val_depth": 11.0,
+      "val_protected": 0.16666666666666666,
+      "seconds": 49.49924159049988
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.58,
+      "val_dwell": 12.083333333333334,
+      "val_depth": 11.55,
+      "val_protected": 0.31666666666666665,
+      "seconds": 57.57420015335083
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.595,
+      "val_dwell": 12.266666666666667,
+      "val_depth": 11.55,
+      "val_protected": 0.36666666666666664,
+      "seconds": 65.21879267692566
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 13.045,
+      "val_dwell": 14.083333333333334,
+      "val_depth": 13.383333333333333,
+      "val_protected": 0.38333333333333336,
+      "seconds": 73.05365324020386
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 12.945,
+      "val_dwell": 13.9,
+      "val_depth": 13.1,
+      "val_protected": 0.4,
+      "seconds": 81.32918643951416
+    }
+  ],
+  "best_update": 439,
+  "best_validation_dwell": 14.083333333333334,
+  "seconds": 81.45444464683533,
+  "protocol": "D1.1",
+  "config": "lr5e-04_ep05",
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 5,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S6",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "6_macro_binary",
+    "6_macro_cron",
+    "6_plugin",
+    "6_screensharing_binary",
+    "6_screensharing_cron"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S6\\s0\\encoder.pt",
+    "checkpoint_sha256": "f6e197b855047efa220a01cc475ee2b5fdd84eaa941fde23b538a80d7118ac9f",
+    "validation_bce": 0.021814310728349474
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "2b90ee3cd82944b8caa4f46339b8e08ba6d1c3ec61697792ab2d583b10260d3e",
+  "wall_seconds": 81.45544481277466,
+  "eval_repeats": 20,
+  "val_seed": 100000,
+  "test_seed": 200000
+}

@@ -1,0 +1,155 @@
+{
+  "seed": 0,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 8.7325,
+      "val_dwell": 11.566666666666666,
+      "val_depth": 9.466666666666667,
+      "val_protected": 0.16666666666666666,
+      "seconds": 9.41586971282959
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 11.135,
+      "val_dwell": 12.583333333333334,
+      "val_depth": 10.116666666666667,
+      "val_protected": 0.18333333333333332,
+      "seconds": 18.49817180633545
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.055,
+      "val_dwell": 12.616666666666667,
+      "val_depth": 10.05,
+      "val_protected": 0.18333333333333332,
+      "seconds": 27.382204294204712
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.565,
+      "val_dwell": 12.766666666666667,
+      "val_depth": 10.166666666666666,
+      "val_protected": 0.2,
+      "seconds": 36.76257276535034
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 10.9575,
+      "val_dwell": 13.483333333333333,
+      "val_depth": 10.716666666666667,
+      "val_protected": 0.26666666666666666,
+      "seconds": 46.18166542053223
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 10.7275,
+      "val_dwell": 12.816666666666666,
+      "val_depth": 10.216666666666667,
+      "val_protected": 0.18333333333333332,
+      "seconds": 55.551889419555664
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.6625,
+      "val_dwell": 12.733333333333333,
+      "val_depth": 10.166666666666666,
+      "val_protected": 0.18333333333333332,
+      "seconds": 64.5976915359497
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.1675,
+      "val_dwell": 12.583333333333334,
+      "val_depth": 10.066666666666666,
+      "val_protected": 0.18333333333333332,
+      "seconds": 73.57161736488342
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 11.5675,
+      "val_dwell": 13.45,
+      "val_depth": 10.7,
+      "val_protected": 0.26666666666666666,
+      "seconds": 82.68739080429077
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.3075,
+      "val_dwell": 13.266666666666667,
+      "val_depth": 10.583333333333334,
+      "val_protected": 0.26666666666666666,
+      "seconds": 91.37126064300537
+    }
+  ],
+  "best_update": 244,
+  "best_validation_dwell": 13.483333333333333,
+  "seconds": 91.40293526649475,
+  "protocol": "D1.1",
+  "config": "lr5e-04_ep10",
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S2",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "2_cron",
+    "2_rootkit"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S2\\s0\\encoder.pt",
+    "checkpoint_sha256": "4cabbfdecbc9f2de3595291aff3e46506ab5bbcdb4db0152bd07776a61a65c58",
+    "validation_bce": 0.017080322435394455
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "914974dda0823766ff6f3743d27e02c1dfc5ebaf68fed9de61327da0be7e297f",
+  "wall_seconds": 91.40393567085266,
+  "eval_repeats": 20,
+  "val_seed": 100000,
+  "test_seed": 200000
+}

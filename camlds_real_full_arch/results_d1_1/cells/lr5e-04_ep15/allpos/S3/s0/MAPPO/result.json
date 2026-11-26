@@ -1,0 +1,159 @@
+{
+  "seed": 0,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 9.24,
+      "val_dwell": 10.216666666666667,
+      "val_depth": 9.3,
+      "val_protected": 0.23333333333333334,
+      "seconds": 8.8645498752594
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.9325,
+      "val_dwell": 10.45,
+      "val_depth": 9.3,
+      "val_protected": 0.23333333333333334,
+      "seconds": 18.312561511993408
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.05,
+      "val_dwell": 10.15,
+      "val_depth": 9.0,
+      "val_protected": 0.23333333333333334,
+      "seconds": 27.80090355873108
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.7175,
+      "val_dwell": 10.55,
+      "val_depth": 9.3,
+      "val_protected": 0.26666666666666666,
+      "seconds": 37.54502820968628
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.945,
+      "val_dwell": 10.583333333333334,
+      "val_depth": 9.316666666666666,
+      "val_protected": 0.26666666666666666,
+      "seconds": 47.380056381225586
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.5725,
+      "val_dwell": 11.283333333333333,
+      "val_depth": 9.966666666666667,
+      "val_protected": 0.2833333333333333,
+      "seconds": 57.10728168487549
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.2925,
+      "val_dwell": 11.75,
+      "val_depth": 10.333333333333334,
+      "val_protected": 0.4166666666666667,
+      "seconds": 66.90661644935608
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 12.6,
+      "val_dwell": 11.833333333333334,
+      "val_depth": 10.416666666666666,
+      "val_protected": 0.4166666666666667,
+      "seconds": 76.29871368408203
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 12.0825,
+      "val_dwell": 11.8,
+      "val_depth": 10.383333333333333,
+      "val_protected": 0.4166666666666667,
+      "seconds": 85.9729814529419
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 10.91,
+      "val_dwell": 11.816666666666666,
+      "val_depth": 10.366666666666667,
+      "val_protected": 0.4166666666666667,
+      "seconds": 95.87233328819275
+    }
+  ],
+  "best_update": 390,
+  "best_validation_dwell": 11.833333333333334,
+  "seconds": 95.9671483039856,
+  "protocol": "D1.1",
+  "config": "lr5e-04_ep15",
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 15,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S3\\s0\\encoder.pt",
+    "checkpoint_sha256": "ab5259266c2c6537d97f37a3ded3df0d3036ad04b05d106dfbbcbb19a267dde6",
+    "validation_bce": 0.022940061219372372
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "75e83a18e4b25f4464da84f9ba80a22db92909109ec834163451b05f4ad3ef0e",
+  "wall_seconds": 95.97928142547607,
+  "eval_repeats": 20,
+  "val_seed": 100000,
+  "test_seed": 200000
+}
