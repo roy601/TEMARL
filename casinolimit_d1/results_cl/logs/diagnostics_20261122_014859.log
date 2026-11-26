@@ -1,0 +1,17 @@
+CL-D1.0 stage 'diagnostics' on cuda, started 2026-11-22 01:48:59; log C:\Users\CMR\TEMARL\casinolimit_d1\results_cl\logs\diagnostics_20261122_014859.log
+
+[1/2] preflight: every CL 1.0 checkpoint (200)
+    casinolimit_d1\run_cl.py --device cuda --preflight
+C:\Users\CMR\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\nn\modules\transformer.py:531: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. We recommend specifying layout=torch.jagged when constructing a nested tensor, as this layout receives active development, has better operator coverage, and works with torch.compile. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\NestedTensorImpl.cpp:182.)
+  output = torch._nested_tensor_from_mask(
+CL-D1.0 preflight: PASS (200 checkpoints match CL 1.0's records: identity, validation rows, validation logits (largest difference 2.86e-06) and BCE; 0 failures) -> C:\Users\CMR\TEMARL\casinolimit_d1\results_cl\PREFLIGHT.json
+    done in 0.8 min
+
+[2/2] timing + dry-run check on this device
+    casinolimit_d1\run_cl.py --device cuda --timing
+timing: one cell 96 s on cuda -> 870 CL-D1.0 cells about 23.3 h (test episodes not included)
+dry-run reproduction on cuda: recorded 17.80217391304348, re-evaluated 17.80217391304348 -> PASS
+    done in 1.7 min
+
+STAGE 'diagnostics' FINISHED in 0.04 h
+  send me C:\Users\CMR\TEMARL\casinolimit_d1\results_cl\logs\diagnostics_20261122_014859.log

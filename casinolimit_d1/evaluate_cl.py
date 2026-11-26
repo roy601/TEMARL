@@ -21,6 +21,8 @@ bootstrap CI with 10,000 resamples of runs, seed 20261103, two-sided Wilcoxon, H
   Family 2   allpos vs none, random, static, fixed, greedy, planner, E1            6 comparisons
   Family 3   allpos vs lstm_allpos, E1                                            1 comparison
   Q4         descriptive (mean difference and CI only): GRU and old Transformer vs allpos; IPPO vs MAPPO
+  Family 1, descriptive additions (Section 10): the same contrast on the engaged fraction (E1 / run length),
+             by run-length tertile, and per training seed (spread of the seed-level differences)
   Section 8  each sensitivity setting: Family 1 on its own cells (seeds 0-4); reported as sensitivity
   Section 9  Family H: tuned allpos vs tuned NoHistory (seeds 0-2); descriptive per-setting differences
 Reference policies are run here on the arms' test episodes (same runs, seed 200000+seed, 20 repeats,
@@ -95,6 +97,69 @@ def secondary(rows) -> dict:
             acc[r["run"]][k].append(r[k])
     per = [{k: float(np.mean(v)) for k, v in d.items()} for d in acc.values()]
     return {k: float(np.mean([p[k] for p in per])) for k in per[0]} if per else {}
+
+
+def fraction_per_run(rows_by_seed) -> dict:
+    """{run: engaged fraction (E1 / run length) averaged over repeats, then over seeds}."""
+    acc = defaultdict(list)
+    for rows in rows_by_seed.values():
+        by_run = defaultdict(list)
+        for r in rows:
+            by_run[r["run"]].append(r["dwell"] / max(r["length"], 1.0))
+        for run, v in by_run.items():
+            acc[run].append(float(np.mean(v)))
+    return {run: float(np.mean(v)) for run, v in acc.items()}
+
+
+def length_tertiles(lengths: dict) -> list:
+    """The runs split into three groups by length (ties broken by run id), sizes as equal as possible."""
+    order = sorted(lengths, key=lambda r: (lengths[r], r))
+    return [list(g) for g in np.array_split(np.array(order, dtype=object), 3)]
+
+
+def family1_descriptive(sealed_rows, folds, seeds, a=("allpos", "MAPPO"), b=("NoHistory", "MAPPO")) -> dict:
+    """Family 1's contrast, descriptive only: on the engaged fraction, by run-length tertile, and per seed.
+    sealed_rows[(arm, learner, fold, seed)] = test rows."""
+    of = lambda key, f: {s: sealed_rows[(*key, f["fold"], s)] for s in seeds}
+    e1 = {k: merged(lambda f, k=k: of(k, f), folds) for k in (a, b)}
+    frac = {}
+    for k in (a, b):
+        frac[k] = {}
+        for f in folds:
+            frac[k].update(fraction_per_run(of(k, f)))
+    lengths = {r["run"]: float(r["length"]) for f in folds for s in seeds for r in sealed_rows[(*a, f["fold"], s)]}
+    groups = []
+    for g in length_tertiles(lengths):
+        keep = set(g)
+        sub = lambda d: {r: v for r, v in d.items() if r in keep}
+        groups.append({"runs": len(g), "length_min": min(lengths[r] for r in g), "length_max": max(lengths[r] for r in g),
+                       **described(sub(e1[a]), sub(e1[b]))})
+    per_seed = []
+    for s in seeds:
+        va, vb = {}, {}
+        for f in folds:
+            va.update(e1_per_run({s: sealed_rows[(*a, f["fold"], s)]}))
+            vb.update(e1_per_run({s: sealed_rows[(*b, f["fold"], s)]}))
+        per_seed.append({"seed": s, "mean_difference": float(np.mean([va[r] - vb[r] for r in va]))})
+    diffs = np.array([x["mean_difference"] for x in per_seed])
+    return {"engaged_fraction": described(frac[a], frac[b]),
+            "by_length_tertile": groups,
+            "per_seed": per_seed,
+            "per_seed_summary": {"mean": float(diffs.mean()), "sd": float(diffs.std(ddof=1)) if len(diffs) > 1 else None,
+                                 "min": float(diffs.min()), "max": float(diffs.max()),
+                                 "seeds_positive": int((diffs > 0).sum()), "seeds": len(diffs)},
+            "note": "descriptive: not tested, no claim; the run-level CI of Family 1 stays the primary interval"}
+
+
+def cell_matches(res: dict, key, cfg) -> bool:
+    """A sealed cell carries exactly its declared study, setting, arm, learner, test seed, repeats,
+    environment and payoff table."""
+    import run_cl as R
+    study, c, arm, _, seed, lr = key
+    return (res.get("protocol") == "CL-D1.0" and res["study"] == study and res["config"] == c
+            and {k: res["hp"][k] for k in R.GRID[c]} == R.GRID[c] and (res["arm"], res["learner"]) == (arm, lr)
+            and res["test_seed"] == R.TEST_SEED + seed and res["eval_repeats"] == R.EVAL_REPEATS
+            and res["env_config"] == cfg.to_dict() and res.get("payoff_sha256") == R.table_sha(study))
 
 
 def described(a: dict, b: dict) -> dict:
@@ -173,6 +238,7 @@ def score_main(sealed, folds, seeds, refs) -> dict:
     team = {unit_name(a, l): team_activity(rows((a, l))) for a, l in R.MAIN_CELLS}
     sec = {unit_name(a, l): secondary(rows((a, l))) for a, l in R.MAIN_CELLS}
     return {**fams, "q4_descriptive": q4, "team_activity_descriptive": team, "secondary_descriptive": sec,
+            "family_1_descriptive": family1_descriptive(sealed, folds, seeds),
             "means": {k: float(np.mean(list(v.values()))) for k, v in values.items()},
             "n_units": len(values["allpos"])}
 
@@ -181,6 +247,7 @@ def score_sensitivity(sealed, folds, seeds) -> dict:
     v = {(a, "E1"): merged(lambda f, a=a: {s: sealed[(a, "MAPPO", f["fold"], s)] for s in seeds}, folds)
          for a in ("allpos", "NoHistory")}
     return {"family_1": E.family(v, [("allpos", "NoHistory", "E1")]),
+            "family_1_descriptive": family1_descriptive(sealed, folds, seeds),
             "means": {a: float(np.mean(list(x.values()))) for (a, _), x in v.items()}, "n_units": len(v[("allpos", "E1")])}
 
 
@@ -219,8 +286,23 @@ def report(res) -> list:
     for c in m["q4_descriptive"]:
         L.append(f"  E1 {c['a']} - {c['b']}: {c['mean']:+.3f} [{c['ci'][0]:+.3f}, {c['ci'][1]:+.3f}] n={c['n_runs']}")
     L += ["", "means (E1 per run): " + "; ".join(f"{k} {v:.3f}" for k, v in sorted(m["means"].items())), ""]
+
+    def f1d(d, title):
+        L.append(title)
+        c = d["engaged_fraction"]
+        L.append(f"  engaged fraction allpos - NoHistory: {c['mean']:+.4f} [{c['ci'][0]:+.4f}, {c['ci'][1]:+.4f}]")
+        for g in d["by_length_tertile"]:
+            L.append(f"  runs of length {g['length_min']:.0f}-{g['length_max']:.0f} ({g['runs']} runs): "
+                     f"{g['mean']:+.3f} [{g['ci'][0]:+.3f}, {g['ci'][1]:+.3f}]")
+        s = d["per_seed_summary"]
+        sd = "n/a" if s["sd"] is None else f"{s['sd']:.3f}"
+        L.append(f"  per training seed: mean {s['mean']:+.3f}, SD {sd}, range [{s['min']:+.3f}, {s['max']:+.3f}], "
+                 f"{s['seeds_positive']} of {s['seeds']} seeds positive")
+        L.append("")
+    f1d(m["family_1_descriptive"], "Family 1, descriptive (engaged fraction, run length, training seeds; no claim)")
     for s, r in res["sensitivity"].items():
         fam(f"Sensitivity {s} (Family 1, seeds 0-4; never replaces the primary result)", r["family_1"])
+        f1d(r["family_1_descriptive"], f"Sensitivity {s}, descriptive")
     t = res["tune"]
     fam("Section 9, Family H (each arm tuned per fold on validation; seeds 0-2)", t["family_H"])
     L.append("Descriptive: allpos - NoHistory under each setting")
@@ -304,12 +386,9 @@ def main():
         cfg = R.setting(s)
         for key, d in cells[s].items():
             res, blob = E.read_sealed(d)
-            study, c, arm, _, seed, lr = key
-            if (res.get("protocol") != "CL-D1.0" or res["study"] != study or res["config"] != c
-                    or {k: res["hp"][k] for k in R.GRID[c]} != R.GRID[c] or (res["arm"], res["learner"]) != (arm, lr)
-                    or res["test_seed"] != R.TEST_SEED + seed or res["eval_repeats"] != R.EVAL_REPEATS
-                    or res["env_config"] != cfg.to_dict()):
-                raise RuntimeError(f"{d}: study, setting, arm, learner, test seed, repeats or environment differ")
+            if not cell_matches(res, key, cfg):
+                raise RuntimeError(f"{d}: study, setting, arm, learner, test seed, repeats, environment or "
+                                   f"payoff table differ")
             sealed[key] = blob["test"]
     cfg = R.setting("main")
     refs, chosen = {}, {}

@@ -26,7 +26,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 OUT = HERE / "results_cl"
 GATE = HERE / "gate" / "GATE_RESULT.json"
-STUDIES = ("main", "efficacy_0.5", "efficacy_0.75", "mean", "reward_engagement", "tune")
+STUDIES = ("main", "efficacy_0.5", "efficacy_0.75", "mean", "reward_engagement", "payoff_permuted", "tune")
 
 
 def _json(path: Path):

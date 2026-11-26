@@ -5,3 +5,28 @@ T3.Ran,Table 3,"DSP (%) under attack policy Ran, average of 10 runs, FNR=0.05, F
 T3.RanE,Table 3,"DSP (%) under attack policy RanE, average of 10 runs, FNR=0.05, FPR=0.02",80.18,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,yes
 T3.RanC,Table 3,"DSP (%) under attack policy RanC, average of 10 runs, FNR=0.05, FPR=0.02",85.96,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,yes
 T3.Mix,Table 3,"DSP (%) under attack policy Mix, average of 10 runs, FNR=0.05, FPR=0.02",79.23,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,yes
+S1.Ran.fnr010.ours,Sec. 5.5.2,"DSR (%), Ran attacker, FNR=0.10 (FPR 0.06): proposed method ('over 85%')",>85,MATCH if the lower end of our 95% CI over 10 seeds is above 85; CLOSE if our mean is above 83,no
+S1.Ran.fnr010.baselines,Sec. 5.5.2,"DSR (%), Ran attacker, FNR=0.10: Random and Critical baselines ('less than 75%')",<75,"MATCH if, for both baselines, the upper end of our 95% CI over 10 seeds is below 75; CLOSE if both means are below 77",no
+S1.HiC.critical,Sec. 5.5.2,"DSR (%), HiC attacker: Critical baseline ('nearly 100%'; FNR not stated, read as 0.05)",~100,MATCH if our 95% CI over 10 seeds reaches 98 or above; CLOSE if our mean is at least 95,no
+S2.MARL.HiE.fnr005,Sec. 5.5.3,"DSR (%), HiE, FNR=0.05: non-hierarchical MARL",30.57,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S2.HMARL.HiE.fnr020,Sec. 5.5.3,"DSR (%), HiE, FNR=0.20 (FPR 0.14): HMARL",41.12,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S2.MARL.HiE.fnr020,Sec. 5.5.3,"DSR (%), HiE, FNR=0.20: MARL",15.51,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S2.MARL.Ran.fnr005,Sec. 5.5.3,"DSR (%), Ran, FNR=0.05 (read from the HMARL value 85.28 = Table 3): MARL",77.76,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S2.MARL.RanE.fnr005,Sec. 5.5.3,"DSR (%), RanE, FNR=0.05: MARL",69.48,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S2.MARL.Mix.fnr005,Sec. 5.5.3,"DSR (%), Mix, FNR=0.05: MARL",70.04,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S3.SO.Old.Ran,Sec. 5.5.4,"DSR (%), Ran, FNR=0.05, old network: SO (compromise-only state, as Wang et al. 2020)",83.20,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S3.SO.New.Ran,Sec. 5.5.4,"DSR (%), Ran, FNR=0.05, changed network, no retraining: SO",79.29,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S3.SO.Old.RanE,Sec. 5.5.4,"DSR (%), RanE, FNR=0.05, old network: SO",76.38,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S3.SO.New.RanE,Sec. 5.5.4,"DSR (%), RanE, FNR=0.05, changed network: SO",71.88,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S3.Ours.New.Ran,Sec. 5.5.4,"DSR (%), Ran, FNR=0.05, changed network, no retraining: proposed method",83.34,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S3.Ours.New.Mix,Sec. 5.5.4,"DSR (%), Mix, FNR=0.05, changed network: proposed method",77.54,MATCH if the published value is inside our 95% CI over 10 seeds; CLOSE if within 2 percentage points,no
+S4.Ours.Mix.fnr020,Sec. 5.5.5,"DSR (%), Mix, FNR=0.20, 100-host network: proposed method",93.46,"NOT ATTEMPTED: the 100-host, 8-subnet network of Scenario 4 is not specified (DECISIONS 1)",no
+S4.G16.Mix.fnr020,Sec. 5.5.5,"DSR (%), Mix, FNR=0.20: G16 variant",91.88,"NOT ATTEMPTED: the 100-host, 8-subnet network of Scenario 4 is not specified (DECISIONS 1)",no
+S4.Ours.RanE.fnr010,Sec. 5.5.5,"DSR (%), RanE, FNR=0.10: proposed method",83.28,"NOT ATTEMPTED: the 100-host, 8-subnet network of Scenario 4 is not specified (DECISIONS 1)",no
+S4.NoG.RanE.fnr010,Sec. 5.5.5,"DSR (%), RanE, FNR=0.10: NoG variant",76.38,"NOT ATTEMPTED: the 100-host, 8-subnet network of Scenario 4 is not specified (DECISIONS 1)",no
+S4.Ours.RanC.fnr015,Sec. 5.5.5,"DSR (%), RanC, FNR=0.15: proposed method",81.98,"NOT ATTEMPTED: the 100-host, 8-subnet network of Scenario 4 is not specified (DECISIONS 1)",no
+S4.NoS.RanC.fnr015,Sec. 5.5.5,"DSR (%), RanC, FNR=0.15: NoS variant",79.93,"NOT ATTEMPTED: the 100-host, 8-subnet network of Scenario 4 is not specified (DECISIONS 1)",no
+T4.detection,Table 4,"mean detection time (s), 10 trials",1.6,NOT ATTEMPTED: measures the authors' hardware and testbed (DECISIONS 1),no
+T4.decision,Table 4,"mean decision time (s), 10 trials",1.99,NOT ATTEMPTED: measures the authors' hardware and testbed (DECISIONS 1),no
+T4.deployment,Table 4,"mean deployment time (s), 10 trials",4.6,NOT ATTEMPTED: measures the authors' hardware and testbed (DECISIONS 1),no
+S53.train30000,Sec. 5.3; Fig. 9,"wall-clock training time (s) for 30,000 attacker steps",259.87,NOT ATTEMPTED: measures the authors' hardware and testbed (DECISIONS 1),no

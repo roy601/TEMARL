@@ -4,20 +4,23 @@
     python casinolimit_d1/run_cl.py --device cuda --preflight          # every CL 1.0 checkpoint (200)
     python casinolimit_d1/run_cl.py --device cuda --timing             # one cell + dry-run check, no test
     python casinolimit_d1/run_cl.py --device cuda --study main         # 350 cells, resumable
-    python casinolimit_d1/run_cl.py --device cuda --study efficacy_0.5 # Section 8: 50 cells each
+    python casinolimit_d1/run_cl.py --device cuda --study efficacy_0.5 # Section 8: 50 cells each (5 settings)
     python casinolimit_d1/run_cl.py --device cuda --study tune         # Section 9: 270 cells
     python casinolimit_d1/run_cl.py --smoke                            # code check, tiny, no freeze
 
 Studies (all cells exist before the single test opening, evaluate_cl.py --open-test):
   main         Family 1 allpos, NoHistory (MAPPO); Family 3 lstm_allpos (MAPPO); Q4 gru_allpos, baseline
                (MAPPO), allpos and NoHistory (IPPO); 5 folds x seeds 0-9 = 350 cells
-  efficacy_0.5, efficacy_0.75, mean, reward_engagement
-               allpos and NoHistory (MAPPO), 5 folds x seeds 0-4 = 50 cells each (200)
+  efficacy_0.5, efficacy_0.75, mean, reward_engagement, payoff_permuted
+               allpos and NoHistory (MAPPO), 5 folds x seeds 0-4 = 50 cells each (250);
+               payoff_permuted uses cl_world.PAYOFF_PERMUTED (which decoy suits which tactic changed)
   tune         learning rate {1e-4, 5e-4, 1e-3} x PPO epochs {5, 10, 15} (as protocol D1.1), allpos and
                NoHistory (MAPPO), 5 folds x seeds 0-2 = 270 cells
 Each cell: D1.0's cell (run_d1.run_cell) on the CasinoLimit world. The encoder is the CL 1.0 checkpoint
-of the same arm, fold and seed, accepted only if its validation BCE reproduces the BCE that CL 1.0
-recorded for it (casinolimit_encoder/out/train/main/.../result.json, committed with CL 1.0).
+of the same arm, fold and seed, accepted only if it matches CL 1.0's committed record for it
+(casinolimit_encoder/out/train/main/.../result.json): variant, fold, seed, window, label count and
+validation rows; the committed validation logits file (by its recorded SHA-256), which the checkpoint's
+own validation logits must reproduce within 1e-3; and the recorded validation BCE, within 1e-5.
 """
 from __future__ import annotations
 
@@ -31,6 +34,7 @@ import sys
 import time
 from pathlib import Path
 
+import numpy as np
 import torch
 
 HERE = Path(__file__).resolve().parent
@@ -49,7 +53,9 @@ PHASES = (
 MAIN_CELLS = tuple(c for _, cs in PHASES for c in cs)
 PRIMARY_CELLS = PHASES[0][1]
 SENSITIVITIES = {"efficacy_0.5": {"efficacy": 0.5}, "efficacy_0.75": {"efficacy": 0.75},
-                 "mean": {"aggregation": "mean"}, "reward_engagement": {"reward": "engagement"}}
+                 "mean": {"aggregation": "mean"}, "reward_engagement": {"reward": "engagement"},
+                 "payoff_permuted": {}}                  # changes the payoff table, not EnvConfig
+PAYOFF_TABLES = {"payoff_permuted": C.PAYOFF_PERMUTED}
 LRS, EPOCHS = (1e-4, 5e-4, 1e-3), (5, 10, 15)        # protocol D1.1's grid
 DEFAULT = {"lr": 5e-4, "ppo_epochs": 10}
 
@@ -69,6 +75,7 @@ ENCODER_ARMS = ("allpos", "baseline", "gru_allpos", "lstm_allpos")
 OUT = HERE / "results_cl"
 CL10_RECORDS = REPO / "casinolimit_encoder" / "out" / "train" / "main"
 BCE_TOL = 1e-5
+LOGIT_TOL = 1e-3                             # max |logit difference| from CL 1.0's committed validation logits
 
 if {k: marl.HP[k] for k in DEFAULT} != DEFAULT:
     raise RuntimeError("mappo_cmd.HP no longer holds D1.0's setting")
@@ -77,6 +84,28 @@ if {k: marl.HP[k] for k in DEFAULT} != DEFAULT:
 def setting(study: str):
     """EnvConfig of a study: D1.0's primary setting (proposal reward), or a Section 8 change of one entry."""
     return env.EnvConfig(**{"reward": PRIMARY_REWARD, **SENSITIVITIES.get(study, {})})
+
+
+def table(study: str):
+    """The payoff table a study uses: D1.0's rule (cl_world.PAYOFF), or a Section 8 replacement."""
+    return PAYOFF_TABLES.get(study, C.PAYOFF)
+
+
+def table_sha(study: str) -> str:
+    return C.table_sha256(table(study))
+
+
+@contextlib.contextmanager
+def payoff(study: str):
+    """Put the study's payoff table into the environment (in place, where command_payoff reads it);
+    restore D1.0's table after, also on an exception."""
+    if not np.array_equal(env.PAYOFF, C.PAYOFF):
+        raise RuntimeError("the environment's payoff table is not D1.0's rule on entry")
+    env.PAYOFF[:] = table(study)
+    try:
+        yield
+    finally:
+        env.PAYOFF[:] = C.PAYOFF
 
 
 def plan(study: str):
@@ -123,14 +152,28 @@ def checkpoint(arm, fold_id, seed, root: Path) -> Path:
     return Path(root) / "train" / "main" / arm / fold_id / f"s{seed}" / "encoder.pt"
 
 
+def cl10_record(arm, fold_id, seed, records: Path = CL10_RECORDS) -> dict:
+    return json.loads((Path(records) / arm / fold_id / f"s{seed}" / "result.json").read_text(encoding="utf-8"))
+
+
 def cl10_bce(arm, fold_id, seed, records: Path = CL10_RECORDS) -> float:
-    rec = json.loads((records / arm / fold_id / f"s{seed}" / "result.json").read_text(encoding="utf-8"))
-    return float(rec["validation"]["bce"])
+    return float(cl10_record(arm, fold_id, seed, records)["validation"]["bce"])
+
+
+def check_record(rec: dict, arm, fold, seed, d) -> None:
+    """CL 1.0's record must describe this arm, fold, seed, window, label count and validation rows."""
+    want = {"variant": arm, "fold": fold["fold"], "seed": seed, "window": C.W, "labels": C.NT}
+    got = {k: rec.get(k) for k in want}
+    if got != want:
+        raise ValueError(f"CL 1.0 record {got} does not describe {want}: not the CL 1.0 checkpoint")
+    if rec.get("val_source_rows") != json.loads(json.dumps(d["val_source_rows"])):
+        raise ValueError("CL 1.0 record's validation rows differ from this fold's: preprocessing changed")
 
 
 def load_encoder(arm, fold, seed, root, device, records: Path = CL10_RECORDS):
-    """The CL 1.0 checkpoint, unchanged, accepted only if it reproduces CL 1.0's recorded validation BCE.
-    NoHistory has no encoder."""
+    """The CL 1.0 checkpoint, unchanged, accepted only if it matches CL 1.0's committed record: identity
+    fields and validation rows, the committed validation logits (SHA-256 as recorded; reproduced within
+    LOGIT_TOL) and the recorded validation BCE (within BCE_TOL). NoHistory has no encoder."""
     if arm == "NoHistory":
         return None, {"arm": "NoHistory", "checkpoint": None}
     path = checkpoint(arm, fold["fold"], seed, root)
@@ -143,14 +186,26 @@ def load_encoder(arm, fold, seed, root, device, records: Path = CL10_RECORDS):
     model.load_state_dict(ck["state_dict"], strict=True)
     model.eval()
     d = C.CD.fold_data(fold)
-    logits = C.CP.V.numpy_logits(model, *d["val"][:2], torch.device(device))
+    rec = cl10_record(arm, fold["fold"], seed, records)
+    check_record(rec, arm, fold, seed, d)
+    vfile = Path(records) / arm / fold["fold"] / f"s{seed}" / rec["val"]["file"]
+    if not vfile.exists() or sha_file(vfile) != rec["val"]["sha256"]:
+        raise ValueError(f"{vfile}: CL 1.0's committed validation logits are missing or changed")
+    stored = np.load(vfile)
+    logits = np.asarray(C.CP.V.numpy_logits(model, *d["val"][:2], torch.device(device)))
+    if stored.shape != logits.shape or stored.shape[0] != rec["val"]["points"]:
+        raise ValueError(f"{path}: validation logits shape {logits.shape} differs from CL 1.0's {stored.shape}")
+    gap = float(np.max(np.abs(logits.astype(np.float64) - stored.astype(np.float64))))
+    if gap > LOGIT_TOL:
+        raise ValueError(f"{path}: validation logits differ from CL 1.0's by up to {gap}: not the CL 1.0 checkpoint")
     measured = float(C.CP.Mx.bce(logits, d["val"][2]))
-    expected = cl10_bce(arm, fold["fold"], seed, records)
+    expected = float(rec["validation"]["bce"])
     if abs(measured - expected) > BCE_TOL:
         raise ValueError(f"{path}: validation BCE {measured} differs from CL 1.0's recorded {expected}: "
                          f"not the CL 1.0 checkpoint")
     return model, {"arm": arm, "checkpoint": str(path), "checkpoint_sha256": sha_file(path),
-                   "validation_bce": measured, "cl10_validation_bce": expected}
+                   "validation_bce": measured, "cl10_validation_bce": expected,
+                   "validation_logits_max_abs_diff": gap, "cl10_val_logits_sha256": rec["val"]["sha256"]}
 
 
 def run_cell(study, config, arm, learner, fold, seed, args, dest: Path, test: bool):
@@ -160,7 +215,7 @@ def run_cell(study, config, arm, learner, fold, seed, args, dest: Path, test: bo
     te = C.specs(C.runs(fold, "test"), TEST_SEED + seed, args.eval_repeats) if test else []
     model, enc = load_encoder(arm, fold, seed, Path(args.encoder_root), args.device, Path(args.records))
     t0 = time.time()
-    with hp(config) as used:
+    with hp(config) as used, payoff(study):
         res = marl.train(model, cfg, C.runs(fold, "train"), va, te, seed, args.env_steps, C.W, C.MAX_STEPS,
                          learner == "MAPPO", args.device, args.verbose)
     dest.mkdir(parents=True, exist_ok=True)
@@ -172,6 +227,7 @@ def run_cell(study, config, arm, learner, fold, seed, args, dest: Path, test: bo
         (dest / "sealed_test.json").write_bytes(blob)
     res.update(protocol="CL-D1.0", study=study, config=config, hp=used, arm=arm, learner=learner,
                fold=fold["fold"], seed=seed, test_runs=fold["test_runs"], encoder=enc, env_config=cfg.to_dict(),
+               payoff_sha256=table_sha(study),
                sealed_test_sha256=sha_bytes(blob) if test else None, wall_seconds=time.time() - t0,
                eval_repeats=args.eval_repeats, val_seed=VAL_SEED + seed, test_seed=TEST_SEED + seed)
     write(dest / "result.json", res)
@@ -213,8 +269,9 @@ def revalidate(dest: Path, fold, seed, model, device, cfg):
     actor.load_state_dict(torch.load(dest / "actor.pt", map_location=device))
     va = C.specs(C.runs(fold, "val"), VAL_SEED + seed, res["eval_repeats"])
     bank = marl.HistoryBank(model, C.W, device, h_zero=(model is None))
-    return (marl.mean_of(marl.evaluate_team(actor, cfg, va, bank, C.MAX_STEPS, device)),
-            res["best_validation_dwell"])
+    with payoff(res["study"]):
+        got = marl.mean_of(marl.evaluate_team(actor, cfg, va, bank, C.MAX_STEPS, device))
+    return got, res["best_validation_dwell"]
 
 
 def validation_summary(out: Path, study: str):
@@ -250,8 +307,10 @@ def preflight(a, folds):
     rep = {"pass": not bad and bool(ok), "spec_sha256": spec_sha(), "checked": len(ok) + len(bad),
            "ok": [[r["arm"], r["fold"], r["seed"]] for r in ok], "failures": bad, "checkpoints": ok}
     write(a.output / "PREFLIGHT.json", rep)
-    print(f"CL-D1.0 preflight: {'PASS' if rep['pass'] else 'FAIL'} ({len(ok)} checkpoints reproduce CL 1.0's "
-          f"validation BCE, {len(bad)} failures) -> {a.output / 'PREFLIGHT.json'}")
+    gap = max((r["validation_logits_max_abs_diff"] for r in ok), default=float("nan"))
+    print(f"CL-D1.0 preflight: {'PASS' if rep['pass'] else 'FAIL'} ({len(ok)} checkpoints match CL 1.0's records: "
+          f"identity, validation rows, validation logits (largest difference {gap:.2e}) and BCE; "
+          f"{len(bad)} failures) -> {a.output / 'PREFLIGHT.json'}")
     for b in bad[:10]:
         print("  ", b)
     return rep
@@ -271,7 +330,8 @@ def identity_of(a, study, folds):
     """What decides a cell's content; a restart must match it (machine, threads, filters may differ)."""
     return {"protocol": "CL-D1.0", "study": study, "spec": json.loads(spec_cl_d1.SPEC.read_text(encoding="utf-8")),
             "base_hp": dict(marl.HP), "grid": GRID if study == "tune" else {DEFAULT_NAME: GRID[DEFAULT_NAME]},
-            "env_config": setting(study).to_dict(), "env_steps": a.env_steps, "eval_repeats": a.eval_repeats,
+            "env_config": setting(study).to_dict(), "payoff_sha256": table_sha(study),
+            "env_steps": a.env_steps, "eval_repeats": a.eval_repeats,
             "val_seed": VAL_SEED, "test_seed": TEST_SEED, "seeds": list(SEEDS[study]), "max_steps": C.MAX_STEPS,
             "folds": [{k: v for k, v in f.items() if k != "_steps"} for f in folds]}
 

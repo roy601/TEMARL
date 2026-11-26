@@ -105,6 +105,48 @@ def build_payoff() -> np.ndarray:
 
 
 PAYOFF = build_payoff()
+PERMUTE_SEED = 20261122                    # Section 8, payoff_permuted: declared before the freeze
+
+
+def _best(row) -> list:
+    """The best decoy(s) of a payoff row (action indices 1-5)."""
+    return sorted(int(j) + 1 for j in np.flatnonzero(np.isclose(row[1:], row[1:].max())))
+
+
+def permuted_payoff(seed: int = PERMUTE_SEED):
+    """Section 8 sensitivity `payoff_permuted`: for each tactic (sorted by name), one permutation of the 5
+    decoy columns from a generator seeded with `seed`, redrawn until the tactic's best decoy changes
+    (a tactic whose row is constant, Resource Development, keeps its first draw: it has no best decoy).
+    The permutation is applied to every technique of that tactic. Each row keeps its multiset of values
+    and its 'none' column, and techniques of one tactic still share a best decoy; only which decoy suits
+    which tactic changes. Returns (table, {tactic: {"permutation", "draws", "best_before", "best_after"}})."""
+    rng = np.random.default_rng(seed)
+    first_row = {}
+    for i, t in enumerate(LABELS):
+        first_row.setdefault(TACTICS[t]["tactic"], i)
+    perms, info = {}, {}
+    for tac in sorted(first_row):
+        row, draws = PAYOFF[first_row[tac]], 0
+        constant = len(_best(row)) == DP.N_ACTIONS - 1
+        while True:
+            p, draws = rng.permutation(DP.N_ACTIONS - 1), draws + 1
+            if constant or _best(row[np.r_[0, 1 + p]]) != _best(row):
+                break
+        perms[tac] = p
+        info[tac] = {"permutation": [int(x) + 1 for x in p], "draws": draws, "best_before": _best(row),
+                     "best_after": _best(row[np.r_[0, 1 + p]])}
+    A = PAYOFF.copy()
+    for i, t in enumerate(LABELS):
+        A[i, 1:] = PAYOFF[i, 1 + perms[TACTICS[t]["tactic"]]]
+    return A, info
+
+
+PAYOFF_PERMUTED, PERMUTATION_INFO = permuted_payoff()
+
+
+def table_sha256(table: np.ndarray) -> str:
+    import hashlib
+    return hashlib.sha256(np.ascontiguousarray(table, np.float64).tobytes()).hexdigest()
 
 
 def _module(name, **attrs):
