@@ -1,0 +1,158 @@
+{
+  "seed": 0,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 6.4925,
+      "val_dwell": 7.116666666666666,
+      "val_depth": 7.733333333333333,
+      "val_protected": 0.18333333333333332,
+      "seconds": 8.565720319747925
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.1425,
+      "val_dwell": 11.05,
+      "val_depth": 10.3,
+      "val_protected": 0.3333333333333333,
+      "seconds": 17.04622197151184
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.155,
+      "val_dwell": 11.2,
+      "val_depth": 10.616666666666667,
+      "val_protected": 0.3,
+      "seconds": 25.433982133865356
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 10.4225,
+      "val_dwell": 9.883333333333333,
+      "val_depth": 9.583333333333334,
+      "val_protected": 0.18333333333333332,
+      "seconds": 34.28946089744568
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.825,
+      "val_dwell": 11.866666666666667,
+      "val_depth": 11.533333333333333,
+      "val_protected": 0.21666666666666667,
+      "seconds": 44.01607346534729
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 12.6325,
+      "val_dwell": 12.25,
+      "val_depth": 11.55,
+      "val_protected": 0.36666666666666664,
+      "seconds": 53.413564920425415
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.855,
+      "val_dwell": 12.516666666666667,
+      "val_depth": 11.883333333333333,
+      "val_protected": 0.35,
+      "seconds": 63.28307008743286
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 12.6525,
+      "val_dwell": 12.366666666666667,
+      "val_depth": 11.516666666666667,
+      "val_protected": 0.36666666666666664,
+      "seconds": 72.88434219360352
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 12.7975,
+      "val_dwell": 12.316666666666666,
+      "val_depth": 11.466666666666667,
+      "val_protected": 0.36666666666666664,
+      "seconds": 82.6895968914032
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 12.5975,
+      "val_dwell": 12.266666666666667,
+      "val_depth": 11.6,
+      "val_protected": 0.3333333333333333,
+      "seconds": 92.40455269813538
+    }
+  ],
+  "best_update": 342,
+  "best_validation_dwell": 12.516666666666667,
+  "seconds": 92.51411890983582,
+  "protocol": "D1.1",
+  "config": "lr5e-04_ep10",
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S6",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "6_macro_binary",
+    "6_macro_cron",
+    "6_plugin",
+    "6_screensharing_binary",
+    "6_screensharing_cron"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S6\\s0\\encoder.pt",
+    "checkpoint_sha256": "f6e197b855047efa220a01cc475ee2b5fdd84eaa941fde23b538a80d7118ac9f",
+    "validation_bce": 0.021814310728349474
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "033790b1186e0e5906205b4d245877052f4afe5d297860ca974122678fff4772",
+  "wall_seconds": 92.53077697753906,
+  "eval_repeats": 20,
+  "val_seed": 100000,
+  "test_seed": 200000
+}

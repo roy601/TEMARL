@@ -1,0 +1,158 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 3.02,
+      "val_dwell": 2.816666666666667,
+      "val_depth": 2.7333333333333334,
+      "val_protected": 0.0,
+      "seconds": 8.187700271606445
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 5.4925,
+      "val_dwell": 8.05,
+      "val_depth": 5.85,
+      "val_protected": 0.11666666666666667,
+      "seconds": 16.56673812866211
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 8.2625,
+      "val_dwell": 9.016666666666667,
+      "val_depth": 7.366666666666666,
+      "val_protected": 0.16666666666666666,
+      "seconds": 25.498965740203857
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 9.535,
+      "val_dwell": 9.433333333333334,
+      "val_depth": 8.7,
+      "val_protected": 0.18333333333333332,
+      "seconds": 34.736868381500244
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 10.055,
+      "val_dwell": 9.6,
+      "val_depth": 8.983333333333333,
+      "val_protected": 0.18333333333333332,
+      "seconds": 43.73151779174805
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 10.67,
+      "val_dwell": 9.15,
+      "val_depth": 8.45,
+      "val_protected": 0.18333333333333332,
+      "seconds": 53.10807275772095
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 9.965,
+      "val_dwell": 9.4,
+      "val_depth": 8.583333333333334,
+      "val_protected": 0.18333333333333332,
+      "seconds": 62.52449440956116
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 10.57,
+      "val_dwell": 9.316666666666666,
+      "val_depth": 8.633333333333333,
+      "val_protected": 0.2,
+      "seconds": 71.70512461662292
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 10.45,
+      "val_dwell": 9.433333333333334,
+      "val_depth": 8.65,
+      "val_protected": 0.18333333333333332,
+      "seconds": 80.73521685600281
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 10.995,
+      "val_dwell": 9.183333333333334,
+      "val_depth": 8.516666666666667,
+      "val_protected": 0.18333333333333332,
+      "seconds": 89.73025512695312
+    }
+  ],
+  "best_update": 244,
+  "best_validation_dwell": 9.6,
+  "seconds": 89.84065580368042,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep10",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S6",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "6_macro_binary",
+    "6_macro_cron",
+    "6_plugin",
+    "6_screensharing_binary",
+    "6_screensharing_cron"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S6\\s2\\encoder.pt",
+    "checkpoint_sha256": "2470f6592ff991c5f783ea5f4ee2d1835a60f06d3f99aa9765209cbc906a7a18",
+    "validation_bce": 0.020446968467352618
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "77c2646bfb6e34eb0087898ccb477caccfcf6c79a6596fafccc10b401390b145",
+  "wall_seconds": 89.84340119361877,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

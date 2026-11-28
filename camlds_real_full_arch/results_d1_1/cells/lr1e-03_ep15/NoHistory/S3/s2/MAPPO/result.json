@@ -1,0 +1,157 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 8.1325,
+      "val_dwell": 8.016666666666667,
+      "val_depth": 5.433333333333334,
+      "val_protected": 0.23333333333333334,
+      "seconds": 8.669260263442993
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 10.535,
+      "val_dwell": 9.633333333333333,
+      "val_depth": 6.033333333333333,
+      "val_protected": 0.31666666666666665,
+      "seconds": 17.293330669403076
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 10.355,
+      "val_dwell": 8.333333333333334,
+      "val_depth": 5.2,
+      "val_protected": 0.2,
+      "seconds": 25.76390552520752
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 10.0725,
+      "val_dwell": 8.366666666666667,
+      "val_depth": 5.233333333333333,
+      "val_protected": 0.2,
+      "seconds": 35.2878782749176
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 10.1825,
+      "val_dwell": 9.633333333333333,
+      "val_depth": 6.033333333333333,
+      "val_protected": 0.31666666666666665,
+      "seconds": 45.10019087791443
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 10.815,
+      "val_dwell": 11.1,
+      "val_depth": 7.25,
+      "val_protected": 0.5666666666666667,
+      "seconds": 54.88087821006775
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 10.52,
+      "val_dwell": 11.7,
+      "val_depth": 8.316666666666666,
+      "val_protected": 0.5666666666666667,
+      "seconds": 64.5331494808197
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 10.3475,
+      "val_dwell": 11.366666666666667,
+      "val_depth": 8.066666666666666,
+      "val_protected": 0.5666666666666667,
+      "seconds": 74.07063269615173
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 10.795,
+      "val_dwell": 11.833333333333334,
+      "val_depth": 8.4,
+      "val_protected": 0.5833333333333334,
+      "seconds": 83.7361581325531
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.1525,
+      "val_dwell": 11.716666666666667,
+      "val_depth": 8.316666666666666,
+      "val_protected": 0.5666666666666667,
+      "seconds": 93.46011662483215
+    }
+  ],
+  "best_update": 439,
+  "best_validation_dwell": 11.833333333333334,
+  "seconds": 93.53857803344727,
+  "protocol": "D1.1",
+  "config": "lr1e-03_ep15",
+  "hp": {
+    "lr": 0.001,
+    "ppo_epochs": 15,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "NoHistory",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "NoHistory",
+    "checkpoint": null
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "ec51132e7dab452e3d5cc5fa097f85624998de4ffe1cc8ed413723be5a31a064",
+  "wall_seconds": 93.5542254447937,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

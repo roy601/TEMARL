@@ -1,0 +1,155 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 3.57,
+      "val_dwell": 4.216666666666667,
+      "val_depth": 4.416666666666667,
+      "val_protected": 0.0,
+      "seconds": 8.869924545288086
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 7.13,
+      "val_dwell": 12.866666666666667,
+      "val_depth": 9.116666666666667,
+      "val_protected": 0.31666666666666665,
+      "seconds": 17.843926191329956
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 10.09,
+      "val_dwell": 12.883333333333333,
+      "val_depth": 9.7,
+      "val_protected": 0.2833333333333333,
+      "seconds": 27.1389262676239
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 10.2675,
+      "val_dwell": 12.966666666666667,
+      "val_depth": 9.566666666666666,
+      "val_protected": 0.2833333333333333,
+      "seconds": 37.064926624298096
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 10.9875,
+      "val_dwell": 13.05,
+      "val_depth": 9.533333333333333,
+      "val_protected": 0.23333333333333334,
+      "seconds": 47.05492663383484
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 10.5825,
+      "val_dwell": 13.683333333333334,
+      "val_depth": 10.016666666666667,
+      "val_protected": 0.2833333333333333,
+      "seconds": 56.857927083969116
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.165,
+      "val_dwell": 13.133333333333333,
+      "val_depth": 9.6,
+      "val_protected": 0.23333333333333334,
+      "seconds": 66.72592973709106
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 10.8275,
+      "val_dwell": 13.133333333333333,
+      "val_depth": 9.616666666666667,
+      "val_protected": 0.23333333333333334,
+      "seconds": 76.36992859840393
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 11.3975,
+      "val_dwell": 13.683333333333334,
+      "val_depth": 10.033333333333333,
+      "val_protected": 0.2833333333333333,
+      "seconds": 86.24892616271973
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.78,
+      "val_dwell": 13.183333333333334,
+      "val_depth": 9.7,
+      "val_protected": 0.23333333333333334,
+      "seconds": 96.23392629623413
+    }
+  ],
+  "best_update": 293,
+  "best_validation_dwell": 13.683333333333334,
+  "seconds": 96.283926486969,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep15",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 15,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S2",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "2_cron",
+    "2_rootkit"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S2\\s2\\encoder.pt",
+    "checkpoint_sha256": "0f7694d61a077e29599a15da72c6a7be94100ccb63dbda09cda3b8be1d2b76f8",
+    "validation_bce": 0.017523277724168305
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "dafaa839b94cdf10b27bc67e00297ee18cad94baf9b960ff3f79e11f7c82e5fc",
+  "wall_seconds": 96.28792667388916,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

@@ -1,0 +1,36 @@
+Protocol D1.1 results: hyperparameter sensitivity (test opened once; simulation only;
+a sensitivity result, never a replacement for the D1.0 primary result)
+
+units: E1 29 test runs, P1 29 (S4 excluded); seeds 0-2
+
+Family H (Q5): allpos vs NoHistory, each with its own setting selected per fold on validation
+  E1 allpos - NoHistory: +1.825 [+1.455, +2.239] p_holm=0.0000 n=29 -> history agents (allpos) outperforms agents without history
+  P1 allpos - NoHistory: +0.042 [+0.011, +0.086] p_holm=0.0253 n=29 -> history agents (allpos) outperforms agents without history
+
+Descriptive only (no test, no correction, no claim): allpos - NoHistory under each setting
+  lr1e-04_ep05 E1: +2.349 [+1.827, +2.895] n=29
+  lr1e-04_ep05 P1: +0.021 [-0.006, +0.053] n=29
+  lr1e-04_ep10 E1: +2.243 [+1.646, +2.891] n=29
+  lr1e-04_ep10 P1: +0.016 [-0.010, +0.046] n=29
+  lr1e-04_ep15 E1: +2.167 [+1.613, +2.771] n=29
+  lr1e-04_ep15 P1: +0.029 [+0.001, +0.067] n=29
+  lr5e-04_ep05 E1: +2.125 [+1.546, +2.764] n=29
+  lr5e-04_ep05 P1: +0.029 [+0.003, +0.060] n=29
+  lr5e-04_ep10 E1: +2.195 [+1.626, +2.800] n=29
+  lr5e-04_ep10 P1: +0.059 [+0.016, +0.109] n=29
+  lr5e-04_ep15 E1: +1.939 [+1.457, +2.494] n=29
+  lr5e-04_ep15 P1: +0.030 [-0.002, +0.067] n=29
+  lr1e-03_ep05 E1: +2.237 [+1.663, +2.867] n=29
+  lr1e-03_ep05 P1: +0.055 [+0.015, +0.102] n=29
+  lr1e-03_ep10 E1: +1.897 [+1.334, +2.521] n=29
+  lr1e-03_ep10 P1: +0.020 [-0.010, +0.055] n=29
+  lr1e-03_ep15 E1: +1.594 [+1.168, +2.049] n=29
+  lr1e-03_ep15 P1: +0.018 [-0.017, +0.066] n=29
+
+Descriptive only: tuned - D1.0 setting, per arm
+  allpos E1: -0.103 [-0.393, +0.114] n=29
+  allpos P1: -0.003 [-0.023, +0.011] n=29
+  NoHistory E1: +0.267 [+0.020, +0.556] n=29
+  NoHistory P1: +0.013 [-0.009, +0.040] n=29
+
+Settings selected (variant folds): allpos: lr1e-03_ep05 x1, lr1e-03_ep10 x1, lr1e-03_ep15 x15, lr1e-04_ep05 x2, lr1e-04_ep10 x2, lr1e-04_ep15 x2, lr5e-04_ep05 x2, lr5e-04_ep10 x2, lr5e-04_ep15 x2; NoHistory: lr1e-03_ep10 x4, lr1e-03_ep15 x18, lr5e-04_ep05 x1, lr5e-04_ep10 x4, lr5e-04_ep15 x2

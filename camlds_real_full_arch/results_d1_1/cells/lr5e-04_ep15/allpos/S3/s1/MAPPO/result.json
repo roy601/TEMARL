@@ -1,0 +1,159 @@
+{
+  "seed": 1,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 9.4175,
+      "val_dwell": 11.5,
+      "val_depth": 10.016666666666667,
+      "val_protected": 0.36666666666666664,
+      "seconds": 9.519232034683228
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 11.0075,
+      "val_dwell": 12.416666666666666,
+      "val_depth": 10.433333333333334,
+      "val_protected": 0.36666666666666664,
+      "seconds": 19.08128547668457
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.145,
+      "val_dwell": 11.65,
+      "val_depth": 9.883333333333333,
+      "val_protected": 0.3333333333333333,
+      "seconds": 28.504045724868774
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.6125,
+      "val_dwell": 11.05,
+      "val_depth": 9.616666666666667,
+      "val_protected": 0.3,
+      "seconds": 38.271841287612915
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.1075,
+      "val_dwell": 12.416666666666666,
+      "val_depth": 10.433333333333334,
+      "val_protected": 0.36666666666666664,
+      "seconds": 48.01160216331482
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.475,
+      "val_dwell": 10.333333333333334,
+      "val_depth": 9.033333333333333,
+      "val_protected": 0.23333333333333334,
+      "seconds": 57.883902072906494
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.6325,
+      "val_dwell": 11.766666666666667,
+      "val_depth": 10.016666666666667,
+      "val_protected": 0.3333333333333333,
+      "seconds": 67.55874037742615
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.855,
+      "val_dwell": 10.316666666666666,
+      "val_depth": 9.05,
+      "val_protected": 0.23333333333333334,
+      "seconds": 77.14338946342468
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 11.41,
+      "val_dwell": 10.316666666666666,
+      "val_depth": 9.05,
+      "val_protected": 0.23333333333333334,
+      "seconds": 86.82776403427124
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.365,
+      "val_dwell": 12.25,
+      "val_depth": 10.666666666666666,
+      "val_protected": 0.36666666666666664,
+      "seconds": 96.41394352912903
+    }
+  ],
+  "best_update": 98,
+  "best_validation_dwell": 12.416666666666666,
+  "seconds": 96.5240364074707,
+  "protocol": "D1.1",
+  "config": "lr5e-04_ep15",
+  "hp": {
+    "lr": 0.0005,
+    "ppo_epochs": 15,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S3\\s1\\encoder.pt",
+    "checkpoint_sha256": "e62beb5d86e1da786b8661533396e2db0f102dcb64bae41f397bbb80c4d32269",
+    "validation_bce": 0.02320933351228216
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "a1bd444e770540434bdcbb6b79498cd7cd01c36c342e2f79cea732198bf3bd5e",
+  "wall_seconds": 96.5250358581543,
+  "eval_repeats": 20,
+  "val_seed": 100001,
+  "test_seed": 200001
+}

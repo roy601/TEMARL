@@ -1,0 +1,159 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 6.6225,
+      "val_dwell": 8.383333333333333,
+      "val_depth": 7.116666666666666,
+      "val_protected": 0.26666666666666666,
+      "seconds": 8.28879690170288
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 11.445,
+      "val_dwell": 10.166666666666666,
+      "val_depth": 8.583333333333334,
+      "val_protected": 0.31666666666666665,
+      "seconds": 16.416877269744873
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 11.9575,
+      "val_dwell": 9.466666666666667,
+      "val_depth": 7.95,
+      "val_protected": 0.21666666666666667,
+      "seconds": 24.501460790634155
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 11.4825,
+      "val_dwell": 9.466666666666667,
+      "val_depth": 7.95,
+      "val_protected": 0.21666666666666667,
+      "seconds": 32.74170637130737
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 11.76,
+      "val_dwell": 10.316666666666666,
+      "val_depth": 8.65,
+      "val_protected": 0.3,
+      "seconds": 41.04573941230774
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 11.48,
+      "val_dwell": 10.3,
+      "val_depth": 8.633333333333333,
+      "val_protected": 0.3,
+      "seconds": 49.27067518234253
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 11.685,
+      "val_dwell": 10.45,
+      "val_depth": 8.783333333333333,
+      "val_protected": 0.3,
+      "seconds": 57.45231890678406
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 11.095,
+      "val_dwell": 10.433333333333334,
+      "val_depth": 8.766666666666667,
+      "val_protected": 0.3,
+      "seconds": 65.47680687904358
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 13.115,
+      "val_dwell": 10.316666666666666,
+      "val_depth": 8.65,
+      "val_protected": 0.3,
+      "seconds": 73.71986865997314
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 11.9025,
+      "val_dwell": 9.533333333333333,
+      "val_depth": 8.016666666666667,
+      "val_protected": 0.21666666666666667,
+      "seconds": 81.39662718772888
+    }
+  ],
+  "best_update": 342,
+  "best_validation_dwell": 10.45,
+  "seconds": 81.50360536575317,
+  "protocol": "D1.1",
+  "config": "lr1e-03_ep05",
+  "hp": {
+    "lr": 0.001,
+    "ppo_epochs": 5,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "allpos",
+  "learner": "MAPPO",
+  "fold": "S3",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "3_ssh_apt",
+    "3_ssh_healthcheck",
+    "3_ssh_puppet",
+    "3_vnc_apt",
+    "3_vnc_healthcheck",
+    "3_vnc_puppet"
+  ],
+  "encoder": {
+    "arm": "allpos",
+    "checkpoint": "C:\\Users\\user5\\TEMARL\\camlds_encoder\\out\\variants\\allpos\\S3\\s2\\encoder.pt",
+    "checkpoint_sha256": "98206379dc0a504e28f5efb65cc32f64c35f9fef0bbcd1ee4efc03fea68e135b",
+    "validation_bce": 0.021843276805293608
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "0e21e3e1ee0cf6fdaa4e71a91a13fa6e0580ef316b30bdd1e6f903d40fc846e6",
+  "wall_seconds": 81.5073549747467,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

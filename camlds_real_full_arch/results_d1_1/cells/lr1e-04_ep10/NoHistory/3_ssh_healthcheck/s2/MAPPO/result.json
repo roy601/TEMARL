@@ -1,0 +1,152 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 4.5475,
+      "val_dwell": 8.85,
+      "val_depth": 5.65,
+      "val_protected": 0.0,
+      "seconds": 9.436102867126465
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 7.23,
+      "val_dwell": 10.95,
+      "val_depth": 6.7,
+      "val_protected": 0.0,
+      "seconds": 17.702571392059326
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 8.4775,
+      "val_dwell": 11.4,
+      "val_depth": 7.85,
+      "val_protected": 0.0,
+      "seconds": 25.788334846496582
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 8.52,
+      "val_dwell": 11.65,
+      "val_depth": 12.3,
+      "val_protected": 0.5,
+      "seconds": 34.37753868103027
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 9.1925,
+      "val_dwell": 13.15,
+      "val_depth": 13.6,
+      "val_protected": 0.45,
+      "seconds": 43.2148551940918
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 9.375,
+      "val_dwell": 13.4,
+      "val_depth": 14.0,
+      "val_protected": 0.5,
+      "seconds": 51.60521173477173
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 9.72,
+      "val_dwell": 13.0,
+      "val_depth": 13.55,
+      "val_protected": 0.45,
+      "seconds": 59.920573711395264
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 10.095,
+      "val_dwell": 14.35,
+      "val_depth": 13.75,
+      "val_protected": 0.45,
+      "seconds": 68.10546517372131
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 9.8375,
+      "val_dwell": 14.45,
+      "val_depth": 13.6,
+      "val_protected": 0.45,
+      "seconds": 76.55123376846313
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 10.3475,
+      "val_dwell": 14.35,
+      "val_depth": 13.55,
+      "val_protected": 0.45,
+      "seconds": 86.14433312416077
+    }
+  ],
+  "best_update": 439,
+  "best_validation_dwell": 14.45,
+  "seconds": 86.19133448600769,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep10",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "NoHistory",
+  "learner": "MAPPO",
+  "fold": "3_ssh_healthcheck",
+  "family": "variant_held_out",
+  "test_runs": [
+    "3_ssh_healthcheck"
+  ],
+  "encoder": {
+    "arm": "NoHistory",
+    "checkpoint": null
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "855eee9cefa7ffe9ba15358efc1d9aa163521fc6915a483ad6e9d6d5a04ca159",
+  "wall_seconds": 86.19133448600769,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}

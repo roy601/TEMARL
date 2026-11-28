@@ -1,0 +1,156 @@
+{
+  "seed": 2,
+  "centralised": true,
+  "window": 16,
+  "env_steps": 1998848,
+  "updates": 488,
+  "curve": [
+    {
+      "update": 49,
+      "env_steps": 200704,
+      "train_dwell": 5.5675,
+      "val_dwell": 5.2,
+      "val_depth": 3.25,
+      "val_protected": 0.016666666666666666,
+      "seconds": 9.035598754882812
+    },
+    {
+      "update": 98,
+      "env_steps": 401408,
+      "train_dwell": 6.3525,
+      "val_dwell": 5.4,
+      "val_depth": 3.433333333333333,
+      "val_protected": 0.016666666666666666,
+      "seconds": 17.528918266296387
+    },
+    {
+      "update": 146,
+      "env_steps": 598016,
+      "train_dwell": 7.4725,
+      "val_dwell": 7.216666666666667,
+      "val_depth": 5.033333333333333,
+      "val_protected": 0.2,
+      "seconds": 25.48357105255127
+    },
+    {
+      "update": 195,
+      "env_steps": 798720,
+      "train_dwell": 8.055,
+      "val_dwell": 8.283333333333333,
+      "val_depth": 5.8,
+      "val_protected": 0.2,
+      "seconds": 33.62514686584473
+    },
+    {
+      "update": 244,
+      "env_steps": 999424,
+      "train_dwell": 8.7975,
+      "val_dwell": 7.966666666666667,
+      "val_depth": 5.483333333333333,
+      "val_protected": 0.2,
+      "seconds": 41.76008582115173
+    },
+    {
+      "update": 293,
+      "env_steps": 1200128,
+      "train_dwell": 9.2125,
+      "val_dwell": 8.283333333333333,
+      "val_depth": 5.8,
+      "val_protected": 0.2,
+      "seconds": 51.055821657180786
+    },
+    {
+      "update": 342,
+      "env_steps": 1400832,
+      "train_dwell": 9.11,
+      "val_dwell": 7.966666666666667,
+      "val_depth": 5.483333333333333,
+      "val_protected": 0.2,
+      "seconds": 60.06398153305054
+    },
+    {
+      "update": 390,
+      "env_steps": 1597440,
+      "train_dwell": 8.87,
+      "val_dwell": 8.266666666666667,
+      "val_depth": 5.65,
+      "val_protected": 0.2,
+      "seconds": 69.07712960243225
+    },
+    {
+      "update": 439,
+      "env_steps": 1798144,
+      "train_dwell": 8.9875,
+      "val_dwell": 8.266666666666667,
+      "val_depth": 5.65,
+      "val_protected": 0.2,
+      "seconds": 78.23931288719177
+    },
+    {
+      "update": 488,
+      "env_steps": 1998848,
+      "train_dwell": 9.95,
+      "val_dwell": 8.183333333333334,
+      "val_depth": 5.7,
+      "val_protected": 0.2,
+      "seconds": 87.62854838371277
+    }
+  ],
+  "best_update": 195,
+  "best_validation_dwell": 8.283333333333333,
+  "seconds": 87.73090744018555,
+  "protocol": "D1.1",
+  "config": "lr1e-04_ep10",
+  "hp": {
+    "lr": 0.0001,
+    "ppo_epochs": 10,
+    "n_minibatch": 1,
+    "clip": 0.2,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "entropy_coef": 0.01,
+    "max_grad_norm": 10.0,
+    "huber_delta": 10.0,
+    "n_envs": 64,
+    "rollout_len": 64,
+    "critic_hidden": 128,
+    "head_hidden": 64,
+    "n_evals": 10
+  },
+  "arm": "NoHistory",
+  "learner": "MAPPO",
+  "fold": "S6",
+  "family": "scenario_held_out",
+  "test_runs": [
+    "6_macro_binary",
+    "6_macro_cron",
+    "6_plugin",
+    "6_screensharing_binary",
+    "6_screensharing_cron"
+  ],
+  "encoder": {
+    "arm": "NoHistory",
+    "checkpoint": null
+  },
+  "env_config": {
+    "beta": 0.2,
+    "p_goal": 0.7,
+    "p_stay": 0.8,
+    "k_capacity": 2,
+    "goal_steps": 1,
+    "aggregation": "max",
+    "movement": "recorded",
+    "goals": "d1",
+    "efficacy": 1.0,
+    "reward": "proposal",
+    "depth_bonus": 1.0,
+    "exposure_penalty": 5.0
+  },
+  "order": "frozen",
+  "setting": "primary",
+  "sealed_test_sha256": "6875f2e1c00cc5653afac3eb678449f9460a94e0f4712cd857e7dcf39c373170",
+  "wall_seconds": 87.73090744018555,
+  "eval_repeats": 20,
+  "val_seed": 100002,
+  "test_seed": 200002
+}
