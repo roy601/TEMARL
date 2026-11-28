@@ -46,7 +46,7 @@ points (1.5 with F1's pooled spread, 2.0 with policy 2's own four values), befor
 
 ## 3. Gaps and choices
 
-Status: **draft, nothing run.** "Calibrate" means the setting is unpublished and Fig. 10 must decide it. Its grid
+Status: **D1-D22 and Section 4 committed 2026-11-28 with the simulator, before any run of it.** "Calibrate" means the setting is unpublished and Fig. 10 must decide it. Its grid
 and the calibration protocol (Section 4) are committed before any run.
 
 | # | gap | choice | why | decided on |
@@ -54,29 +54,63 @@ and the calibration protocol (Section 4) are committed before any run.
 | D1 | which node is deployment location 1-7 | Table 2 order: 1 web server, 2 pad, 3 host 1, 4 host 2, 5 host 3, 6 file server, 7 data server | Table 2 numbers H1-H7; the state is a 7-vector; F3 confirms that 7 = data server | 2026-11-20 |
 | D2 | the attack graph | Fig. 8 as printed (`data/ntpg.json`), including the four USB edges' direction | it is the graph the method uses (Alg. 1 line 1); F7 | 2026-11-20 |
 | D3 | static policy numbering | lexicographic pairs (1,2), (1,3), ..., (6,7) | the text: policy 1 = "first and second deployment locations"; F3's block structure fits | 2026-11-20 |
-| D4 | J(n), the attacker's success probability | calibrate between UP and RP of the best edge from a compromised node | Eq. 1 names J and CVSS, but not which privilege; Table 2 shows user privilege suffices to move on (all "required privilege: User") | open |
-| D5 | interestingness I(n) and the weights alpha, beta | calibrate: a small declared family (Section 4), never node-by-node free values | not published at all; F8 shows I (or tie-breaking) must separate hosts 2 and 3 | open |
-| D6 | a decoy's I and J | J = J of the data server's best incoming edge; I: calibrate among "same as the data server" and "same as the node it sits behind" | the paper: a decoy "is the same as n_cr" apart from fake data, and its location changes I(decoy) | open |
-| D7 | argmax ties and failed exploits | ties in Eq. 1: calibrate between index order and random. A failed exploit leaves the attacker where it is, and it chooses again next step. | not stated; F8 | open |
-| D8 | episode length ("after a limited number of attack actions") | 20 attack actions, then the episode counts as a failed defence | the longest simple path to the data server has 6 edges; the limit must not bind except when the attacker is stuck | 2026-11-20 (to confirm at the smoke test) |
+| D4 | J(n), the attacker's success probability | J(n) = the best Fig. 8 edge into n from the Internet or any compromised node (D15); **calibrated** between UP and RP (Section 4 grid) | Eq. 1 names J and CVSS, but not which privilege; Table 2 shows user privilege suffices to move on (all "required privilege: User") | 2026-11-28 (grid) |
+| D5 | interestingness I(n) and the weights alpha, beta | **calibrated** over the declared family of D17 and alpha in {0.2, 0.5, 0.8}, beta = 1 - alpha (Section 4); never node-by-node free values | not published at all; F8 shows I (or tie-breaking) must separate hosts 2 and 3 | 2026-11-28 (grid) |
+| D6 | a decoy's I and J | J: D16. I: **calibrated** between "same as the data server" and "same as the node it sits behind" | the paper: a decoy "is the same as n_cr" apart from fake data, and its location changes I(decoy) but not J(decoy) | 2026-11-28 (grid) |
+| D7 | argmax ties and failed exploits | ties in Eq. 1: **calibrated** between index order (D18) and random. A failed exploit leaves the attacker where it is, and it chooses again next step. | not stated; F8 | 2026-11-28 (grid) |
+| D8 | episode length ("after a limited number of attack actions") | 20 attack actions, then the episode counts as a failed defence (D19). Fixed: the share of experiments that reach the limit is logged for every trial and does not change the limit | the longest simple path to the data server has 6 edges; the limit must not bind except when the attacker keeps failing | 2026-11-20 |
 | D9 | alarm model | each step, a compromised location raises an alarm with probability 1 - FNR, an uncompromised one with probability FPR, independently | the plainest reading of Section II.B and Fig. 3 | 2026-11-20 |
 | D10 | following-alarm when the alarmed set does not hold exactly 2 locations | 2 or more alarms: 2 distinct random alarmed locations. 1 alarm: that one plus a random other. 0 alarms: a random element of AD | Eq. 5 picks from AL; two decoys must be placed one-to-one | 2026-11-20 |
 | D11 | random-dynamic | reading (b): one random sequence A_t per repeat, used for all 1000 attacks; reading (a) reported too | F2 | 2026-11-20 |
 | D12 | Q-learning settings | gamma = 0.9 and epsilon = 0.1, fixed (not tuned: Fig. 13 stays held out); ties at random (F5); a training step = one defender decision (Alg. 1 line 5), episodes restart from s0; the dsp at x steps = the greedy policy over 1000 new experiments | gamma and epsilon not published; common textbook values, declared before any run | 2026-11-20 |
 | D13 | when the defender acts | before each attack action, the defender sees the alarms S_t and places both decoys; the attacker then chooses among the nodes reachable from its compromised set, which includes any decoy placed behind one of them | Eq. 2 and Section IV.A: an action at every time t | 2026-11-20 |
 | D14 | variance | 10 seeds; each evaluation is 1000 experiments (Table 3) | STANDARD.md requirement 5 | 2026-11-20 |
+| D15 | how J is used | J(n) is computed from the attacker's current footholds (the Internet and every compromised node) and is both the J of Eq. 1 and the probability that the attack action on n succeeds | Sec. II.B: "J(n_i) denote[s] the probability that the attacker invades n_i successfully" | 2026-11-28 |
+| D16 | a decoy's J | J(decoy) = the data server's best incoming edge under the same reading: 0.8 (UP) or 0.6 (RP), wherever the decoy is | "its location will not affect the attacker's success probability J(n_fr)"; a decoy "is the same as n_cr" | 2026-11-28 |
+| D17 | the family of attacker readings (choice rule and I) | Choice rule: **argmax** (Eq. 1) or **proportional** (P(n) proportional to alpha I(n) + beta J(n)). I: **uniform** (1 for every node); **role** (web, file and data server 1; pad and hosts 0.5); **outdegree** (out-degree in Fig. 8 divided by the largest: web 0.5, pad 1, host 1 1, hosts 2-3 0.75, file 0.25, data 0); **random** (I(n) ~ U(0,1) for every node, drawn once per experiment). | argmax: Eq. 1. Proportional: Sec. II.B defines p_n, "the probability that attacker invades n_i in the next step", which grows with I and J. Role: I "is related to the nature of the nodes" (0.5 is our choice). Outdegree: "... the network topology". Random: "the attacker's strategy is expressed by the attacker's interestingness distribution" (Sec. V), read as a population of attackers. | 2026-11-28 |
+| D18 | order for index ties | real nodes in Table 2 order (locations 1-7), then decoys in the order of the location they sit behind | Table 2 numbering; decoys are added after the scan | 2026-11-28 |
+| D19 | the step limit in training | reaching the limit is S_fail: reward -1 (Eq. 10) and a failed defence in dsp | the attacker has not been trapped | 2026-11-28 |
+| D20 | Eq. 15 vs Algorithm 1 | learning rate 1 / (1 + visits) where visits includes the current update (first update 1/2), as Eq. 15 states; Algorithm 1 increments the count after the update, which would give 1 at the first update | Eq. 15 is explicit ("including the nth cycle") | 2026-11-28 |
+| D21 | prior exposure | Before this grid was written, one reading was worked out by hand while designing (argmax, UP, uniform I, random ties: one decoy behind the web server would trap about 50%). No reading was simulated before the commit of the grid and the code. The family comes from the text (D17), not from that check. | honesty about the order | 2026-11-28 |
+| D22 | machine | development PC, CPU, pure Python (`random`, no NumPy), worker processes; each evaluation has its own seed from its labels (`seed_of`), so the worker count changes nothing | STANDARD.md requirement 7 | 2026-11-28 |
 
-## 4. Calibration and held-out targets (draft; grid to be committed before any run)
+## 4. Calibration and held-out targets (committed 2026-11-28, before any run)
 
-- **Calibration targets:** the 21 static-policy means `F10.P01`-`F10.P21`. Static policies read no alarms and
-  learn nothing, so they fix the attacker and the network (D4-D7) without touching the alarm model or the
-  learner.
-- **Held-out targets, computed once after the calibration is committed:**
-  - following-alarm, 4 settings (`F12.FA.S1`-`S4`): a test of the alarm model and the attacker together;
-  - random-dynamic mean (`F11.RD_mean`);
-  - Q-learning at 0, 2000 and 30000 steps (`F13.*`);
-  - the claim `CLAIM.Q_minus_best_static`.
-- **Informativeness (STANDARD.md 3a):** reference policies are the best static policy, following-alarm and the
-  untrained Q-learner, all in our calibrated environment. A held-out Q-learning target is UNINFORMATIVE if any
-  reference lands within 2 points of it.
-- **Logging:** every trial goes to `out/calibration_log.csv`, and every trial counts.
+Code: `wang_env.py` (simulator), `run.py` (stages `calibrate`, `heldout`, `report`), `tests/` (rules).
+
+1. **Calibration targets:** the 21 static-policy means `F10.P01`-`F10.P21` (and `F10.best_text`, a point of the
+   same figure). Verdict: CALIBRATION TARGET, with the distance reached. Static policies read no alarms and learn
+   nothing, so they fix the attacker (D4-D7) without touching the alarm model or the learner.
+2. **Grid (144 readings, `run.py` GRID):** choice {argmax, proportional} x J {UP, RP} x I {uniform, role,
+   outdegree, random} x decoy I {data, location} x alpha {0.2, 0.5, 0.8} (beta = 1 - alpha) x ties {index,
+   random} (argmax only). Some readings coincide (for example alpha does not matter under argmax with uniform I);
+   they are run anyway and all are logged.
+3. **One trial = one reading:** 21 static policies x 4 settings x 1000 experiments, each evaluation with its own
+   seed. Our value per policy = the mean of the 4 settings; loss = RMSE over the 21 policies, in points.
+4. **Selection:** the lowest RMSE; an exact tie goes to the earlier trial. One round only: no reading is added
+   after the log is seen (that would be a new, dated protocol version, reported as such).
+5. **Adequacy:** the calibration is adequate if the best RMSE is at most 5 points (about 3 times the noise of
+   Fig. 10's own means, ~1.5 points, F1). The constant predictor (the standard deviation of the 21 published
+   means) is reported as the null fit. If it is not adequate, the held-out targets are still computed once and
+   reported, and the paper is "not calibrated-replicated".
+6. **Then commit** `out/CALIBRATION.json` and `out/calibration_log.csv`. `heldout` refuses to run before that,
+   and refuses to run twice.
+7. **Held-out, computed once, 10 seeds, the selected reading:** the 21 static policies again (new seeds; the
+   distances of step 1 are reported from these); following-alarm, 10 repeats x 1000 experiments per setting
+   (`F12.FA.S1`-`S4`); random-dynamic reading (b), 10 repeats per setting, the mean of the 40 (`F11.RD_mean`),
+   and reading (a) as a sensitivity; Q-learning trained separately per setting, greedy evaluation on 1000 new
+   experiments at 0, 500, 1000, 2000, 5000, 10000, 20000 and 30000 steps (`F13.*`); the claim
+   (`CLAIM.Q_minus_best_static`) = Q at 30000 minus the best static policy (the policy with the highest mean in
+   our environment), per seed.
+8. **Verdicts:** as `TARGETS.csv`: MATCH if the published value is inside our 95% CI (t, 10 seeds), CLOSE if our
+   mean is within 2 points, else NO MATCH.
+9. **Informativeness (STANDARD.md 3a), checked first:** reference policies = the best static policy,
+   following-alarm, random-dynamic (b) and the untrained Q-learner, in our calibrated environment; a policy is
+   not its own reference; per-setting targets use the references at that setting; for the claim the references
+   are 0 and each reference minus the best static policy. If any reference is within 2 points of the published
+   value, the target is UNINFORMATIVE (numbers still reported).
+10. **Paper verdict:** calibrated-replicated only if the calibration is adequate and every informative primary
+    held-out target (`F13.Q_30000_mean`, `CLAIM.Q_minus_best_static`) is MATCH or CLOSE; otherwise "not
+    calibrated-replicated", naming the targets; if no primary target is informative, "uninformative".
+11. **Logging:** every trial and every number in `out/calibration_log.csv`; held-out raw values in
+    `out/heldout.json`; `REPORT.md` is written by `run.py report`. `F14.time_30000` is NOT ATTEMPTED (F6).

@@ -1,7 +1,7 @@
 # Wang et al. 2020, RL deployment of deception resources (IEEE Access 8:35792): replication
 
 Everything for this paper is in this folder. No code or data was released, so the method is rebuilt from the
-paper. Status: **targets, consistency findings and gaps written; no simulator yet, nothing run.**
+paper. Status: **simulator, calibration grid (144 readings) and held-out protocol committed 2026-11-28 before any run (DECISIONS D15-D22, Section 4).**
 
 | file | what it is |
 |---|---|
@@ -14,10 +14,23 @@ paper. Status: **targets, consistency findings and gaps written; no simulator ye
 | `data/consistency.json` | output of `checks/consistency.py` (findings F1-F6) |
 | `checks/extract_figures.py` | measures the figures (needs the PDF; checks its SHA-256) |
 | `checks/consistency.py` | the internal-consistency checks |
+| `wang_env.py` | the rebuilt simulation: network, attacker readings, alarms, the four policies, Q-learning |
+| `run.py` | `calibrate` (once), `heldout` (once, after the calibration is committed), `report` |
+| `tests/` | the rules taken from the paper and DECISIONS |
 
 Re-measure and re-check (repository root, the PDF in `PDF/`):
 
 ```powershell
 python reproductions/wang2020/checks/extract_figures.py
 python reproductions/wang2020/checks/consistency.py
+```
+
+Run (repository root; pure Python, CPU):
+
+```powershell
+python -m unittest discover -s reproductions/wang2020/tests
+python reproductions/wang2020/run.py calibrate --workers 10
+# commit out/CALIBRATION.json and out/calibration_log.csv, then:
+python reproductions/wang2020/run.py heldout --workers 10
+python reproductions/wang2020/run.py report
 ```
