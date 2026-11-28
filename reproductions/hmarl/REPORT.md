@@ -96,7 +96,7 @@
 | 2 | gaps decided before the run | yes | `DECISIONS.md` 1-13 |
 | 3 | authors asked about every gap | **not yet**: the issue is drafted, to be posted by the user | `AUTHOR_CONTACT.md` |
 | 4 | exact sources and licence | yes | `SOURCES.md`; 87 policy and code files pinned (`POLICY_SHA256.txt`) |
-| 5 | variance: two machines identical, or 10+ seeds with CI | partly: one released policy per method, so no training seeds (DECISIONS 8); 10 evaluation seeds with a 95% CI; **second machine not yet** | `out/RECHECK_*.json` |
+| 5 | variance: two machines identical, or 10+ seeds with CI | partly: one released policy per method, so no training seeds (DECISIONS 8); 10 evaluation seeds with a 95% CI; identical on a second machine (DESKTOP-JV86IM7) | `out/RECHECK_*.json` |
 | 6 | every target reported | yes | table above, `audit.py` |
 | 7 | environment recorded | yes | `out/ENVIRONMENT.json` |
 | 8 | one command from public inputs, outputs hashed | yes: a fixed sequence of commands (`README.md`); every output's SHA-256 in `out/HASHES.txt` | `fetch.py`, `run.py` |
@@ -106,5 +106,5 @@
 ## Environment
 
 - Python 3.10.22, Windows-10-10.0.26100-SP0, machine DESKTOP-Q1DMJ51; commits {'Hierarchical-MARL': '6fe960f5931f2d7dc5ef522f09ca4a179f377ee4', 'cage-challenge-4': '8c3c50ca54b176c2de199847944e8dcc035497e3'}; full package list in `out/ENVIRONMENT.json`.
-- Rechecks (kept episodes run again): none yet.
+- Rechecks (kept episodes run again): HMARL_Expert seed 0 on DESKTOP-JV86IM7: IDENTICAL; HMARL_Meta seed 0 on DESKTOP-JV86IM7: IDENTICAL; MARL_Decentralized seed 0 on DESKTOP-JV86IM7: IDENTICAL.
 - Every output's SHA-256 (LF line endings): `out/HASHES.txt`; the authors' printed output of every run: `out/logs/`.
